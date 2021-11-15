@@ -2,7 +2,9 @@
 
 #include "math/Transform.h"
 
+#include <stdexcept>
 #include <string>
+#include <typeinfo>
 #include <vector>
 
 namespace Pitbull
@@ -27,8 +29,21 @@ namespace Pitbull
 		template <class Impl>
 		void AddComponent(Component<Impl>* Comp);
 
+		/// <summary>
+		/// Get the first component that match a type.
+		/// </summary>
+		/// <typeparam name="Impl">The desired type.</typeparam>
+		/// <returns>A reference to the stored component or fail if none found.</returns>
+		///	<example>auto& comp = actor.GetComponent<MyComponent>();</example>
 		template <class Impl>
 		Component<Impl>& GetComponent();
+
+		/// <summary>
+		/// Get all components that match a type.
+		/// </summary>
+		/// <typeparam name="Impl">The desired type.</typeparam>
+		/// <returns>A vector of references to the stored components, can be empty.</returns>
+		///	<example>auto vec = actor.GetComponents<MyComponent>();</example>
 		template <class Impl>
 		std::vector<std::reference_wrapper<Component<Impl>>> GetComponents();
 
@@ -56,13 +71,12 @@ namespace Pitbull
 		const auto CompID = Impl::GetIDStatic();
 
 		for (auto Comp : Components) {
-			if (Comp->GetID() == CompID)
-			{
+			if (Comp->GetID() == CompID) {
 				return *static_cast<Impl*>(Comp);
 			}
 		}
 
-		throw 1;
+		throw std::logic_error{ std::string{"The actor has no component of type "} + typeid(Impl).name() };
 	}
 
 	template <class Impl>
@@ -74,8 +88,7 @@ namespace Pitbull
 		std::vector<std::reference_wrapper<Component<Impl>>> MatchingComponents;
 
 		for (auto Comp : Components) {
-			if (Comp->GetID() == CompID)
-			{
+			if (Comp->GetID() == CompID) {
 				MatchingComponents.push_back(*static_cast<Impl*>(Comp));
 			}
 		}

@@ -6,9 +6,14 @@ namespace Pitbull
 	IComponent::~IComponent() = default;
 
 	void IComponent::SetParentActor(Actor* Actor) noexcept
-{
-	this->ParentActor = Actor;
-}
+	{
+		this->ParentActor = Actor;
+	}
+
+	void IComponent::Init()
+	{
+		// Default init behaviour is to do nothing
+	}
 
 	void IComponent::Tick(const float& /*DeltaTime*/)
 	{

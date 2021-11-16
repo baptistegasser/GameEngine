@@ -46,6 +46,12 @@
     <Filter Include="Header Files\util">
       <UniqueIdentifier>{2de06613-6c3a-470b-8ad9-7a7810d24adb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\physic\components">
+      <UniqueIdentifier>{d39b5bb4-a57b-4e9b-bd9d-6368b53c850a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physic\components">
+      <UniqueIdentifier>{962782c1-da4b-49e5-b68a-fb607be82878}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -140,6 +146,24 @@
     </ClCompile>
     <ClCompile Include="physic\ContactFilter.cpp">
       <Filter>Source Files\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\BoxCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\CapsuleCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\Collider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\RigidBody.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\SphereCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\PhysicMaterial.cpp">
+      <Filter>Source Files\physic\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,7 +279,25 @@
       <Filter>Header Files\physic</Filter>
     </ClInclude>
     <ClInclude Include="physic\ContactFilter.h">
-      <Filter>Source Files\physic</Filter>
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\RigidBody.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\SphereCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\BoxCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\CapsuleCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\Collider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\PhysicMaterial.h">
+      <Filter>Header Files\physic\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

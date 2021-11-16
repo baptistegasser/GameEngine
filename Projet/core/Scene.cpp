@@ -2,7 +2,8 @@
 #include "Scene.h"
 
 Scene::Scene()
-	: SceneContactHandler{ std::make_unique<ContactHandler>() }
+	: PhysxScene{ nullptr }
+	, SceneContactHandler{ std::make_unique<ContactHandler>() }
 {}
 
 void Scene::Tick()

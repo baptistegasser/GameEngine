@@ -13,7 +13,7 @@ public:
 
 	void Tick();
 
-	std::unique_ptr<physx::PxScene> PhysxScene;
+	physx::PxScene* PhysxScene;
 	std::unique_ptr<ContactHandler> SceneContactHandler;
 	std::vector<std::unique_ptr<Pitbull::Actor>> Actors;
 };

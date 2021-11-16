@@ -17,21 +17,25 @@
 
 class PhysicManager : public Singleton<PhysicManager>
 {
+	friend struct Singleton<PhysicManager>;
+
 public:
 	void Init();
 	void InitScene(std::shared_ptr<Scene> Scene);
 	void Step();
 	void Cleanup();
 
-private:
+	physx::PxPhysics* Physics = nullptr;
 	std::shared_ptr<Scene> CurrentScene;
 
-	physx::PxDefaultAllocator gAllocator;
-	physx::PxDefaultErrorCallback gErrorCallback;
+private:
+	PhysicManager() {};
+	~PhysicManager() noexcept {};
+	physx::PxDefaultAllocator Allocator;
+	physx::PxDefaultErrorCallback ErrorCallback;
 
-	physx::PxPhysics* gPhysics = nullptr;
-	physx::PxFoundation* gFoundation = nullptr;
+	physx::PxFoundation* Foundation = nullptr;
 
-	physx::PxPvd* gPvd = nullptr;
-	physx::PxDefaultCpuDispatcher* gDispatcher = nullptr;
+	physx::PxPvd* Pvd = nullptr;
+	physx::PxDefaultCpuDispatcher* Dispatcher = nullptr;
 };

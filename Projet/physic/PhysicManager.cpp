@@ -7,32 +7,32 @@ using namespace physx;
 
 void PhysicManager::Init()
 {
-	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
+	Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, Allocator, ErrorCallback);
 
-	gPvd = PxCreatePvd(*gFoundation);
+	Pvd = PxCreatePvd(*Foundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
+	Pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
+	Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *Foundation, PxTolerancesScale(), true, Pvd);
 
-	gDispatcher = PxDefaultCpuDispatcherCreate(2);
+	Dispatcher = PxDefaultCpuDispatcherCreate(2);
 }
 
 void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 {
 	CurrentScene = Scene;
 
-	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
+	PxSceneDesc sceneDesc(Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-	gDispatcher = PxDefaultCpuDispatcherCreate(2);
-	sceneDesc.cpuDispatcher = gDispatcher;
+	Dispatcher = PxDefaultCpuDispatcherCreate(2);
+	sceneDesc.cpuDispatcher = Dispatcher;
 
 	// Change physic handling
 	sceneDesc.filterShader = ContactFilter::filterShader;
 	sceneDesc.contactModifyCallback = CurrentScene->SceneContactHandler.get();
 	sceneDesc.simulationEventCallback = CurrentScene->SceneContactHandler.get();
 
-	CurrentScene->PhysxScene = std::unique_ptr<PxScene>(gPhysics->createScene(sceneDesc));
+	CurrentScene->PhysxScene = Physics->createScene(sceneDesc);
 
 	// Finally init the scene for the Physx visual debugger
 	PxPvdSceneClient* pvdClient = CurrentScene->PhysxScene->getScenePvdClient();
@@ -53,14 +53,14 @@ void PhysicManager::Step()
 void PhysicManager::Cleanup()
 {
 	PX_RELEASE(CurrentScene->PhysxScene);
-	PX_RELEASE(gDispatcher);
-	PX_RELEASE(gPhysics);
-	if (gPvd)
+	PX_RELEASE(Dispatcher);
+	PX_RELEASE(Physics);
+	if (Pvd)
 	{
-		PxPvdTransport* transport = gPvd->getTransport();
-		PX_RELEASE(gPvd);
+		PxPvdTransport* transport = Pvd->getTransport();
+		PX_RELEASE(Pvd);
 		PX_RELEASE(transport);
 	}
-	PX_RELEASE(gFoundation);
+	PX_RELEASE(Foundation);
 }
 

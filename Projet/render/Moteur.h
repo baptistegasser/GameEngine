@@ -19,6 +19,12 @@
 #include "core/Scene.h"
 #include "physic/PhysicManager.h"
 
+// Physic components
+#include "physic/RigidBody.h"
+#include "physic/SphereCollider.h"
+#include "physic/BoxCollider.h"
+#include "physic/CapsuleCollider.h"
+
 namespace PM3D
 {
 
@@ -67,11 +73,13 @@ public:
 		// * Initialisation du dispositif de rendu
 		pDispositif = CreationDispositifSpecific(CDS_PLEIN_ECRAN);
 
+		PhysicManager::GetInstance().Init();
+		PhysicManager::GetInstance().InitScene(CurrentScene);
+
 		// * Initialisation de la scène
 		InitScene();
 
-		PhysicManager::GetInstance().Init();
-		PhysicManager::GetInstance().InitScene(CurrentScene);
+		CurrentScene.Init();
 
 		// * Initialisation des paramètres de l'animation et 
 		//   préparation de la première image
@@ -248,8 +256,7 @@ protected:
 			&m_MatViewProj };
 
 		// Initialisation des objets 3D - création et/ou chargement
-		if (!InitObjets())
-		{
+		if (!InitObjets()) {
 			return 1;
 		}
 
@@ -261,8 +268,10 @@ protected:
 	{
 		Actor Ball{};
 		Ball.Transform.p = { 0.f, 10.f , 0.f };
-		ball.AddComponent(new SphereCollider{PxU32 : MonFlag | default :0});
+		Ball.AddComponent(new SphereCollider{PxU32 : MonFlag | default :0});
 		Ball.AddComponent(new MeshRenderer{"nom texture"});
+		Ball.AddComponent(new SphereCollider{ new physx::PxMaterial{} })
+
 		scene.AddActor(Ball);
 
 		// Puis, il est ajouté à la scène

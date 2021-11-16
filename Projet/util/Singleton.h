@@ -3,15 +3,11 @@
 #include "NonCopyable.h"
 
 template <class T>
-class Singleton : public NonCopyable
+struct Singleton : NonCopyable
 {
-public:
 	static T& GetInstance()
 	{
 		static T instance;
 		return instance;
 	}
-
-private:
-	Singleton() = default;
 };

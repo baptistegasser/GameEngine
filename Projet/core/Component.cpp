@@ -4,19 +4,19 @@
 namespace Pitbull
 {
 	// Default implementation must be provided to destructor, even if pure virtual
-	IComponent::~IComponent() = default;
+	Component::~Component() = default;
 
-	void IComponent::SetParentActor(Actor* Actor) noexcept
+	void Component::SetParentActor(Actor* Actor) noexcept
 	{
 		this->ParentActor = Actor;
 	}
 
-	void IComponent::Init()
+	void Component::Init()
 	{
 		// Default init behaviour is to do nothing
 	}
 
-	void IComponent::Tick(const float& /*DeltaTime*/)
+	void Component::Tick(const float& /*DeltaTime*/)
 	{
 		// Default component logic is to do nothing
 	}

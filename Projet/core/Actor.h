@@ -14,14 +14,14 @@ namespace Pitbull
 	template <class Impl>
 	class Component;
 
-	using ActorID = unsigned int;
-
 	/// <summary>
 	/// Represent anything that can be placed on the scene of a game.
 	///	The actor logic is defined by the composition of its components.
 	/// </summary>
 	class Actor {
 	public:
+		using ActorID = unsigned int;
+
 		explicit Actor();
 		explicit Actor(std::string name);
 		~Actor();

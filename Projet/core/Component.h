@@ -4,10 +4,6 @@
 
 namespace Pitbull
 {
-	using ComponentID = unsigned int;
-	// Static counter to get unique ID for each Component classes
-	static ComponentID NextID = 0;
-
 	/// <summary>
 	/// Definition of a component and it's interface.
 	///	This should be used to store components, notably pointers.
@@ -15,6 +11,8 @@ namespace Pitbull
 	/// </summary>
 	class IComponent {
 	public:
+		using ComponentID = unsigned int;
+
 		// Virtual, prevent direct instantiation of this class.
 		virtual ~IComponent() = 0;
 		/// <summary>
@@ -91,6 +89,9 @@ namespace Pitbull
 	template <class Impl>
 	Component<Impl>::~Component() = default;
 
+	// Static counter to get unique ID for each Component classes
+	static IComponent::ComponentID NextID = 0;
+
 	template <class Impl>
-	ComponentID Component<Impl>::ID = NextID++;
+	IComponent::ComponentID Component<Impl>::ID = NextID++;
 }  // namespace Pitbull

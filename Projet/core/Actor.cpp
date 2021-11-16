@@ -1,6 +1,5 @@
 #include "Actor.h"
 
-#include <utility>
 #include "Component.h"
 
 namespace Pitbull
@@ -23,5 +22,5 @@ namespace Pitbull
 		}
 	}
 
-	ActorID Actor::NextID = 0;
+	Actor::ActorID Actor::NextID = 0;
 } // namespace Pitbull

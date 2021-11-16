@@ -15,6 +15,10 @@
 #include "Camera.h"
 #include "Terrain.h"
 
+#include "core/Actor.h"
+#include "core/Scene.h"
+#include "physic/PhysicManager.h"
+
 namespace PM3D
 {
 
@@ -66,6 +70,9 @@ public:
 		// * Initialisation de la scène
 		InitScene();
 
+		PhysicManager::GetInstance().Init();
+		PhysicManager::GetInstance().InitScene(CurrentScene);
+
 		// * Initialisation des paramètres de l'animation et 
 		//   préparation de la première image
 		InitAnimation();
@@ -80,13 +87,25 @@ public:
 		const int64_t TempsCompteurCourant = GetTimeSpecific();
 		const double TempsEcoule = GetTimeIntervalsInSec(TempsCompteurPrecedent, TempsCompteurCourant);
 
+		// 0. Update inputs states
+		GestionnaireDeSaisie.StatutClavier();
+		GestionnaireDeSaisie.SaisirEtatSouris();
+
+		// 1. update the actors
+		CurrentScene->Tick(/* TODO deltatime */);
+
+		// 2. update physic state
+		PhysicManager::GetInstance().Step(/* TODO deltatime */);
+
+		// 3. render
+
 		// Est-il temps de rendre l'image?
 		if (TempsEcoule > EcartTemps)
 		{
 			// Affichage optimisé
 			pDispositif->Present(); // On enlevera «//» plus tard
 
-									// On prépare la prochaine image
+			// On prépare la prochaine image
 			AnimeScene(static_cast<float>(TempsEcoule));
 
 			// On rend l'image sur la surface de travail
@@ -156,8 +175,7 @@ protected:
 
 	virtual void Cleanup()
 	{
-		// détruire les objets
-		ListeScene.clear();
+		PhysicManager::GetInstance().Cleanup();
 
 		// Détruire le dispositif
 		if (pDispositif)
@@ -241,6 +259,11 @@ protected:
 
 	bool InitObjets()
 	{
+		Actor Ball{};
+		Ball.Transform.p = { 0.f, 10.f , 0.f };
+		ball.AddComponent(new SphereCollider{PxU32 : MonFlag | default :0});
+		Ball.AddComponent(new MeshRenderer{"nom texture"});
+		scene.AddActor(Ball);
 
 		// Puis, il est ajouté à la scène
 		//char* filename = new char[50]("./src/Heightmap.bmp");
@@ -288,11 +311,6 @@ protected:
 
 	bool AnimeScene(float tempsEcoule)
 	{
-		// Prendre en note le statut du clavier
-		GestionnaireDeSaisie.StatutClavier();
-		// Prendre en note l’état de la souris
-		GestionnaireDeSaisie.SaisirEtatSouris();
-
 		if (camera.getType() == CCamera::CAMERA_TYPE::LEVEL && camera.getPosition().vector4_f32[0] > (-terrain->width / 2.0f) * terrain->scale.x && camera.getPosition().vector4_f32[0] < (terrain->width / 2.0f) * terrain->scale.x
 			&& camera.getPosition().vector4_f32[2] > (-terrain->height / 2.0f) * terrain->scale.z && camera.getPosition().vector4_f32[2] < (terrain->height / 2.0f) * terrain->scale.z) {
 
@@ -325,7 +343,7 @@ protected:
 	TClasseDispositif* pDispositif;
 
 	// La seule scène
-	std::vector<std::unique_ptr<CObjet3D>> ListeScene;
+	std::shared_ptr<Scene> CurrentScene;
 
 	// Les matrices
 	XMMATRIX m_MatView;

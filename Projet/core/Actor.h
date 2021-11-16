@@ -26,6 +26,8 @@ namespace Pitbull
 		explicit Actor(std::string name);
 		~Actor();
 
+		void Tick();
+
 		template <class Impl>
 		void AddComponent(Component<Impl>* Comp);
 

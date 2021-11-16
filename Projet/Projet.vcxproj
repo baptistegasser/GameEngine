@@ -78,7 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)libs\glut\include;$(SolutionDir)libs\physx\include;$(SolutionDir)libs\pxshared\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libs\physx;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -125,12 +126,18 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;DXGI.lib;Effects11d.lib;d3dcompiler.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;DXGI.lib;Effects11d.lib;d3dcompiler.lib;dinput8.lib;PhysXCommon_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysX_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy /s /y "$(SolutionDir)dlls\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copie les fichiers dll nécessaire automatiquement</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -159,8 +166,12 @@
   <ItemGroup>
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
+    <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Transform.cpp" />
+    <ClCompile Include="physic\ContactFilter.cpp" />
+    <ClCompile Include="physic\ContactHandler.cpp" />
+    <ClCompile Include="physic\PhysicManager.cpp" />
     <ClCompile Include="Pitbull.cpp" />
     <ClCompile Include="render\AfficheurSprite.cpp" />
     <ClCompile Include="render\AfficheurTexte.cpp" />
@@ -185,11 +196,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="util\NonCopyable.cpp" />
+    <ClCompile Include="util\Singleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
+    <ClInclude Include="core\Scene.h" />
     <ClInclude Include="math\Transform.h" />
+    <ClInclude Include="physic\ContactFilter.h" />
+    <ClInclude Include="physic\ContactHandler.h" />
+    <ClInclude Include="physic\PhysicManager.h" />
     <ClInclude Include="Pitbull.h" />
     <ClInclude Include="render\AfficheurSprite.h" />
     <ClInclude Include="render\AfficheurTexte.h" />
@@ -219,6 +236,8 @@
     <ClInclude Include="render\util.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="util\NonCopyable.h" />
+    <ClInclude Include="util\Singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico" />

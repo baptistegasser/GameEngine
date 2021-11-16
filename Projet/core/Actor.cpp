@@ -23,5 +23,13 @@ namespace Pitbull
 		}
 	}
 
+	void Actor::Tick()
+	{
+		for (auto& Comp : Components)
+		{
+			Comp->Tick(0.f /* TODO deltatime */);
+		}
+	}
+
 	Actor::ActorID Actor::NextID = 0;
 } // namespace Pitbull

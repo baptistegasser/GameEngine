@@ -6,9 +6,8 @@
 #define PVD_HOST "127.0.0.1"
 #endif
 
-#define PX_RELEASE(x) if(x) { x->release(); x = NULL; }
-
 #include "util/Singleton.h"
+#include "util/Util.h" // PX_RELEASE
 #include "core/Scene.h"
 
 #include "PxPhysicsAPI.h"

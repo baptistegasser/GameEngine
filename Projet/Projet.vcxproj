@@ -204,6 +204,7 @@
     </ClCompile>
     <ClCompile Include="util\NonCopyable.cpp" />
     <ClCompile Include="util\Singleton.cpp" />
+    <ClCompile Include="util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util\NonCopyable.h" />
     <ClInclude Include="util\Singleton.h" />
+    <ClInclude Include="util\Util.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico" />

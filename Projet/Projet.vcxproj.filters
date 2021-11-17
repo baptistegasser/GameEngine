@@ -165,6 +165,9 @@
     <ClCompile Include="physic\PhysicMaterial.cpp">
       <Filter>Source Files\physic\components</Filter>
     </ClCompile>
+    <ClCompile Include="util\Util.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="math\Transform.h">
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="physic\PhysicMaterial.h">
       <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Util.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

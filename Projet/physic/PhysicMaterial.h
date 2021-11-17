@@ -2,8 +2,13 @@
 
 #include "PxPhysicsAPI.h"
 
-struct PhysicMaterial {
-	float StaticFriction, DynamicFriction, Restitution;
+class PhysicMaterial {
+public:
+	PhysicMaterial(float StaticFriction, float DynamicFriction, float Restitution);
+	~PhysicMaterial();
+	physx::PxMaterial* GetPxMaterial();
 
-	physx::PxMaterial* GetPxMaterial() const;
+private:
+	physx::PxMaterial* Material;
+	float StaticFriction, DynamicFriction, Restitution;
 };

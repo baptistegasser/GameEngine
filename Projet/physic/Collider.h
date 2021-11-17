@@ -9,21 +9,15 @@
 class Collider : public Pitbull::Component {
 public:
 	Collider(const PhysicMaterial& Material);
+	~Collider();
 
-	physx::PxGeometry* GetPxGeometry() const
-	{
-		static physx::PxGeometry* Geometry = GetGeometryImpl();
-		return Geometry;
-	}
-
-	physx::PxMaterial* GetPxMaterial() const
-	{
-		return Material.GetPxMaterial();
-	}
+	physx::PxGeometry* GetPxGeometry();
+	physx::PxMaterial* GetPxMaterial();
 
 protected:
 	virtual physx::PxGeometry* GetGeometryImpl() const = 0;
 
 private:
+	physx::PxGeometry* Geometry;
 	PhysicMaterial Material;
 };

@@ -1,10 +1,24 @@
 #include "stdafx.h"
-
-#include "physic/PhysicManager.h"
 #include "PhysicMaterial.h"
 
-physx::PxMaterial* PhysicMaterial::GetPxMaterial() const
+#include "physic/PhysicManager.h"
+
+PhysicMaterial::PhysicMaterial(float StaticFriction, float DynamicFriction, float Restitution)
+	: StaticFriction{ StaticFriction }
+	, DynamicFriction{ DynamicFriction }
+	, Restitution{ Restitution }
+	, Material{ nullptr }
+{}
+
+PhysicMaterial::~PhysicMaterial()
 {
-	static physx::PxMaterial* Mat = PhysicManager::GetInstance().Physics->createMaterial(StaticFriction, DynamicFriction, Restitution);
-	return Mat;
+	PX_RELEASE(Material);
+}
+
+physx::PxMaterial* PhysicMaterial::GetPxMaterial()
+{
+	if (!Material) {
+		Material = PhysicManager::GetInstance().Physics->createMaterial(StaticFriction, DynamicFriction, Restitution);
+	}
+	return Material;
 }

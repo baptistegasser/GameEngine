@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace Pitbull
 {
@@ -19,12 +20,13 @@ namespace Pitbull
 
 		explicit Actor();
 		explicit Actor(std::string name);
-		~Actor();
+		~Actor() = default;
 
 		void Init();
 		void Tick();
 
-		void AddComponent(Component* Comp);
+		template <class Impl, class ... Args>
+		void AddComponent(Args&&... args);
 
 		/// <summary>
 		/// Get the first component that match a type.
@@ -33,7 +35,7 @@ namespace Pitbull
 		/// <returns>A reference to the stored component or fail if none found.</returns>
 		///	<example>auto& comp = actor.GetComponent<MyComponent>();</example>
 		template <class Impl>
-		Impl* GetComponent();
+		Impl* GetComponent() const;
 
 		/// <summary>
 		/// Get all components that match a type.
@@ -42,7 +44,7 @@ namespace Pitbull
 		/// <returns>A vector of references to the stored components, can be empty.</returns>
 		///	<example>auto vec = actor.GetComponents<MyComponent>();</example>
 		template <class Impl>
-		std::vector<Impl*> GetComponents();
+		std::vector<Impl*> GetComponents() const;
 		
 		const std::string Name;
 		physx::PxTransform Transform;
@@ -50,6 +52,6 @@ namespace Pitbull
 		static ActorID NextID;
 
 	private:
-		std::vector<Component*> Components;
+		std::vector<std::unique_ptr<Component>> Components;
 	};
 } // namespace Pitbull

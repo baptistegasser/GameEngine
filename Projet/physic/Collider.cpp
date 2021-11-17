@@ -1,23 +1,18 @@
 #include "stdafx.h"
 #include "Collider.h"
 
-Collider::Collider(const PhysicMaterial& Material)
-	: Geometry{ nullptr }
+Collider::Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material)
+	: Component{ Parent }
+	, Geometry{ nullptr }
 	, Material{ Material }
 {}
-
-Collider::~Collider()
-{
-	delete Geometry;
-	Geometry = nullptr;
-}
 
 physx::PxGeometry* Collider::GetPxGeometry()
 {
 	if (!Geometry) {
-		Geometry = GetGeometryImpl();
+		Geometry = std::make_unique<physx::PxGeometry>(GetGeometryImpl());
 	}
-	return Geometry;
+	return Geometry.get();
 }
 
 physx::PxMaterial* Collider::GetPxMaterial()

@@ -268,9 +268,10 @@ protected:
 	{
 		Actor Ball{};
 		Ball.Transform.p = { 0.f, 10.f , 0.f };
-		Ball.AddComponent(new SphereCollider{PxU32 : MonFlag | default :0});
-		Ball.AddComponent(new MeshRenderer{"nom texture"});
-		Ball.AddComponent(new SphereCollider{ new physx::PxMaterial{} })
+		Ball.AddComponent<Collider>(new physx::PxMaterial{});
+		//Ball.AddComponent(new SphereCollider{PxU32 : MonFlag | default :0});
+		//Ball.AddComponent(new MeshRenderer{"nom texture"});
+		//Ball.AddComponent(new SphereCollider{ new physx::PxMaterial{} })
 
 		scene.AddActor(Ball);
 

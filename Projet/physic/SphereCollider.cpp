@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "SphereCollider.h"
 
-SphereCollider::SphereCollider(const PhysicMaterial& Material, const float Radius)
-	: Collider { Material }
+SphereCollider::SphereCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const float Radius)
+	: Collider { Parent, Material }
 	, Radius{ Radius }
 {}
 
-physx::PxGeometry* SphereCollider::GetGeometryImpl() const
+physx::PxGeometry&& SphereCollider::GetGeometryImpl() const
 {
-	return new physx::PxSphereGeometry{ Radius };
+	return std::move(physx::PxSphereGeometry{ Radius });
 }

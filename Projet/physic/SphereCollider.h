@@ -4,8 +4,10 @@
 
 class SphereCollider : public Collider {
 public:
-	explicit SphereCollider(const PhysicMaterial& Material, const float Radius);
-	physx::PxGeometry* GetGeometryImpl() const override;
+	physx::PxGeometry&& GetGeometryImpl() const override;
 
 	const float Radius;
+
+protected:
+	explicit SphereCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const float Radius);
 };

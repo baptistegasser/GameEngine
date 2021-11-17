@@ -299,11 +299,11 @@
     <ClInclude Include="physic\Collider.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
-    <ClInclude Include="physic\PhysicMaterial.h">
-      <Filter>Header Files\physic\components</Filter>
-    </ClInclude>
     <ClInclude Include="util\Util.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\PhysicMaterial.h">
+      <Filter>Header Files\physic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

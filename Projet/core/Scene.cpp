@@ -8,7 +8,7 @@ Scene::Scene()
 
 void Scene::Tick()
 {
-	for (auto& Actor : Actors)
+	for (const auto& Actor : Actors)
 	{
 		Actor->Tick(/* TODO deltatime */);
 	}

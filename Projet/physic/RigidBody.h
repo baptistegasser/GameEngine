@@ -5,7 +5,6 @@
 
 class RigidBody : public Pitbull::Component {
 public:
-	RigidBody() = default;
 	~RigidBody() = default;
 
 	void Init() override;

@@ -6,33 +6,25 @@
 namespace Pitbull
 {
 	Actor::Actor()
-		: ID{ NextID++ }
-		, Name{ "Actor_" + std::to_string(NextID-1) }
+		: Name{ "Actor_" + std::to_string(NextID) }
+		, ID{ ++NextID }
 	{}
 
 	Actor::Actor(std::string name)
-		: ID{ NextID++ }
-		, Name{std::move(name)}
+		: Name{std::move(name)}
+		, ID{ ++NextID }
 	{}
-
-	Actor::~Actor()
-	{
-		// Delete all our components
-		for (const auto Comp : Components) {
-			delete Comp;
-		}
-	}
 
 	void Actor::Init()
 	{
-		for (const auto Comp : Components) {
+		for (const auto& Comp : Components) {
 			Comp->Init();
 		}
 	}
 
 	void Actor::Tick()
 	{
-		for (auto& Comp : Components)
+		for (const auto& Comp : Components)
 		{
 			Comp->Tick(0.f /* TODO deltatime */);
 		}
@@ -40,19 +32,21 @@ namespace Pitbull
 
 	Actor::ActorID Actor::NextID = 0;
 
-	void Actor::AddComponent(Component* Comp)
+	template <class Impl, class ... Args>
+	void Actor::AddComponent(Args&&... Args)
 	{
-		Comp->SetParentActor(this);
-		Components.push_back(Comp);
+		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
+
+		Components.push_back(std::make_unique<Component>(this, new Impl{ std::forward(Args ...) }));
 	}
 
 	template <class Impl>
-	Impl* Actor::GetComponent()
+	Impl* Actor::GetComponent() const
 	{
 		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
 
 		for (auto Comp : Components) {
-			auto CompImpl = dynamic_cast<Impl*>(Comp);
+			auto CompImpl = dynamic_cast<Impl*>(Comp.get());
 			if (CompImpl) {
 				return CompImpl;
 			}
@@ -62,14 +56,14 @@ namespace Pitbull
 	}
 
 	template <class Impl>
-	std::vector<Impl*> Actor::GetComponents()
+	std::vector<Impl*> Actor::GetComponents() const
 	{
 		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
 
 		std::vector<Impl*> MatchingComponents;
 
 		for (auto Comp : Components) {
-			auto CompImpl = dynamic_cast<Impl*>(Comp);
+			auto CompImpl = dynamic_cast<Impl*>(Comp.get());
 			if (CompImpl) {
 				MatchingComponents.push_back(CompImpl);
 			}

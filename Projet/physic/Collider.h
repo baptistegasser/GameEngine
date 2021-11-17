@@ -8,16 +8,16 @@
 
 class Collider : public Pitbull::Component {
 public:
-	Collider(const PhysicMaterial& Material);
-	~Collider();
+	~Collider() override = default;
 
 	physx::PxGeometry* GetPxGeometry();
 	physx::PxMaterial* GetPxMaterial();
 
 protected:
-	virtual physx::PxGeometry* GetGeometryImpl() const = 0;
+	Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material);
+	virtual physx::PxGeometry&& GetGeometryImpl() const = 0;
 
 private:
-	physx::PxGeometry* Geometry;
+	std::unique_ptr<physx::PxGeometry> Geometry;
 	PhysicMaterial Material;
 };

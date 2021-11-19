@@ -168,6 +168,15 @@
     <ClCompile Include="util\Util.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="render\MeshRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Material.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Shader.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="math\Transform.h">
@@ -304,6 +313,15 @@
     </ClInclude>
     <ClInclude Include="physic\PhysicMaterial.h">
       <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MeshRenderer.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Material.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Shader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

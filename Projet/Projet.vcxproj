@@ -192,9 +192,12 @@
     <ClCompile Include="render\GestionnaireDeTextures.cpp" />
     <ClCompile Include="render\Horloge.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
+    <ClCompile Include="render\Material.cpp" />
+    <ClCompile Include="render\MeshRenderer.cpp" />
     <ClCompile Include="render\Moteur.cpp" />
     <ClCompile Include="render\MoteurWindows.cpp" />
     <ClCompile Include="render\ObjetMesh.cpp" />
+    <ClCompile Include="render\Shader.cpp" />
     <ClCompile Include="render\sommetbloc.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
     <ClCompile Include="render\Texture.cpp" />
@@ -237,10 +240,13 @@
     <ClInclude Include="render\GestionnaireDeTextures.h" />
     <ClInclude Include="render\Horloge.h" />
     <ClInclude Include="render\InfoDispositif.h" />
+    <ClInclude Include="render\Material.h" />
+    <ClInclude Include="render\MeshRenderer.h" />
     <ClInclude Include="render\Moteur.h" />
     <ClInclude Include="render\MoteurWindows.h" />
     <ClInclude Include="render\objet3d.h" />
     <ClInclude Include="render\ObjetMesh.h" />
+    <ClInclude Include="render\Shader.h" />
     <ClInclude Include="render\Singleton.h" />
     <ClInclude Include="render\sommetbloc.h" />
     <ClInclude Include="render\sommetTerrain.h" />

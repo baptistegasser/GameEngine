@@ -133,6 +133,7 @@ public:
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	CGestionnaireDeTextures& GetTextureManager() { return TexturesManager; }
+	const Scene& GetScene() const noexcept { return *CurrentScene; }
 
 protected:
 	~CMoteur()

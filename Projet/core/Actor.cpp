@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Actor.h"
 
-#include "Component.h"
-
 namespace Pitbull
 {
 	Actor::Actor()
@@ -28,6 +26,17 @@ namespace Pitbull
 		{
 			Comp->Tick(0.f /* TODO deltatime */);
 		}
+	}
+
+	std::vector<Component*> Actor::GetComponents() const
+	{
+		std::vector<Component*> All;
+		All.reserve(Components.size());
+
+		for (auto& Comp : Components)
+			All.push_back(Comp.get());
+
+		return All;
 	}
 
 	Actor::ActorID Actor::NextID = 0;

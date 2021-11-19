@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Component.h"
 
+#include "Actor.h"
+
 namespace Pitbull
 {
 	// Default implementation must be provided to destructor, even if pure virtual

@@ -24,6 +24,7 @@
 #include "physic/SphereCollider.h"
 #include "physic/BoxCollider.h"
 #include "physic/CapsuleCollider.h"
+#include "render/MeshRenderer.h"
 
 namespace PM3D
 {
@@ -134,6 +135,7 @@ public:
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	CGestionnaireDeTextures& GetTextureManager() { return TexturesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
+	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
 
 protected:
 	~CMoteur()
@@ -169,12 +171,16 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		// Appeler les fonctions de dessin de chaque objet de la scène
-		for (auto& object3D : ListeScene)
+		for (auto& actor : CurrentScene->Actors)
 		{
-			object3D->Draw();
-			if (object3D->typeTag == "Terrain") {
-				terrain = static_cast<Terrain*>(object3D.get());
+			auto Components = actor.GetComponents();
+
+			for (const auto Comp : Components)
+			{
+				if (dynamic_cast<MeshRenderer*>(Comp) != nullptr)
+				{
+					Comp->Tick(0.f);
+				}
 			}
 		}
 
@@ -256,73 +262,73 @@ protected:
 			&m_MatProj,
 			&m_MatViewProj };
 
-		// Initialisation des objets 3D - création et/ou chargement
+
+		// Create actors
 		if (!InitObjets()) {
 			return 1;
 		}
 
+		CurrentScene->Init();
 
 		return 0;
 	}
 
-	bool InitObjets()
+	// TODO Create actor
+ 	bool InitObjets()
 	{
-		Actor Ball{};
-		Ball.Transform.p = { 0.f, 10.f , 0.f };
-		Ball.AddComponent<Collider>(new physx::PxMaterial{});
-		//Ball.AddComponent(new SphereCollider{PxU32 : MonFlag | default :0});
-		//Ball.AddComponent(new MeshRenderer{"nom texture"});
-		//Ball.AddComponent(new SphereCollider{ new physx::PxMaterial{} })
+		Pitbull::Actor Mesh;
+		Mesh.AddComponent<MeshRenderer>(".\\modeles\\jin\\jin.OMB", Shader{ L".\\shaders\\MiniPhong.fx" });
 
-		scene.AddActor(Ball);
+
+		CurrentScene->Actors.push_back(Mesh);
 
 		// Puis, il est ajouté à la scène
 		//char* filename = new char[50]("./src/Heightmap.bmp");
 		//ListeScene.emplace_back(std::make_unique<Terrain>(filename, XMFLOAT3(20.0f, 3.0f, 20.0f), pDispositif));
 
 		
-		//// Constructeur avec format binaire
-		std::unique_ptr<CObjetMesh> pMesh = std::make_unique<CObjetMesh>(".\\modeles\\jin\\jin.OMB", pDispositif);
-		// Puis, il est ajouté à la scène
-		ListeScene.push_back(std::move(pMesh));
+		////// Constructeur avec format binaire
+		//std::unique_ptr<CObjetMesh> pMesh = std::make_unique<CObjetMesh>(".\\modeles\\jin\\jin.OMB", pDispositif);
+		//// Puis, il est ajouté à la scène
+		//ListeScene.push_back(std::move(pMesh));
 
-		//// Création de l'afficheur de sprites et ajout des sprites
-		std::unique_ptr<CAfficheurSprite> pAfficheurSprite = std::make_unique<CAfficheurSprite>(pDispositif);
+		////// Création de l'afficheur de sprites et ajout des sprites
+		//std::unique_ptr<CAfficheurSprite> pAfficheurSprite = std::make_unique<CAfficheurSprite>(pDispositif);
 
-		// ajout de panneaux 
-		pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-			XMFLOAT3(1.0f, 0.0f, 1.0f));
-		pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-			XMFLOAT3(0.0f, 0.0f, -1.0f));
-		pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-			XMFLOAT3(-1.0f, 0.0f, 0.5f));
-		pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-			XMFLOAT3(-0.5f, 0.0f, 1.0f));
-		pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-			XMFLOAT3(-2.0f, 0.0f, 2.0f));
+		//// ajout de panneaux 
+		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
+		//	XMFLOAT3(1.0f, 0.0f, 1.0f));
+		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
+		//	XMFLOAT3(0.0f, 0.0f, -1.0f));
+		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
+		//	XMFLOAT3(-1.0f, 0.0f, 0.5f));
+		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
+		//	XMFLOAT3(-0.5f, 0.0f, 1.0f));
+		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
+		//	XMFLOAT3(-2.0f, 0.0f, 2.0f));
 
-		pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 200,400);
-		pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 500,500, 100, 100);
-		pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 800,200, 100, 100);
+		//pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 200,400);
+		//pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 500,500, 100, 100);
+		//pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 800,200, 100, 100);
 
-		CAfficheurTexte::Init();
-		const Gdiplus::FontFamily oFamily(L"Arial", nullptr);
-		pPolice = std::make_unique<Gdiplus::Font>(&oFamily, 16.0f, Gdiplus::FontStyleBold, Gdiplus::UnitPixel);
-		pTexte1 = std::make_unique<CAfficheurTexte>(pDispositif, 256, 256, pPolice.get());
+		//CAfficheurTexte::Init();
+		//const Gdiplus::FontFamily oFamily(L"Arial", nullptr);
+		//pPolice = std::make_unique<Gdiplus::Font>(&oFamily, 16.0f, Gdiplus::FontStyleBold, Gdiplus::UnitPixel);
+		//pTexte1 = std::make_unique<CAfficheurTexte>(pDispositif, 256, 256, pPolice.get());
 
-		pAfficheurSprite->AjouterSpriteTexte(pTexte1->GetTextureView(), 0, 257);
+		//pAfficheurSprite->AjouterSpriteTexte(pTexte1->GetTextureView(), 0, 257);
 
-		pTexte1->Ecrire(L"Test du texte");
+		//pTexte1->Ecrire(L"Test du texte");
 
-		// Puis, il est ajouté à la scène
-		ListeScene.push_back(std::move(pAfficheurSprite));
+		//// Puis, il est ajouté à la scène
+		//ListeScene.push_back(std::move(pAfficheurSprite));
 
 		return true;
 	}
 
 	bool AnimeScene(float tempsEcoule)
 	{
-		if (camera.getType() == CCamera::CAMERA_TYPE::LEVEL && camera.getPosition().vector4_f32[0] > (-terrain->width / 2.0f) * terrain->scale.x && camera.getPosition().vector4_f32[0] < (terrain->width / 2.0f) * terrain->scale.x
+		/*if (camera.getType() == CCamera::CAMERA_TYPE::LEVEL && camera.getPosition().vector4_f32[0] > (-terrain->width / 2.0f) * terrain->scale.x && camera.getPosition().vector4_f32[0] < (terrain->width / 2.0f) * terrain->scale.x
 			&& camera.getPosition().vector4_f32[2] > (-terrain->height / 2.0f) * terrain->scale.z && camera.getPosition().vector4_f32[2] < (terrain->height / 2.0f) * terrain->scale.z) {
 
 			float y = terrain->getHeight(camera.getPosition().vector4_f32[0], camera.getPosition().vector4_f32[2]) + CCamera::HEIGHT;
@@ -340,7 +346,21 @@ protected:
 			}
 			camera.update(tempsEcoule);
 
+		}*/
+		for (auto& actor : CurrentScene->Actors)
+		{
+			auto Components = actor.GetComponents();
+
+			for (const auto Comp : Components)
+			{
+				if (dynamic_cast<MeshRenderer*>(Comp) == nullptr)
+				{
+					Comp->Tick(tempsEcoule);
+				}
+			}
 		}
+
+		camera.update(tempsEcoule);
 
 		return true;
 	}

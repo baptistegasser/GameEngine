@@ -52,6 +52,12 @@
     <Filter Include="Source Files\physic\components">
       <UniqueIdentifier>{962782c1-da4b-49e5-b68a-fb607be82878}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\render\NewSystemTMP">
+      <UniqueIdentifier>{bc092bae-0a89-4efc-9622-4e501f136c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\render\NewSystemTMP">
+      <UniqueIdentifier>{22d6f103-db7b-4336-af41-9417c3be1736}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -114,9 +120,6 @@
     <ClCompile Include="render\ObjetMesh.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="render\Texture.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\Terrain.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -168,14 +171,20 @@
     <ClCompile Include="util\Util.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="render\MeshRenderer.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Material.cpp">
-      <Filter>Source Files\render</Filter>
+    <ClCompile Include="render\Texture.cpp">
+      <Filter>Source Files\render\NewSystemTMP</Filter>
     </ClCompile>
     <ClCompile Include="render\Shader.cpp">
-      <Filter>Source Files\render</Filter>
+      <Filter>Source Files\render\NewSystemTMP</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MeshRenderer.cpp">
+      <Filter>Source Files\render\NewSystemTMP</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Material.cpp">
+      <Filter>Source Files\render\NewSystemTMP</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MeshLoader.cpp">
+      <Filter>Source Files\render\NewSystemTMP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +269,6 @@
     <ClInclude Include="render\Terrain.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Texture.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\util.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -314,14 +320,20 @@
     <ClInclude Include="physic\PhysicMaterial.h">
       <Filter>Header Files\physic</Filter>
     </ClInclude>
-    <ClInclude Include="render\MeshRenderer.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
-      <Filter>Header Files\render</Filter>
+      <Filter>Header Files\render\NewSystemTMP</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MeshRenderer.h">
+      <Filter>Header Files\render\NewSystemTMP</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Texture.h">
+      <Filter>Header Files\render\NewSystemTMP</Filter>
     </ClInclude>
     <ClInclude Include="render\Shader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\render\NewSystemTMP</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MeshLoader.h">
+      <Filter>Header Files\render\NewSystemTMP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Actor.h"
-
 namespace Pitbull
 {
+	class Actor;
+
 	/// <summary>
 	/// Definition of a component and it's interface.
 	///	This should be used to store components, notably pointers.

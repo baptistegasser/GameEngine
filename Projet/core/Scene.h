@@ -5,16 +5,16 @@
 
 #include "PxPhysicsAPI.h"
 #include <vector>
-#include <memory>
 
 class Scene {
 public:
 	Scene();
 	~Scene() = default;
 
+	void Init();
 	void Tick();
 
 	physx::PxScene* PhysxScene;
-	std::unique_ptr<ContactHandler> SceneContactHandler;
-	std::vector<std::unique_ptr<Pitbull::Actor>> Actors;
+	ContactHandler* SceneContactHandler;
+	std::vector<Pitbull::Actor> Actors;
 };

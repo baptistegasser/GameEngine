@@ -5,11 +5,10 @@
 #include <vector>
 #include <memory>
 
+#include "Component.h"
+
 namespace Pitbull
 {
-	// Replace include with incomplete type to prevent cyclic dependencies
-	class Component;
-
 	/// <summary>
 	/// Represent anything that can be placed on the scene of a game.
 	///	The actor logic is defined by the composition of its components.
@@ -45,6 +44,8 @@ namespace Pitbull
 		///	<example>auto vec = actor.GetComponents<MyComponent>();</example>
 		template <class Impl>
 		std::vector<Impl*> GetComponents() const;
+
+		std::vector<Component*> GetComponents() const;
 		
 		const std::string Name;
 		physx::PxTransform Transform;

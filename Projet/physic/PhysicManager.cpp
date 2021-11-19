@@ -29,8 +29,8 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 
 	// Change physic handling
 	sceneDesc.filterShader = ContactFilter::filterShader;
-	sceneDesc.contactModifyCallback = CurrentScene->SceneContactHandler.get();
-	sceneDesc.simulationEventCallback = CurrentScene->SceneContactHandler.get();
+	sceneDesc.contactModifyCallback = CurrentScene->SceneContactHandler;
+	sceneDesc.simulationEventCallback = CurrentScene->SceneContactHandler;
 
 	CurrentScene->PhysxScene = Physics->createScene(sceneDesc);
 

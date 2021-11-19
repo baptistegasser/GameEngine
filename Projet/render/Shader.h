@@ -1,45 +1,110 @@
 #pragma once
 
-#include "core/Component.h"
+#include "d3dx11effect.h"
+#include "resources/resource.h"
+#include "util.h"
+#include "sommetbloc.h"
+#include "MoteurWindows.h"
 
-template <class ShaderParams>
-class Shader : public Pitbull::Component{
+struct ShadersParams {
+	DirectX::XMMATRIX matWorldViewProj;
+	DirectX::XMMATRIX matWorld;
+	DirectX::XMVECTOR vLumiere;
+	DirectX::XMVECTOR vCamera;
+	DirectX::XMVECTOR vAEcl;
+	DirectX::XMVECTOR vAMat;
+	DirectX::XMVECTOR vDEcl;
+	DirectX::XMVECTOR vDMat;
+	DirectX::XMVECTOR vSEcl;
+	DirectX::XMVECTOR vSMat;
+	float puissance;
+	int bTex;
+	DirectX::XMFLOAT2 remplissage;
+
+};
+
+struct Shader {
 	const wchar_t* FileName;
+	ID3D11Buffer* PConstantBuffer;
+	
+	ID3DX11Effect* PEffect;
+	ID3DX11EffectTechnique* PEffectTechnique;
+	ID3DX11EffectPass* PEffectPass;
+	ID3D11InputLayout* PInputLayout;
+	ID3D11SamplerState* PSampleState;
 
-public:
-	explicit Shader(const wchar_t* FileName)
-		: FileName{ FileName }
-	{}
-	// Force shader implementations to create a destructor to hopefully clean their ressources
-	virtual ~Shader();
+	ID3D11ShaderResourceView* pTextureD3D;
+	ID3D11SamplerState* pSampleState;
 
-	virtual ShaderParams GetShaderParams() noexcept = 0;
+	Shader(const wchar_t* FileName);
+	~Shader();
 };
 
-template <class ShaderParams>
-Shader<ShaderParams>::~Shader() = default;
-
-
-struct DefaultShaderParams
+Shader::Shader(const wchar_t* FileName)
 {
-	DirectX::XMMATRIX matWorldViewProj;	// la matrice totale 
-	DirectX::XMMATRIX matWorld;			// matrice de transformation dans le monde 
-	DirectX::XMVECTOR vLumiere; 		// la position de la source d'éclairage (Point)
-	DirectX::XMVECTOR vCamera; 			// la position de la caméra
-	DirectX::XMVECTOR vAEcl; 			// la valeur ambiante de l'éclairage
-	DirectX::XMVECTOR vAMat; 			// la valeur ambiante du matériau
-	DirectX::XMVECTOR vDEcl; 			// la valeur diffuse de l'éclairage 
-	DirectX::XMVECTOR vDMat; 			// la valeur diffuse du matériau 
-	DirectX::XMVECTOR vSEcl; 			// la valeur spéculaire de l'éclairage 
-	DirectX::XMVECTOR vSMat; 			// la valeur spéculaire du matériau 
-};
+	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
-class DefaultShader : Shader<DefaultShaderParams> {
-public:
-	DefaultShader()
-		: Shader<DefaultShaderParams>{ L"MiniPhong.fx" }
-	{}
+	// Création d'un tampon pour les constantes du VS
+	D3D11_BUFFER_DESC BuffDesc;
+	ZeroMemory(&BuffDesc, sizeof(BuffDesc));
 
-	void Init() override;
-	DefaultShaderParams GetShaderParams() noexcept override;
-};
+	BuffDesc.Usage = D3D11_USAGE_DEFAULT;
+	BuffDesc.ByteWidth = sizeof(ShadersParams);
+	BuffDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BuffDesc.CPUAccessFlags = 0;
+	PD3DDevice->CreateBuffer(&BuffDesc, nullptr, &PConstantBuffer);
+
+	// Pour l'effet
+	ID3DBlob* PFXBlob = nullptr;
+
+	PM3D::DXEssayer(D3DCompileFromFile(FileName, 0, 0, 0, "fx_5_0", 0, 0, &PFXBlob, 0), DXE_ERREURCREATION_FX);
+
+	D3DX11CreateEffectFromMemory(PFXBlob->GetBufferPointer(), PFXBlob->GetBufferSize(), 0, PD3DDevice, &PEffect);
+
+	PFXBlob->Release();
+
+	PEffectTechnique = PEffect->GetTechniqueByIndex(0);
+	PEffectPass = PEffectTechnique->GetPassByIndex(0);
+
+	D3DX11_PASS_SHADER_DESC PassDesc;
+	PEffectPass->GetVertexShaderDesc(&PassDesc);
+
+	D3DX11_EFFECT_SHADER_DESC EffectDesc;
+	PassDesc.pShaderVariable->GetShaderDesc(PassDesc.ShaderIndex, &EffectDesc);
+
+	PM3D::DXEssayer(PD3DDevice->CreateInputLayout(PM3D::CSommetBloc::layout,
+		PM3D::CSommetBloc::numElements,
+		EffectDesc.pBytecode,
+		EffectDesc.BytecodeLength,
+		&PInputLayout),
+		DXE_CREATIONLAYOUT);
+
+	// Initialisation des paramètres de sampling de la texture
+	D3D11_SAMPLER_DESC samplerDesc;
+
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 4;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	// Création de l'état de sampling
+	PD3DDevice->CreateSamplerState(&samplerDesc, &PSampleState);
+}
+
+Shader::~Shader()
+{
+	PM3D::DXRelacher(PConstantBuffer);
+	PM3D::DXRelacher(PEffectPass);
+	PM3D::DXRelacher(PEffectTechnique);
+	PM3D::DXRelacher(PInputLayout);
+	PM3D::DXRelacher(PEffect);
+}

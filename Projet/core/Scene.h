@@ -14,7 +14,12 @@ public:
 	void Init();
 	void Tick();
 
+	void AddActor(Pitbull::Actor& Actor);
+	std::vector<Pitbull::Actor>& GetActors();
+
 	physx::PxScene* PhysxScene;
-	ContactHandler* SceneContactHandler;
+	ContactHandler SceneContactHandler;
+
+private:
 	std::vector<Pitbull::Actor> Actors;
 };

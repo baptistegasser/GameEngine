@@ -3,7 +3,6 @@
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
-	, SceneContactHandler{ nullptr }
 {}
 
 void Scene::Init()
@@ -20,4 +19,14 @@ void Scene::Tick()
 	{
 		Actor.Tick(/* TODO deltatime */);
 	}
+}
+
+void Scene::AddActor(Pitbull::Actor& Actor)
+{
+	Actors.push_back(std::move(Actor));
+}
+
+std::vector<Pitbull::Actor>& Scene::GetActors()
+{
+	return Actors;
 }

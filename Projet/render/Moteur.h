@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Singleton.h"
 #include "dispositif.h"
 
@@ -76,7 +76,7 @@ public:
 		InitialisationsSpecific();
 
 		// * Initialisation du dispositif de rendu
-		pDispositif = CreationDispositifSpecific(CDS_PLEIN_ECRAN);
+		pDispositif = CreationDispositifSpecific(CDS_FENETRE);
 
 		CurrentScene = std::make_shared<Scene>();
 
@@ -85,8 +85,6 @@ public:
 
 		// * Initialisation de la scène
 		InitScene();
-
-		CurrentScene->Init();
 
 		// * Initialisation des paramètres de l'animation et 
 		//   préparation de la première image
@@ -177,17 +175,12 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			auto& Components = actor->GetComponents();
+		for (auto& actor : CurrentScene->GetActors()) {
+			// TODO Parent class for renderable
+			auto& Components = actor->GetComponents<MeshRenderer>();
 
-			for (auto& Comp : Components)
-			{
-				const auto ptr = dynamic_cast<MeshRenderer*>(Comp);
-				if (ptr != nullptr)
-				{
-					Comp->Tick(0.f);
-				}
+			for (auto& Comp : Components) {
+				Comp->Tick(0.f);
 			}
 		}
 
@@ -241,6 +234,11 @@ protected:
 		//camera.init(XMVectorSet(-2000.0f, 2000.0f, 2000.0f, 1.0f), XMVectorSet(1.0f, -1.0f, -1.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), &m_MatView, &m_MatProj, &m_MatViewProj, CCamera::CAMERA_TYPE::LEVEL);
 		//camera.update();
 
+		// Create actors
+		if (!InitObjets()) {
+			return 1;
+		}
+
 		//// Initialisation des matrices View et Proj
 		//// Dans notre cas, ces matrices sont fixes
 		m_MatView = XMMatrixLookAtLH(
@@ -269,12 +267,7 @@ protected:
 			&m_MatProj,
 			&m_MatViewProj };
 
-
-		// Create actors
-		if (!InitObjets()) {
-			return 1;
-		}
-
+		// Finnaly init the scene
 		CurrentScene->Init();
 
 		return 0;
@@ -285,6 +278,8 @@ protected:
 	{
 		auto Mesh = std::make_unique<Pitbull::Actor>();
 		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
+		Mesh->AddComponent<RigidBody>(false, false, 10.f, physx::PxVec3{0.f, 9.81f, 0.f});
 
 		CurrentScene->AddActor(Mesh);
 

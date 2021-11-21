@@ -169,7 +169,7 @@
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Transform.cpp" />
+    <ClCompile Include="math\Math.cpp" />
     <ClCompile Include="physic\BoxCollider.cpp" />
     <ClCompile Include="physic\CapsuleCollider.cpp" />
     <ClCompile Include="physic\Collider.cpp" />
@@ -216,7 +216,7 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
-    <ClInclude Include="math\Transform.h" />
+    <ClInclude Include="math\Math.h" />
     <ClInclude Include="physic\BoxCollider.h" />
     <ClInclude Include="physic\CapsuleCollider.h" />
     <ClInclude Include="physic\Collider.h" />

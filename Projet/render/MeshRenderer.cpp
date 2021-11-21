@@ -3,6 +3,7 @@
 
 #include "MeshLoader.h"
 #include "MoteurWindows.h"
+#include "math/Math.h"
 
 #include "util/ResourcesManager.h"
 
@@ -33,6 +34,10 @@ void MeshRenderer::Init()
 
 void MeshRenderer::Tick(const float& delta_time)
 {
+	// Update position
+	matWorld = Math::TransformToMatrix(ParentActor->Transform);
+
+
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
 

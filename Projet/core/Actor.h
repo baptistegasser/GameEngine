@@ -53,6 +53,46 @@ namespace Pitbull
 		static ActorID NextID;
 
 	private:
-		std::vector<std::unique_ptr<Component>> Components;
+		std::vector<Component*> Components;
 	};
+
+	template <class Impl, class ... Args>
+	void Actor::AddComponent(Args&&... Arguments)
+	{
+		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
+
+		Components.push_back(new Impl{ this, std::forward<Args>(Arguments)... });
+	}
+
+	template <class Impl>
+	Impl* Actor::GetComponent() const
+	{
+		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
+
+		for (auto Comp : Components) {
+			auto CompImpl = dynamic_cast<Impl*>(Comp);
+			if (CompImpl) {
+				return CompImpl;
+			}
+		}
+
+		throw std::logic_error{ std::string{"The actor has no component of type "} + typeid(Impl).name() };
+	}
+
+	template <class Impl>
+	std::vector<Impl*> Actor::GetComponents() const
+	{
+		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
+
+		std::vector<Impl*> MatchingComponents;
+
+		for (auto& Comp : Components) {
+			auto CompImpl = dynamic_cast<Impl*>(Comp);
+			if (CompImpl) {
+				MatchingComponents.push_back(CompImpl);
+			}
+		}
+
+		return MatchingComponents;
+	}
 } // namespace Pitbull

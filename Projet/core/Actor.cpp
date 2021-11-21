@@ -34,50 +34,10 @@ namespace Pitbull
 		All.reserve(Components.size());
 
 		for (auto& Comp : Components)
-			All.push_back(Comp.get());
+			All.push_back(Comp);
 
 		return All;
 	}
 
 	Actor::ActorID Actor::NextID = 0;
-
-	template <class Impl, class ... Args>
-	void Actor::AddComponent(Args&&... Args)
-	{
-		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
-
-		Components.push_back(std::make_unique<Component>(this, new Impl{ std::forward(Args ...) }));
-	}
-
-	template <class Impl>
-	Impl* Actor::GetComponent() const
-	{
-		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
-
-		for (auto Comp : Components) {
-			auto CompImpl = dynamic_cast<Impl*>(Comp.get());
-			if (CompImpl) {
-				return CompImpl;
-			}
-		}
-
-		throw std::logic_error{ std::string{"The actor has no component of type "} + typeid(Impl).name() };
-	}
-
-	template <class Impl>
-	std::vector<Impl*> Actor::GetComponents() const
-	{
-		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
-
-		std::vector<Impl*> MatchingComponents;
-
-		for (auto Comp : Components) {
-			auto CompImpl = dynamic_cast<Impl*>(Comp.get());
-			if (CompImpl) {
-				MatchingComponents.push_back(CompImpl);
-			}
-		}
-
-		return MatchingComponents;
-	}
 } // namespace Pitbull

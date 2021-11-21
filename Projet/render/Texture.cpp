@@ -3,7 +3,7 @@
 #include "dispositifD3D11.h"
 #include "Texture.h"
 #include "resources/resource.h"
-#include "util.h"
+#include "util/util.h"
 #include "DDSTextureLoader.h"
 #include "MoteurWindows.h"
 

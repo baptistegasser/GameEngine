@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "resources/resource.h"
 #include "DispositifD3D11.h"
-#include "Util.h"
+#include "util/Util.h"
 #include "InfoDispositif.h"
 
 namespace PM3D

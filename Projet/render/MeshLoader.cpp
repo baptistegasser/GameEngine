@@ -2,7 +2,7 @@
 #include "MeshLoader.h"
 
 #include "MoteurWindows.h"
-#include "util.h"
+#include "util/util.h"
 #include "resources/resource.h"
 
 void OMBMeshLoader::Load(const std::string& FileName)

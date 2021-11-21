@@ -2,7 +2,7 @@
 
 #include "moteur.h"
 #include "dispositifD3D11.h"
-#include "Horloge.h"
+#include "util/Horloge.h"
 
 namespace PM3D
 {

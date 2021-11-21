@@ -52,10 +52,10 @@
     <Filter Include="Source Files\physic\components">
       <UniqueIdentifier>{962782c1-da4b-49e5-b68a-fb607be82878}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\render\NewSystemTMP">
+    <Filter Include="Source Files\render\components">
       <UniqueIdentifier>{bc092bae-0a89-4efc-9622-4e501f136c7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\render\NewSystemTMP">
+    <Filter Include="Header Files\render\components">
       <UniqueIdentifier>{22d6f103-db7b-4336-af41-9417c3be1736}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -94,9 +94,6 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\dispositifD3D11.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Horloge.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\InfoDispositif.cpp">
@@ -163,19 +160,19 @@
       <Filter>Source Files\util</Filter>
     </ClCompile>
     <ClCompile Include="render\Texture.cpp">
-      <Filter>Source Files\render\NewSystemTMP</Filter>
+      <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="render\Shader.cpp">
-      <Filter>Source Files\render\NewSystemTMP</Filter>
+      <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="render\MeshRenderer.cpp">
-      <Filter>Source Files\render\NewSystemTMP</Filter>
+      <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="render\Material.cpp">
-      <Filter>Source Files\render\NewSystemTMP</Filter>
+      <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="render\MeshLoader.cpp">
-      <Filter>Source Files\render\NewSystemTMP</Filter>
+      <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="util\ResourcesManager.cpp">
       <Filter>Source Files\util</Filter>
@@ -184,7 +181,10 @@
       <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="render\Camera.cpp">
-      <Filter>Source Files\render\NewSystemTMP</Filter>
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Horloge.cpp">
+      <Filter>Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +230,6 @@
     <ClInclude Include="render\dispositifD3D11.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Horloge.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\InfoDispositif.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -255,9 +252,6 @@
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\Terrain.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\util.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\AfficheurSprite.h">
@@ -309,19 +303,19 @@
       <Filter>Header Files\physic</Filter>
     </ClInclude>
     <ClInclude Include="render\Material.h">
-      <Filter>Header Files\render\NewSystemTMP</Filter>
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\MeshRenderer.h">
-      <Filter>Header Files\render\NewSystemTMP</Filter>
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\Texture.h">
-      <Filter>Header Files\render\NewSystemTMP</Filter>
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\Shader.h">
-      <Filter>Header Files\render\NewSystemTMP</Filter>
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\MeshLoader.h">
-      <Filter>Header Files\render\NewSystemTMP</Filter>
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="util\ResourcesManager.h">
       <Filter>Header Files\util</Filter>
@@ -330,7 +324,10 @@
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="render\Camera.h">
-      <Filter>Header Files\render\NewSystemTMP</Filter>
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Horloge.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

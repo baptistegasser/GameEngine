@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "AfficheurTexte.h"
-#include "util.h"
+#include "util/util.h"
 
 namespace PM3D
 {

@@ -2,7 +2,7 @@
 #include "Shader.h"
 
 #include "resources/resource.h"
-#include "util.h"
+#include "util/util.h"
 #include "sommetbloc.h"
 #include "MoteurWindows.h"
 

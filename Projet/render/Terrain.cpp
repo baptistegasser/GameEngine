@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "Terrain.h"
 #include "sommetTerrain.h"
-#include "util.h"
+#include "util/util.h"
 #include "DispositifD3D11.h"
 
 #include "resources/resource.h"

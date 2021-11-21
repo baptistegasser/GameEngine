@@ -2,7 +2,7 @@
 #include "AfficheurSprite.h"
 #include "resources/resource.h"
 #include "MoteurWindows.h"
-#include "util.h"
+#include "util/util.h"
 #include "DispositifD3D11.h"
 
 namespace PM3D

@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "Bloc.h"
 #include "sommetbloc.h"
-#include "util.h"
+#include "util/util.h"
 #include "DispositifD3D11.h"
 
 #include "resources/resource.h"

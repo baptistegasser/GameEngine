@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DIManipulateur.h"
-#include "util.h"
+#include "util/util.h"
 #include "resources/resource.h"
 
 namespace PM3D

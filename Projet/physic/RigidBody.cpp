@@ -16,7 +16,6 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, bool IsStatic, bool DisableGravity,
 
 RigidBody::~RigidBody()
 {
-	std::cout << "debug";
 	PX_RELEASE(RigidActor);
 }
 
@@ -36,12 +35,8 @@ void RigidBody::Init()
 	}
 
 	const auto Colliders = ParentActor->GetComponents<Collider>();
-	for( const auto Collider : Colliders )
-	{
-		auto TMPMat = Collider->GetPxMaterial();
-		auto TMPGeo = Collider->GetPxGeometry();
-
-		PxRigidActorExt::createExclusiveShape(*RigidActor, *TMPGeo, *TMPMat);
+	for( const auto Collider : Colliders) {
+		PxRigidActorExt::createExclusiveShape(*RigidActor, *Collider->GetPxGeometry(), *Collider->GetPxMaterial());
 	}
 
 	PhysicManager::GetInstance().CurrentScene->PhysxScene->addActor(*RigidActor);

@@ -8,11 +8,11 @@ class CDispositifD3D11;
 class CTexture
 {
 public:
-	CTexture(const std::wstring& filename, CDispositifD3D11* pDispositif);
+	CTexture(const std::wstring& filename);
 	~CTexture();
 
-	const std::wstring& GetFilename() const { return m_Filename; }
-	ID3D11ShaderResourceView* GetD3DTexture() { return m_Texture; }
+	const std::wstring& GetFilename() const;
+	ID3D11ShaderResourceView* GetD3DTexture();
 
 private:
 	std::wstring m_Filename;

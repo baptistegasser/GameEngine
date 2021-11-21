@@ -210,14 +210,12 @@ void CAfficheurSprite::AjouterSprite(const std::string& NomTexture,
 	float facteurX, facteurY;
 
 	// Initialisation de la texture
-	CGestionnaireDeTextures& TexturesManager =
-		CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
 
 	std::wstring ws(NomTexture.begin(), NomTexture.end());
 
 	std::unique_ptr<CSprite> pSprite = std::make_unique<CSprite>();;
-	pSprite->pTextureD3D =
-		TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+	//pSprite->pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
 
 	// Obtenir les dimensions de la texture si _dx et _dy sont à 0;
 	if (_dx == 0 && _dy == 0)
@@ -265,14 +263,12 @@ void CAfficheurSprite::AjouterPanneau(const std::string& NomTexture,
 	float _dx, float _dy)
 {
 	// Initialisation de la texture
-	CGestionnaireDeTextures& TexturesManager =
-		CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
 
 	std::wstring ws(NomTexture.begin(), NomTexture.end());
 
 	std::unique_ptr<CPanneau> pPanneau = std::make_unique<CPanneau>();
-	pPanneau->pTextureD3D =
-		TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+	//pPanneau->pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
 
 	// Obtenir la dimension de la texture si _dx et _dy sont à 0;
 	if (_dx == 0.0f && _dy == 0.0f)

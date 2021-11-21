@@ -8,7 +8,6 @@
 #include "ObjetMesh.h"
 #include "ChargeurOBJ.h"
 
-#include "GestionnaireDeTextures.h"
 #include "AfficheurSprite.h"
 #include "AfficheurTexte.h"
 #include "DIManipulateur.h"
@@ -137,7 +136,6 @@ public:
 	const XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
-	CGestionnaireDeTextures& GetTextureManager() { return TexturesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
 
@@ -389,9 +387,6 @@ protected:
 	XMMATRIX m_MatView;
 	XMMATRIX m_MatProj;
 	XMMATRIX m_MatViewProj;
-
-	// Le gestionnaire de texture
-	CGestionnaireDeTextures TexturesManager;
 
 	// Pour le texte
 	std::unique_ptr<CAfficheurTexte> pTexte1;

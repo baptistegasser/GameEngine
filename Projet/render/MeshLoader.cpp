@@ -99,14 +99,14 @@ void OMBMeshLoader::Load(const std::string& FileName)
 	}
 
 	// 4d) Chargement des textures
-	PM3D::CGestionnaireDeTextures& TexturesManager = PM3D::CMoteurWindows::GetInstance().GetTextureManager();
+	ResourcesManager& ResourcesManager = ResourcesManager::GetInstance();
 
 	for (uint32_t i = 0; i < Materials.size(); ++i)
 	{
 		if (Materials[i].TextureFile.length() > 0)
 		{
 			std::wstring ws(Materials[i].TextureFile.begin(), Materials[i].TextureFile.end());
-			Materials[i].Texture = TexturesManager.GetNewTexture(ws.c_str(), &PM3D::CMoteurWindows::GetInstance().GetDispositif());
+			Materials[i].Texture = ResourcesManager.GetTexture(ws);
 		}
 	}
 }

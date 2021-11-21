@@ -348,14 +348,14 @@ void CObjetMesh::TransfertObjet(const IChargeur& chargeur)
 	}
 
 	// 4d) Chargement des textures
-	CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
 
 	for (uint32_t i = 0; i < Material.size(); ++i)
 	{
 		if (Material[i].NomFichierTexture.length() > 0)
 		{
 			const std::wstring ws(Material[i].NomFichierTexture.begin(), Material[i].NomFichierTexture.end());
-			Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+			//Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
 		}
 	}
 }
@@ -547,14 +547,14 @@ void CObjetMesh::LireFichierBinaire(const std::string& nomFichier)
 	}
 
 	// 4d) Chargement des textures
-	CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
 
 	for (uint32_t i = 0; i < Material.size(); ++i)
 	{
 		if (Material[i].NomFichierTexture.length() > 0)
 		{
 			std::wstring ws(Material[i].NomFichierTexture.begin(), Material[i].NomFichierTexture.end());
-			Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+			//Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
 		}
 	}
 }

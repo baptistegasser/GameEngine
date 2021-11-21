@@ -5,6 +5,7 @@
 #include "resources/resource.h"
 #include "util.h"
 #include "DDSTextureLoader.h"
+#include "MoteurWindows.h"
 
 using namespace DirectX;
 
@@ -17,11 +18,21 @@ CTexture::~CTexture()
 	DXRelacher(m_Texture);
 }
 
-CTexture::CTexture(const std::wstring& filename, CDispositifD3D11* pDispositif)
+const std::wstring& CTexture::GetFilename() const
+{
+	return m_Filename;
+}
+
+ID3D11ShaderResourceView* CTexture::GetD3DTexture()
+{
+	return m_Texture;
+}
+
+CTexture::CTexture(const std::wstring& filename)
 	: m_Filename(filename)
 	, m_Texture(nullptr)
 {
-	ID3D11Device* pDevice = pDispositif->GetD3DDevice();
+	ID3D11Device* pDevice = CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
 	// Charger la texture en ressource
 	DXEssayer(CreateDDSTextureFromFile(pDevice,

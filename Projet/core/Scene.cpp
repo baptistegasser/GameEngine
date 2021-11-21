@@ -9,7 +9,7 @@ void Scene::Init()
 {
 	for (auto& Actor : Actors)
 	{
-		Actor.Init();
+		Actor->Init();
 	}
 }
 
@@ -17,16 +17,16 @@ void Scene::Tick()
 {
 	for (auto& Actor : Actors)
 	{
-		Actor.Tick(/* TODO deltatime */);
+		Actor->Tick(/* TODO deltatime */);
 	}
 }
 
-void Scene::AddActor(Pitbull::Actor& Actor)
+void Scene::AddActor(ActorPtr& Actor)
 {
 	Actors.push_back(std::move(Actor));
 }
 
-std::vector<Pitbull::Actor>& Scene::GetActors()
+std::vector<Scene::ActorPtr>& Scene::GetActors()
 {
 	return Actors;
 }

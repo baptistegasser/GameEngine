@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Singleton.h"
 #include "dispositif.h"
 
@@ -179,7 +179,7 @@ protected:
 
 		for (auto& actor : CurrentScene->GetActors())
 		{
-			auto& Components = actor.GetComponents();
+			auto& Components = actor->GetComponents();
 
 			for (auto& Comp : Components)
 			{
@@ -283,10 +283,10 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
-		Pitbull::Actor Mesh;
-		Mesh.AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
+		auto Mesh = std::make_unique<Pitbull::Actor>();
+		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
 
-		CurrentScene->GetActors().push_back(std::move(Mesh));
+		CurrentScene->AddActor(Mesh);
 
 		// Puis, il est ajouté à la scène
 		//char* filename = new char[50]("./src/Heightmap.bmp");
@@ -355,7 +355,7 @@ protected:
 		}*/
 		for (auto& actor : CurrentScene->GetActors())
 		{
-			auto& Components = actor.GetComponents();
+			auto& Components = actor->GetComponents();
 
 			for (const auto& Comp : Components)
 			{

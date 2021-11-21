@@ -9,5 +9,6 @@ public:
 	const physx::PxVec3 HalfExtent;
 
 protected:
+	friend class Pitbull::Actor;
 	explicit BoxCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const physx::PxVec3 HalfExtent);
 };

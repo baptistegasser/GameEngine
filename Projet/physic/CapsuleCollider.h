@@ -8,6 +8,8 @@ public:
 
 	const float Radius;
 	const float HalfHeight;
+
 protected:
+	friend class Pitbull::Actor;
 	explicit CapsuleCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const float Radius, const float HalfHeight);
 };

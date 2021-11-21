@@ -10,8 +10,6 @@ namespace Pitbull
 	///	However, us Component<Impl> to create new component classes.
 	/// </summary>
 	class Component {
-		friend class Actor;
-
 	public:
 		// Virtual, prevent direct instantiation of this class.
 		virtual ~Component() = 0;

@@ -9,5 +9,6 @@ public:
 	const float Radius;
 
 protected:
+	friend class Pitbull::Actor;
 	explicit SphereCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const float Radius);
 };

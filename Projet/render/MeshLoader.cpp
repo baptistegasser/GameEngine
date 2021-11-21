@@ -2,6 +2,8 @@
 #include "MeshLoader.h"
 
 #include "MoteurWindows.h"
+#include "util.h"
+#include "resources/resource.h"
 
 void OMBMeshLoader::Load(const std::string& FileName)
 {
@@ -59,8 +61,7 @@ void OMBMeshLoader::Load(const std::string& FileName)
 		InitData.pSysMem = index.get();
 		PIndexBuffer = nullptr;
 
-		PM3D::DXEssayer(PD3DDevice->CreateBuffer(&bd, &InitData, &PIndexBuffer),
-			DXE_CREATIONINDEXBUFFER);
+		PM3D::DXEssayer(PD3DDevice->CreateBuffer(&bd, &InitData, &PIndexBuffer), DXE_CREATIONINDEXBUFFER);
 	}
 
 	// 3. Les sous-objets

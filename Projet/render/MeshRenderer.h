@@ -7,16 +7,18 @@
 class MeshRenderer : public Pitbull::Component {
 public:
 	MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName);
-	MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName, Shader& MeshShader);
+	MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName, Shader* MeshShader);
 	~MeshRenderer() = default;
 
 	void Init() override;
 	void Tick(const float& DeltaTime) override;
 
+	ShadersParams ShaderParams;
+
 private:
 	std::string MeshFileName;
-	XMMATRIX matWorld;
-	Shader MeshShader;
+	DirectX::XMMATRIX matWorld;
+	Shader* MeshShader;
 	ID3D11Buffer* PIndexBuffer;
 	ID3D11Buffer* PVertexBuffer;
 	int SubsetCount;

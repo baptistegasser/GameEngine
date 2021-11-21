@@ -37,6 +37,7 @@ private:
 			Mat.Specular = Specular;
 			Mat.Power = Puissance;
 			Mat.Transparency = transparent;
+			return Mat;
 		}
 	};
 };

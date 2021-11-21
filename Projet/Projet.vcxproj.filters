@@ -96,9 +96,6 @@
     <ClCompile Include="render\dispositifD3D11.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="render\GestionnaireDeTextures.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\Horloge.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -233,9 +230,6 @@
     <ClInclude Include="render\dispositifD3D11.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\GestionnaireDeTextures.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Horloge.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -252,9 +246,6 @@
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\ObjetMesh.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Singleton.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\sommetbloc.h">

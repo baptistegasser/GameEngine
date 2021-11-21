@@ -190,7 +190,6 @@
     <ClCompile Include="render\DIManipulateur.cpp" />
     <ClCompile Include="render\dispositif.cpp" />
     <ClCompile Include="render\dispositifD3D11.cpp" />
-    <ClCompile Include="render\GestionnaireDeTextures.cpp" />
     <ClCompile Include="render\Horloge.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
     <ClCompile Include="render\Material.cpp" />
@@ -240,7 +239,6 @@
     <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\dispositif.h" />
     <ClInclude Include="render\dispositifD3D11.h" />
-    <ClInclude Include="render\GestionnaireDeTextures.h" />
     <ClInclude Include="render\Horloge.h" />
     <ClInclude Include="render\InfoDispositif.h" />
     <ClInclude Include="render\Material.h" />
@@ -251,7 +249,6 @@
     <ClInclude Include="render\objet3d.h" />
     <ClInclude Include="render\ObjetMesh.h" />
     <ClInclude Include="render\Shader.h" />
-    <ClInclude Include="render\Singleton.h" />
     <ClInclude Include="render\sommetbloc.h" />
     <ClInclude Include="render\sommetTerrain.h" />
     <ClInclude Include="render\Terrain.h" />

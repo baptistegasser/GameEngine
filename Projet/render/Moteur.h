@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "Singleton.h"
 #include "dispositif.h"
 
 #include "Objet3D.h"
@@ -18,6 +17,7 @@
 #include "physic/PhysicManager.h"
 
 #include "util/ResourcesManager.h"
+#include "util/Singleton.h"
 
 // Physic components
 #include "physic/RigidBody.h"
@@ -48,7 +48,7 @@ const double EcartTemps = 1.0 / static_cast<double>(IMAGESPARSECONDE);
 //        le dispositif Direct3D), l'utilisation d'un singleton 
 //        nous simplifiera plusieurs aspects.
 //
-template <class T, class TClasseDispositif> class CMoteur :public CSingleton<T>
+template <class T, class TClasseDispositif> class CMoteur :public Singleton<T>
 {
 public:
 

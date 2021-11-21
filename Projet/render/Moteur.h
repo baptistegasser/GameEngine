@@ -19,12 +19,16 @@
 #include "core/Scene.h"
 #include "physic/PhysicManager.h"
 
+#include "util/ResourcesManager.h"
+
 // Physic components
 #include "physic/RigidBody.h"
 #include "physic/SphereCollider.h"
 #include "physic/BoxCollider.h"
 #include "physic/CapsuleCollider.h"
+// Render components
 #include "render/MeshRenderer.h"
+// Gameplay components
 
 namespace PM3D
 {
@@ -74,13 +78,15 @@ public:
 		// * Initialisation du dispositif de rendu
 		pDispositif = CreationDispositifSpecific(CDS_PLEIN_ECRAN);
 
+		CurrentScene = std::make_shared<Scene>();
+
 		PhysicManager::GetInstance().Init();
 		PhysicManager::GetInstance().InitScene(CurrentScene);
 
 		// * Initialisation de la scène
 		InitScene();
 
-		CurrentScene.Init();
+		CurrentScene->Init();
 
 		// * Initialisation des paramètres de l'animation et 
 		//   préparation de la première image
@@ -171,13 +177,14 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		for (auto& actor : CurrentScene->Actors)
+		for (auto& actor : CurrentScene->GetActors())
 		{
-			auto Components = actor.GetComponents();
+			auto& Components = actor.GetComponents();
 
-			for (const auto Comp : Components)
+			for (auto& Comp : Components)
 			{
-				if (dynamic_cast<MeshRenderer*>(Comp) != nullptr)
+				const auto ptr = dynamic_cast<MeshRenderer*>(Comp);
+				if (ptr != nullptr)
 				{
 					Comp->Tick(0.f);
 				}
@@ -277,10 +284,9 @@ protected:
  	bool InitObjets()
 	{
 		Pitbull::Actor Mesh;
-		Mesh.AddComponent<MeshRenderer>(".\\modeles\\jin\\jin.OMB", Shader{ L".\\shaders\\MiniPhong.fx" });
+		Mesh.AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
 
-
-		CurrentScene->Actors.push_back(Mesh);
+		CurrentScene->GetActors().push_back(std::move(Mesh));
 
 		// Puis, il est ajouté à la scène
 		//char* filename = new char[50]("./src/Heightmap.bmp");
@@ -347,11 +353,11 @@ protected:
 			camera.update(tempsEcoule);
 
 		}*/
-		for (auto& actor : CurrentScene->Actors)
+		for (auto& actor : CurrentScene->GetActors())
 		{
-			auto Components = actor.GetComponents();
+			auto& Components = actor.GetComponents();
 
-			for (const auto Comp : Components)
+			for (const auto& Comp : Components)
 			{
 				if (dynamic_cast<MeshRenderer*>(Comp) == nullptr)
 				{

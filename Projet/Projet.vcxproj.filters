@@ -186,6 +186,9 @@
     <ClCompile Include="render\MeshLoader.cpp">
       <Filter>Source Files\render\NewSystemTMP</Filter>
     </ClCompile>
+    <ClCompile Include="util\ResourcesManager.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="math\Transform.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="render\MeshLoader.h">
       <Filter>Header Files\render\NewSystemTMP</Filter>
+    </ClInclude>
+    <ClInclude Include="util\ResourcesManager.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

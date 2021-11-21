@@ -208,6 +208,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="util\NonCopyable.cpp" />
+    <ClCompile Include="util\ResourcesManager.cpp" />
     <ClCompile Include="util\Singleton.cpp" />
     <ClCompile Include="util\Util.cpp" />
   </ItemGroup>
@@ -259,6 +260,7 @@
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util\NonCopyable.h" />
+    <ClInclude Include="util\ResourcesManager.h" />
     <ClInclude Include="util\Singleton.h" />
     <ClInclude Include="util\Util.h" />
   </ItemGroup>

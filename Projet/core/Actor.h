@@ -24,6 +24,9 @@ namespace Pitbull
 		void Init();
 		void Tick();
 
+		template <class ... Args>
+		static std::unique_ptr<Actor> New(Args&&... args);
+
 		template <class Impl, class ... Args>
 		void AddComponent(Args&&... args);
 
@@ -55,6 +58,12 @@ namespace Pitbull
 	private:
 		std::vector<Component*> Components;
 	};
+
+	template<class ...Args>
+	inline std::unique_ptr<Actor> Actor::New(Args && ...args)
+	{
+		return std::make_unique<Actor>(std::forward<Args>(Arguments)...);
+	}
 
 	template <class Impl, class ... Args>
 	void Actor::AddComponent(Args&&... Arguments)

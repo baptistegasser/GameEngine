@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Singleton.h"
 #include "dispositif.h"
 
@@ -276,11 +276,10 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
-		auto Mesh = std::make_unique<Pitbull::Actor>();
+		auto Mesh = Pitbull::Actor::New();
 		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
-		Mesh->AddComponent<RigidBody>(false, false, 10.f, physx::PxVec3{0.f, 9.81f, 0.f});
-
+		Mesh->AddComponent<RigidBody>(false, true, 10.f);
 		CurrentScene->AddActor(Mesh);
 
 		// Puis, il est ajouté à la scène

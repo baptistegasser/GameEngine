@@ -1,48 +1,29 @@
 #pragma once
-#include <vector>
-#include <DirectXMath.h>
-#include "objet3d.h"
 
-namespace PM3D {
-	class CCamera
-	{
-		DirectX::XMVECTOR position;
-		DirectX::XMVECTOR direction;
-		DirectX::XMVECTOR up;
-		DirectX::XMMATRIX* pMatView;
-		DirectX::XMMATRIX* pMatProj;
-		DirectX::XMMATRIX* pMatViewProj;
+#include "core/Component.h"
 
-	public:
-		static const int HEIGHT = 100;
+class Camera : public Pitbull::Component {
+protected:
+	friend class Pitbull::Actor;
+	Camera(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Position, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection, DirectX::XMMATRIX* PMatView, DirectX::XMMATRIX* PMatProj, DirectX::XMMATRIX* PMatViewProj);
 
-		enum CAMERA_TYPE {
-			FREE,
-			LEVEL
-		};
+public:
+	~Camera() = default;
 
-	private:
+	void Tick(const float& DeltaTime) override;
 
+	void SetPosition(const DirectX::XMVECTOR& NewPosition) noexcept;
+	void SetDirection(const DirectX::XMVECTOR& NewDirection) noexcept;
+	void SetUpDirection(const DirectX::XMVECTOR& NewUpDirection) noexcept;
 
-		CAMERA_TYPE type;
+private:
+	DirectX::XMVECTOR Position;
+	DirectX::XMVECTOR Direction;
+	DirectX::XMVECTOR UpDirection;
+	DirectX::XMMATRIX* PMatView;
+	DirectX::XMMATRIX* PMatProj;
+	DirectX::XMMATRIX* PMatViewProj;
 
-	public:
-		bool waitForSwap = false;
-		CCamera() = default;
-		CCamera(const DirectX::XMVECTOR& position_in, const DirectX::XMVECTOR& direction_in, const DirectX::XMVECTOR& up_in, DirectX::XMMATRIX* pMatView_in, DirectX::XMMATRIX* pMatProj_in, DirectX::XMMATRIX* pMatViewProj_in, CAMERA_TYPE type = FREE);
-
-		void init(const DirectX::XMVECTOR& position_in, const DirectX::XMVECTOR& direction_in, const DirectX::XMVECTOR& up_in, DirectX::XMMATRIX* pMatView_in, DirectX::XMMATRIX* pMatProj_in, DirectX::XMMATRIX* pMatViewProj_in, CAMERA_TYPE type = FREE);
-
-		void setPosition(const DirectX::XMVECTOR& position_in);
-		void setDirection(const DirectX::XMVECTOR& direction_in);
-		void setUp(const DirectX::XMVECTOR& up_in);
-
-		CAMERA_TYPE getType() { return type; }
-		XMVECTOR getPosition() { return position; }
-
-		void swapCameraMode();
-
-		void update(float tempsEcoule = 0.0f);
-		void update(float y, float tempsEcoule);
-	};
-}
+	// TODO
+	float FOV, AspectRatio, NearClip, FarClip;
+};

@@ -81,9 +81,6 @@
     <ClCompile Include="render\ChargeurOBJ.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="render\Camera.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\BlocEffet1.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -189,6 +186,9 @@
     <ClCompile Include="math\Math.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="render\Camera.cpp">
+      <Filter>Source Files\render\NewSystemTMP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -207,9 +207,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="render\BlocEffet1.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Camera.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\chargeur.h">
@@ -340,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="math\Math.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Camera.h">
+      <Filter>Header Files\render\NewSystemTMP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

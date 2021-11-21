@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Singleton.h"
 #include "dispositif.h"
 
@@ -12,7 +12,6 @@
 #include "AfficheurSprite.h"
 #include "AfficheurTexte.h"
 #include "DIManipulateur.h"
-#include "Camera.h"
 #include "Terrain.h"
 
 #include "core/Actor.h"
@@ -28,6 +27,7 @@
 #include "physic/CapsuleCollider.h"
 // Render components
 #include "render/MeshRenderer.h"
+#include "render/Camera.h"
 // Gameplay components
 
 namespace PM3D
@@ -260,13 +260,6 @@ protected:
 		// Calcul de VP a l'avance
 		m_MatViewProj = m_MatView * m_MatProj;
 
-		camera = CCamera{ XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
-			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
-			&m_MatView,
-			&m_MatProj,
-			&m_MatViewProj };
-
 		// Finnaly init the scene
 		CurrentScene->Init();
 
@@ -281,6 +274,22 @@ protected:
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
 		Mesh->AddComponent<RigidBody>(false, true, 10.f);
 		CurrentScene->AddActor(Mesh);
+
+		auto MyCamera = Pitbull::Actor::New();
+		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
+			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
+			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
+			&m_MatView,
+			&m_MatProj,
+			&m_MatViewProj);
+		CurrentScene->AddActor(MyCamera);
+
+		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
+			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
+			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
+			&m_MatView,
+			&m_MatProj,
+			&m_MatViewProj };*/
 
 		// Puis, il est ajouté à la scène
 		//char* filename = new char[50]("./src/Heightmap.bmp");
@@ -360,7 +369,7 @@ protected:
 			}
 		}
 
-		camera.update(tempsEcoule);
+		//camera.update(tempsEcoule);
 
 		return true;
 	}
@@ -392,9 +401,6 @@ protected:
 
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
-
-	// La camera
-	CCamera camera;
 
 	// Le Terrain
 	Terrain* terrain;

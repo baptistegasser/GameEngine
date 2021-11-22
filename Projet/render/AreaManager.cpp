@@ -8,21 +8,52 @@ using ActorPtr = std::shared_ptr<Pitbull::Actor>;
 using namespace std;
 void AreaManager::Init(int WidthMap, int HeightMap)
 {
-    Width = 1 + (int)floor((float)WidthMap / (float)Size);
-    Height = 1 + (int)floor((float)HeightMap / (float)Size);
+    if (WidthMap % Size == 0) {
+        Width = WidthMap / Size;
+    }
+    else {
+        Width = 1 + (int)floor((float)WidthMap / (float)Size);
+    }
 
-    Grid = vector(Width, vector(Height, set<ActorPtr>()));
+    if (HeightMap % Size == 0) {
+        Height = HeightMap / Size;
+    }
+    else {
+        Height = 1 + (int)floor((float)HeightMap / (float)Size);
+    }
+
+    
+
+    Grid = vector(Width*2, vector(Height*2, set<ActorPtr>()));
 }
 
 void AreaManager::PlaceActor(ActorPtr &Actor)
 {
-    int X = (int) floor(Actor->Transform.p.x / Size);
-    int Y = (int) floor(Actor->Transform.p.y / Size);
+    float X = Actor->Transform.p.x / Size;
+    float Y = Actor->Transform.p.z / Size;
 
-    Actor->GridX = X;
-    Actor->GridY = Y;
+    int XGrid;
+    int YGrid;
 
-    Grid[X][Y].insert(Actor);
+    if (X < 0) {
+        XGrid = Width + (int) ceil(X);
+    }
+    else {
+        XGrid = Width + (int) floor(X);
+    }
+
+    if (Y < 0) {
+        YGrid = Width + (int)ceil(Y);
+    }
+    else {
+        YGrid = Width + (int)floor(Y);
+    }
+
+
+    Actor->GridX = XGrid;
+    Actor->GridY = YGrid;
+
+    Grid[XGrid][YGrid].insert(Actor);
 }
 
 void AreaManager::PlaceCamera(ActorPtr& Actor)
@@ -32,25 +63,60 @@ void AreaManager::PlaceCamera(ActorPtr& Actor)
 
 void AreaManager::MoveActor(ActorPtr &Actor)
 {
-    int X = (int) floor(Actor->Transform.p.x / Size);
-    int Y = (int) floor(Actor->Transform.p.y / Size);
+    float X = Actor->Transform.p.x / Size;
+    float Y = Actor->Transform.p.z / Size;
 
-    if ((Actor->GridX == X) && (Actor->GridY == Y))
+    int XGrid;
+    int YGrid;
+
+    if (X < 0) {
+        XGrid = Width + (int)ceil(X);
+    }
+    else {
+        XGrid = Width + (int)floor(X);
+    }
+
+    if (Y < 0) {
+        YGrid = Width + (int)ceil(Y);
+    }
+    else {
+        YGrid = Width + (int)floor(Y);
+    }
+
+    if ((Actor->GridX == XGrid) && (Actor->GridY == YGrid))
         return;
 
     Grid[Actor->GridX][Actor->GridY].erase(Actor);
 
-    Actor->GridX = X;
-    Actor->GridY = Y;
+    Actor->GridX = XGrid;
+    Actor->GridY = YGrid;
 
-    Grid[X][Y].insert(Actor);
+    Grid[XGrid][YGrid].insert(Actor);
 
 }
 
 std::set<ActorPtr> AreaManager::GetActors()
 {
-    int XArea = (int)floor(Camera->Transform.p.x / Size);
-    int YArea = (int)floor(Camera->Transform.p.y / Size);
 
-    return  Grid[XArea][YArea];
+    float X = Camera->Transform.p.x / Size;
+    float Y = Camera->Transform.p.z / Size;
+
+    int XGrid;
+    int YGrid;
+
+    if (X < 0) {
+        XGrid = Width + (int)ceil(X);
+    }
+    else {
+        XGrid = Width + (int)floor(X);
+    }
+
+    if (Y < 0) {
+        YGrid = Width + (int)ceil(Y);
+    }
+    else {
+        YGrid = Width + (int)floor(Y);
+    }
+
+    return  Grid[XGrid][YGrid];
 }

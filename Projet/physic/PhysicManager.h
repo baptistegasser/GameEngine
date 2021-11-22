@@ -33,8 +33,8 @@ public:
 private:
 	PhysicManager() {};
 	~PhysicManager() noexcept {};
-	physx::PxDefaultAllocator Allocator;
-	physx::PxDefaultErrorCallback ErrorCallback;
+	static physx::PxDefaultAllocator Allocator;
+	static physx::PxDefaultErrorCallback ErrorCallback;
 
 	physx::PxFoundation* Foundation = nullptr;
 

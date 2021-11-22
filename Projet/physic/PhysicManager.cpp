@@ -5,6 +5,9 @@
 
 using namespace physx;
 
+PxDefaultAllocator PhysicManager::Allocator;
+PxDefaultErrorCallback PhysicManager::ErrorCallback;
+
 void PhysicManager::Init()
 {
 	Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, Allocator, ErrorCallback);

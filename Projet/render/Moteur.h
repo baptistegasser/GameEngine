@@ -190,7 +190,7 @@ protected:
 	virtual void Cleanup()
 	{
 		ResourcesManager.Cleanup();
-		//PhysicManager::GetInstance().Cleanup();
+		PhysicManager::GetInstance().Cleanup();
 
 		// Détruire le dispositif
 		if (pDispositif)

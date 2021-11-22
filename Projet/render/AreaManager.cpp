@@ -3,47 +3,54 @@
 
 #include <cmath>
 
+using ActorPtr = std::shared_ptr<Pitbull::Actor>;
+
 using namespace std;
-AreaManager::AreaManager(int WidthMap, int HeightMap)
+void AreaManager::Init(int WidthMap, int HeightMap)
 {
-    Width = 1 + (int) floor((float) WidthMap / (float) Size);
-    Height = 1 + (int) floor((float) HeightMap / (float) Size);
+    Width = 1 + (int)floor((float)WidthMap / (float)Size);
+    Height = 1 + (int)floor((float)HeightMap / (float)Size);
 
-    Grid = vector(Width, vector(Height, set<string>()));
+    Grid = vector(Width, vector(Height, set<ActorPtr>()));
 }
 
-void AreaManager::PlaceActor(Pitbull::Actor &Actor)
+void AreaManager::PlaceActor(ActorPtr &Actor)
 {
-    int X = (int) floor(Actor.Transform.p.x / Size);
-    int Y = (int) floor(Actor.Transform.p.y / Size);
+    int X = (int) floor(Actor->Transform.p.x / Size);
+    int Y = (int) floor(Actor->Transform.p.y / Size);
 
-    Actor.GridX = X;
-    Actor.GridY = Y;
+    Actor->GridX = X;
+    Actor->GridY = Y;
 
-    Grid[X][Y].insert(Actor.Name);
+    Grid[X][Y].insert(Actor);
 }
 
-void AreaManager::MoveActor(Pitbull::Actor &Actor)
+void AreaManager::PlaceCamera(ActorPtr& Actor)
 {
-    int X = (int) floor(Actor.Transform.p.x / Size);
-    int Y = (int) floor(Actor.Transform.p.y / Size);
+    Camera = Actor;
+}
 
-    if ((Actor.GridX == X) && (Actor.GridY == Y))
+void AreaManager::MoveActor(ActorPtr &Actor)
+{
+    int X = (int) floor(Actor->Transform.p.x / Size);
+    int Y = (int) floor(Actor->Transform.p.y / Size);
+
+    if ((Actor->GridX == X) && (Actor->GridY == Y))
         return;
 
-    Grid[Actor.GridX][Actor.GridY].erase(Actor.Name);
+    Grid[Actor->GridX][Actor->GridY].erase(Actor);
 
-    Actor.GridX = X;
-    Actor.GridY = Y;
+    Actor->GridX = X;
+    Actor->GridY = Y;
 
-    Grid[X][Y].insert(Actor.Name);
+    Grid[X][Y].insert(Actor);
 
 }
 
-std::set<std::string> AreaManager::GetActors(float X, float Y)
+std::set<ActorPtr> AreaManager::GetActors()
 {
-    int XArea = (int)floor(X / Size);
-    int YArea = (int)floor(Y / Size);
+    int XArea = (int)floor(Camera->Transform.p.x / Size);
+    int YArea = (int)floor(Camera->Transform.p.y / Size);
 
     return  Grid[XArea][YArea];
 }

@@ -108,9 +108,6 @@ public:
 		GestionnaireDeSaisie.StatutClavier();
 		GestionnaireDeSaisie.SaisirEtatSouris();
 
-		// 1. update the actors
-		CurrentScene->Tick(/* TODO deltatime */);
-
 		// 2. update physic state
 		PhysicManager::GetInstance().Step(/* TODO deltatime */);
 
@@ -173,29 +170,19 @@ protected:
 		return true;
 	}
 
-	int cont= 0;
-	int blup = 0;
+
 	// Fonctions de rendu et de présentation de la scène
 	virtual bool RenderScene()
 	{
-		cont = 0;
-		blup = 0;
 		BeginRenderSceneSpecific();
 
-		for (auto& actor : CurrentScene->GetActors()) {
-			auto& Component = actor->GetComponents<Camera>();
+		std::set<std::shared_ptr<Pitbull::Actor>> actors = AreaManager::GetInstance().GetActors();
 
-			//std::set<std::string> s = CurrentAreaManager.GetActors(actor->Transform.p.x, actor->Transform.p.y);
-				
-		}
-
-		for (auto& actor : CurrentScene->GetActors()) {
+		for (auto& actor : actors) {
 			// TODO Parent class for renderable
 			auto& Components = actor->GetComponents<MeshRenderer>();
-			cont++;
 			for (auto& Comp : Components) {
 				Comp->Tick(0.f);
-				blup++;
 			}
 		}
 
@@ -284,13 +271,15 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
+		AreaManager::GetInstance().Init(50, 50);
 		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
-		Mesh->Transform = PxTransform(PxVec3(0.0f, 0.0f, 2.0f));
+		Mesh->Transform = PxTransform(PxVec3(0.0f, 5.0f, 0.0f));
 		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
 		Mesh->AddComponent<RigidBody>(false, true, 10.f);
 		CurrentScene->AddActor(Mesh);
+		AreaManager::GetInstance().PlaceActor(Mesh);
 
 
 		/*auto Terrain = Pitbull::Actor::New();
@@ -304,6 +293,7 @@ protected:
 			&m_MatProj,
 			&m_MatViewProj);
 		CurrentScene->AddActor(MyCamera);
+		AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -390,6 +380,11 @@ protected:
 			}
 		}
 
+		for (auto& actor : CurrentScene->GetActors())
+		{
+			AreaManager::GetInstance().MoveActor(actor);
+		}
+
 		//camera.update(tempsEcoule);
 
 		return true;
@@ -405,8 +400,6 @@ protected:
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;
-
-	AreaManager CurrentAreaManager;
 
 	// Les matrices
 	XMMATRIX m_MatView;

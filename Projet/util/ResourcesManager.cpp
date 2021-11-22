@@ -7,46 +7,38 @@
 
 ResourcesManager::~ResourcesManager()
 {
-	// Remove all ressources, auto call destructor
-	Resources.clear();
+	Cleanup();
+}
+
+void ResourcesManager::Cleanup() noexcept
+{
+	// Remove all ressources -> call respective destructor
+	Shaders.clear();
+	Textures.clear();
 }
 
 Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)
 {
-	const std::string ResourceName = wchar2str(ShaderName);
-	auto& Entry = Resources[ResourceName];
+	const std::string Name = wchar2str(ShaderName);
+	auto PShader = Shaders[Name].get();
 
-	switch (Entry.Type) {
-	case ResourceType::None:
-	{
-		auto NewShader = new Shader{ ShaderName };
-		Entry.Type = ResourceType::Shader;
-		Entry.Value = NewShader;
-		return NewShader;
+	if (!PShader) {
+		PShader = new Shader{ ShaderName };
+		Shaders[Name].reset(PShader);
 	}
-	case ResourceType::Shader:
-		return Entry.GetValueAs<Shader>();
-	default:
-		throw std::logic_error("The name '"+ ResourceName +"' is not associated with a shader.");
-	}
+
+	return PShader;
 }
 
 PM3D::CTexture* ResourcesManager::GetTexture(const std::wstring& TextureName)
 {
-	const std::string ResourceName = wstr2str(TextureName);
-	auto& Entry = Resources[ResourceName];
+	const std::string Name = wstr2str(TextureName);
+	auto PTexture = Textures[Name].get();
 
-	switch (Entry.Type) {
-	case ResourceType::None:
-	{
-		auto NewTexture= new PM3D::CTexture{ TextureName };
-		Entry.Type = ResourceType::Texture;
-		Entry.Value = NewTexture;
-		return NewTexture;
+	if (!PTexture) {
+		PTexture = new PM3D::CTexture{ TextureName };
+		Textures[Name].reset(PTexture);
 	}
-	case ResourceType::Texture:
-		return Entry.GetValueAs<PM3D::CTexture>();
-	default:
-		throw std::logic_error("The name '" + ResourceName + "' is not associated with a texture.");
-	}
+
+	return PTexture;
 }

@@ -32,9 +32,6 @@ struct Shader {
 	ID3D11ShaderResourceView* pTextureD3D;
 	ID3D11SamplerState* pSampleState;
 
-protected:
 	Shader(const wchar_t* FileName);
 	~Shader();
-
-	friend class ResourcesManager;
 };

@@ -8,7 +8,7 @@
 #include "util/ResourcesManager.h"
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName)
-	: MeshRenderer{ Parent, MeshFileName, ResourcesManager::GetInstance().GetShader(L"Default.fx")}
+	: MeshRenderer{ Parent, MeshFileName, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
 {}
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName, Shader* MeshShader)

@@ -99,7 +99,7 @@ void OMBMeshLoader::Load(const std::string& FileName)
 	}
 
 	// 4d) Chargement des textures
-	ResourcesManager& ResourcesManager = ResourcesManager::GetInstance();
+	ResourcesManager& ResourcesManager = PM3D::CMoteurWindows::GetInstance().GetResourcesManager();
 
 	for (uint32_t i = 0; i < Materials.size(); ++i)
 	{

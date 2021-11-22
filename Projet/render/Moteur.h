@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "dispositif.h"
 
 #include "Objet3D.h"
@@ -136,6 +136,7 @@ public:
 	const XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
+	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
 
@@ -188,7 +189,8 @@ protected:
 
 	virtual void Cleanup()
 	{
-		PhysicManager::GetInstance().Cleanup();
+		ResourcesManager.Cleanup();
+		//PhysicManager::GetInstance().Cleanup();
 
 		// Détruire le dispositif
 		if (pDispositif)
@@ -268,7 +270,7 @@ protected:
  	bool InitObjets()
 	{
 		auto Mesh = Pitbull::Actor::New();
-		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
 		Mesh->AddComponent<RigidBody>(false, true, 10.f);
 		CurrentScene->AddActor(Mesh);
@@ -396,6 +398,7 @@ protected:
 
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
+	ResourcesManager ResourcesManager;
 
 	// Le Terrain
 	Terrain* terrain;

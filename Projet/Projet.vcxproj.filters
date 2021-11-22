@@ -189,6 +189,9 @@
     <ClCompile Include="Contact.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="render\AreaManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Contact.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\AreaManager.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

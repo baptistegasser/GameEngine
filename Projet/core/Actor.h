@@ -57,6 +57,10 @@ namespace Pitbull
 
 	private:
 		std::vector<Component*> Components;
+
+	public:
+		int GridX = 0;
+		int GridY = 0;
 	};
 
 	template<class ...Args>
@@ -104,4 +108,6 @@ namespace Pitbull
 
 		return MatchingComponents;
 	}
+
+
 } // namespace Pitbull

@@ -27,7 +27,12 @@
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
+#include "render/AreaManager.h"
 // Gameplay components
+
+using namespace physx;
+
+#include <iostream>
 
 namespace PM3D
 {
@@ -168,17 +173,29 @@ protected:
 		return true;
 	}
 
+	int cont= 0;
+	int blup = 0;
 	// Fonctions de rendu et de présentation de la scène
 	virtual bool RenderScene()
 	{
+		cont = 0;
+		blup = 0;
 		BeginRenderSceneSpecific();
+
+		for (auto& actor : CurrentScene->GetActors()) {
+			auto& Component = actor->GetComponents<Camera>();
+
+			//std::set<std::string> s = CurrentAreaManager.GetActors(actor->Transform.p.x, actor->Transform.p.y);
+				
+		}
 
 		for (auto& actor : CurrentScene->GetActors()) {
 			// TODO Parent class for renderable
 			auto& Components = actor->GetComponents<MeshRenderer>();
-
+			cont++;
 			for (auto& Comp : Components) {
 				Comp->Tick(0.f);
+				blup++;
 			}
 		}
 
@@ -267,11 +284,17 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
+		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
+		Mesh->Transform = PxTransform(PxVec3(0.0f, 0.0f, 2.0f));
 		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
 		Mesh->AddComponent<RigidBody>(false, true, 10.f);
 		CurrentScene->AddActor(Mesh);
+
+
+		/*auto Terrain = Pitbull::Actor::New();
+		Terrain->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager::GetInstance().GetShader(L".\\shaders\\MiniPhong.fx"));*/
 
 		auto MyCamera = Pitbull::Actor::New();
 		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
@@ -382,6 +405,8 @@ protected:
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;
+
+	AreaManager CurrentAreaManager;
 
 	// Les matrices
 	XMMATRIX m_MatView;

@@ -12,7 +12,7 @@ namespace Math
 	{
 		using namespace DirectX;
 		XMMATRIX Scale = XMMatrixScalingFromVector({ 1.0f, 1.f, 1.f });
-		XMMATRIX Translation = XMMatrixTranslationFromVector({ Transform.p.x, Transform.p.y, Transform.p.z });
+		XMMATRIX Translation = XMMatrixRotationQuaternion(XMVectorSet(Transform.q.x, Transform.q.y, Transform.q.z, Transform.q.w));
 		XMMATRIX Rotation = XMMatrixRotationZ(0);
 
 		return Scale * Rotation * Translation;

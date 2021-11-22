@@ -170,7 +170,10 @@
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\BoundingBox.cpp" />
+    <ClCompile Include="math\BoundingSphere.cpp" />
     <ClCompile Include="math\Math.cpp" />
+    <ClCompile Include="math\Volume.cpp" />
     <ClCompile Include="physic\BoxCollider.cpp" />
     <ClCompile Include="physic\CapsuleCollider.cpp" />
     <ClCompile Include="physic\Collider.cpp" />
@@ -181,6 +184,7 @@
     <ClCompile Include="physic\RigidBody.cpp" />
     <ClCompile Include="physic\SphereCollider.cpp" />
     <ClCompile Include="Pitbull.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="render\AfficheurSprite.cpp" />
     <ClCompile Include="render\AfficheurTexte.cpp" />
     <ClCompile Include="render\AreaManager.cpp" />
@@ -220,7 +224,11 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
+    <ClInclude Include="math\BoundingBox.h" />
+    <ClInclude Include="math\BoundingSphere.h" />
+    <ClInclude Include="math\BoundingVolume.h" />
     <ClInclude Include="math\Math.h" />
+    <ClInclude Include="math\Volume.h" />
     <ClInclude Include="physic\BoxCollider.h" />
     <ClInclude Include="physic\CapsuleCollider.h" />
     <ClInclude Include="physic\Collider.h" />
@@ -231,6 +239,7 @@
     <ClInclude Include="physic\RigidBody.h" />
     <ClInclude Include="physic\SphereCollider.h" />
     <ClInclude Include="Pitbull.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="render\AfficheurSprite.h" />
     <ClInclude Include="render\AfficheurTexte.h" />
     <ClInclude Include="render\AreaManager.h" />

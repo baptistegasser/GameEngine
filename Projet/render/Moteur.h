@@ -104,14 +104,16 @@ public:
 		const int64_t TempsCompteurCourant = GetTimeSpecific();
 		const double TempsEcoule = GetTimeIntervalsInSec(TempsCompteurPrecedent, TempsCompteurCourant);
 
-		// 0. Update inputs states
+		// Update physic state
+		PhysicAccumulator += static_cast<float>(TempsEcoule);
+		while (PhysicAccumulator >= PhysicDeltaStep) {
+			PhysicManager::GetInstance().Step(PhysicDeltaStep);
+			PhysicAccumulator -= PhysicDeltaStep;
+		}
+
+		// Update inputs states
 		GestionnaireDeSaisie.StatutClavier();
 		GestionnaireDeSaisie.SaisirEtatSouris();
-
-		// 2. update physic state
-		PhysicManager::GetInstance().Step(/* TODO deltatime */);
-
-		// 3. render
 
 		// Est-il temps de rendre l'image?
 		if (TempsEcoule > EcartTemps)
@@ -397,6 +399,9 @@ protected:
 	}
 
 protected:
+	const float PhysicDeltaStep = 1.0f / 60.0f;
+	float PhysicAccumulator = 0;
+
 	// Variables pour le temps de l'animation
 	int64_t TempsSuivant;
 	int64_t TempsCompteurPrecedent;

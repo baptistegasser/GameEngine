@@ -4,7 +4,7 @@
 
 class BoxCollider : public Collider {
 public:
-	physx::PxGeometry&& GetGeometryImpl() const override;
+	physx::PxGeometry* GetGeometryImpl() const override;
 
 	const physx::PxVec3 HalfExtent;
 

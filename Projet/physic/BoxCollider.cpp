@@ -6,7 +6,7 @@ BoxCollider::BoxCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material,
 	, HalfExtent{ HalfExtent }
 {}
 
-physx::PxGeometry&& BoxCollider::GetGeometryImpl() const
+physx::PxGeometry* BoxCollider::GetGeometryImpl() const
 {
-	return std::move(physx::PxBoxGeometry{ HalfExtent });
+	return new physx::PxBoxGeometry{ HalfExtent };
 }

@@ -19,7 +19,7 @@ public:
 
 protected:
 	Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material);
-	virtual physx::PxGeometry&& GetGeometryImpl() const = 0;
+	virtual physx::PxGeometry* GetGeometryImpl() const = 0;
 
 private:
 	std::unique_ptr<physx::PxGeometry> Geometry;

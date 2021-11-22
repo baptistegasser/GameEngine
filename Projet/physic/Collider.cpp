@@ -10,7 +10,7 @@ Collider::Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material)
 physx::PxGeometry* Collider::GetPxGeometry()
 {
 	if (!Geometry) {
-		Geometry = std::make_unique<physx::PxGeometry>(GetGeometryImpl());
+		Geometry = std::unique_ptr<physx::PxGeometry>(GetGeometryImpl());
 	}
 	return Geometry.get();
 }

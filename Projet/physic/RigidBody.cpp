@@ -38,7 +38,8 @@ void RigidBody::Init()
 
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for( const auto Collider : Colliders) {
-		const PxShape* Shape = PxRigidActorExt::createExclusiveShape(*RigidActor, *Collider->GetPxGeometry(), *Collider->GetPxMaterial());
+		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(), *Collider->GetPxMaterial());
+		RigidActor->attachShape(*Shape);
 		PhysicManager.GetContactHandler().RegisterCollider(Shape, Collider);
 	}
 

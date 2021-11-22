@@ -5,7 +5,7 @@
 
 class RigidBody : public Pitbull::Component {
 public:
-	~RigidBody();
+	~RigidBody() override;
 
 	void Init() override;
 	void Tick(const float& ElapsedTime) override;

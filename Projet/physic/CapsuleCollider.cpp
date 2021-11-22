@@ -7,7 +7,7 @@ CapsuleCollider::CapsuleCollider(Pitbull::Actor* Parent, const PhysicMaterial& M
 	, HalfHeight{ HalfHeight }
 {}
 
-physx::PxGeometry&& CapsuleCollider::GetGeometryImpl() const
+physx::PxGeometry* CapsuleCollider::GetGeometryImpl() const
 {
-	return std::move(physx::PxCapsuleGeometry{ Radius , HalfHeight });
+	return new physx::PxCapsuleGeometry{ Radius , HalfHeight };
 }

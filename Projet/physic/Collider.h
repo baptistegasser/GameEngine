@@ -2,13 +2,17 @@
 
 #include "core/Component.h"
 #include "PhysicMaterial.h"
-#include "physic/PhysicManager.h"
+#include "Contact.h"
 
 #include "PxPhysicsAPI.h"
 
 class Collider : public Pitbull::Component {
 public:
 	~Collider() override = default;
+
+	virtual void OnContact(const Contact& Contact) const {
+		std::cout << 1;
+	}
 
 	physx::PxGeometry* GetPxGeometry();
 	physx::PxMaterial* GetPxMaterial();

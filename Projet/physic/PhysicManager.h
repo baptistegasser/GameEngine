@@ -9,6 +9,7 @@
 #include "util/Singleton.h"
 #include "util/Util.h" // PX_RELEASE
 #include "core/Scene.h"
+#include "ContactHandler.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -24,6 +25,8 @@ public:
 	void Step();
 	void Cleanup();
 
+	ContactHandler& GetContactHandler() noexcept;
+
 	physx::PxPhysics* Physics = nullptr;
 	std::shared_ptr<Scene> CurrentScene;
 
@@ -37,4 +40,6 @@ private:
 
 	physx::PxPvd* Pvd = nullptr;
 	physx::PxDefaultCpuDispatcher* Dispatcher = nullptr;
+
+	ContactHandler ContactHandler;
 };

@@ -186,6 +186,9 @@
     <ClCompile Include="util\Horloge.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="Contact.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="util\Horloge.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Contact.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

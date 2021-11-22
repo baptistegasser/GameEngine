@@ -21,7 +21,6 @@ public:
 	std::vector<ActorPtr>& GetActors();
 
 	physx::PxScene* PhysxScene;
-	ContactHandler SceneContactHandler;
 
 private:
 	std::vector<ActorPtr> Actors;

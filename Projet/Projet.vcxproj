@@ -165,6 +165,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Contact.cpp" />
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Contact.h" />
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />

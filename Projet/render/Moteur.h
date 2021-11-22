@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "dispositif.h"
 
 #include "Objet3D.h"
@@ -246,10 +246,10 @@ protected:
 			XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
-		const float champDeVision = XM_PI / 4; 	// 45 degr�s
+		const float champDeVision = XM_PI / 2; 	// 45 degr�s
 		const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
 		const float planRapproche = 1.0;
-		const float planEloigne = 30.0;
+		const float planEloigne = 300.0;
 
 		m_MatProj = XMMatrixPerspectiveFovLH(
 			champDeVision,
@@ -275,9 +275,16 @@ protected:
 		Mesh->AddComponent<RigidBody>(false, true, 10.f);
 		CurrentScene->AddActor(Mesh);
 
+		auto Other = Pitbull::Actor::New();
+		Other->Transform.p.y = 2.f;
+		Other->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Other->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, 2.0f);
+		Other->AddComponent<RigidBody>(false, false, 10.f);
+		CurrentScene->AddActor(Other);
+
 		auto MyCamera = Pitbull::Actor::New();
-		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
+		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
+			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
 			&m_MatView,
 			&m_MatProj,

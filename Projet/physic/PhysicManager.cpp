@@ -23,14 +23,14 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 	CurrentScene = Scene;
 
 	PxSceneDesc sceneDesc(Physics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -0.1f, 0.0f);
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = Dispatcher;
 
 	// Change physic handling
 	sceneDesc.filterShader = ContactFilter::filterShader;
-	sceneDesc.contactModifyCallback = &CurrentScene->SceneContactHandler;
-	sceneDesc.simulationEventCallback = &CurrentScene->SceneContactHandler;
+	sceneDesc.contactModifyCallback = &ContactHandler;
+	sceneDesc.simulationEventCallback = &ContactHandler;
 
 	CurrentScene->PhysxScene = Physics->createScene(sceneDesc);
 
@@ -62,5 +62,10 @@ void PhysicManager::Cleanup()
 		PX_RELEASE(transport);
 	}
 	PX_RELEASE(Foundation);
+}
+
+ContactHandler& PhysicManager::GetContactHandler() noexcept
+{
+	return ContactHandler;
 }
 

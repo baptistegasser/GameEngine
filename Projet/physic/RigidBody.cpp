@@ -3,6 +3,7 @@
 
 #include "Collider.h"
 #include "util/Util.h"
+#include "PhysicManager.h"
 
 using namespace physx;
 
@@ -21,7 +22,8 @@ RigidBody::~RigidBody()
 
 void RigidBody::Init()
 {
-	const auto Physics = PhysicManager::GetInstance().Physics;
+	auto& PhysicManager = PhysicManager::GetInstance();
+	const auto Physics = PhysicManager.Physics;
 
 	if (IsStatic) {
 		RigidActor = Physics->createRigidStatic(ParentActor->Transform);
@@ -36,7 +38,8 @@ void RigidBody::Init()
 
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for( const auto Collider : Colliders) {
-		PxRigidActorExt::createExclusiveShape(*RigidActor, *Collider->GetPxGeometry(), *Collider->GetPxMaterial());
+		const PxShape* Shape = PxRigidActorExt::createExclusiveShape(*RigidActor, *Collider->GetPxGeometry(), *Collider->GetPxMaterial());
+		PhysicManager.GetContactHandler().RegisterCollider(Shape, Collider);
 	}
 
 	PhysicManager::GetInstance().CurrentScene->PhysxScene->addActor(*RigidActor);

@@ -25,30 +25,358 @@
     <Filter Include="Header Files\core">
       <UniqueIdentifier>{a17cdea4-ece5-4e20-b7cd-bf779dc4e974}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\render">
+      <UniqueIdentifier>{8a58529b-e682-4cdc-b005-f3791146427f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render">
+      <UniqueIdentifier>{9e70c6be-f53e-43c9-9a26-2575334ea30d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{644ac2cc-5b37-4d6e-9b2c-acb566c1900d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physic">
+      <UniqueIdentifier>{353375bf-6821-4f36-903b-e43132156751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\physic">
+      <UniqueIdentifier>{7d38b609-2420-4a38-9f1c-9c8b1f18c918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{734e1946-99bc-424c-82f8-177edfaae404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{2de06613-6c3a-470b-8ad9-7a7810d24adb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\physic\components">
+      <UniqueIdentifier>{d39b5bb4-a57b-4e9b-bd9d-6368b53c850a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physic\components">
+      <UniqueIdentifier>{962782c1-da4b-49e5-b68a-fb607be82878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render\components">
+      <UniqueIdentifier>{bc092bae-0a89-4efc-9622-4e501f136c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\render\components">
+      <UniqueIdentifier>{22d6f103-db7b-4336-af41-9417c3be1736}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="math\Transform.cpp">
-      <Filter>Source Files\math</Filter>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pitbull.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\dispositif.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DIManipulateur.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DDSTextureLoader.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ChargeurOBJ.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\BlocEffet1.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Bloc.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\AfficheurTexte.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\AfficheurSprite.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\dispositifD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\InfoDispositif.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Moteur.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MoteurWindows.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ObjetMesh.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Terrain.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\sommetbloc.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\PhysicManager.cpp">
+      <Filter>Source Files\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="util\NonCopyable.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Singleton.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Scene.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="core\Actor.cpp">
-      <Filter>Source Files\math</Filter>
+      <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="core\Component.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\ContactHandler.cpp">
+      <Filter>Source Files\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\ContactFilter.cpp">
+      <Filter>Source Files\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\BoxCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\CapsuleCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\Collider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\RigidBody.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\SphereCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\PhysicMaterial.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Util.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Texture.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Shader.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MeshRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Material.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MeshLoader.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="util\ResourcesManager.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Math.cpp">
       <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Camera.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Horloge.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="Contact.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render\AreaManager.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="math\Transform.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="core\Actor.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="core\Component.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="resources\resource.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pitbull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\BlocEffet1.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\chargeur.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ChargeurOBJ.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\d3dx11effect.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\d3dxGlobal.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DDSTextureLoader.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DIManipulateur.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\dispositif.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\dispositifD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\InfoDispositif.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Moteur.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MoteurWindows.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\objet3d.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ObjetMesh.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\sommetbloc.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\sommetTerrain.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Terrain.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\AfficheurSprite.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\AfficheurTexte.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Bloc.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\PhysicManager.h">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="util\NonCopyable.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Singleton.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Scene.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\ContactHandler.h">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\ContactFilter.h">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\RigidBody.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\SphereCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\BoxCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\CapsuleCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\Collider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Util.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\PhysicMaterial.h">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Material.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MeshRenderer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Texture.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Shader.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MeshLoader.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="util\ResourcesManager.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Math.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Camera.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Horloge.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Contact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\AreaManager.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\PetitMoteur3D.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\PetitMoteur3D.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\MiniPhong.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\sprite1.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\MiniPhong.phl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\MiniPhong.vhl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\ps1.phl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\vs1.vhl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitattributes" />
+    <None Include="..\.gitignore" />
   </ItemGroup>
 </Project>

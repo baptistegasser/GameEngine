@@ -1,25 +1,44 @@
+#include "stdafx.h"
 #include "Actor.h"
-
-#include "Component.h"
 
 namespace Pitbull
 {
 	Actor::Actor()
-		: ID{ NextID++ }
-		, Name{ "Actor_" + std::to_string(NextID-1) }
+		: Name{ "Actor_" + std::to_string(NextID) }
+		, ID{ ++NextID }
+		, Transform{ 0.f, 0.f, 0.f }
 	{}
 
 	Actor::Actor(std::string name)
-		: ID{ NextID++ }
-		, Name{std::move(name)}
+		: Name{std::move(name)}
+		, ID{ ++NextID }
+		, Transform{ 0.f, 0.f, 0.f }
 	{}
 
-	Actor::~Actor()
+	void Actor::Init()
 	{
-		// Delete all our components
-		for (const auto Comp : Components) {
-			delete Comp;
+		for (const auto& Comp : Components) {
+			Comp->Init();
 		}
+	}
+
+	void Actor::Tick()
+	{
+		for (const auto& Comp : Components)
+		{
+			Comp->Tick(0.f /* TODO deltatime */);
+		}
+	}
+
+	std::vector<Component*> Actor::GetComponents() const
+	{
+		std::vector<Component*> All;
+		All.reserve(Components.size());
+
+		for (auto& Comp : Components)
+			All.push_back(Comp);
+
+		return All;
 	}
 
 	Actor::ActorID Actor::NextID = 0;

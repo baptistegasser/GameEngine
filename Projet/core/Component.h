@@ -1,27 +1,18 @@
 #pragma once
 
-#include "Actor.h"
-
 namespace Pitbull
 {
+	class Actor;
+
 	/// <summary>
 	/// Definition of a component and it's interface.
 	///	This should be used to store components, notably pointers.
 	///	However, us Component<Impl> to create new component classes.
 	/// </summary>
-	class IComponent {
+	class Component {
 	public:
-		using ComponentID = unsigned int;
-
 		// Virtual, prevent direct instantiation of this class.
-		virtual ~IComponent() = 0;
-		/// <summary>
-		/// Get the unique ID associated to a component class.
-		///	Each class should have a unique ID, and each instance of
-		///	said class must return the same ID.
-		/// </summary>
-		/// <returns>The ID of the component type.</returns>
-		virtual ComponentID GetID() const noexcept = 0;
+		virtual ~Component() = 0;
 
 		/// <summary>
 		/// Set the actor that contains this component.
@@ -39,59 +30,12 @@ namespace Pitbull
 		/// <param name="DeltaTime">The elapsed time since last call.</param>
 		virtual void Tick(const float& DeltaTime);
 
-	private:
+	protected:
 		/// <summary>
 		/// The actor that contains this component.
 		/// </summary>
 		Actor* ParentActor = nullptr;
+
+		Component(Actor* Parent) : ParentActor{ Parent }{}
 	};
-
-	/// <summary>
-	///	Proxy pattern used to create component classes that respect the IComponent
-	///	class's contract by providing unique IDs.
-	/// </summary>
-	/// <typeparam name="Impl">The actual component class created.</typeparam>
-	///	<example>
-	///		// Create a new Component to control the player
-	///		class PlayerController : public Component<PlayerController> {
-	///		public:
-	///			~PlayerController() {}
-	///		}
-	///	</example>
-	template <class Impl>
-	class Component : public IComponent {
-	public:
-		// Virtual, prevent direct instantiation of this class.
-		~Component() override = 0;
-
-		/// <summary>
-		/// Get the unique ID of this component respecting IComponent contract.
-		/// </summary>
-		ComponentID GetID() const noexcept override final
-		{
-			return ID;
-		}
-		/// <summary>
-		/// Allow to get the unique ID of this class without instantiating it.
-		/// </summary>
-		static ComponentID GetIDStatic() noexcept
-		{
-			return ID;
-		}
-
-	private:
-		/// <summary>
-		/// The proxied component ID.
-		/// </summary>
-		static ComponentID ID;
-	};
-
-	template <class Impl>
-	Component<Impl>::~Component() = default;
-
-	// Static counter to get unique ID for each Component classes
-	static IComponent::ComponentID NextID = 0;
-
-	template <class Impl>
-	IComponent::ComponentID Component<Impl>::ID = NextID++;
 }  // namespace Pitbull

@@ -3,6 +3,7 @@
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
+	, Tree{ BoundingBox{ 1000.f } }
 {}
 
 void Scene::Init()

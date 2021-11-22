@@ -184,6 +184,7 @@
     <ClCompile Include="physic\RigidBody.cpp" />
     <ClCompile Include="physic\SphereCollider.cpp" />
     <ClCompile Include="Pitbull.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="render\AfficheurSprite.cpp" />
     <ClCompile Include="render\AfficheurTexte.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="physic\RigidBody.h" />
     <ClInclude Include="physic\SphereCollider.h" />
     <ClInclude Include="Pitbull.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="render\AfficheurSprite.h" />
     <ClInclude Include="render\AfficheurTexte.h" />

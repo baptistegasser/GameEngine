@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/Actor.h"
+#include "Octree.h"
 #include "physic/ContactHandler.h"
 
 #include "PxPhysicsAPI.h"
@@ -22,6 +23,8 @@ public:
 
 	physx::PxScene* PhysxScene;
 
+	BoundingVolume* VisionVolume;
+
 private:
-	std::vector<ActorPtr> Actors;
+	Octree<ActorPtr, 10> Tree;
 };

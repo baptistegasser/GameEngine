@@ -9,7 +9,7 @@
 
 class Scene {
 public:
-	using ActorPtr = std::unique_ptr<Pitbull::Actor>;
+	using ActorPtr = std::shared_ptr<Pitbull::Actor>;
 
 	Scene();
 	~Scene() = default;

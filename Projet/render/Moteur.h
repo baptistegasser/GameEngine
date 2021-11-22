@@ -27,7 +27,12 @@
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
+#include "render/AreaManager.h"
 // Gameplay components
+
+using namespace physx;
+
+#include <iostream>
 
 namespace PM3D
 {
@@ -103,9 +108,6 @@ public:
 		GestionnaireDeSaisie.StatutClavier();
 		GestionnaireDeSaisie.SaisirEtatSouris();
 
-		// 1. update the actors
-		CurrentScene->Tick(/* TODO deltatime */);
-
 		// 2. update physic state
 		PhysicManager::GetInstance().Step(/* TODO deltatime */);
 
@@ -169,15 +171,17 @@ protected:
 		return true;
 	}
 
+
 	// Fonctions de rendu et de présentation de la scène
 	virtual bool RenderScene()
 	{
 		BeginRenderSceneSpecific();
 
-		for (auto& actor : CurrentScene->GetActors()) {
+		std::set<std::shared_ptr<Pitbull::Actor>> actors = AreaManager::GetInstance().GetActors();
+
+		for (auto& actor : actors) {
 			// TODO Parent class for renderable
 			auto& Components = actor->GetComponents<MeshRenderer>();
-
 			for (auto& Comp : Components) {
 				Comp->Tick(0.f);
 			}
@@ -269,12 +273,15 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
+		AreaManager::GetInstance().Init(50, 50);
+		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
 		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		Mesh->Transform.p.y = -1.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
 		CurrentScene->AddActor(Mesh);
+		AreaManager::GetInstance().PlaceActor(Mesh);
 
 		auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
@@ -292,6 +299,7 @@ protected:
 			&m_MatProj,
 			&m_MatViewProj);
 		CurrentScene->AddActor(MyCamera);
+		AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -376,6 +384,11 @@ protected:
 					Comp->Tick(tempsEcoule);
 				}
 			}
+		}
+
+		for (auto& actor : CurrentScene->GetActors())
+		{
+			AreaManager::GetInstance().MoveActor(actor);
 		}
 
 		//camera.update(tempsEcoule);

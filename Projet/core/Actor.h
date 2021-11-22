@@ -25,7 +25,7 @@ namespace Pitbull
 		void Tick();
 
 		template <class ... Args>
-		static std::unique_ptr<Actor> New(Args&&... args);
+		static std::shared_ptr<Actor> New(Args&&... args);
 
 		template <class Impl, class ... Args>
 		void AddComponent(Args&&... args);
@@ -57,12 +57,16 @@ namespace Pitbull
 
 	private:
 		std::vector<Component*> Components;
+
+	public:
+		int GridX = 0;
+		int GridY = 0;
 	};
 
 	template<class ...Args>
-	inline std::unique_ptr<Actor> Actor::New(Args && ...args)
+	inline std::shared_ptr<Actor> Actor::New(Args && ...args)
 	{
-		return std::make_unique<Actor>(std::forward<Args>(Arguments)...);
+		return std::make_shared<Actor>(std::forward<Args>(Arguments)...);
 	}
 
 	template <class Impl, class ... Args>
@@ -104,4 +108,6 @@ namespace Pitbull
 
 		return MatchingComponents;
 	}
+
+
 } // namespace Pitbull

@@ -23,7 +23,7 @@ void Scene::Tick()
 
 void Scene::AddActor(ActorPtr& Actor)
 {
-	Actors.push_back(std::move(Actor));
+	Actors.push_back(Actor);
 }
 
 std::vector<Scene::ActorPtr>& Scene::GetActors()

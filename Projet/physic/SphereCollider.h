@@ -4,7 +4,7 @@
 
 class SphereCollider : public Collider {
 public:
-	physx::PxGeometry&& GetGeometryImpl() const override;
+	physx::PxGeometry* GetGeometryImpl() const override;
 
 	const float Radius;
 

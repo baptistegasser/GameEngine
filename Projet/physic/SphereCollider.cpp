@@ -6,7 +6,7 @@ SphereCollider::SphereCollider(Pitbull::Actor* Parent, const PhysicMaterial& Mat
 	, Radius{ Radius }
 {}
 
-physx::PxGeometry&& SphereCollider::GetGeometryImpl() const
+physx::PxGeometry* SphereCollider::GetGeometryImpl() const
 {
-	return std::move(physx::PxSphereGeometry{ Radius });
+	return new physx::PxSphereGeometry{ Radius };
 }

@@ -188,7 +188,6 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="render\AfficheurSprite.cpp" />
     <ClCompile Include="render\AfficheurTexte.cpp" />
-    <ClCompile Include="render\AreaManager.cpp" />
     <ClCompile Include="render\Bloc.cpp" />
     <ClCompile Include="render\BlocEffet1.cpp" />
     <ClCompile Include="render\Camera.cpp" />
@@ -244,7 +243,6 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="render\AfficheurSprite.h" />
     <ClInclude Include="render\AfficheurTexte.h" />
-    <ClInclude Include="render\AreaManager.h" />
     <ClInclude Include="render\Bloc.h" />
     <ClInclude Include="render\BlocEffet1.h" />
     <ClInclude Include="render\Camera.h" />

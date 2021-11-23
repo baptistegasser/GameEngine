@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "Octree.h"
 
+#include "math/BoundingSphere.h"
+
 #include <algorithm>
+#include <functional>
+#include <queue>
 
 Node::Node(const BoundingBox& Boundary)
     : Subdivided{ false }
@@ -39,15 +43,14 @@ bool Node::Remove(const Leaf& Leaf)
         return RemoveFromChildren(Leaf);
     }
 
-    auto it = std::find(begin(Leafs), end(Leafs), Leaf);
+    const auto it = std::find(begin(Leafs), end(Leafs), Leaf);
 
     if (it != end(Leafs)) {
         Leafs.erase(it);
         return true;
     }
-    else {
-        return false;
-    }
+
+    return false;
 }
 
 void Node::Subdivide()
@@ -90,26 +93,21 @@ void Node::Subdivide()
 
 bool Node::AddToChildren(const Leaf& Leaf)
 {
-    for (const auto& Child : Children) {
-        if (Child->Add(Leaf))
-            return true;
-    }
-
-    return false; // Something is wrong I can feel it
+    const auto AddCallback = [&Leaf](const ChildPtr& Child) { return Child->Add(Leaf); };
+    return std::any_of(Children.begin(), Children.end(), AddCallback);
 }
 
 bool Node::RemoveFromChildren(const Leaf& Leaf)
 {
-    for (const auto& Child : Children) {
-        if (Child->Remove(Leaf))
-            return true;
-    }
-    
-    return false;
+    const auto RemoveCallback = [&Leaf](const ChildPtr& Child) { return Child->Remove(Leaf); };
+    return std::any_of(Children.begin(), Children.end(), RemoveCallback);
 }
 
+Octree::Octree(const BoundingBox& Boundary)
+	: Root{ Boundary }
+{}
 
-bool SimpleOctree::Add(const ActorType& Actor)
+bool Octree::Add(ActorType Actor)
 {
     // Prepare leaf
     Leaf Leaf{ Actors.size(), Actor->Transform };
@@ -126,21 +124,22 @@ bool SimpleOctree::Add(const ActorType& Actor)
     }
 
     // Insert the actor in the array
-    Actors.push_back(Actor);
+    Actors.push_back(std::move(Actor));
 
     // Insert in the tree
     return Root.Add(Leaf);
 }
 
-bool SimpleOctree::Remove(const ActorType& Actor)
+bool Octree::Remove(const ActorPtr Actor)
 {
     // Ignore if not in tree
-    const auto it = std::find(begin(Actors), end(Actors), Actor);
+    const auto PtrMatcher = [&Actor](const ActorType& uptr) { return uptr.get() == Actor; };
+    const auto it = std::find_if(begin(Actors), end(Actors), PtrMatcher);
     if (it == Actors.end())
         return true;
 
     // Create matching leaf
-    const Leaf Leaf{ it - Actors.begin(), Actor->Transform };
+    const Leaf Leaf{static_cast<Leaf::ID>(it - Actors.begin()), Actor->Transform };
 
     // Remove from actors
     Actors.erase(it);
@@ -151,7 +150,62 @@ bool SimpleOctree::Remove(const ActorType& Actor)
     return true;
 }
 
-SimpleOctree::ActorList SimpleOctree::Find(const BoundingVolume* Volume)
+void Octree::Update()
 {
-    return ActorList();
+    using NodePtr = Node *;
+
+    std::vector<Leaf> LeafToUpdate;
+
+    std::deque<NodePtr> NodeToExplore;
+    NodeToExplore.push_back(&Root);
+
+    while (!NodeToExplore.empty()) {
+        const NodePtr Node = NodeToExplore.front();
+        NodeToExplore.pop_front();
+
+        // Add node to explore
+        if (Node->Subdivided) {
+            std::transform(begin(Node->Children),
+                end(Node->Children),
+                std::back_inserter(NodeToExplore),
+                [](const auto& uptr) { return uptr.get(); });
+            continue;
+        }
+
+        // Iterate on the leafs
+        auto It = Node->Leafs.begin();
+        for (; It != Node->Leafs.end();) {
+            Leaf CurLeaf = *It;
+            // The leaf is now invalid
+        	if (CurLeaf.Position != Actors[CurLeaf.ActorID]->Transform) {
+                // Update position, store to add back and remove from current node
+                CurLeaf.Position = Actors[CurLeaf.ActorID]->Transform;
+                LeafToUpdate.push_back(CurLeaf);
+                It = Node->Leafs.erase(It);
+            }
+            else {
+                ++It;
+            }
+        }
+    }
+
+    // Add Leafs back to their correct places
+    const auto AddToRoot = std::bind(&Node::Add, &Root, std::placeholders::_1);
+    std::for_each(begin(LeafToUpdate), end(LeafToUpdate), AddToRoot);
+}
+
+const Octree::ActorList& Octree::GetActors() const noexcept
+{
+    return Actors;
+}
+
+Octree::ActorPtrList Octree::Find(const Point& Pos, float MaxDistance)
+{
+	const BoundingSphere Sphere{ MaxDistance, Pos };
+    return Find(&Sphere);
+}
+
+Octree::ActorPtrList Octree::Find(const BoundingVolume* Volume)
+{
+    return ActorPtrList();
 }

@@ -24,4 +24,23 @@ struct Point : public physx::PxVec3 {
 		this->z += lhr.z;
 		return *this;
 	}
+	bool operator==(const physx::PxTransform& Transform) const noexcept
+	{
+		return this->x == Transform.p.x
+			&& this->y == Transform.p.y
+			&& this->z == Transform.p.z;
+	}
+	bool operator!=(const physx::PxTransform& Transform) const noexcept
+	{
+		return !(*this == Transform);
+	}
+
+	float Distance(const Point& Other) const noexcept
+	{
+		return sqrtf(
+			powf(x - Other.x, 2.f) +
+			powf(y - Other.y, 2.f) +
+			powf(z - Other.z, 2.f)
+		);
+	}
 };

@@ -1,28 +1,21 @@
 #pragma once
 
 #include "core/Component.h"
-#include "Material.h"
+#include "ObjectMesh.h"
 #include "Shader.h"
 
 class MeshRenderer : public Pitbull::Component {
 public:
-	MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName);
-	MeshRenderer(Pitbull::Actor* Parent, const std::string& MeshFileName, Shader* MeshShader);
+	MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh);
+	MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader);
 	~MeshRenderer() = default;
 
-	void Init() override;
 	void Tick(const float& DeltaTime) override;
 
 	ShadersParams ShaderParams;
 
 private:
-	std::string MeshFileName;
 	DirectX::XMMATRIX matWorld;
+	ObjectMesh* Mesh;
 	Shader* MeshShader;
-	ID3D11Buffer* PIndexBuffer;
-	ID3D11Buffer* PVertexBuffer;
-	int SubsetCount;
-	std::vector<int> SubsetMaterialIndex;
-	std::vector<int> SubsetIndex;
-	std::vector<Material> Materials;
 };

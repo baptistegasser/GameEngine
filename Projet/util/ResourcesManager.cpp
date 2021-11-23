@@ -4,6 +4,7 @@
 #include "util/Util.h"
 #include "render/Shader.h"
 #include "render/Texture.h"
+#include "render/ObjectMesh.h"
 
 ResourcesManager::~ResourcesManager()
 {
@@ -41,4 +42,17 @@ PM3D::CTexture* ResourcesManager::GetTexture(const std::wstring& TextureName)
 	}
 
 	return PTexture;
+}
+
+ObjectMesh* ResourcesManager::GetMesh(const wchar_t* MeshName)
+{
+	const std::string Name = wchar2str(MeshName);
+	auto PMesh = Meshes[Name].get();
+
+	if (!PMesh) {
+		PMesh = new ObjectMesh{ MeshName };
+		Meshes[Name].reset(PMesh);
+	}
+
+	return PMesh;
 }

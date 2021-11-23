@@ -192,6 +192,12 @@
     <ClCompile Include="render\AreaManager.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="render\Vertex.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ObjectMesh.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -340,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="render\AreaManager.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Vertex.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ObjectMesh.h">
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

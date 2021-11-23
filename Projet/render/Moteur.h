@@ -278,7 +278,7 @@ protected:
 		AreaManager::GetInstance().Init(50, 50);
 		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
-		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		Mesh->Transform.p.y = -1.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
@@ -288,7 +288,7 @@ protected:
 		auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
 		Other->Transform.p.z = 0.5f;
-		Other->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Other->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Other->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, physx::PxVec3{1.0f});
 		Other->AddComponent<RigidBody>(false, false, 10.f);
 		CurrentScene->AddActor(Other);

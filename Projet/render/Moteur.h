@@ -28,6 +28,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/AreaManager.h"
+#include "render/Player.h"
 // Gameplay components
 
 using namespace physx;
@@ -177,7 +178,8 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		std::set<std::shared_ptr<Pitbull::Actor>> actors = AreaManager::GetInstance().GetActors();
+		//std::set<std::shared_ptr<Pitbull::Actor>> actors = AreaManager::GetInstance().GetActors();
+		auto& actors = CurrentScene->GetActors();
 
 		for (auto& actor : actors) {
 			// TODO Parent class for renderable
@@ -281,15 +283,15 @@ protected:
 		Mesh->Transform.p.y = -1.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
 		CurrentScene->AddActor(Mesh);
-		AreaManager::GetInstance().PlaceActor(Mesh);
+		//AreaManager::GetInstance().PlaceActor(Mesh);
 
-		auto Other = Pitbull::Actor::New();
+		/*auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
 		Other->Transform.p.z = 0.5f;
 		Other->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Other->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, physx::PxVec3{1.0f});
 		Other->AddComponent<RigidBody>(false, false, 10.f);
-		CurrentScene->AddActor(Other);
+		CurrentScene->AddActor(Other);*/
 
 		auto MyCamera = Pitbull::Actor::New();
 		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
@@ -298,8 +300,23 @@ protected:
 			&m_MatView,
 			&m_MatProj,
 			&m_MatViewProj);
-		CurrentScene->AddActor(MyCamera);
-		AreaManager::GetInstance().PlaceCamera(MyCamera);
+		//CurrentScene->AddActor(MyCamera);
+		//AreaManager::GetInstance().PlaceCamera(MyCamera);
+
+		auto MyPlayer = Pitbull::Actor::New();
+		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f),
+			XMVectorSet(0.0f, 1.0f, 1.0f, 1.0f));
+		MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
+			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
+			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
+			&m_MatView,
+			&m_MatProj,
+			&m_MatViewProj);
+		MyPlayer->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		//MyPlayer->AddComponent<RigidBody>(false, true, 10.f);
+		CurrentScene->AddActor(MyPlayer);
+		//AreaManager::GetInstance().PlaceActor(MyPlayer);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -386,10 +403,10 @@ protected:
 			}
 		}
 
-		for (auto& actor : CurrentScene->GetActors())
+		/*for (auto& actor : CurrentScene->GetActors())
 		{
 			AreaManager::GetInstance().MoveActor(actor);
-		}
+		}*/
 
 		//camera.update(tempsEcoule);
 

@@ -199,6 +199,7 @@
     <ClCompile Include="render\Moteur.cpp" />
     <ClCompile Include="render\MoteurWindows.cpp" />
     <ClCompile Include="render\ObjetMesh.cpp" />
+    <ClCompile Include="render\Player.cpp" />
     <ClCompile Include="render\Shader.cpp" />
     <ClCompile Include="render\sommetbloc.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="render\MoteurWindows.h" />
     <ClInclude Include="render\objet3d.h" />
     <ClInclude Include="render\ObjetMesh.h" />
+    <ClInclude Include="render\Player.h" />
     <ClInclude Include="render\Shader.h" />
     <ClInclude Include="render\sommetbloc.h" />
     <ClInclude Include="render\sommetTerrain.h" />

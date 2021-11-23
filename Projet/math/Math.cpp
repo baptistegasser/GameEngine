@@ -8,6 +8,16 @@ namespace Math
 		return DirectX::XMVECTOR{ Vec.x, Vec.y, Vec.z };
 	}
 
+	physx::PxVec3 XMVector2PX(const DirectX::XMVECTOR& Vec) noexcept
+	{
+		return physx::PxVec3{DirectX::XMVectorGetX(Vec), DirectX::XMVectorGetY(Vec), DirectX::XMVectorGetZ(Vec)};
+	}
+
+	physx::PxQuat XMVector2Quat(const DirectX::XMVECTOR& Vec) noexcept
+	{
+		return physx::PxQuat{ DirectX::XMVectorGetX(Vec), DirectX::XMVectorGetY(Vec), DirectX::XMVectorGetZ(Vec), 1.0f };
+	}
+
 	DirectX::XMMATRIX TransformToMatrix(const physx::PxTransform& Transform) noexcept
 	{
 		using namespace DirectX;

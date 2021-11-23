@@ -192,6 +192,9 @@
     <ClCompile Include="render\AreaManager.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="render\Player.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -340,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="render\AreaManager.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Player.h">
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

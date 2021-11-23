@@ -181,7 +181,7 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		for (auto& actor : CurrentScene->GetActors()) {
+		for (auto& actor : CurrentScene->Tree.Find({0.f}, 1.f)) {
 			// TODO Parent class for renderable
 			const auto Components = actor->GetComponents<MeshRenderer>();
 			for (auto& Comp : Components) {

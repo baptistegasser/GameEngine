@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Octree.h"
 
-#include "math/BoundingSphere.h"
-
 #include <algorithm>
 #include <functional>
 #include <queue>
@@ -15,7 +13,7 @@ Node::Node(const BoundingBox& Boundary)
 bool Node::Add(const Leaf& Leaf)
 {
     // Ignore out of bound for this node
-    if (!Boundary.ContainPoint(Leaf.Position))
+    if (!VolumeContains(Boundary, Leaf.Position))
         return false;
 
     // This node is not subdivided and still have available leafs
@@ -35,7 +33,7 @@ bool Node::Add(const Leaf& Leaf)
 bool Node::Remove(const Leaf& Leaf)
 {
     // Ignore out of bound for this node
-    if (!Boundary.ContainPoint(Leaf.Position))
+    if (!VolumeContains(Boundary, Leaf.Position))
         return false;
 
     // Don't check our leaves if not needed
@@ -113,7 +111,7 @@ bool Octree::Add(ActorType Actor)
     Leaf Leaf{ Actors.size(), Actor->Transform };
 
     // Ignore out of bound for this tree
-    if (!Root.Boundary.ContainPoint(Leaf.Position))
+    if (!VolumeContains(Root.Boundary, Leaf.Position))
         return false;
 
     // Ignore if already have this Actor in the tree
@@ -201,11 +199,42 @@ const Octree::ActorList& Octree::GetActors() const noexcept
 
 Octree::ActorPtrList Octree::Find(const Point& Pos, float MaxDistance)
 {
-	const BoundingSphere Sphere{ MaxDistance, Pos };
-    return Find(&Sphere);
+	return Find(BoundingSphere{ MaxDistance, Pos });
 }
 
-Octree::ActorPtrList Octree::Find(const BoundingVolume* Volume)
+Octree::ActorPtrList Octree::Find(const BoundingVolume Volume)
 {
-    return ActorPtrList();
+    using NodePtr = Node*;
+
+    ActorPtrList ActorsFound{};
+
+    std::deque<NodePtr> NodeToExplore;
+    NodeToExplore.push_back(&Root);
+
+    while (!NodeToExplore.empty()) {
+        const NodePtr Node = NodeToExplore.front();
+        NodeToExplore.pop_front();
+
+        // Ignore non intersected nodes
+        if (!VolumesIntersect(Node->Boundary, Volume))
+            continue;
+
+        // This node is subdivided add node to queue
+        if (Node->Subdivided) {
+            std::transform(begin(Node->Children),
+                end(Node->Children),
+                std::back_inserter(NodeToExplore),
+                [](const auto& uptr) { return uptr.get(); });
+            continue;
+        }
+
+        // Add matching actors to the list
+        for (const Leaf& Leaf : Node->Leafs) {
+	        if (VolumeContains(Volume, Leaf.Position)) {
+                ActorsFound.push_back(Actors[Leaf.ActorID].get());
+	        }
+        }
+    }
+
+    return ActorsFound;
 }

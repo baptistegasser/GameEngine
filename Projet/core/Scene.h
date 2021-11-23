@@ -23,6 +23,6 @@ public:
 
 	BoundingVolume* VisionVolume;
 
-private:
+//private:
 	Octree Tree;
 };

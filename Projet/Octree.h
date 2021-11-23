@@ -1,7 +1,8 @@
 #pragma once
 
 #include "core/Actor.h"
-#include "math/BoundingBox.h"
+
+#include "math/BoundingVolume.h"
 
 #include <vector>
 #include <memory>
@@ -53,7 +54,7 @@ public:
 
 	const ActorList& GetActors() const noexcept;
 	ActorPtrList Find(const Point& Pos, float MaxDistance);
-	ActorPtrList Find(const BoundingVolume* Volume);
+	ActorPtrList Find(const BoundingVolume Volume);
 
 private:
 	Node Root;

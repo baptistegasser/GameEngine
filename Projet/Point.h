@@ -13,4 +13,15 @@ struct Point : public physx::PxVec3 {
 	Point(const physx::PxTransform& Transform)
 		: PxVec3{ Transform.p }
 	{}
+	Point operator*(const float& Factor) const noexcept
+	{
+		return { x * Factor, y * Factor, z * Factor };
+	}
+	Point& operator+=(const Point& lhr) noexcept
+	{
+		this->x += lhr.x;
+		this->y += lhr.y;
+		this->z += lhr.z;
+		return *this;
+	}
 };

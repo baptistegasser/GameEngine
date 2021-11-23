@@ -204,6 +204,9 @@
     <ClCompile Include="math\BoundingSphere.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="math\BoundingVolume.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
     <ClCompile Include="render\Vertex.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>

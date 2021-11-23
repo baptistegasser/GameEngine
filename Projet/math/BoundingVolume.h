@@ -1,10 +1,17 @@
 ﻿#pragma once
 
-#include "Point.h"
+#include "BoundingBox.h"
+#include "BoundingSphere.h"
 
-struct BoundingVolume {
-	virtual bool ContainPoint(const Point& p) noexcept
-	{
-		return false;
-	}
+#include <variant>
+
+
+using BoundingVolume = std::variant<BoundingBox, BoundingSphere>;
+
+struct Intersect
+{
+	bool operator()(const BoundingBox& V0, const BoundingBox& V1) const;
+	bool operator()(const BoundingBox& V0, const BoundingSphere& V1) const;
 };
+
+inline bool VolumesIntersect(const BoundingVolume& V0, const BoundingVolume& V1);

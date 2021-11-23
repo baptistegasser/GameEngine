@@ -172,6 +172,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\BoundingBox.cpp" />
     <ClCompile Include="math\BoundingSphere.cpp" />
+    <ClCompile Include="math\BoundingVolume.cpp" />
     <ClCompile Include="math\Math.cpp" />
     <ClCompile Include="math\Volume.cpp" />
     <ClCompile Include="physic\BoxCollider.cpp" />

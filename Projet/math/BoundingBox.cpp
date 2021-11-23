@@ -12,7 +12,7 @@ BoundingBox::BoundingBox(float HalfWidth, float HalfHeight, float HalfDepth, Poi
 	, Center{ Center }
 {}
 
-bool BoundingBox::ContainPoint(const Point& p) noexcept
+bool BoundingBox::ContainPoint(const Point& p) const noexcept
 {
 	return -HalfWidth <= p.x && p.x <= HalfWidth
 		&& -HalfHeight <= p.y && p.y <= HalfHeight

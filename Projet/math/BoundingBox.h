@@ -1,13 +1,12 @@
 ﻿#pragma once
 
-#include "Boundingvolume.h"
+#include "Point.h"
 
 /// <summary>
 /// Structure representing a 3D Box.
 /// </summary>
-class BoundingBox : public BoundingVolume
+struct BoundingBox
 {
-public:
 	float HalfWidth, HalfHeight, HalfDepth;
 	// The center of this box
 	Point Center;
@@ -15,5 +14,5 @@ public:
 	BoundingBox(float A, Point Center = Point{ 0.f });
 	BoundingBox(float HalfWidth, float HalfHeight, float HalfDepth, Point Center = Point{ 0.f });
 
-	bool inline ContainPoint(const Point& p) noexcept override;
+	bool inline ContainPoint(const Point& p) const noexcept;
 };

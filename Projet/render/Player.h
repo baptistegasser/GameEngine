@@ -15,11 +15,30 @@ public:
 	void SetDirection(const DirectX::XMVECTOR & NewDirection) noexcept;
 	void SetUpDirection(const DirectX::XMVECTOR & NewUpDirection) noexcept;
 
+	DirectX::XMVECTOR Velocity;
+	float AngleRotation = 0.0f;
+	DirectX::XMVECTOR Direction;
+
+	enum CAMERA_TYPE {
+		FIRST,
+		THIRD
+	};
+
+	CAMERA_TYPE type;
+
 private:
 	DirectX::XMVECTOR Position;
-	DirectX::XMVECTOR Direction;
+
+
 	DirectX::XMVECTOR UpDirection;
-	float AngleRotation = 0.0f;
+	
+	int time = 0;
+
+
+	bool waitForSwap = false;
+	bool WaitForSwapJump = false;
+
+	void swapCameraMode();
 
 };
 

@@ -279,11 +279,22 @@ protected:
 		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
 		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		Mesh->Transform.p.y = -1.f;
+		//Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
+		Mesh->Transform.p.y = -2.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
 		CurrentScene->AddActor(Mesh);
 		//AreaManager::GetInstance().PlaceActor(Mesh);
+
+		auto Mesh2 = Pitbull::Actor::New();
+		Mesh2->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
+		Mesh2->Transform.p.y = 0.f;
+		Mesh2->Transform.p.z = -7.f;
+		Mesh2->Transform.p.x = 1.f;
+		Mesh2->AddComponent<RigidBody>(true, true, 10.f);
+		CurrentScene->AddActor(Mesh2);
 
 		/*auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
@@ -293,13 +304,13 @@ protected:
 		Other->AddComponent<RigidBody>(false, false, 10.f);
 		CurrentScene->AddActor(Other);*/
 
-		auto MyCamera = Pitbull::Actor::New();
+		/*auto MyCamera = Pitbull::Actor::New();
 		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
 			&m_MatView,
 			&m_MatProj,
-			&m_MatViewProj);
+			&m_MatViewProj);*/
 		//CurrentScene->AddActor(MyCamera);
 		//AreaManager::GetInstance().PlaceCamera(MyCamera);
 
@@ -314,7 +325,7 @@ protected:
 			&m_MatViewProj);
 		MyPlayer->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		//MyPlayer->AddComponent<RigidBody>(false, true, 10.f);
+		MyPlayer->AddComponent<RigidBody>(false, false, 10.f);
 		CurrentScene->AddActor(MyPlayer);
 		//AreaManager::GetInstance().PlaceActor(MyPlayer);
 
@@ -390,6 +401,46 @@ protected:
 			camera.update(tempsEcoule);
 
 		}*/
+
+		for (auto& actor : CurrentScene->GetActors())
+		{
+			auto& Components = actor->GetComponents();
+
+			for (const auto& Comp : Components)
+			{
+				if (dynamic_cast<Player*>(Comp) != nullptr)
+				{
+					Comp->Tick(tempsEcoule);
+				}
+			}
+		}
+
+		for (auto& actor : CurrentScene->GetActors())
+		{
+			auto& Components = actor->GetComponents();
+
+			for (const auto& Comp : Components)
+			{
+				if (dynamic_cast<RigidBody*>(Comp) != nullptr)
+				{
+					Comp->Tick(tempsEcoule);
+				}
+			}
+		}
+
+		for (auto& actor : CurrentScene->GetActors())
+		{
+			auto& Components = actor->GetComponents();
+
+			for (const auto& Comp : Components)
+			{
+				if (dynamic_cast<Camera*>(Comp) != nullptr)
+				{
+					Comp->Tick(tempsEcoule);
+				}
+			}
+		}
+
 		for (auto& actor : CurrentScene->GetActors())
 		{
 			auto& Components = actor->GetComponents();

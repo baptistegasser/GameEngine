@@ -323,7 +323,7 @@ protected:
 			&m_MatView,
 			&m_MatProj,
 			&m_MatViewProj);
-		MyPlayer->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlayer->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\ball3\\ball.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		MyPlayer->AddComponent<RigidBody>(false, false, 10.f);
 		CurrentScene->AddActor(MyPlayer);

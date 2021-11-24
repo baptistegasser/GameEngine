@@ -1,27 +1,28 @@
 #pragma once
 
-#include "core/Actor.h"
-#include "physic/ContactHandler.h"
+#include "Octree.h"
 
 #include "PxPhysicsAPI.h"
-#include <vector>
 #include <memory>
 
 class Scene {
 public:
-	using ActorPtr = std::shared_ptr<Pitbull::Actor>;
+	using ActorPtr = Octree::ActorType;
 
 	Scene();
 	~Scene() = default;
 
+	void Update(const float Elapsed);
 	void Init();
 	void Tick();
 
-	void AddActor(ActorPtr& Actor);
-	std::vector<ActorPtr>& GetActors();
+	void AddActor(ActorPtr Actor);
+	const Octree::ActorList& GetActors();
 
 	physx::PxScene* PhysxScene;
 
-private:
-	std::vector<ActorPtr> Actors;
+	BoundingVolume* VisionVolume;
+
+//private:
+	Octree Tree;
 };

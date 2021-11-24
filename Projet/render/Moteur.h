@@ -27,7 +27,6 @@
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
-#include "render/AreaManager.h"
 // Gameplay components
 
 using namespace physx;
@@ -124,6 +123,9 @@ public:
 			// On prépare la prochaine image
 			AnimeScene(static_cast<float>(TempsEcoule));
 
+			// Update tree after movement
+			CurrentScene->Update(static_cast<float>(TempsEcoule));
+
 			// On rend l'image sur la surface de travail
 			// (tampon d'arrière plan)
 			RenderScene();
@@ -179,11 +181,9 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		std::set<std::shared_ptr<Pitbull::Actor>> actors = AreaManager::GetInstance().GetActors();
-
-		for (auto& actor : actors) {
+		for (auto& actor : CurrentScene->Tree.Find({0.f}, 10.f)) {
 			// TODO Parent class for renderable
-			auto& Components = actor->GetComponents<MeshRenderer>();
+			const auto Components = actor->GetComponents<MeshRenderer>();
 			for (auto& Comp : Components) {
 				Comp->Tick(0.f);
 			}
@@ -275,15 +275,12 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
-		AreaManager::GetInstance().Init(50, 50);
-		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
 		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		Mesh->Transform.p.y = -1.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
-		CurrentScene->AddActor(Mesh);
-		AreaManager::GetInstance().PlaceActor(Mesh);
+		CurrentScene->AddActor(std::move(Mesh));
 
 		auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
@@ -291,7 +288,7 @@ protected:
 		Other->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Other->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, physx::PxVec3{1.0f});
 		Other->AddComponent<RigidBody>(false, false, 10.f);
-		CurrentScene->AddActor(Other);
+		CurrentScene->AddActor(std::move(Other));
 
 		auto MyCamera = Pitbull::Actor::New();
 		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
@@ -300,8 +297,7 @@ protected:
 			&m_MatView,
 			&m_MatProj,
 			&m_MatViewProj);
-		CurrentScene->AddActor(MyCamera);
-		AreaManager::GetInstance().PlaceCamera(MyCamera);
+		CurrentScene->AddActor(std::move(MyCamera));
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -375,23 +371,6 @@ protected:
 			camera.update(tempsEcoule);
 
 		}*/
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			auto& Components = actor->GetComponents();
-
-			for (const auto& Comp : Components)
-			{
-				if (dynamic_cast<MeshRenderer*>(Comp) == nullptr)
-				{
-					Comp->Tick(tempsEcoule);
-				}
-			}
-		}
-
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			AreaManager::GetInstance().MoveActor(actor);
-		}
 
 		//camera.update(tempsEcoule);
 

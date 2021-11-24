@@ -189,8 +189,23 @@
     <ClCompile Include="Contact.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="render\AreaManager.cpp">
-      <Filter>Source Files\render</Filter>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\BoundingBox.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Volume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="math\BoundingSphere.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\BoundingVolume.cpp">
+      <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="render\Vertex.cpp">
       <Filter>Source Files\render\components</Filter>
@@ -344,8 +359,23 @@
     <ClInclude Include="Contact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="render\AreaManager.h">
-      <Filter>Header Files\render</Filter>
+    <ClInclude Include="Octree.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\BoundingBox.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\BoundingVolume.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Volume.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\BoundingSphere.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="render\Vertex.h">
       <Filter>Header Files\render\components</Filter>

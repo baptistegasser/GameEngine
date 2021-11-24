@@ -15,7 +15,9 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, bool IsStatic, bool DisableGravity,
 	, DisableGravity{ DisableGravity }
 	, Mass{ Mass }
 	, Velocity{ Velocity }
-{}
+{
+	TypeFlags |= PHYSIC_COMPONENT;
+}
 
 RigidBody::~RigidBody()
 {

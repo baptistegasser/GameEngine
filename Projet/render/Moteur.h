@@ -109,6 +109,7 @@ public:
 		while (PhysicAccumulator >= PhysicDeltaStep) {
 			PhysicManager::GetInstance().Step(PhysicDeltaStep);
 			PhysicAccumulator -= PhysicDeltaStep;
+			CurrentScene->FixedTick(PhysicDeltaStep);
 		}
 
 		// Update inputs states
@@ -119,13 +120,10 @@ public:
 		if (TempsEcoule > EcartTemps)
 		{
 			// Affichage optimisé
-			pDispositif->Present(); // On enlevera «//» plus tard
+			pDispositif->Present();
 
 			// On prépare la prochaine image
 			AnimeScene(static_cast<float>(TempsEcoule));
-
-			// Update tree after movement
-			CurrentScene->Update(static_cast<float>(TempsEcoule));
 
 			// On rend l'image sur la surface de travail
 			// (tampon d'arrière plan)
@@ -182,9 +180,11 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		for (auto& actor : CurrentScene->Tree.Find({0.f}, 10.f)) {
-			// TODO Parent class for renderable
-			const auto Components = actor->GetComponents<MeshRenderer>();
+		// Get actors in vision range
+		const auto actors = CurrentScene->Tree.Find({ 0.f }, 10.f);
+
+		for (const auto& actor : actors) {
+			const auto Components = actor->GetFlaggedComponents(Pitbull::Component::RENDER_COMPONENT);
 			for (auto& Comp : Components) {
 				Comp->Tick(0.f);
 			}
@@ -267,13 +267,12 @@ protected:
 		// Calcul de VP a l'avance
 		m_MatViewProj = m_MatView * m_MatProj;
 
-		// Finnaly init the scene
+		// Finally init the scene
 		CurrentScene->Init();
 
 		return 0;
 	}
 
-	// TODO Create actor
  	bool InitObjets()
 	{
 		auto Mesh = Pitbull::Actor::New();
@@ -284,14 +283,14 @@ protected:
 		CurrentScene->AddActor(std::move(Mesh));
 
 		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
 		Mesh2->Transform.p.y = 0.f;
 		Mesh2->Transform.p.z = -7.f;
 		Mesh2->Transform.p.x = 1.f;
 		Mesh2->AddComponent<RigidBody>(true, true, 10.f);
-		CurrentScene->AddActor(Mesh2);
+		CurrentScene->AddActor(std::move(Mesh2));
 
 		/*auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
@@ -299,7 +298,7 @@ protected:
 		Other->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Other->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, physx::PxVec3{1.0f});
 		Other->AddComponent<RigidBody>(false, false, 10.f);
-		CurrentScene->AddActor(Other);
+		CurrentScene->AddActor(Other);*/
 
 		/*auto MyCamera = Pitbull::Actor::New();
 		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
@@ -312,6 +311,7 @@ protected:
 		//AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		auto MyPlayer = Pitbull::Actor::New();
+		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
 		MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
@@ -319,8 +319,9 @@ protected:
 			&m_MatView,
 			&m_MatProj,
 			&m_MatViewProj);
-		CurrentScene->AddActor(MyCamera);
-		AreaManager::GetInstance().PlaceCamera(MyCamera);
+		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		MyPlayer->AddComponent<RigidBody>(false, false, 10.f);
+		CurrentScene->AddActor(std::move(MyPlayer));
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -375,27 +376,11 @@ protected:
 
 	bool AnimeScene(float tempsEcoule)
 	{
-		/*if (camera.getType() == CCamera::CAMERA_TYPE::LEVEL && camera.getPosition().vector4_f32[0] > (-terrain->width / 2.0f) * terrain->scale.x && camera.getPosition().vector4_f32[0] < (terrain->width / 2.0f) * terrain->scale.x
-			&& camera.getPosition().vector4_f32[2] > (-terrain->height / 2.0f) * terrain->scale.z && camera.getPosition().vector4_f32[2] < (terrain->height / 2.0f) * terrain->scale.z) {
+		// Make all component Tick
+		CurrentScene->Tick(tempsEcoule);
 
-			float y = terrain->getHeight(camera.getPosition().vector4_f32[0], camera.getPosition().vector4_f32[2]) + CCamera::HEIGHT;
-
-			for (auto& object3D : ListeScene)
-			{
-				object3D->Anime(tempsEcoule);
-			}
-			camera.update(y, tempsEcoule);
-		}
-		else {
-			for (auto& object3D : ListeScene)
-			{
-				object3D->Anime(tempsEcoule);
-			}
-			camera.update(tempsEcoule);
-
-		}*/
-
-		//camera.update(tempsEcoule);
+		// Update the scene to reflect components changes
+		CurrentScene->Update();
 
 		return true;
 	}

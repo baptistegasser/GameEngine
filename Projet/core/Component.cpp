@@ -18,7 +18,12 @@ namespace Pitbull
 		// Default init behaviour is to do nothing
 	}
 
-	void Component::Tick(const float& /*DeltaTime*/)
+	void Component::Tick(const float& /*ElapsedTime*/)
+	{
+		// Default component logic is to do nothing
+	}
+
+	void Component::FixedTick(const float& DeltaTime)
 	{
 		// Default component logic is to do nothing
 	}

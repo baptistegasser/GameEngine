@@ -22,23 +22,55 @@ namespace Pitbull
 		}
 	}
 
-	void Actor::Tick()
+	void Actor::Tick(const float ElapsedTime)
 	{
-		for (const auto& Comp : Components)
-		{
-			Comp->Tick(0.f /* TODO deltatime */);
+		for (const auto& Comp : Components) {
+			Comp->Tick(ElapsedTime);
 		}
 	}
 
-	std::vector<Component*> Actor::GetComponents() const
+	void Actor::FixedTick(const float DeltaTime)
 	{
-		std::vector<Component*> All;
+		for (const auto& Comp : Components) {
+			Comp->Tick(DeltaTime);
+		}
+	}
+
+	Actor::ComponentList Actor::GetComponents() const
+	{
+		ComponentList All;
 		All.reserve(Components.size());
 
 		for (auto& Comp : Components)
 			All.push_back(Comp);
 
 		return All;
+	}
+
+	Actor::ComponentList Actor::GetFlaggedComponents(const Component::ComponentTypeFlag Flag) const
+	{
+		ComponentList Result;
+
+		for (const auto& Comp : Components) {
+			if ((Comp->TypeFlags & Flag) == Flag) {
+				Result.push_back(Comp);
+			}
+		}
+
+		return Result;
+	}
+
+	Actor::ComponentList Actor::GetNotFlaggedComponents(const Component::ComponentTypeFlag Flag) const
+	{
+		ComponentList Result;
+
+		for (const auto& Comp : Components) {
+			if ((Comp->TypeFlags & Flag) != Flag) {
+				Result.push_back(Comp);
+			}
+		}
+
+		return Result;
 	}
 
 	Actor::ActorID Actor::NextID = 0;

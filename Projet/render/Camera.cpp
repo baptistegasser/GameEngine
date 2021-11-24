@@ -16,7 +16,9 @@ Camera::Camera(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Position, const 
 	, PMatView{ PMatView }
 	, PMatProj{ PMatProj }
 	, PMatViewProj{ PMatViewProj }
-{}
+{
+	TypeFlags |= RENDER_COMPONENT;
+}
 
 void Camera::Tick(const float& DeltaTime)
 {

@@ -17,7 +17,9 @@ MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* Mes
 	, Mesh{ Mesh }
 	, MeshShader{ MeshShader }
 	, matWorld{ DirectX::XMMatrixIdentity() }
-{}
+{
+	TypeFlags |= RENDER_COMPONENT;
+}
 
 void MeshRenderer::Tick(const float& delta_time)
 {

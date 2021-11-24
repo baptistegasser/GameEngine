@@ -8,39 +8,35 @@ Scene::Scene()
 	, Tree{ BoundingBox{ 10000.f } }
 {}
 
-void Scene::Update(const float Elapsed)
+void Scene::Tick(const float ElapsedTime)
 {
-	// Update non render actor
-	for (auto& actor : GetActors())
-	{
-		auto& Components = actor->GetComponents();
+	for (auto& actor : GetActors()) {
+		auto Components = actor->GetNotFlaggedComponents(Pitbull::Component::RENDER_COMPONENT);
 
-		for (const auto& Comp : Components)
-		{
-			if (dynamic_cast<MeshRenderer*>(Comp) == nullptr)
-			{
-				Comp->Tick(Elapsed);
-			}
+		for (const auto& Comp : Components) {
+			Comp->Tick(ElapsedTime);
 		}
 	}
+}
 
-	// Update Tree
+void Scene::FixedTick(const float DeltaTime)
+{
+	for (auto& actor : GetActors()) {
+		actor->FixedTick(DeltaTime);
+	}
+}
+
+
+void Scene::Update()
+{
+	// Update the Octree
 	Tree.Update();
 }
 
-void Scene::Init()
+void Scene::Init() const
 {
-	for (auto& Actor : Tree.GetActors())
-	{
+	for (auto& Actor : Tree.GetActors()) {
 		Actor->Init();
-	}
-}
-
-void Scene::Tick()
-{
-	for (auto& Actor : Tree.GetActors())
-	{
-		Actor->Tick(/* TODO deltatime */);
 	}
 }
 

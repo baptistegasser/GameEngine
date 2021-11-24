@@ -47,9 +47,9 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 	}
 }
 
-void PhysicManager::Step()
+void PhysicManager::Step(const float& ElapsedTime)
 {
-	CurrentScene->PhysxScene->simulate(1.0f / 60.0f);
+	CurrentScene->PhysxScene->simulate(ElapsedTime);
 	CurrentScene->PhysxScene->fetchResults(true);
 }
 

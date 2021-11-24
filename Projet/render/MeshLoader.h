@@ -1,20 +1,11 @@
 #pragma once
 
 #include "Material.h"
-
-#include <string>
-#include <vector>
+#include "ObjectMesh.h"
 
 class OMBMeshLoader {
 public:
-	void Load(const std::string& FileName);
-
-	ID3D11Buffer* PVertexBuffer;
-	ID3D11Buffer* PIndexBuffer;
-	int SubsetCount;
-	std::vector<int> SubsetMaterialIndex;
-	std::vector<int> SubsetIndex;
-	std::vector<Material> Materials;
+	static ObjectMesh Load(const wchar_t* FileName, ObjectMesh& Mesh);
 
 private:
 	struct RawMaterialBlock

@@ -2,10 +2,10 @@
 #include "MeshLoader.h"
 
 #include "MoteurWindows.h"
-#include "util/util.h"
+#include "util/Util.h"
 #include "resources/resource.h"
 
-void OMBMeshLoader::Load(const std::string& FileName)
+ObjectMesh OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 {
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
@@ -35,9 +35,9 @@ void OMBMeshLoader::Load(const std::string& FileName)
 		D3D11_SUBRESOURCE_DATA InitData;
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = ts.get();
-		PVertexBuffer = nullptr;
+		Mesh.PVertexBuffer = nullptr;
 
-		PM3D::DXEssayer(PD3DDevice->CreateBuffer(&bd, &InitData, &PVertexBuffer), DXE_CREATIONVERTEXBUFFER);
+		PM3D::DXEssayer(PD3DDevice->CreateBuffer(&bd, &InitData, &Mesh.PVertexBuffer), DXE_CREATIONVERTEXBUFFER);
 	}
 
 	// 2. INDEX 
@@ -59,19 +59,19 @@ void OMBMeshLoader::Load(const std::string& FileName)
 		D3D11_SUBRESOURCE_DATA InitData;
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = index.get();
-		PIndexBuffer = nullptr;
+		Mesh.PIndexBuffer = nullptr;
 
-		PM3D::DXEssayer(PD3DDevice->CreateBuffer(&bd, &InitData, &PIndexBuffer), DXE_CREATIONINDEXBUFFER);
+		PM3D::DXEssayer(PD3DDevice->CreateBuffer(&bd, &InitData, &Mesh.PIndexBuffer), DXE_CREATIONINDEXBUFFER);
 	}
 
 	// 3. Les sous-objets
-	fichier.read((char*)&SubsetCount, sizeof(SubsetCount));
+	fichier.read((char*)&Mesh.SubsetCount, sizeof(Mesh.SubsetCount));
 	//    Début de chaque sous-objet et un pour la fin
 	{
-		std::unique_ptr<int32_t[]> si(new int32_t[SubsetCount + 1]);
+		std::unique_ptr<int32_t[]> si(new int32_t[Mesh.SubsetCount + 1]);
 
-		fichier.read((char*)si.get(), (SubsetCount + 1) * sizeof(int32_t));
-		SubsetIndex.assign(si.get(), si.get() + (SubsetCount + 1));
+		fichier.read((char*)si.get(), (Mesh.SubsetCount + 1) * sizeof(int32_t));
+		Mesh.SubsetIndex.assign(si.get(), si.get() + (Mesh.SubsetCount + 1));
 	}
 
 	// 4. MATERIAUX
@@ -81,32 +81,34 @@ void OMBMeshLoader::Load(const std::string& FileName)
 	int32_t NbMaterial;
 	fichier.read((char*)&NbMaterial, sizeof(int32_t));
 
-	Materials.resize(NbMaterial);
+	Mesh.Materials.resize(NbMaterial);
 
 	RawMaterialBlock mb;
 	for (int32_t i = 0; i < NbMaterial; ++i)
 	{
 		fichier.read((char*)&mb, sizeof(RawMaterialBlock));
-		Materials[i] = mb.ToMat();
+		Mesh.Materials[i] = mb.ToMat();
 	}
 
 	// 4c) Trouver l'index du materiau pour chaque sous-ensemble
 	{
-		std::unique_ptr<int32_t[]> smi(new int32_t[SubsetCount]);
+		std::unique_ptr<int32_t[]> smi(new int32_t[Mesh.SubsetCount]);
 
-		fichier.read((char*)smi.get(), (SubsetCount) * sizeof(int32_t));
-		SubsetMaterialIndex.assign(smi.get(), smi.get() + SubsetCount);
+		fichier.read((char*)smi.get(), (Mesh.SubsetCount) * sizeof(int32_t));
+		Mesh.SubsetMaterialIndex.assign(smi.get(), smi.get() + Mesh.SubsetCount);
 	}
 
 	// 4d) Chargement des textures
 	ResourcesManager& ResourcesManager = PM3D::CMoteurWindows::GetInstance().GetResourcesManager();
 
-	for (uint32_t i = 0; i < Materials.size(); ++i)
+	for (uint32_t i = 0; i < Mesh.Materials.size(); ++i)
 	{
-		if (Materials[i].TextureFile.length() > 0)
+		if (Mesh.Materials[i].TextureFile.length() > 0)
 		{
-			std::wstring ws(Materials[i].TextureFile.begin(), Materials[i].TextureFile.end());
-			Materials[i].Texture = ResourcesManager.GetTexture(ws);
+			std::wstring ws(Mesh.Materials[i].TextureFile.begin(), Mesh.Materials[i].TextureFile.end());
+			Mesh.Materials[i].Texture = ResourcesManager.GetTexture(ws);
 		}
 	}
+
+	return Mesh;
 }

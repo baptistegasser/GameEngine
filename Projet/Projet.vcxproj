@@ -170,7 +170,11 @@
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\BoundingBox.cpp" />
+    <ClCompile Include="math\BoundingSphere.cpp" />
+    <ClCompile Include="math\BoundingVolume.cpp" />
     <ClCompile Include="math\Math.cpp" />
+    <ClCompile Include="math\Volume.cpp" />
     <ClCompile Include="physic\BoxCollider.cpp" />
     <ClCompile Include="physic\CapsuleCollider.cpp" />
     <ClCompile Include="physic\Collider.cpp" />
@@ -181,9 +185,10 @@
     <ClCompile Include="physic\RigidBody.cpp" />
     <ClCompile Include="physic\SphereCollider.cpp" />
     <ClCompile Include="Pitbull.cpp" />
+    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="render\AfficheurSprite.cpp" />
     <ClCompile Include="render\AfficheurTexte.cpp" />
-    <ClCompile Include="render\AreaManager.cpp" />
     <ClCompile Include="render\Bloc.cpp" />
     <ClCompile Include="render\BlocEffet1.cpp" />
     <ClCompile Include="render\Camera.cpp" />
@@ -198,12 +203,14 @@
     <ClCompile Include="render\MeshRenderer.cpp" />
     <ClCompile Include="render\Moteur.cpp" />
     <ClCompile Include="render\MoteurWindows.cpp" />
+    <ClCompile Include="render\ObjectMesh.cpp" />
     <ClCompile Include="render\ObjetMesh.cpp" />
     <ClCompile Include="render\Player.cpp" />
     <ClCompile Include="render\Shader.cpp" />
     <ClCompile Include="render\sommetbloc.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
     <ClCompile Include="render\Texture.cpp" />
+    <ClCompile Include="render\Vertex.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -219,7 +226,11 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
+    <ClInclude Include="math\BoundingBox.h" />
+    <ClInclude Include="math\BoundingSphere.h" />
+    <ClInclude Include="math\BoundingVolume.h" />
     <ClInclude Include="math\Math.h" />
+    <ClInclude Include="math\Volume.h" />
     <ClInclude Include="physic\BoxCollider.h" />
     <ClInclude Include="physic\CapsuleCollider.h" />
     <ClInclude Include="physic\Collider.h" />
@@ -230,9 +241,10 @@
     <ClInclude Include="physic\RigidBody.h" />
     <ClInclude Include="physic\SphereCollider.h" />
     <ClInclude Include="Pitbull.h" />
+    <ClInclude Include="Octree.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="render\AfficheurSprite.h" />
     <ClInclude Include="render\AfficheurTexte.h" />
-    <ClInclude Include="render\AreaManager.h" />
     <ClInclude Include="render\Bloc.h" />
     <ClInclude Include="render\BlocEffet1.h" />
     <ClInclude Include="render\Camera.h" />
@@ -250,6 +262,7 @@
     <ClInclude Include="render\MeshRenderer.h" />
     <ClInclude Include="render\Moteur.h" />
     <ClInclude Include="render\MoteurWindows.h" />
+    <ClInclude Include="render\ObjectMesh.h" />
     <ClInclude Include="render\objet3d.h" />
     <ClInclude Include="render\ObjetMesh.h" />
     <ClInclude Include="render\Player.h" />
@@ -258,6 +271,7 @@
     <ClInclude Include="render\sommetTerrain.h" />
     <ClInclude Include="render\Terrain.h" />
     <ClInclude Include="render\Texture.h" />
+    <ClInclude Include="render\Vertex.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util\Horloge.h" />

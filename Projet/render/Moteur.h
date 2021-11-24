@@ -27,7 +27,6 @@
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
-#include "render/AreaManager.h"
 #include "render/Player.h"
 // Gameplay components
 
@@ -105,14 +104,16 @@ public:
 		const int64_t TempsCompteurCourant = GetTimeSpecific();
 		const double TempsEcoule = GetTimeIntervalsInSec(TempsCompteurPrecedent, TempsCompteurCourant);
 
-		// 0. Update inputs states
+		// Update physic state
+		PhysicAccumulator += static_cast<float>(TempsEcoule);
+		while (PhysicAccumulator >= PhysicDeltaStep) {
+			PhysicManager::GetInstance().Step(PhysicDeltaStep);
+			PhysicAccumulator -= PhysicDeltaStep;
+		}
+
+		// Update inputs states
 		GestionnaireDeSaisie.StatutClavier();
 		GestionnaireDeSaisie.SaisirEtatSouris();
-
-		// 2. update physic state
-		PhysicManager::GetInstance().Step(/* TODO deltatime */);
-
-		// 3. render
 
 		// Est-il temps de rendre l'image?
 		if (TempsEcoule > EcartTemps)
@@ -122,6 +123,9 @@ public:
 
 			// On prépare la prochaine image
 			AnimeScene(static_cast<float>(TempsEcoule));
+
+			// Update tree after movement
+			CurrentScene->Update(static_cast<float>(TempsEcoule));
 
 			// On rend l'image sur la surface de travail
 			// (tampon d'arrière plan)
@@ -178,12 +182,9 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		//std::set<std::shared_ptr<Pitbull::Actor>> actors = AreaManager::GetInstance().GetActors();
-		auto& actors = CurrentScene->GetActors();
-
-		for (auto& actor : actors) {
+		for (auto& actor : CurrentScene->Tree.Find({0.f}, 10.f)) {
 			// TODO Parent class for renderable
-			auto& Components = actor->GetComponents<MeshRenderer>();
+			const auto Components = actor->GetComponents<MeshRenderer>();
 			for (auto& Comp : Components) {
 				Comp->Tick(0.f);
 			}
@@ -275,16 +276,12 @@ protected:
 	// TODO Create actor
  	bool InitObjets()
 	{
-		AreaManager::GetInstance().Init(50, 50);
-		//CurrentAreamanager = AreaManager(50, 50);
 		auto Mesh = Pitbull::Actor::New();
-		Mesh->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		//Mesh->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
 		Mesh->Transform.p.y = -2.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
-		CurrentScene->AddActor(Mesh);
-		//AreaManager::GetInstance().PlaceActor(Mesh);
+		CurrentScene->AddActor(std::move(Mesh));
 
 		auto Mesh2 = Pitbull::Actor::New();
 		Mesh2->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
@@ -299,10 +296,10 @@ protected:
 		/*auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;
 		Other->Transform.p.z = 0.5f;
-		Other->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\jin\\jin.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Other->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Other->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, physx::PxVec3{1.0f});
 		Other->AddComponent<RigidBody>(false, false, 10.f);
-		CurrentScene->AddActor(Other);*/
+		CurrentScene->AddActor(Other);
 
 		/*auto MyCamera = Pitbull::Actor::New();
 		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
@@ -322,11 +319,8 @@ protected:
 			&m_MatView,
 			&m_MatProj,
 			&m_MatViewProj);
-		MyPlayer->AddComponent<MeshRenderer>(std::string{ ".\\modeles\\ball3\\ball.OMB" }, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		MyPlayer->AddComponent<RigidBody>(false, false, 10.f);
-		CurrentScene->AddActor(MyPlayer);
-		//AreaManager::GetInstance().PlaceActor(MyPlayer);
+		CurrentScene->AddActor(MyCamera);
+		AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -401,69 +395,15 @@ protected:
 
 		}*/
 
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			auto& Components = actor->GetComponents();
-
-			for (const auto& Comp : Components)
-			{
-				if (dynamic_cast<Player*>(Comp) != nullptr)
-				{
-					Comp->Tick(tempsEcoule);
-				}
-			}
-		}
-
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			auto& Components = actor->GetComponents();
-
-			for (const auto& Comp : Components)
-			{
-				if (dynamic_cast<RigidBody*>(Comp) != nullptr)
-				{
-					Comp->Tick(tempsEcoule);
-				}
-			}
-		}
-
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			auto& Components = actor->GetComponents();
-
-			for (const auto& Comp : Components)
-			{
-				if (dynamic_cast<Camera*>(Comp) != nullptr)
-				{
-					Comp->Tick(tempsEcoule);
-				}
-			}
-		}
-
-		for (auto& actor : CurrentScene->GetActors())
-		{
-			auto& Components = actor->GetComponents();
-
-			for (const auto& Comp : Components)
-			{
-				if ((dynamic_cast<MeshRenderer*>(Comp) == nullptr) && (dynamic_cast<Player*>(Comp) == nullptr) && (dynamic_cast<RigidBody*>(Comp) == nullptr) && (dynamic_cast<Camera*>(Comp) == nullptr))
-				{
-					Comp->Tick(tempsEcoule);
-				}
-			}
-		}
-
-		/*for (auto& actor : CurrentScene->GetActors())
-		{
-			AreaManager::GetInstance().MoveActor(actor);
-		}*/
-
 		//camera.update(tempsEcoule);
 
 		return true;
 	}
 
 protected:
+	const float PhysicDeltaStep = 1.0f / 60.0f;
+	float PhysicAccumulator = 0;
+
 	// Variables pour le temps de l'animation
 	int64_t TempsSuivant;
 	int64_t TempsCompteurPrecedent;

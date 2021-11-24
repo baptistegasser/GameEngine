@@ -12,10 +12,6 @@ public:
 
 	void Tick(const float& DeltaTime) override;
 
-	void SetPosition(const DirectX::XMVECTOR& NewPosition) noexcept;
-	void SetDirection(const DirectX::XMVECTOR& NewDirection) noexcept;
-	void SetUpDirection(const DirectX::XMVECTOR& NewUpDirection) noexcept;
-
 private:
 	DirectX::XMVECTOR Position;
 	DirectX::XMVECTOR Direction;

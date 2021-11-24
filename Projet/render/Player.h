@@ -5,20 +5,21 @@
 class Player : public Pitbull::Component
 {
 public :
-	Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection);
+	Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction);
 public:
 	~Player() = default;
 
+	/// <summary>
+	/// Update the direction of the player
+	/// Update the actions (bool) the player want to do
+	/// Update the type of camera
+	/// </summary>
+	/// <param name="DeltaTime"></param>
 	void Tick(const float& DeltaTime) override;
 
-	void SetPosition(const DirectX::XMVECTOR & NewPosition) noexcept;
-	void SetDirection(const DirectX::XMVECTOR & NewDirection) noexcept;
-	void SetUpDirection(const DirectX::XMVECTOR & NewUpDirection) noexcept;
-
-	DirectX::XMVECTOR Velocity;
-	float AngleRotation = 0.0f;
-	DirectX::XMVECTOR Direction;
-
+	/// <summary>
+	/// Type of camera, first or third person
+	/// </summary>
 	enum CAMERA_TYPE {
 		FIRST,
 		THIRD
@@ -26,19 +27,28 @@ public:
 
 	CAMERA_TYPE type;
 
+	bool Forward;
+	bool Backward;
+	bool Left;
+	bool Right;
+	bool Jump;
+
+	DirectX::XMVECTOR Direction;
+	DirectX::XMVECTOR RelativeZ;
+
+	float Speed = 0.3f;
+	float JumpSpeed = 2.0f;
+
 private:
-	DirectX::XMVECTOR Position;
+	float AngleRotation = 0.0f;
+	float RotationSpeed = 0.05f;
 
+	/// <summary>
+	/// Swap the camera's type
+	/// </summary>
+	void SwapCameraMode();
 
-	DirectX::XMVECTOR UpDirection;
-	
-	int time = 0;
-
-
-	bool waitForSwap = false;
-	bool WaitForSwapJump = false;
-
-	void swapCameraMode();
+	bool WaitForSwap = false;
 
 };
 

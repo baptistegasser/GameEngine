@@ -46,28 +46,32 @@ void RigidBody::Init()
 	}
 
 	PhysicManager::GetInstance().CurrentScene->PhysxScene->addActor(*RigidActor);
-
-	auto player = ParentActor->GetComponent<Player>();
-	if (player != nullptr) {
-		auto rigid = static_cast<PxRigidDynamic*>(RigidActor);
-		//if (rigid != nullptr)
-			//rigid->setMaxLinearVelocity(0.05f);
-	}
 }
 
 void RigidBody::Tick(const float& ElapsedTime)
 {
+	// Deplacements of the player
 	auto player = ParentActor->GetComponent<Player>();
 	if (player != nullptr) {
-		//RigidActor->setGlobalPose(PxTransform(RigidActor->getGlobalPose().p, PxQuat(player->AngleRotation, PxVec3(0, 1, 0))));
 		auto rigid = static_cast<PxRigidDynamic*>(RigidActor);
-		if (rigid != nullptr) {
-			rigid->setLinearVelocity(Math::XMVector2PX( player->Velocity));
-
+		if (rigid != nullptr) {					
+			rigid->addForce(Math::XMVector2PX(player->Direction) * 0.01f, physx::PxForceMode::Enum::eIMPULSE);
+			if (player->Forward) {
+				rigid->addForce(Math::XMVector2PX(player->Direction) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
+			}
+			if (player->Backward) {
+				rigid->addForce(- Math::XMVector2PX(player->Direction) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
+			}
+			if (player->Left) {
+				rigid->addForce(Math::XMVector2PX(player->RelativeZ) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
+			}
+			if (player->Right) {
+				rigid->addForce(-Math::XMVector2PX(player->RelativeZ) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
+			}
+			if (player->Jump) {
+				rigid->addForce(PxVec3(0.0f, 1.0f, 0.0f) * player->JumpSpeed, physx::PxForceMode::Enum::eIMPULSE);
+			}
 		}
-				
-
-			
 	}
 	
 	// Update parent pos with self, simulated pos

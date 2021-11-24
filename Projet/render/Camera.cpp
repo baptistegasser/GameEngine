@@ -23,12 +23,12 @@ void Camera::Tick(const float& DeltaTime)
 	auto player = ParentActor->GetComponent<Player>();
 	if (player != nullptr) {
 		if (player->type == Player::CAMERA_TYPE::THIRD) {
-			SetPosition(Math::PX2XMVector(ParentActor->Transform.p) - player->Direction * 1.5 + XMVectorSet(0, 1.5, 0, 0));
+			Position = Math::PX2XMVector(ParentActor->Transform.p) - player->Direction * 1.5 + XMVectorSet(0, 0.75f, 0, 0);
 		}
 		else {
-			SetPosition(Math::PX2XMVector(ParentActor->Transform.p) + player->Direction * 1.5 + XMVectorSet(0, 1.5, 0, 0));
+			Position = Math::PX2XMVector(ParentActor->Transform.p) + player->Direction + XMVectorSet(0, 0.75f, 0, 0);
 		}
-		SetDirection(player->Direction);	
+		Direction = player->Direction;	
 	}
 
 	// Matrice de la vision
@@ -36,19 +36,4 @@ void Camera::Tick(const float& DeltaTime)
 
 	// Recalculer matViewProj
 	*PMatViewProj = (*PMatView) * (*PMatProj);
-}
-
-void Camera::SetPosition(const DirectX::XMVECTOR& NewPosition) noexcept
-{
-	Position = NewPosition;
-}
-
-void Camera::SetDirection(const DirectX::XMVECTOR& NewDirection) noexcept
-{
-	Direction = NewDirection;
-}
-
-void Camera::SetUpDirection(const DirectX::XMVECTOR& NewUpDirection) noexcept
-{
-	UpDirection = NewUpDirection;
 }

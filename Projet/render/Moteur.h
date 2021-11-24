@@ -315,8 +315,7 @@ protected:
 		//AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		auto MyPlayer = Pitbull::Actor::New();
-		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, 1.0f, 1.0f));
+		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
 		MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
@@ -447,7 +446,7 @@ protected:
 
 			for (const auto& Comp : Components)
 			{
-				if (dynamic_cast<MeshRenderer*>(Comp) == nullptr)
+				if ((dynamic_cast<MeshRenderer*>(Comp) == nullptr) && (dynamic_cast<Player*>(Comp) == nullptr) && (dynamic_cast<RigidBody*>(Comp) == nullptr) && (dynamic_cast<Camera*>(Comp) == nullptr))
 				{
 					Comp->Tick(tempsEcoule);
 				}

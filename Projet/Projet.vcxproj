@@ -236,6 +236,7 @@
     <ClInclude Include="physic\Collider.h" />
     <ClInclude Include="physic\ContactFilter.h" />
     <ClInclude Include="physic\ContactHandler.h" />
+    <ClInclude Include="physic\ForceMode.h" />
     <ClInclude Include="physic\PhysicMaterial.h" />
     <ClInclude Include="physic\PhysicManager.h" />
     <ClInclude Include="physic\RigidBody.h" />

@@ -7,9 +7,9 @@
 #endif
 
 #include "util/Singleton.h"
-#include "util/Util.h" // PX_RELEASE
 #include "core/Scene.h"
 #include "ContactHandler.h"
+#include "RigidBody.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -25,6 +25,7 @@ public:
 	void Step(const float& ElapsedTime);
 	void Cleanup();
 
+	void RegisterRigidBody(const RigidBody* RigidBody);
 	ContactHandler& GetContactHandler() noexcept;
 
 	physx::PxPhysics* Physics = nullptr;
@@ -42,4 +43,8 @@ private:
 	physx::PxDefaultCpuDispatcher* Dispatcher = nullptr;
 
 	ContactHandler ContactHandler;
+	/// <summary>
+	/// List of all RigidBody created during runtime.
+	/// </summary>
+	std::vector<const RigidBody*> RigidBodies;
 };

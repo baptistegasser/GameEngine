@@ -389,6 +389,9 @@
     <ClInclude Include="render\Player.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
+    <ClInclude Include="physic\ForceMode.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico">

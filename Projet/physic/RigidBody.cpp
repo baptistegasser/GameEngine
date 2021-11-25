@@ -4,17 +4,20 @@
 #include "Collider.h"
 #include "util/Util.h"
 #include "PhysicManager.h"
-#include <render/Player.h>
 #include "../math/Math.h"
+
+#include <cassert>
+
+#ifdef _DEBUG
+#define ASSERT_DYNAMIC assert("This method must be called on dynamic actor only" && !IsStatic);
+#endif
 
 using namespace physx;
 
-RigidBody::RigidBody(Pitbull::Actor* Parent, bool IsStatic, bool DisableGravity, float Mass, PxVec3 Velocity)
+RigidBody::RigidBody(Pitbull::Actor* Parent, bool IsStatic)
 	: Component{ Parent }
 	, IsStatic{ IsStatic }
-	, DisableGravity{ DisableGravity }
-	, Mass{ Mass }
-	, Velocity{ Velocity }
+	, RigidActor{ nullptr }
 {
 	TypeFlags |= PHYSIC_COMPONENT;
 }
@@ -29,17 +32,15 @@ void RigidBody::Init()
 	auto& PhysicManager = PhysicManager::GetInstance();
 	const auto Physics = PhysicManager.Physics;
 
+	// Create appropriate physx actor
 	if (IsStatic) {
 		RigidActor = Physics->createRigidStatic(ParentActor->Transform);
 	}
 	else {
-		const auto DynamicActor = Physics->createRigidDynamic(ParentActor->Transform);
-		DynamicActor->setMass(Mass);
-		DynamicActor->setLinearVelocity(Velocity);
-		DynamicActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, DisableGravity);
-		RigidActor = DynamicActor;
+		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
 	}
 
+	// Create and add shapes for collisions
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for( const auto Collider : Colliders) {
 		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(), *Collider->GetPxMaterial());
@@ -47,35 +48,52 @@ void RigidBody::Init()
 		PhysicManager.GetContactHandler().RegisterCollider(Shape, Collider);
 	}
 
-	PhysicManager::GetInstance().CurrentScene->PhysxScene->addActor(*RigidActor);
+	// Notify the big boss that we exist
+	PhysicManager.RegisterRigidBody(this);
 }
 
-void RigidBody::Tick(const float& ElapsedTime)
+void RigidBody::PreFixedTick() const
 {
-	// Deplacements of the player
-	auto player = ParentActor->GetComponent<Player>();
-	if (player != nullptr) {
-		auto rigid = static_cast<PxRigidDynamic*>(RigidActor);
-		if (rigid != nullptr) {					
-			rigid->addForce(Math::XMVector2PX(player->Direction) * 0.01f, physx::PxForceMode::Enum::eIMPULSE);
-			if (player->Forward) {
-				rigid->addForce(Math::XMVector2PX(player->Direction) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
-			}
-			if (player->Backward) {
-				rigid->addForce(- Math::XMVector2PX(player->Direction) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
-			}
-			if (player->Left) {
-				rigid->addForce(Math::XMVector2PX(player->RelativeZ) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
-			}
-			if (player->Right) {
-				rigid->addForce(-Math::XMVector2PX(player->RelativeZ) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
-			}
-			if (player->Jump) {
-				rigid->addForce(PxVec3(0.0f, 1.0f, 0.0f) * player->JumpSpeed, physx::PxForceMode::Enum::eIMPULSE);
-			}
-		}
-	}
-	
-	// Update parent pos with self, simulated pos
+	// Update the transform with the actor's own to match change made by other components
+	RigidActor->setGlobalPose(ParentActor->Transform);
+}
+
+void RigidBody::FixedTick(const float& DeltaTime)
+{
+	// Update the actor transform with the simulated one
 	ParentActor->Transform = RigidActor->getGlobalPose();
+}
+
+physx::PxRigidDynamic* RigidBody::GetAsDynamic() const noexcept
+{
+	return static_cast<PxRigidDynamic*>(RigidActor); // NOLINT(cppcoreguidelines-pro-type-static-cast-downcast)
+}
+
+void RigidBody::AddForce(const physx::PxVec3& Force, const ForceMode& ForceMode) const
+{
+	ASSERT_DYNAMIC
+	GetAsDynamic()->addForce(Force, PhysxForce(ForceMode));
+}
+
+void RigidBody::AddTorque(const physx::PxVec3& Torque, const ForceMode& ForceMode) const
+{
+	ASSERT_DYNAMIC
+	GetAsDynamic()->addTorque(Torque, PhysxForce(ForceMode));
+}
+
+void RigidBody::SetVelocity(const physx::PxVec3& Velocity) const
+{
+	ASSERT_DYNAMIC
+	GetAsDynamic()->setLinearVelocity(Velocity);
+}
+
+void RigidBody::SetMass(const float Mass) const
+{
+	ASSERT_DYNAMIC
+	GetAsDynamic()->setMass(Mass);
+}
+
+void RigidBody::SetFollowGravity(const bool FollowGravity) const
+{
+	RigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !FollowGravity);
 }

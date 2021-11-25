@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PhysicManager.h"
 
+#include "util/Util.h" // PX_RELEASE
 #include "ContactFilter.h"
 
 using namespace physx;
@@ -49,6 +50,9 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 
 void PhysicManager::Step(const float& ElapsedTime)
 {
+	const auto CallPreTick = [](const RigidBody* RB) { RB->PreFixedTick(); };
+	std::for_each(RigidBodies.begin(), RigidBodies.end(), CallPreTick);
+
 	CurrentScene->PhysxScene->simulate(ElapsedTime);
 	CurrentScene->PhysxScene->fetchResults(true);
 }
@@ -65,6 +69,12 @@ void PhysicManager::Cleanup()
 		PX_RELEASE(transport);
 	}
 	PX_RELEASE(Foundation);
+}
+
+void PhysicManager::RegisterRigidBody(const RigidBody* RigidBody)
+{
+	CurrentScene->PhysxScene->addActor(*RigidBody->RigidActor);
+	RigidBodies.push_back(RigidBody);
 }
 
 ContactHandler& PhysicManager::GetContactHandler() noexcept

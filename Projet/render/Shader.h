@@ -36,6 +36,7 @@ struct Shader {
 
 	// 3e
 	ID3D11Buffer* PStructuredBuffer3;
+	ID3D11ShaderResourceView* ShaderResourceView;
 
 	
 	ID3DX11Effect* PEffect;

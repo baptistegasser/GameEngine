@@ -94,30 +94,26 @@ Shader::Shader(const wchar_t* FileName)
 	D3D11_BUFFER_DESC buffer;
 	ZeroMemory(&buffer, sizeof(bufferDesc));
 
-	buffer.Usage = D3D11_USAGE_DEFAULT;
+	buffer.Usage = D3D11_USAGE_DYNAMIC;
 	buffer.ByteWidth = sizeof(LightShader)*10;
 	buffer.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	buffer.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-	buffer.CPUAccessFlags = 0;
+	buffer.MiscFlags = 0;
+	buffer.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	buffer.StructureByteStride = sizeof(LightShader);
 
+	auto result3 = PD3DDevice->CreateBuffer(&buffer, nullptr, &PStructuredBuffer3);
 
-	D3D11_SUBRESOURCE_DATA subResourceData2;
-	subResourceData2.pSysMem = 0;
-	subResourceData2.SysMemPitch = 0;
-	subResourceData2.SysMemSlicePitch = 0;
-
-
-	PD3DDevice->CreateBuffer(&buffer, nullptr, &PStructuredBuffer3);
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	srvDesc.Buffer.FirstElement = 0;
 	srvDesc.Buffer.NumElements = 10;
+	srvDesc.Buffer.ElementWidth = sizeof(LightShader);
 
-	PD3DDevice->CreateShaderResourceView(PStructuredBuffer3, &srvDesc, &pTextureD3D);
+	auto result2 = PD3DDevice->CreateShaderResourceView(PStructuredBuffer3, &srvDesc, &ShaderResourceView);
 	
+	int b =0;
 }
 
 Shader::~Shader()

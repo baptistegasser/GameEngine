@@ -60,16 +60,16 @@ void MeshRenderer::Tick(const float& delta_time)
 	LightParams.Roughness = LightShader1.Roughness;
 	LightParams.Specular = LightShader1.Specular;
 
-	LightParams3.Position = LightShader1.Position;
-	LightParams3.Ambiante = LightShader1.Ambiante;
-	LightParams3.Roughness = LightShader1.Roughness;
-	LightParams3.Specular = LightShader1.Specular;
+	//LightParams3.Position = LightShader1.Position;
+	//LightParams3.Ambiante = LightShader1.Ambiante;
+	//LightParams3.Roughness = LightShader1.Roughness;
+	//LightParams3.Specular = LightShader1.Specular;
 
 
 	LightShader blop[1] = { LightShader1.Position, LightShader1.Ambiante, LightShader1.Roughness, LightShader1.Specular };
 
-	LightShader* blap = new LightShader[1];
-	blap[1] = { LightShader1.Position, LightShader1.Ambiante, LightShader1.Roughness, LightShader1.Specular };
+	/*LightShader* blap = new LightShader[1];
+	blap[1] = { LightShader1.Position, LightShader1.Ambiante, LightShader1.Roughness, LightShader1.Specular };*/
 
 
 	// Le sampler state
@@ -114,35 +114,23 @@ void MeshRenderer::Tick(const float& delta_time)
 			pCB2->SetConstantBuffer(MeshShader->PConstantBuffer2);
 			pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer2, 0, nullptr, &LightParams, 0, 0);
 
-			// 3e buffer
-			/*ID3DX11EffectShaderResourceVariable* lights;
-			lights = MeshShader->PEffect->GetVariableByName("lightsSt")->AsShaderResource();
-			lights->SetResource(MeshShader->PConstantBuffer2);*/
-			/*ID3DX11EffectConstantBuffer* pCB3 = MeshShader->PEffect->GetConstantBufferByName("lightsSt");
-			pCB3->SetConstantBuffer(MeshShader->PStructuredBuffer3);
-			pImmediateContext->UpdateSubresource(MeshShader->PStructuredBuffer3, 0, nullptr, &LightParams3, 0, 0);*/
-
-			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
+			//pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 
 			// 3e
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource2;
-			pImmediateContext->Map(MeshShader->PStructuredBuffer3, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource2);
+			auto result = pImmediateContext->Map((ID3D11Resource* ) MeshShader->PStructuredBuffer3, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource2);
 
-			size_t sizeInBytes = 1 * sizeof(LightShader);
+			size_t sizeInBytes = sizeof(blop);
 
-			memcpy_s(mappedResource2.pData, sizeInBytes, blap, sizeInBytes);
+			memcpy_s(mappedResource2.pData, sizeInBytes, blop, sizeInBytes);
 
-			//pImmediateContext->Unmap(MeshShader->PStructuredBuffer3, 0);
+			pImmediateContext->Unmap(MeshShader->PStructuredBuffer3, 0);
 
-			//ID3D11ShaderResourceView* Texture;
-			//Texture = (ID3D11ShaderResourceView*) MeshShader->PEffect->GetVariableByName("lightsSt")->AsShaderResource();
+			ID3DX11EffectShaderResourceVariable* ress = MeshShader->PEffect->GetVariableByName("lightsSt")->AsShaderResource();
+			ress->SetResource(MeshShader->ShaderResourceView);
 
-			pImmediateContext->PSSetShaderResources(9, 1, &MeshShader->pTextureD3D);
-
-			int i = 0;
-
-
+			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 
 			
 		}

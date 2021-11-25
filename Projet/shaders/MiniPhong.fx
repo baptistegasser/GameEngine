@@ -1,3 +1,12 @@
+struct Light {
+	float4 Position;
+	float4 Ambiante;
+	float4 Roughness;
+	float4 Specular;
+};
+
+StructuredBuffer<Light> lightsSt;
+
 cbuffer param
 { 
 	float4x4 matWorldViewProj;   // la matrice totale 
@@ -15,14 +24,7 @@ cbuffer param
 	float2 remplissage;
 }
 
-struct Light {
-	float4 Position;
-	float4 Ambiante;
-	float4 Roughness;
-	float4 Specular;
-};
 
-StructuredBuffer<Light> lightsSt;
 
 cbuffer lights {
 	float4 Position;

@@ -292,12 +292,13 @@ protected:
 		CurrentScene->AddActor(std::move(Mesh));
 
 		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB" ), Principal, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), Principal, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
 		Mesh2->Transform.p.y = 0.f;
 		Mesh2->Transform.p.z = -7.f;
 		Mesh2->Transform.p.x = 1.f;
+		Mesh2->Transform.q = physx::PxQuat(3.14f, physx::PxVec3(0, 1, 0));
 		Mesh2->AddComponent<RigidBody>(true, true, 10.f);
 		CurrentScene->AddActor(std::move(Mesh2));
 
@@ -321,7 +322,7 @@ protected:
 
 		auto MyPlayer = Pitbull::Actor::New();
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), Principal, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
+		//MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
 		MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),

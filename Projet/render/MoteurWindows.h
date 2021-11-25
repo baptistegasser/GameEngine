@@ -37,6 +37,7 @@ private:
 	TCHAR szWindowClass[MAX_LOADSTRING];	// le nom de la classe de fenêtre principale
 
 	Horloge m_Horloge;
+	static bool Focused, PreviousFocused;
 };
 
 } // namespace PM3D

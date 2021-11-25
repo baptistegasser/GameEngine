@@ -5,6 +5,8 @@
 
 namespace PM3D
 {
+bool CMoteurWindows::Focused = false;
+bool CMoteurWindows::PreviousFocused = false;
 HINSTANCE CMoteurWindows::hAppInstance;	// handle Windows de l'instance actuelle de l'application
 
 										//   FONCTION : SetWindowsAppInstance(HANDLE, int)
@@ -117,8 +119,13 @@ bool CMoteurWindows::RunSpecific()
 	MSG msg;
 	bool bBoucle = true;
 
+	if (Focused != PreviousFocused) {
+		GetGestionnaireDeSaisie().HandleFocusChange(Focused, hMainWnd);
+		PreviousFocused = Focused;
+	}
+
 	// Y-a-t'il un message Windows à traiter?
-	if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	while (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{
 		// Est-ce un message de fermeture ?
 		if (msg.message == WM_QUIT) bBoucle = false;
@@ -223,6 +230,12 @@ LRESULT CALLBACK CMoteurWindows::WndProc(HWND hWnd, UINT message, WPARAM wParam,
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	case WM_KILLFOCUS:
+		Focused = false;
+		return 0;
+	case WM_SETFOCUS:
+		Focused = true;
+		return 0;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

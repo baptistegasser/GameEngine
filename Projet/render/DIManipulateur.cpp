@@ -109,4 +109,51 @@ namespace PM3D
 		pSouris->GetDeviceState(sizeof(mouseState), (void*)&mouseState);
 	}
 
+	void CDIManipulateur::HandleFocusChange(bool Focused, HWND hWnd)
+	{
+		if (Focused) {
+			AcquireAll(hWnd);
+		} else {
+			UnAcquireAll();
+		}
+	}
+
+	void CDIManipulateur::AcquireAll(HWND hWnd)
+	{
+		if (pClavier)
+		{
+			pClavier->Acquire();
+			pClavier->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+		}
+
+		if (pSouris)
+		{
+			pSouris->Acquire();
+			pSouris->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+		}
+
+		if (pJoystick)
+		{
+			pJoystick->Acquire();
+		}
+	}
+
+	void CDIManipulateur::UnAcquireAll()
+	{
+		if (pClavier)
+		{
+			pClavier->Unacquire();
+		}
+
+		if (pSouris)
+		{
+			pSouris->Unacquire();
+		}
+
+		if (pJoystick)
+		{
+			pJoystick->Unacquire();
+		}
+	}
+
 } // namespace PM3D

@@ -13,6 +13,7 @@ namespace PM3D
 		void StatutClavier();
 		bool ToucheAppuyee(UINT touche) const;
 		void SaisirEtatSouris();
+		void HandleFocusChange(bool Focused, HWND hWnd);
 
 		const DIMOUSESTATE& EtatSouris() const { return mouseState; }
 
@@ -26,6 +27,9 @@ namespace PM3D
 
 		char tamponClavier[256];
 		DIMOUSESTATE mouseState;
+
+		void AcquireAll(HWND hWnd);
+		void UnAcquireAll();
 	};
 
 } // namespace PM3D

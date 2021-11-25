@@ -15,18 +15,19 @@ namespace PM3D
 		DXRelacher(mSolidCullBackRS);
 		DXRelacher(pDepthTexture);
 		DXRelacher(pDepthStencilView);
-
-		if (pImmediateContext)
-		{
-			pImmediateContext->ClearState();
-		}
 		DXRelacher(mSolidCullBackRS);
 		DXRelacher(pDepthStencilView);
 		DXRelacher(pDepthTexture);
 		DXRelacher(pRenderTargetView);
-		DXRelacher(pImmediateContext);
 		DXRelacher(pSwapChain);
 		DXRelacher(pD3DDevice);
+
+		if (pImmediateContext)
+		{
+			pImmediateContext->ClearState();
+			pImmediateContext->Flush();
+		}
+		DXRelacher(pImmediateContext);
 	}
 
 	uint32_t CDispositifD3D11::GetLargeur() const { return largeurEcran; }

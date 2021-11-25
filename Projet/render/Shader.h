@@ -29,9 +29,6 @@ struct Shader {
 	ID3D11InputLayout* PInputLayout;
 	ID3D11SamplerState* PSampleState;
 
-	ID3D11ShaderResourceView* pTextureD3D;
-	ID3D11SamplerState* pSampleState;
-
 	Shader(const wchar_t* FileName);
 	~Shader();
 };

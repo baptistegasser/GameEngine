@@ -72,5 +72,6 @@ Shader::~Shader()
 	PM3D::DXRelacher(PEffectPass);
 	PM3D::DXRelacher(PEffectTechnique);
 	PM3D::DXRelacher(PInputLayout);
+	PM3D::DXRelacher(PSampleState);
 	PM3D::DXRelacher(PEffect);
 }

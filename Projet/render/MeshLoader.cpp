@@ -5,7 +5,7 @@
 #include "util/Util.h"
 #include "resources/resource.h"
 
-ObjectMesh OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
+void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 {
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
@@ -109,6 +109,4 @@ ObjectMesh OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 			Mesh.Materials[i].Texture = ResourcesManager.GetTexture(ws);
 		}
 	}
-
-	return Mesh;
 }

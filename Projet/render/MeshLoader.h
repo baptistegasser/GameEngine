@@ -5,7 +5,7 @@
 
 class OMBMeshLoader {
 public:
-	static ObjectMesh Load(const wchar_t* FileName, ObjectMesh& Mesh);
+	static void Load(const wchar_t* FileName, ObjectMesh& Mesh);
 
 private:
 	struct RawMaterialBlock

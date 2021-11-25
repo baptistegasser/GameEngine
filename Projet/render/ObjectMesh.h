@@ -5,6 +5,7 @@
 struct ObjectMesh
 {
 	ObjectMesh(const wchar_t* MeshName);
+	~ObjectMesh();
 
 	ID3D11Buffer* PVertexBuffer;
 	ID3D11Buffer* PIndexBuffer;

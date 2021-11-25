@@ -279,7 +279,7 @@ protected:
 		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
 		Mesh->Transform.p.y = -2.f;
-		Mesh->AddComponent<RigidBody>(true);
+		Mesh->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh));
 
 		auto Mesh2 = Pitbull::Actor::New();
@@ -289,7 +289,7 @@ protected:
 		Mesh2->Transform.p.y = 0.f;
 		Mesh2->Transform.p.z = -7.f;
 		Mesh2->Transform.p.x = 1.f;
-		Mesh2->AddComponent<RigidBody>(true);
+		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh2));
 
 		/*auto Other = Pitbull::Actor::New();
@@ -320,7 +320,7 @@ protected:
 			&m_MatProj,
 			&m_MatViewProj);
 		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		MyPlayer->AddComponent<RigidBody>(false);
+		MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 		CurrentScene->AddActor(std::move(MyPlayer));
 
 		CurrentScene->SetCurrentCamera(PlayerCam);

@@ -9,14 +9,15 @@
 #include <cassert>
 
 #ifdef _DEBUG
-#define ASSERT_DYNAMIC assert("This method must be called on dynamic actor only" && !IsStatic);
+#define ASSERT_DYNAMIC assert("This method must be called on a dynamic actor only" && ActorType == RigidActorType::Dynamic);
+#define ASSERT_KINEMATIC assert("This method must be called on a kinematic actor only" && ActorType == RigidActorType::Kinematic);
 #endif
 
 using namespace physx;
 
-RigidBody::RigidBody(Pitbull::Actor* Parent, bool IsStatic)
+RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	: Component{ Parent }
-	, IsStatic{ IsStatic }
+	, ActorType{ ActorType }
 	, RigidActor{ nullptr }
 {
 	TypeFlags |= PHYSIC_COMPONENT;
@@ -33,11 +34,18 @@ void RigidBody::Init()
 	const auto Physics = PhysicManager.Physics;
 
 	// Create appropriate physx actor
-	if (IsStatic) {
+	switch (ActorType) {
+	case RigidActorType::Static:
 		RigidActor = Physics->createRigidStatic(ParentActor->Transform);
-	}
-	else {
+		break;
+	case RigidActorType::Dynamic:
 		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
+		break;
+	case RigidActorType::Kinematic:
+		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
+		static_cast<PxRigidDynamic*>(RigidActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+		break;
+	default: throw "Invalid actor type";
 	}
 
 	// Create and add shapes for collisions
@@ -96,4 +104,10 @@ void RigidBody::SetMass(const float Mass) const
 void RigidBody::SetFollowGravity(const bool FollowGravity) const
 {
 	RigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !FollowGravity);
+}
+
+void RigidBody::setKinematicTarget(const physx::PxTransform& Target) const
+{
+	ASSERT_KINEMATIC;
+	GetAsDynamic()->setKinematicTarget(Target);
 }

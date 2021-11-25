@@ -6,6 +6,15 @@
 
 class RigidBody : public Pitbull::Component {
 public:
+	/// <summary>
+	/// The different type of physx actor that can be created
+	/// </summary>
+	enum class RigidActorType {
+		Static,
+		Dynamic,
+		Kinematic
+	};
+
 	~RigidBody() override;
 
 	void Init() override;
@@ -36,14 +45,18 @@ public:
 	/// Enable or disable gravity on the actor.
 	/// </summary>
 	void SetFollowGravity(bool FollowGravity) const;
+	/// <summary>
+	/// Set the target so the actor follow a path to it.
+	/// </summary>
+	void setKinematicTarget(const physx::PxTransform& Target) const;
 
 protected:
 	friend class Pitbull::Actor;
 	friend class PhysicManager;
-	RigidBody(Pitbull::Actor* Parent, bool IsStatic);
+	RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType);
 
 private:
-	bool IsStatic = true;
+	RigidActorType ActorType;
 	physx::PxRigidActor* RigidActor;
 
 	/// <summary>

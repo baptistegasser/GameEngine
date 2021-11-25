@@ -31,8 +31,8 @@ public :
 	DirectX::XMVECTOR Direction;
 	DirectX::XMVECTOR RelativeZ;
 
-	float Speed = 0.03f;
-	float JumpSpeed = 0.5f;
+	float Speed = 1.0f;
+	float JumpSpeed = 1.5f;
 
 private:
 	RigidBody* MyRigidBody;

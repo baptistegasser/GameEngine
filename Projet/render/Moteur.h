@@ -33,6 +33,7 @@
 using namespace physx;
 
 #include <iostream>
+#include <chrono>
 
 namespace PM3D
 {
@@ -104,12 +105,15 @@ public:
 		const int64_t TempsCompteurCourant = GetTimeSpecific();
 		const double TempsEcoule = GetTimeIntervalsInSec(TempsCompteurPrecedent, TempsCompteurCourant);
 
+		const double PhysicElapsedTime = GetTimeIntervalsInSec(CurrentPhysicTime, TempsCompteurCourant);
+		CurrentPhysicTime = TempsCompteurCourant;
+
 		// Update physic state
-		PhysicAccumulator += static_cast<float>(TempsEcoule);
+		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
 		while (PhysicAccumulator >= PhysicDeltaStep) {
 			PhysicManager::GetInstance().Step(PhysicDeltaStep);
-			PhysicAccumulator -= PhysicDeltaStep;
 			CurrentScene->FixedTick(PhysicDeltaStep);
+			PhysicAccumulator -= PhysicDeltaStep;
 		}
 
 		// Update inputs states
@@ -167,6 +171,7 @@ protected:
 	{
 		TempsSuivant = GetTimeSpecific();
 		TempsCompteurPrecedent = TempsSuivant;
+		CurrentPhysicTime = TempsSuivant;
 
 		// première Image
 		RenderScene();
@@ -319,11 +324,13 @@ protected:
 			&m_MatView,
 			&m_MatProj,
 			&m_MatViewProj);
+		CurrentScene->SetCurrentCamera(PlayerCam);
+
 		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
+		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 		CurrentScene->AddActor(std::move(MyPlayer));
 
-		CurrentScene->SetCurrentCamera(PlayerCam);
+		PlayerBody->SetMass(10.f);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
@@ -390,6 +397,7 @@ protected:
 protected:
 	const float PhysicDeltaStep = 1.0f / 60.0f;
 	float PhysicAccumulator = 0;
+	int64_t CurrentPhysicTime;
 
 	// Variables pour le temps de l'animation
 	int64_t TempsSuivant;

@@ -1,21 +1,21 @@
 #include "stdafx.h"
 #include "Player.h"
+
 #include "MoteurWindows.h"
 #include "../math/Math.h"
-#include "physic/RigidBody.h"
 
 Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
-: Component{ Parent }
-, Direction{ XMVector3Normalize(Direction) }
-, type{ CAMERA_TYPE::THIRD }
-, WaitForSwap{false}
-{
-}
+	: Component{ Parent }
+	, Direction{ XMVector3Normalize(Direction) }
+	, ViewType{ CameraViewType::Third }
+	, WaitForSwap{false}
+{}
 
 void Player::Init()
 {
-	// Get the component only once at init
+	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
+	MyCamera = ParentActor->GetComponent<Camera>();
 }
 
 void Player::Tick(const float& DeltaTime)
@@ -25,38 +25,23 @@ void Player::Tick(const float& DeltaTime)
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_A)) {
-		Left = true;
-	}
-	else {
-		Left = false;
+		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_D)) {
-		Right = true;
-	}
-	else {
-		Right = false;
+		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_W)) {
-		Forward = true;
-	}
-	else {
-		Forward = false;
+		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_S)) {
-		Backward = true;
-	}
-	else {
-		Backward = false;
+		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
 	}
 
  	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
-		Jump = true;
-	}
-	else {
-		Jump = false;
+		MyRigidBody->AddForce(PxVec3(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_M)) {
@@ -79,27 +64,22 @@ void Player::Tick(const float& DeltaTime)
 		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
 		Direction = XMVector4Normalize(Direction);
 	}
-	if (Forward) {
-		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
+
+	if (ViewType == CameraViewType::Third) {
+		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.p) - Direction * 1.5 + XMVectorSet(0, 0.75f, 0, 0));
 	}
-	if (Backward) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
+	else {
+		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.p) + Direction + XMVectorSet(0, 0.75f, 0, 0));
 	}
-	if (Left) {
-		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
-	}
-	if (Right) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
-	}
-	if (Jump) {
-		MyRigidBody->AddForce(PxVec3(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
-	}
+	MyCamera->SetDirection(Direction);
 }
 
 void Player::SwapCameraMode()
 {
-	if (type == CAMERA_TYPE::FIRST) type = CAMERA_TYPE::THIRD;
-	else type = CAMERA_TYPE::FIRST;
+	if (ViewType == CameraViewType::First)
+		ViewType = CameraViewType::Third;
+	else
+		ViewType = CameraViewType::First;
 
 	WaitForSwap = false;
 }

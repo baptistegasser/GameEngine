@@ -12,7 +12,12 @@ public:
 
 	void Tick(const float& DeltaTime) override;
 
+	void SetPosition(const DirectX::XMVECTOR& Position) noexcept;
+	void SetDirection(const DirectX::XMVECTOR& Direction) noexcept;
+	void SetUpDirection(const DirectX::XMVECTOR& UpDirection) noexcept;
+
 private:
+	bool NeedToUpdate;
 	DirectX::XMVECTOR Position;
 	DirectX::XMVECTOR Direction;
 	DirectX::XMVECTOR UpDirection;

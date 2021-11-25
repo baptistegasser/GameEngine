@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "MoteurWindows.h"
 #include "../math/Math.h"
+#include "physic/RigidBody.h"
 
 Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
 : Component{ Parent }
@@ -9,6 +10,12 @@ Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
 , type{ CAMERA_TYPE::THIRD }
 , WaitForSwap{false}
 {
+}
+
+void Player::Init()
+{
+	// Get the component only once at init
+	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 }
 
 void Player::Tick(const float& DeltaTime)
@@ -71,6 +78,21 @@ void Player::Tick(const float& DeltaTime)
 		PxQuat qx = PxQuat(RotationSpeed, PxVec3(0, 1, 0));
 		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
 		Direction = XMVector4Normalize(Direction);
+	}
+	if (Forward) {
+		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
+	}
+	if (Backward) {
+		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
+	}
+	if (Left) {
+		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
+	}
+	if (Right) {
+		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
+	}
+	if (Jump) {
+		MyRigidBody->AddForce(PxVec3(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 }
 

@@ -20,6 +20,11 @@ namespace Pitbull
 
 	void Component::FixedTick(const float& DeltaTime)
 	{
-		// Default component logic is to do nothing
+		// Default fixed component logic is to do nothing
+	}
+
+	void Component::LateTick(const float& ElapsedTime)
+	{
+		// Default late component logic is to do nothing
 	}
 }  // namespace Pitbull

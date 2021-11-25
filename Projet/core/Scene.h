@@ -20,14 +20,19 @@ public:
 	void Init() const;
 
 	/// <summary>
-	/// Call all components Tick() method, except those axed toward rendering.
+	/// Call all actors Tick() method.
 	/// </summary>
 	void Tick(const float ElapsedTime);
 
 	/// <summary>
-	/// Call all components FixedTick() method.
+	/// Call all actors FixedTick() method.
 	/// </summary>
 	void FixedTick(const float DeltaTime);
+
+	/// <summary>
+	/// Call all actors LateTick() method.
+	/// </summary>
+	void LateTick(const float ElapsedTime);
 
 	/// <summary>
 	/// Update the scene state.

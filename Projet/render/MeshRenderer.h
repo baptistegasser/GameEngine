@@ -10,7 +10,7 @@ public:
 	MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader);
 	~MeshRenderer() = default;
 
-	void Tick(const float& DeltaTime) override;
+	void LateTick(const float& ElapsedTime) override;
 
 	ShadersParams ShaderParams;
 

@@ -12,22 +12,24 @@ Scene::Scene()
 
 void Scene::Tick(const float ElapsedTime)
 {
-	for (auto& actor : GetActors()) {
-		auto Components = actor->GetNotFlaggedComponents(Pitbull::Component::RENDER_COMPONENT);
-
-		for (const auto& Comp : Components) {
-			Comp->Tick(ElapsedTime);
-		}
+	for (auto& Actor : GetActors()) {
+		Actor->Tick(ElapsedTime);
 	}
 }
 
 void Scene::FixedTick(const float DeltaTime)
 {
-	for (auto& actor : GetActors()) {
-		actor->FixedTick(DeltaTime);
+	for (auto& Actor : GetActors()) {
+		Actor->FixedTick(DeltaTime);
 	}
 }
 
+void Scene::LateTick(const float ElapsedTime)
+{
+	for (auto& Actor : GetActors()) {
+		Actor->LateTick(ElapsedTime);
+	}
+}
 
 void Scene::Update()
 {

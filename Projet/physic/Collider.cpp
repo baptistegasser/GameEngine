@@ -5,9 +5,7 @@ Collider::Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material)
 	: Component{ Parent }
 	, Geometry{ nullptr }
 	, Material{ Material }
-{
-	TypeFlags |= PHYSIC_COMPONENT;
-}
+{}
 
 physx::PxGeometry* Collider::GetPxGeometry()
 {

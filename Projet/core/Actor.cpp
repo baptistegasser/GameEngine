@@ -36,6 +36,13 @@ namespace Pitbull
 		}
 	}
 
+	void Actor::LateTick(const float ElapsedTime)
+	{
+		for (const auto& Comp : Components) {
+			Comp->LateTick(ElapsedTime);
+		}
+	}
+
 	Actor::ComponentList Actor::GetComponents() const
 	{
 		ComponentList All;
@@ -45,32 +52,6 @@ namespace Pitbull
 			All.push_back(Comp.get());
 
 		return All;
-	}
-
-	Actor::ComponentList Actor::GetFlaggedComponents(const Component::ComponentTypeFlag Flag) const
-	{
-		ComponentList Result;
-
-		for (const auto& Comp : Components) {
-			if ((Comp->TypeFlags & Flag) == Flag) {
-				Result.push_back(Comp.get());
-			}
-		}
-
-		return Result;
-	}
-
-	Actor::ComponentList Actor::GetNotFlaggedComponents(const Component::ComponentTypeFlag Flag) const
-	{
-		ComponentList Result;
-
-		for (const auto& Comp : Components) {
-			if ((Comp->TypeFlags & Flag) != Flag) {
-				Result.push_back(Comp.get());
-			}
-		}
-
-		return Result;
 	}
 
 	Actor::ActorID Actor::NextID = 0;

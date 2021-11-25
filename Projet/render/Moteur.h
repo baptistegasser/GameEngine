@@ -131,7 +131,7 @@ public:
 
 			// On rend l'image sur la surface de travail
 			// (tampon d'arrière plan)
-			RenderScene();
+			RenderScene(static_cast<float>(TempsEcoule));
 
 			// Calcul du temps du prochain affichage
 			TempsCompteurPrecedent = TempsCompteurCourant;
@@ -174,25 +174,21 @@ protected:
 		CurrentPhysicTime = TempsSuivant;
 
 		// première Image
-		RenderScene();
+		RenderScene(0.f);
 
 		return true;
 	}
 
 
 	// Fonctions de rendu et de présentation de la scène
-	virtual bool RenderScene()
+	virtual bool RenderScene(const float ElapsedTime)
 	{
 		BeginRenderSceneSpecific();
 
 		// Get actors in vision range
-		const auto actors = CurrentScene->GetVisibleActors();
-
-		for (const auto& actor : actors) {
-			const auto Components = actor->GetFlaggedComponents(Pitbull::Component::RENDER_COMPONENT);
-			for (auto& Comp : Components) {
-				Comp->Tick(0.f);
-			}
+		const auto Actors = CurrentScene->GetVisibleActors();
+		for (const auto& Actor : Actors) {
+			Actor->LateTick(ElapsedTime);
 		}
 
 		EndRenderSceneSpecific();

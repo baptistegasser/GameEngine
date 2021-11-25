@@ -38,8 +38,18 @@ namespace Pitbull
 		~Actor() = default;
 
 		void Init();
+		/// <summary>
+		/// Call all components \ref Component::Tick method.
+		/// </summary>
 		void Tick(const float ElapsedTime);
+		/// <summary>
+		/// Call all components \ref Component::FixedTick method.
+		/// </summary>
 		void FixedTick(const float DeltaTime);
+		/// <summary>
+		/// Call all components \ref Component::LateTick method.
+		/// </summary>
+		void LateTick(const float ElapsedTime);
 
 		template <class ... Args>
 		static std::unique_ptr<Actor> New(Args&&... args);
@@ -77,18 +87,6 @@ namespace Pitbull
 		/// </summary>
 		/// <returns></returns>
 		ComponentList GetComponents() const;
-
-		/// <summary>
-		/// Get Components that match a flag.
-		///	See \ref Component::ComponentTypeFlag for possible values
-		/// </summary>
-		ComponentList GetFlaggedComponents(const Component::ComponentTypeFlag Flag) const;
-
-		/// <summary>
-		/// Get Components that don't match a flag.
-		///	See \ref Component::ComponentTypeFlag for possible values
-		/// </summary>
-		ComponentList GetNotFlaggedComponents(const Component::ComponentTypeFlag Flag) const;
 
 	private:
 		/// <summary>

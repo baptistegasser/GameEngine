@@ -20,8 +20,6 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	, ActorType{ ActorType }
 	, RigidActor{ nullptr }
 {
-	TypeFlags |= PHYSIC_COMPONENT;
-
 	auto& PhysicManager = PhysicManager::GetInstance();
 	const auto Physics = PhysicManager.Physics;
 

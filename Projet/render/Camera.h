@@ -10,7 +10,7 @@ protected:
 public:
 	~Camera() = default;
 
-	void Tick(const float& DeltaTime) override;
+	void LateTick(const float& DeltaTime) override;
 
 	void SetPosition(const DirectX::XMVECTOR& Position) noexcept;
 	void SetDirection(const DirectX::XMVECTOR& Direction) noexcept;

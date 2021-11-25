@@ -37,19 +37,11 @@ namespace Pitbull
 		virtual void FixedTick(const float& DeltaTime);
 
 		/// <summary>
-		/// Type are used to flag a components.
-		///	The defined flags are only used by the engine to find specific
-		///	components relating to a specific subsystem (ie: physic stuff).
+		/// A late component logic, called after \ref Tick.
+		///	Useful for components that want to wait for other components to apply their logic before computing.
 		/// </summary>
-		enum ComponentTypeFlag {
-			DEFAULT_COMPONENT = 1 << 0,
-			PHYSIC_COMPONENT  = 1 << 1,
-			RENDER_COMPONENT  = 1 << 2,
-		};
-		/// <summary>
-		/// The component flags.
-		/// </summary>
-		int TypeFlags = DEFAULT_COMPONENT;
+		/// <param name="ElapsedTime">The elapsed time since last call, same as the one passed to \ref Tick.</param>
+		virtual void LateTick(const float& ElapsedTime);
 
 	protected:
 		/// <summary>

@@ -46,8 +46,15 @@ namespace Pitbull
 		template <class ... Args>
 		static std::unique_ptr<Actor> New(Args&&... args);
 
+		/// <summary>
+		/// Create and add a component to this actor.
+		/// </summary>
+		/// <typeparam name="Impl">The class of the component to create</typeparam>
+		/// <typeparam name="...Args">Generic variadic args</typeparam>
+		/// <param name="...args">Arguments for the component constructors</param>
+		/// <returns>A pointer to the newly created component</returns>
 		template <class Impl, class ... Args>
-		void AddComponent(Args&&... args);
+		Actor::ImplPtr<Impl> AddComponent(Args&&... args);
 
 		/// <summary>
 		/// Get the first component that match a type.
@@ -100,11 +107,13 @@ namespace Pitbull
 	}
 
 	template <class Impl, class ... Args>
-	void Actor::AddComponent(Args&&... Arguments)
+	Actor::ImplPtr<Impl> Actor::AddComponent(Args&&... Arguments)
 	{
 		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
-
-		Components.push_back(new Impl{ this, std::forward<Args>(Arguments)... });
+		
+		auto Comp = new Impl{ this, std::forward<Args>(Arguments)... };
+		Components.push_back(Comp);
+		return Comp;
 	}
 
 	template <class Impl>

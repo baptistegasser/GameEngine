@@ -32,7 +32,7 @@ namespace Pitbull
 	void Actor::FixedTick(const float DeltaTime)
 	{
 		for (const auto& Comp : Components) {
-			Comp->Tick(DeltaTime);
+			Comp->FixedTick(DeltaTime);
 		}
 	}
 

@@ -10,11 +10,6 @@ PhysicMaterial::PhysicMaterial(float StaticFriction, float DynamicFriction, floa
 	, Material{ nullptr }
 {}
 
-PhysicMaterial::~PhysicMaterial()
-{
-	PX_RELEASE(Material);
-}
-
 physx::PxMaterial* PhysicMaterial::GetPxMaterial()
 {
 	if (!Material) {

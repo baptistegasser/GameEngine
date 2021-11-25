@@ -5,7 +5,7 @@
 class PhysicMaterial {
 public:
 	PhysicMaterial(float StaticFriction, float DynamicFriction, float Restitution);
-	~PhysicMaterial();
+	~PhysicMaterial() = default;;
 	physx::PxMaterial* GetPxMaterial();
 
 private:

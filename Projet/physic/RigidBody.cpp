@@ -52,11 +52,6 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	PhysicManager.RegisterRigidBody(this);
 }
 
-RigidBody::~RigidBody()
-{
-	PX_RELEASE(RigidActor);
-}
-
 void RigidBody::PreFixedTick() const
 {
 	// Update the transform with the actor's own to match change made by other components

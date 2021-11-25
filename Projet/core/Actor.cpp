@@ -42,7 +42,7 @@ namespace Pitbull
 		All.reserve(Components.size());
 
 		for (auto& Comp : Components)
-			All.push_back(Comp);
+			All.push_back(Comp.get());
 
 		return All;
 	}
@@ -53,7 +53,7 @@ namespace Pitbull
 
 		for (const auto& Comp : Components) {
 			if ((Comp->TypeFlags & Flag) == Flag) {
-				Result.push_back(Comp);
+				Result.push_back(Comp.get());
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Pitbull
 
 		for (const auto& Comp : Components) {
 			if ((Comp->TypeFlags & Flag) != Flag) {
-				Result.push_back(Comp);
+				Result.push_back(Comp.get());
 			}
 		}
 

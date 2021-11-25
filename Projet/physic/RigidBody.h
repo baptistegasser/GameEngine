@@ -15,7 +15,7 @@ public:
 		Kinematic
 	};
 
-	~RigidBody() override;
+	~RigidBody() override = default;
 
 	/// <summary>
 	/// Specific function used to update the component before the fixed update.

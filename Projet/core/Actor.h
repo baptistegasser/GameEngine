@@ -18,8 +18,6 @@ namespace Pitbull
 		using ActorID = unsigned int;
 		using ComponentPtr = Component*;
 		using ComponentList = std::vector<ComponentPtr>;
-		template <class Impl> using ImplPtr = Impl*;
-		template <class Impl> using ImplList = std::vector<ImplPtr<Impl>>;
 
 		/// <summary>
 		/// The unique identifier of an actor.
@@ -51,10 +49,10 @@ namespace Pitbull
 		/// </summary>
 		/// <typeparam name="Impl">The class of the component to create</typeparam>
 		/// <typeparam name="...Args">Generic variadic args</typeparam>
-		/// <param name="...args">Arguments for the component constructors</param>
+		/// <param name="...Arguments">Arguments for the component constructors</param>
 		/// <returns>A pointer to the newly created component</returns>
 		template <class Impl, class ... Args>
-		Actor::ImplPtr<Impl> AddComponent(Args&&... args);
+		Impl* AddComponent(Args&&... Arguments);
 
 		/// <summary>
 		/// Get the first component that match a type.
@@ -64,7 +62,7 @@ namespace Pitbull
 		///	<example>auto& comp = actor.GetComponent<MyComponent>();</example>
 		template <class Impl>
 
-		ImplPtr<Impl> GetComponent() const;
+		Impl* GetComponent() const;
 		/// <summary>
 		/// Get all components that match a type.
 		/// </summary>
@@ -72,7 +70,7 @@ namespace Pitbull
 		/// <returns>A vector of references to the stored components, can be empty.</returns>
 		///	<example>auto vec = actor.GetComponents<MyComponent>();</example>
 		template <class Impl>
-		ImplList<Impl> GetComponents() const;
+		std::vector<Impl*> GetComponents() const;
 
 		/// <summary>
 		/// Simply get all components of this actor.
@@ -97,7 +95,7 @@ namespace Pitbull
 		/// The list of component associated to this actor, defining
 		///	it's logic and behaviour during runtime;
 		/// </summary>
-		ComponentList Components;
+		std::vector<std::unique_ptr<Component>> Components;
 	};
 
 	template<class ...Args>
@@ -107,23 +105,22 @@ namespace Pitbull
 	}
 
 	template <class Impl, class ... Args>
-	Actor::ImplPtr<Impl> Actor::AddComponent(Args&&... Arguments)
+	Impl* Actor::AddComponent(Args&&... Arguments)
 	{
 		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
 		
 		auto Comp = new Impl{ this, std::forward<Args>(Arguments)... };
-		Components.push_back(Comp);
+		Components.push_back(std::unique_ptr<Component>{Comp});
 		return Comp;
 	}
 
 	template <class Impl>
-	Actor::ImplPtr<Impl> Actor::GetComponent() const
+	Impl* Actor::GetComponent() const
 	{
 		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
 
-		for (auto Comp : Components) {
-			auto CompImpl = dynamic_cast<ImplPtr<Impl>>(Comp);
-			if (CompImpl) {
+		for (auto& Comp : Components) {
+			if (auto CompImpl = dynamic_cast<Impl*>(Comp.get())) {
 				return CompImpl;
 			}
 		}
@@ -133,15 +130,14 @@ namespace Pitbull
 	}
 
 	template <class Impl>
-	Actor::ImplList<Impl> Actor::GetComponents() const
+	std::vector<Impl*> Actor::GetComponents() const
 	{
 		static_assert(std::is_base_of<Component, Impl>::value, "The passed type is not a Component.");
 
-		ImplList<Impl> MatchingComponents;
+		std::vector<Impl*> MatchingComponents;
 
 		for (auto& Comp : Components) {
-			auto CompImpl = dynamic_cast<ImplPtr<Impl>>(Comp);
-			if (CompImpl) {
+			if (auto CompImpl = dynamic_cast<Impl*>(Comp.get())) {
 				MatchingComponents.push_back(CompImpl);
 			}
 		}

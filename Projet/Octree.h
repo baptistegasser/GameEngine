@@ -53,8 +53,8 @@ public:
 	void Update();
 
 	const ActorList& GetActors() const noexcept;
-	ActorPtrList Find(const Point& Pos, float MaxDistance);
-	ActorPtrList Find(const BoundingVolume Volume);
+	ActorPtrList Find(const Point& Pos, float MaxDistance) const;
+	ActorPtrList Find(const BoundingVolume Volume) const;
 
 private:
 	Node Root;

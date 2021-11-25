@@ -16,6 +16,8 @@ public:
 	void SetDirection(const DirectX::XMVECTOR& Direction) noexcept;
 	void SetUpDirection(const DirectX::XMVECTOR& UpDirection) noexcept;
 
+	const DirectX::XMVECTOR& GetPosition() const noexcept;
+
 private:
 	bool NeedToUpdate;
 	DirectX::XMVECTOR Position;

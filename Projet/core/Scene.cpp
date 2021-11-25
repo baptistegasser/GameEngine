@@ -2,10 +2,12 @@
 #include "Scene.h"
 
 #include "render/MeshRenderer.h"
+#include "math/Math.h"
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
 	, Tree{ BoundingBox{ 10000.f } }
+	, VisionVolume{ BoundingSphere{ 0.f } }
 {}
 
 void Scene::Tick(const float ElapsedTime)
@@ -48,4 +50,15 @@ void Scene::AddActor(ActorPtr Actor)
 const Octree::ActorList& Scene::GetActors()
 {
 	return Tree.GetActors();
+}
+
+void Scene::SetCurrentCamera(const Camera* NewCamera) noexcept
+{
+	CurrentCamera = NewCamera;
+}
+
+const Octree::ActorPtrList Scene::GetVisibleActors() noexcept
+{
+	VisionVolume = BoundingSphere{ 10.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
+	return Tree.Find(VisionVolume);
 }

@@ -50,3 +50,8 @@ void Camera::SetUpDirection(const DirectX::XMVECTOR& UpDirection) noexcept
 	this->UpDirection = UpDirection;
 	NeedToUpdate = true;
 }
+
+const DirectX::XMVECTOR& Camera::GetPosition() const noexcept
+{
+	return Position;
+}

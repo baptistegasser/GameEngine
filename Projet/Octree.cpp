@@ -197,14 +197,14 @@ const Octree::ActorList& Octree::GetActors() const noexcept
     return Actors;
 }
 
-Octree::ActorPtrList Octree::Find(const Point& Pos, float MaxDistance)
+Octree::ActorPtrList Octree::Find(const Point& Pos, float MaxDistance) const
 {
 	return Find(BoundingSphere{ MaxDistance, Pos });
 }
 
-Octree::ActorPtrList Octree::Find(const BoundingVolume Volume)
+Octree::ActorPtrList Octree::Find(const BoundingVolume Volume) const
 {
-    using NodePtr = Node*;
+    using NodePtr = const Node*;
 
     ActorPtrList ActorsFound{};
 
@@ -212,7 +212,7 @@ Octree::ActorPtrList Octree::Find(const BoundingVolume Volume)
     NodeToExplore.push_back(&Root);
 
     while (!NodeToExplore.empty()) {
-        const NodePtr Node = NodeToExplore.front();
+        NodePtr Node = NodeToExplore.front();
         NodeToExplore.pop_front();
 
         // Ignore non intersected nodes

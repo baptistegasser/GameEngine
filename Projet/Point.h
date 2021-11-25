@@ -10,6 +10,9 @@ struct Point : public physx::PxVec3 {
 	Point(float x, float y, float z)
 		: PxVec3{ x, y, z }
 	{}
+	Point(const PxVec3& Vec3)
+		: PxVec3{ Vec3 }
+	{}
 	Point(const physx::PxTransform& Transform)
 		: PxVec3{ Transform.p }
 	{}

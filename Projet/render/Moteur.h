@@ -181,7 +181,7 @@ protected:
 		BeginRenderSceneSpecific();
 
 		// Get actors in vision range
-		const auto actors = CurrentScene->Tree.Find({ 0.f }, 10.f);
+		const auto actors = CurrentScene->GetVisibleActors();
 
 		for (const auto& actor : actors) {
 			const auto Components = actor->GetFlaggedComponents(Pitbull::Component::RENDER_COMPONENT);
@@ -313,7 +313,7 @@ protected:
 		auto MyPlayer = Pitbull::Actor::New();
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
-		MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
+		auto PlayerCam = MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
 			&m_MatView,
@@ -322,6 +322,8 @@ protected:
 		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		MyPlayer->AddComponent<RigidBody>(false);
 		CurrentScene->AddActor(std::move(MyPlayer));
+
+		CurrentScene->SetCurrentCamera(PlayerCam);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Octree.h"
+#include "render/Camera.h"
 
 #include "PxPhysicsAPI.h"
+
 #include <memory>
 
 class Scene {
@@ -35,10 +37,20 @@ public:
 	void AddActor(ActorPtr Actor);
 	const Octree::ActorList& GetActors();
 
+	/// <summary>
+	/// Update the camera used to get visible actors.
+	/// </summary>
+	void SetCurrentCamera(const Camera* NewCamera) noexcept;
+
+	/// <summary>
+	/// Get all actors in current vision range.
+	/// </summary>
+	const Octree::ActorPtrList GetVisibleActors() noexcept;
+
 	physx::PxScene* PhysxScene;
 
-	BoundingVolume* VisionVolume;
-
-//private:
+private:
+	const Camera* CurrentCamera;
+	BoundingVolume VisionVolume;
 	Octree Tree;
 };

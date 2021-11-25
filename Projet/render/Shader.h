@@ -3,6 +3,7 @@
 #include "d3dx11effect.h"
 
 struct ShadersParams {
+
 	DirectX::XMMATRIX matWorldViewProj;
 	DirectX::XMMATRIX matWorld;
 	DirectX::XMVECTOR vLumiere;
@@ -16,12 +17,26 @@ struct ShadersParams {
 	float puissance;
 	int bTex;
 	DirectX::XMFLOAT2 remplissage;
-
 };
+
+struct LightShader {
+	DirectX::XMVECTOR Position;
+	DirectX::XMVECTOR Ambiante;
+	DirectX::XMVECTOR Roughness;
+	DirectX::XMVECTOR Specular;
+};
+
 
 struct Shader {
 	const wchar_t* FileName;
 	ID3D11Buffer* PConstantBuffer;
+
+	// 2e
+	ID3D11Buffer* PConstantBuffer2;
+
+	// 3e
+	ID3D11Buffer* PStructuredBuffer3;
+
 	
 	ID3DX11Effect* PEffect;
 	ID3DX11EffectTechnique* PEffectTechnique;
@@ -34,4 +49,11 @@ struct Shader {
 
 	Shader(const wchar_t* FileName);
 	~Shader();
+
+	/* structered buffer */
+	/*int Stride;
+	int Size;
+	int NbElems;*/
+
+	
 };

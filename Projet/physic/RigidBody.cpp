@@ -57,7 +57,7 @@ void RigidBody::Tick(const float& ElapsedTime)
 	if (player != nullptr) {
 		auto rigid = static_cast<PxRigidDynamic*>(RigidActor);
 		if (rigid != nullptr) {					
-			rigid->addForce(Math::XMVector2PX(player->Direction) * 0.01f, physx::PxForceMode::Enum::eIMPULSE);
+			//rigid->addForce(Math::XMVector2PX(player->Direction) * 0.01f, physx::PxForceMode::Enum::eIMPULSE);
 			if (player->Forward) {
 				rigid->addForce(Math::XMVector2PX(player->Direction) * player->Speed, physx::PxForceMode::Enum::eIMPULSE);
 			}

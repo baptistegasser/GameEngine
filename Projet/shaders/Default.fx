@@ -4,32 +4,18 @@ cbuffer param
 	float4x4 matWorld;		// matrice de transformation dans le monde 
 	float4 vLumiere; 		// la position de la source d'éclairage (Point)
 	float4 vCamera; 			// la position de la caméra
-	float4 vAEcl;
-	float4 vAMat;
-	float4 vDEcl;
-	float4 vDMat;
-	float4 vSEcl;
-	float4 vSMat;
+	float4 vAEcl; 			// la valeur ambiante de l'éclairage
+	float4 vAMat; 			// la valeur ambiante du matériau
+	float4 vDEcl; 			// la valeur diffuse de l'éclairage 
+	float4 vDMat; 			// la valeur diffuse du matériau 
+	float4 vSEcl; 			// la valeur spéculaire de l'éclairage 
+	float4 vSMat; 			// la valeur spéculaire du matériau 
 	float puissance;
 	int bTex;		    // Booléen pour la présence de texture
 	float2 remplissage;
+
+	//vector<float4, 4> Lights;
 }
-
-struct Light {
-	float4 Position;
-	float4 Ambiante;
-	float4 Roughness;
-	float4 Specular;
-};
-
-StructuredBuffer<Light> lightsSt;
-
-cbuffer lights {
-	float4 Position;
-	float4 Ambiante;
-	float4 Roughness;
-	float4 Specular;
-};
 
 struct VS_Sortie
 {
@@ -40,7 +26,7 @@ struct VS_Sortie
 	float2 coordTex : TEXCOORD3; 
 };
 
-VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coordTex : TEXCOORD)
+VS_Sortie DefaultVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coordTex: TEXCOORD)
 {
 	VS_Sortie sortie = (VS_Sortie)0;
 
@@ -49,7 +35,7 @@ VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coo
 
 	float3 PosWorld = mul(Pos, matWorld).xyz;
 
-	sortie.vDirLum = lightsSt[0].Position.xyz - PosWorld;
+	sortie.vDirLum = vLumiere.xyz - PosWorld;
 	sortie.vDirCam = vCamera.xyz - PosWorld;
 
 	// Coordonnées d'application de texture
@@ -61,7 +47,7 @@ VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coo
 Texture2D textureEntree;  // la texture
 SamplerState SampleState;  // l'état de sampling
 
-float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
+float4 DefaultPS( VS_Sortie vs ) : SV_Target
 {
 	float3 couleur;
 
@@ -87,24 +73,24 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 		couleurTexture = textureEntree.Sample(SampleState, vs.coordTex).rgb;
 
 		// I = A + D * N.L + (R.V)n
-		couleur =  couleurTexture * Ambiante.rgb  +
-				   couleurTexture * Roughness.rgb * diff +
-					vSEcl.rgb * vSMat.rgb * S;
+		couleur =  couleurTexture * vAEcl.rgb  + 
+				   couleurTexture * vDEcl.rgb * diff +
+				   vSEcl.rgb * vSMat.rgb * S;
 	}
 	else
 	{
-		couleur = Ambiante.rgb * vAMat.rgb + Roughness.rgb * vDMat.rgb * diff  +
-			Specular.rgb * vSMat.rgb * S;
+		couleur =  vAEcl.rgb * vAMat.rgb + vDEcl.rgb * vDMat.rgb * diff  +
+					vSEcl.rgb * vSMat.rgb * S;
 	}
 	return float4(couleur, 1.0f);
 }
 
-technique11 MiniPhong
+technique11 Default
 {
 	pass pass0
 	{
-		SetVertexShader(CompileShader(vs_4_0, MiniPhongVS()));
-		SetPixelShader(CompileShader(ps_4_0, MiniPhongPS()));
+		SetVertexShader(CompileShader(vs_4_0, DefaultVS()));
+		SetPixelShader(CompileShader(ps_4_0, DefaultPS()));
 		SetGeometryShader(NULL);
 	}
 }

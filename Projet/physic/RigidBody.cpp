@@ -21,15 +21,7 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	, RigidActor{ nullptr }
 {
 	TypeFlags |= PHYSIC_COMPONENT;
-}
 
-RigidBody::~RigidBody()
-{
-	PX_RELEASE(RigidActor);
-}
-
-void RigidBody::Init()
-{
 	auto& PhysicManager = PhysicManager::GetInstance();
 	const auto Physics = PhysicManager.Physics;
 
@@ -50,7 +42,7 @@ void RigidBody::Init()
 
 	// Create and add shapes for collisions
 	const auto Colliders = ParentActor->GetComponents<Collider>();
-	for( const auto Collider : Colliders) {
+	for (const auto Collider : Colliders) {
 		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(), *Collider->GetPxMaterial());
 		RigidActor->attachShape(*Shape);
 		PhysicManager.GetContactHandler().RegisterCollider(Shape, Collider);
@@ -58,6 +50,11 @@ void RigidBody::Init()
 
 	// Notify the big boss that we exist
 	PhysicManager.RegisterRigidBody(this);
+}
+
+RigidBody::~RigidBody()
+{
+	PX_RELEASE(RigidActor);
 }
 
 void RigidBody::PreFixedTick() const

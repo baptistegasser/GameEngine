@@ -17,7 +17,6 @@ public:
 
 	~RigidBody() override;
 
-	void Init() override;
 	/// <summary>
 	/// Specific function used to update the component before the fixed update.
 	/// </summary>

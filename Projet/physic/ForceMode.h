@@ -35,5 +35,6 @@ inline physx::PxForceMode::Enum PhysxForce(const ForceMode& Mode) noexcept
 		case ForceMode::Impulse: return PxForceMode::eIMPULSE;
 		case ForceMode::Acceleration: return PxForceMode::eACCELERATION;
 		case ForceMode::VelocityChange: return PxForceMode::eVELOCITY_CHANGE;
+		default: return PxForceMode::eFORCE;
 	}
 }

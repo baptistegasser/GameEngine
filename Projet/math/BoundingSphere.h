@@ -7,9 +7,9 @@
 /// </summary>
 struct BoundingSphere
 {
-	const float Radius;
+	float Radius;
 	// The center of this box
-	const Point Center;
+	Point Center;
 
 	BoundingSphere(float Radius, Point Center = Point{ 0.f });
 };

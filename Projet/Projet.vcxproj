@@ -198,7 +198,6 @@
     <ClCompile Include="render\dispositif.cpp" />
     <ClCompile Include="render\dispositifD3D11.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
-    <ClCompile Include="render\Light.cpp" />
     <ClCompile Include="render\Material.cpp" />
     <ClCompile Include="render\MeshLoader.cpp" />
     <ClCompile Include="render\MeshRenderer.cpp" />
@@ -366,6 +365,7 @@
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
+    <None Include="shaders\Light.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

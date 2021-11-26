@@ -216,9 +216,6 @@
     <ClCompile Include="render\Player.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
-    <ClCompile Include="render\Light.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -432,5 +429,8 @@
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
+    <None Include="shaders\Light.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

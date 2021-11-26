@@ -19,14 +19,6 @@ struct ShadersParams {
 	DirectX::XMFLOAT2 remplissage;
 };
 
-struct LightShader {
-	DirectX::XMVECTOR Position;
-	DirectX::XMVECTOR Ambiante;
-	DirectX::XMVECTOR Roughness;
-	DirectX::XMVECTOR Specular;
-};
-
-
 struct Shader {
 	const wchar_t* FileName;
 	ID3D11Buffer* PConstantBuffer;
@@ -48,13 +40,9 @@ struct Shader {
 	ID3D11ShaderResourceView* pTextureD3D;
 	ID3D11SamplerState* pSampleState;
 
+	// Light buffers
+	ID3D11Buffer* PLightBuffer;
+
 	Shader(const wchar_t* FileName);
 	~Shader();
-
-	/* structered buffer */
-	/*int Stride;
-	int Size;
-	int NbElems;*/
-
-	
 };

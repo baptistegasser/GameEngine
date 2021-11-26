@@ -66,19 +66,33 @@ Shader::Shader(const wchar_t* FileName)
 	// Création de l'état de sampling
 	PD3DDevice->CreateSamplerState(&samplerDesc, &PSampleState);
 
+	int LightCount = 10;
 
-	/* Creation of structured buffer : Lights */
-	//Size = 4 /*stride*/ * 2 /*numElements*/;
-	//Stride = 4 /*stride*/;
-	//NbElems = 2/*numElements*/;
+	// Create dynamic buffer for lighting
+	D3D11_BUFFER_DESC LightBuffDesc;
+	LightBuffDesc.ByteWidth = MAX_LIGHT_BYTE_WIDTH * LightCount;
+	LightBuffDesc.Usage = D3D11_USAGE_DYNAMIC;
+	LightBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	LightBuffDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	LightBuffDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+	LightBuffDesc.StructureByteStride = MAX_LIGHT_BYTE_WIDTH;
+	PD3DDevice->CreateBuffer(&LightBuffDesc, nullptr, &PLightBuffer);
 
-	//D3D11_BUFFER_DESC bufferDesc;
-	//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	//bufferDesc.ByteWidth = Stride * NbElems;	
-	//bufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	//bufferDesc.CPUAccessFlags = 0;
-	//bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-	//bufferDesc.StructureByteStride = Stride;
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = LightCount;
+	PD3DDevice->CreateShaderResourceView(m_lightBuffer2, &srvDesc, &m_pSRV);
+
+
+
+
+
+
+
+
+
 
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));

@@ -1,18 +1,13 @@
-struct Light {
-	float4 Position;
-	float4 Ambiante;
-	float4 Roughness;
-	float4 Specular;
-};
+#include "Light.hlsli"
 
-StructuredBuffer<Light> lightsSt;
+StructuredBuffer<ILight> Lights;
 
 cbuffer param
 { 
 	float4x4 matWorldViewProj;   // la matrice totale 
 	float4x4 matWorld;		// matrice de transformation dans le monde 
-	float4 vLumiere; 		// la position de la source d'éclairage (Point)
-	float4 vCamera; 			// la position de la caméra
+	float4 vLumiere; 		// la position de la source d'ï¿½clairage (Point)
+	float4 vCamera; 			// la position de la camï¿½ra
 	float4 vAEcl;
 	float4 vAMat;
 	float4 vDEcl;
@@ -20,18 +15,9 @@ cbuffer param
 	float4 vSEcl;
 	float4 vSMat;
 	float puissance;
-	int bTex;		    // Booléen pour la présence de texture
+	int bTex;		    // Boolï¿½en pour la prï¿½sence de texture
 	float2 remplissage;
 }
-
-
-
-cbuffer lights {
-	float4 Position;
-	float4 Ambiante;
-	float4 Roughness;
-	float4 Specular;
-};
 
 struct VS_Sortie
 {
@@ -54,20 +40,20 @@ VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coo
 	sortie.vDirLum = lightsSt[0].Position.xyz - PosWorld;
 	sortie.vDirCam = vCamera.xyz - PosWorld;
 
-	// Coordonnées d'application de texture
+	// Coordonnï¿½es d'application de texture
 	sortie.coordTex = coordTex;
 
 	return sortie;
 }
 
 Texture2D textureEntree;  // la texture
-SamplerState SampleState;  // l'état de sampling
+SamplerState SampleState;  // l'ï¿½tat de sampling
 
 float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 {
 	float3 couleur;
 
-	// Normaliser les paramètres
+	// Normaliser les paramï¿½tres
 	float3 N = normalize(vs.Norm);
 	float3 L = normalize(vs.vDirLum);
 	float3 V = normalize(vs.vDirCam);
@@ -75,17 +61,17 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 	// Valeur de la composante diffuse
 	float3 diff = saturate(dot(N, L));
 
-	// R = 2 * (N.L) * N – L
+	// R = 2 * (N.L) * N ï¿½ L
 	float3 R = normalize(2 * diff * N - L);
  
-	// Calcul de la spécularité 
+	// Calcul de la spï¿½cularitï¿½ 
 	float3 S = pow(saturate(dot(R, V)), 4.0f);
 
 	float3 couleurTexture;
 
 	if (bTex>0)
 	{
-		// Échantillonner la couleur du pixel à partir de la texture
+		// ï¿½chantillonner la couleur du pixel ï¿½ partir de la texture
 		couleurTexture = textureEntree.Sample(SampleState, vs.coordTex).rgb;
 
 		// I = A + D * N.L + (R.V)n

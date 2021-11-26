@@ -57,28 +57,25 @@ void MeshRenderer::Tick(const float& delta_time)
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
 
+
 	// Update lighting
 
 	std::vector<ILight*> SceneLights;
 	SceneLights.push_back(new BaseLight{});
 
-	float vertices[] =
-	{
-		0.f, 1.f, 1.f, 1.0f
-	};
+	BufferStruct BF{ 1.0f, 0.f, 0.f, 1.f };
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	//  Disable GPU access to the vertex buffer data.
-	pImmediateContext->Map(MeshShader->PLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	pImmediateContext->Map(MeshShader->pStructuredBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	//  Update the vertex buffer here.
-	memcpy(mappedResource.pData, vertices, 16);
+	memcpy(mappedResource.pData, &BF, sizeof(BufferStruct));
 	//  Reenable GPU access to the vertex buffer data.
-	pImmediateContext->Unmap(MeshShader->PLightBuffer, 0);
+	pImmediateContext->Unmap(MeshShader->pStructuredBuffer, 0);
 
-	ID3DX11EffectConstantBuffer* LightBuffer = MeshShader->PEffect->GetConstantBufferByName("Lights");
-	LightBuffer->SetConstantBuffer(MeshShader->PLightBuffer);
-	pImmediateContext->UpdateSubresource(MeshShader->PLightBuffer, 0, nullptr, &vertices, 0, 0);
+	auto variableTexture = MeshShader->PEffect->GetVariableByName("Lights")->AsShaderResource();
+	variableTexture->SetResource(MeshShader->pStructuredBufferView);
 
 	// Dessiner les subsets non-transparents
 	for (int32_t i = 0; i < Mesh->SubsetCount; ++i)

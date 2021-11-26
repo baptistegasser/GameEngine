@@ -19,17 +19,14 @@ struct ShadersParams {
 	DirectX::XMFLOAT2 remplissage;
 };
 
+struct BufferStruct
+{
+	float color[4];
+};
+
 struct Shader {
 	const wchar_t* FileName;
 	ID3D11Buffer* PConstantBuffer;
-
-	// 2e
-	ID3D11Buffer* PConstantBuffer2;
-
-	// 3e
-	ID3D11Buffer* PStructuredBuffer3;
-	ID3D11ShaderResourceView* ShaderResourceView;
-
 	
 	ID3DX11Effect* PEffect;
 	ID3DX11EffectTechnique* PEffectTechnique;
@@ -41,7 +38,8 @@ struct Shader {
 	ID3D11SamplerState* pSampleState;
 
 	// Light buffers
-	ID3D11Buffer* PLightBuffer;
+	ID3D11Buffer* pStructuredBuffer;
+	ID3D11ShaderResourceView* pStructuredBufferView;
 
 	Shader(const wchar_t* FileName);
 	~Shader();

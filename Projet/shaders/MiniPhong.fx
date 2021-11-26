@@ -59,7 +59,12 @@ struct SpotLight : BaseLightAttrib, ILight {
 	float3 IlluminateSpecular(float3 vNormal, float specularPower) { return float3(0,0,0); }
 };
 
-StructuredBuffer<BaseLightAttrib> Lights;
+struct Test
+{
+    float4 Color;
+};
+
+StructuredBuffer<Test> Lights;
 
 cbuffer param
 { 
@@ -143,7 +148,7 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 		couleur = vAEcl.rgb * vAMat.rgb + vDEcl.rgb * vDMat.rgb * diff +
 			vSEcl.rgb * vSMat.rgb * S;
 	}
-	return float4(Lights[0].Color, 1.0f);
+    return Lights[0].Color;
 }
 
 technique11 MiniPhong

@@ -24,6 +24,7 @@
 #include "physic/SphereCollider.h"
 #include "physic/BoxCollider.h"
 #include "physic/CapsuleCollider.h"
+#include "physic/Plateform.h"
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
@@ -292,6 +293,18 @@ protected:
 		Mesh2->Transform.p.x = 1.f;
 		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh2));
+
+
+		auto MyPlateform = Pitbull::Actor::New();
+		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlateform->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		MyPlateform->Transform.p.y = 0.f;
+		MyPlateform->Transform.p.z = -7.f;
+		MyPlateform->Transform.p.x = 1.f;
+		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		MyPlateform->AddComponent<Plateform>(Point(5, 5, 5), Point(7, 0, 3), true);
+		CurrentScene->AddActor(std::move(MyPlateform));
+
 
 		/*auto Other = Pitbull::Actor::New();
 		Other->Transform.p.y = 10.f;

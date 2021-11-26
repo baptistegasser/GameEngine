@@ -216,6 +216,9 @@
     <ClCompile Include="render\Player.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
+    <ClCompile Include="physic\Plateform.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -390,6 +393,9 @@
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="physic\ForceMode.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\Plateform.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
   </ItemGroup>

@@ -182,6 +182,7 @@
     <ClCompile Include="physic\ContactHandler.cpp" />
     <ClCompile Include="physic\PhysicMaterial.cpp" />
     <ClCompile Include="physic\PhysicManager.cpp" />
+    <ClCompile Include="physic\Plateform.cpp" />
     <ClCompile Include="physic\RigidBody.cpp" />
     <ClCompile Include="physic\SphereCollider.cpp" />
     <ClCompile Include="Pitbull.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="physic\ForceMode.h" />
     <ClInclude Include="physic\PhysicMaterial.h" />
     <ClInclude Include="physic\PhysicManager.h" />
+    <ClInclude Include="physic\Plateform.h" />
     <ClInclude Include="physic\RigidBody.h" />
     <ClInclude Include="physic\SphereCollider.h" />
     <ClInclude Include="Pitbull.h" />

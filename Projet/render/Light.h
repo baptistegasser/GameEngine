@@ -1,12 +1,14 @@
 #pragma once
 
-struct BaseLight
+struct ILight {};
+
+struct BaseLight : public ILight
 {
-	DirectX::XMFLOAT3 Color{ 255.f, 255.f, 255.f };
-	float Intensity{ 1.0f };
+	DirectX::XMFLOAT3 Color{ 0.f, 1.f, 0.f };
+	float Intensity{ 0.0f };
 };
 
-struct AmbiantLight : public BaseLight {};
+using AmbiantLight = BaseLight;
 
 struct DirectionalLight : public BaseLight {
 	DirectX::XMFLOAT3 Direction;

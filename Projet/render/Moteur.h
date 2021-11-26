@@ -276,23 +276,15 @@ protected:
 
  	bool InitObjets()
 	{
-		// Lights
-		Light Principal;
-		Principal.Position = XMVectorSet(-10.0f, 10.0f, -15.0f, 1.0f);
-		Principal.Ambiante = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
-		Principal.Roughness = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-		Principal.Specular = XMVectorSet(0.6f, 0.6f, 0.6f, 1.0f);
-
-
 		auto Mesh = Pitbull::Actor::New();
-		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), Principal, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
 		Mesh->Transform.p.y = -2.f;
 		Mesh->AddComponent<RigidBody>(true, true, 10.f);
 		CurrentScene->AddActor(std::move(Mesh));
 
 		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), Principal, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
 		Mesh2->Transform.p.y = 0.f;
@@ -321,7 +313,7 @@ protected:
 		//AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		auto MyPlayer = Pitbull::Actor::New();
-		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), Principal, ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		//MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
 		MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),

@@ -390,7 +390,7 @@
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\Light.h">
-      <Filter>Header Files\render</Filter>
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,9 +407,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders\MiniPhong.fx">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\sprite1.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -423,6 +420,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\vs1.vhl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\MiniPhong.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -8,16 +8,17 @@
 
 #include "util/ResourcesManager.h"
 
-MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Light& Light)
-	: MeshRenderer{ Parent, Mesh, Light, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
+#include "Light.h"
+
+MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh)
+	: MeshRenderer{ Parent, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
 {}
 
-MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Light& Light, Shader* MeshShader)
+MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader)
 	: Pitbull::Component{ Parent }
 	, Mesh{ Mesh }
 	, MeshShader{ MeshShader }
 	, matWorld{ DirectX::XMMatrixIdentity() }
-	, LightShader1{ Light }
 {
 	TypeFlags |= RENDER_COMPONENT;
 }
@@ -49,33 +50,35 @@ void MeshRenderer::Tick(const float& delta_time)
 
 	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	ShaderParams.matWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.vLumiere = LightShader1.Position;
 	ShaderParams.vCamera = XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f);
-	ShaderParams.vAEcl = LightShader1.Ambiante;
-	ShaderParams.vDEcl = LightShader1.Roughness;
-	ShaderParams.vSEcl = LightShader1.Specular;
-
-	LightParams.Position = LightShader1.Position;
-	LightParams.Ambiante = LightShader1.Ambiante;
-	LightParams.Roughness = LightShader1.Roughness;
-	LightParams.Specular = LightShader1.Specular;
-
-	//LightParams3.Position = LightShader1.Position;
-	//LightParams3.Ambiante = LightShader1.Ambiante;
-	//LightParams3.Roughness = LightShader1.Roughness;
-	//LightParams3.Specular = LightShader1.Specular;
-
-
-	LightShader blop[1] = { LightShader1.Position, LightShader1.Ambiante, LightShader1.Roughness, LightShader1.Specular };
-
-	/*LightShader* blap = new LightShader[1];
-	blap[1] = { LightShader1.Position, LightShader1.Ambiante, LightShader1.Roughness, LightShader1.Specular };*/
-
 
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
+
+	// Update lighting
+
+	std::vector<ILight*> SceneLights;
+	SceneLights.push_back(new BaseLight{});
+
+	float vertices[] =
+	{
+		0.f, 1.f, 1.f, 1.0f
+	};
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	//  Disable GPU access to the vertex buffer data.
+	pImmediateContext->Map(MeshShader->PLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//  Update the vertex buffer here.
+	memcpy(mappedResource.pData, vertices, 16);
+	//  Reenable GPU access to the vertex buffer data.
+	pImmediateContext->Unmap(MeshShader->PLightBuffer, 0);
+
+	ID3DX11EffectConstantBuffer* LightBuffer = MeshShader->PEffect->GetConstantBufferByName("Lights");
+	LightBuffer->SetConstantBuffer(MeshShader->PLightBuffer);
+	pImmediateContext->UpdateSubresource(MeshShader->PLightBuffer, 0, nullptr, &vertices, 0, 0);
 
 	// Dessiner les subsets non-transparents
 	for (int32_t i = 0; i < Mesh->SubsetCount; ++i)
@@ -109,30 +112,7 @@ void MeshRenderer::Tick(const float& delta_time)
 			pCB->SetConstantBuffer(MeshShader->PConstantBuffer);
 			pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer, 0, nullptr, &ShaderParams, 0, 0);
 
-			// 2e buffer
-			ID3DX11EffectConstantBuffer* pCB2 = MeshShader->PEffect->GetConstantBufferByName("lights");
-			pCB2->SetConstantBuffer(MeshShader->PConstantBuffer2);
-			pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer2, 0, nullptr, &LightParams, 0, 0);
-
-			//pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
-
-			// 3e
-
-			D3D11_MAPPED_SUBRESOURCE mappedResource2;
-			auto result = pImmediateContext->Map((ID3D11Resource* ) MeshShader->PStructuredBuffer3, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource2);
-
-			size_t sizeInBytes = sizeof(blop);
-
-			memcpy_s(mappedResource2.pData, sizeInBytes, blop, sizeInBytes);
-
-			pImmediateContext->Unmap(MeshShader->PStructuredBuffer3, 0);
-
-			ID3DX11EffectShaderResourceVariable* ress = MeshShader->PEffect->GetVariableByName("lightsSt")->AsShaderResource();
-			ress->SetResource(MeshShader->ShaderResourceView);
-
 			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
-
-			
 		}
 	}
 }

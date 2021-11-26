@@ -66,68 +66,17 @@ Shader::Shader(const wchar_t* FileName)
 	// Création de l'état de sampling
 	PD3DDevice->CreateSamplerState(&samplerDesc, &PSampleState);
 
-	int LightCount = 10;
+	int LightCount = 1;
 
 	// Create dynamic buffer for lighting
 	D3D11_BUFFER_DESC LightBuffDesc;
-	LightBuffDesc.ByteWidth = MAX_LIGHT_BYTE_WIDTH * LightCount;
+	LightBuffDesc.ByteWidth = sizeof(BaseLight) * LightCount;
 	LightBuffDesc.Usage = D3D11_USAGE_DYNAMIC;
 	LightBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	LightBuffDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	LightBuffDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-	LightBuffDesc.StructureByteStride = MAX_LIGHT_BYTE_WIDTH;
+	LightBuffDesc.StructureByteStride = sizeof(BaseLight);
 	PD3DDevice->CreateBuffer(&LightBuffDesc, nullptr, &PLightBuffer);
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
-	srvDesc.Buffer.FirstElement = 0;
-	srvDesc.Buffer.NumElements = LightCount;
-	PD3DDevice->CreateShaderResourceView(m_lightBuffer2, &srvDesc, &m_pSRV);
-
-
-
-
-
-
-
-
-
-
-	D3D11_BUFFER_DESC bufferDesc;
-	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
-
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(LightShader);
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-	PD3DDevice->CreateBuffer(&bufferDesc, nullptr, &PConstantBuffer2);
-
-
-	// 3e
-	D3D11_BUFFER_DESC buffer;
-	ZeroMemory(&buffer, sizeof(bufferDesc));
-
-	buffer.Usage = D3D11_USAGE_DYNAMIC;
-	buffer.ByteWidth = sizeof(LightShader)*10;
-	buffer.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	buffer.MiscFlags = 0;
-	buffer.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	buffer.StructureByteStride = sizeof(LightShader);
-
-	auto result3 = PD3DDevice->CreateBuffer(&buffer, nullptr, &PStructuredBuffer3);
-
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
-	srvDesc.Buffer.FirstElement = 0;
-	srvDesc.Buffer.NumElements = 10;
-	srvDesc.Buffer.ElementWidth = sizeof(LightShader);
-
-	auto result2 = PD3DDevice->CreateShaderResourceView(PStructuredBuffer3, &srvDesc, &ShaderResourceView);
-	
-	int b =0;
 }
 
 Shader::~Shader()

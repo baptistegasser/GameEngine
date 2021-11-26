@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Octree.h"
+#include "render/LightConfig.h"
 
 #include "PxPhysicsAPI.h"
 #include <memory>
@@ -38,6 +39,7 @@ public:
 	physx::PxScene* PhysxScene;
 
 	BoundingVolume* VisionVolume;
+	LightConfig LightConfig;
 
 //private:
 	Octree Tree;

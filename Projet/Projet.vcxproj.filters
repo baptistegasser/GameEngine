@@ -216,6 +216,9 @@
     <ClCompile Include="render\Player.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
+    <ClCompile Include="render\LightConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -390,6 +393,9 @@
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightConfig.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
   </ItemGroup>

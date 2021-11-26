@@ -1,162 +1,136 @@
-//#include "./shaders/Light.hlsli"
-
-//*****************************************//
-//       Structures for lights data        //
-//*****************************************//
-
-// Interface for ligth, each class must define it's lightning behaviour
-interface ILight
+struct Material
 {
-    float3 IlluminateAmbient(float3 vNormal);
-    float3 IlluminateDiffuse(float3 vNormal);
-    float3 IlluminateSpecular(float3 vNormal, float specularPower);
-};
-
-// Common base for all lights
-struct BaseLightAttrib
-{
-    float3 Color;
+    float4 Ambient;
+    float4 Roughness;
+    float4 Specular;
     float Intensity;
+    float3 _FILL_;
 };
 
-// Ambiant light is just a simple unidirectional light
-struct AmbiantLight : BaseLightAttrib, ILight {
-    float3 IlluminateAmbient(float3 vNormal) { return float3(0,1.0,0); }
-    float3 IlluminateDiffuse(float3 vNormal) { return float3(0,0,0); }
-	float3 IlluminateSpecular(float3 vNormal, float specularPower) { return float3(0,0,0); }
+struct AmbientLight {
+    float4 Value;
 };
 
-// A light with ray directions
-struct DirectionalLight : BaseLightAttrib, ILight {
-    float3 Direction;
-    float _DataAlign_;
-    
-    float3 IlluminateAmbient(float3 vNormal) { return float3(0,0,0); }
-    float3 IlluminateDiffuse(float3 vNormal) { return float3(0,0,0); }
-	float3 IlluminateSpecular(float3 vNormal, float specularPower) { return float3(0,0,0); }
-};
-
-// A light bulb representation, intensity fade toward 0 as we go further from the position
-struct PointLight : BaseLightAttrib, ILight {
-    float3 Position;
-    float Range;
-    
-    float3 IlluminateAmbient(float3 vNormal) { return float3(0,0,0); }
-    float3 IlluminateDiffuse(float3 vNormal) { return float3(0,0,0); }
-	float3 IlluminateSpecular(float3 vNormal, float specularPower) { return float3(0,0,0); }
-};
-
-
-// Simmilar to a spotlight but with a restrictive angle, like a flashligth
-struct SpotLight : BaseLightAttrib, ILight {
-    float3 Position;
-    float3 Direction;
-    float Angle;
-    float Range;
-    
-    float3 IlluminateAmbient(float3 vNormal) { return float3(0,0,0); }
-    float3 IlluminateDiffuse(float3 vNormal) { return float3(0,0,0); }
-	float3 IlluminateSpecular(float3 vNormal, float specularPower) { return float3(0,0,0); }
-};
-
-struct Test
+struct DirectionalLight
 {
-    float4 Color;
+    float4 Direction;
+    float4 Specular;
+    float4 Roughness;
 };
 
-StructuredBuffer<Test> Lights;
+struct PointLight
+{
+    float3 Position;
+    float3 Specular;
+    float3 Roughness;
+    float InnerRadius, OuterRadius, Intensity;
+
+    float3 CalcPhong(float3 N, float3 V, float3 WorldPosition)
+    {
+        float3 color = (float4) 0;
+
+        float3 L = Position - WorldPosition;
+        L = normalize(L);
+        float NdotL = dot(N, L);
+
+        float3 R = reflect(-L, N);
+
+        if (NdotL > 0)
+        {
+         /*Diffuse color*/
+            float dist = distance(WorldPosition, Position);
+            float sstep = smoothstep(InnerRadius, OuterRadius, dist);
+
+            float3 diffuseColor = lerp(Specular, float3(0.0f, 0.0f, 0.0f), sstep);
+            color += (diffuseColor * NdotL);
+
+         /*Specular color*/
+            float RdotV = dot(R, V);
+            color += Roughness * pow(max(0.0f, RdotV), Intensity);
+        }
+
+        return color;
+    }
+};
 
 cbuffer param
 { 
-	float4x4 matWorldViewProj;   // la matrice totale 
-	float4x4 matWorld;		// matrice de transformation dans le monde 
-	float4 vLumiere; 		// la position de la source d'�clairage (Point)
-	float4 vCamera; 			// la position de la cam�ra
-	float4 vAEcl;
-	float4 vAMat;
-	float4 vDEcl;
-	float4 vDMat;
-	float4 vSEcl;
-	float4 vSMat;
-	float puissance;
-	int bTex;		    // Bool�en pour la pr�sence de texture
-	float2 remplissage;
+	float4x4 MatWorldViewProj;
+	float4x4 MatWorld;
+	float4 CameraPos;
+    AmbientLight Ambient;
+    DirectionalLight Directional;
+    Material Mat;
+	bool HasTexture;
+	float3 _FILL_;
 }
 
 struct VS_Sortie
 {
 	float4 Pos : SV_Position;
 	float3 Norm : TEXCOORD0;
-	float3 vDirLum : TEXCOORD1;
+    float3 PosWorld : TEXCOORD1;
 	float3 vDirCam : TEXCOORD2;
-	float2 coordTex : TEXCOORD3; 
+	float2 coordTex : TEXCOORD3;
 };
 
 VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coordTex : TEXCOORD)
 {
 	VS_Sortie sortie = (VS_Sortie)0;
 
-	sortie.Pos = mul(Pos, matWorldViewProj);
-	sortie.Norm = mul(float4(Normale, 0.0f), matWorld).xyz;
+	sortie.Pos = mul(Pos, MatWorldViewProj);
+    sortie.Norm = mul(float4(Normale, 0.0f), MatWorld).xyz;
 
-	float3 PosWorld = mul(Pos, matWorld).xyz;
+    sortie.PosWorld = mul(Pos, MatWorld).xyz;
 
-	sortie.vDirLum = vLumiere.xyz - PosWorld;
-	sortie.vDirCam = vCamera.xyz - PosWorld;
+    sortie.vDirCam = CameraPos.xyz - sortie.PosWorld;
 
-	// Coordonn�es d'application de texture
 	sortie.coordTex = coordTex;
 
 	return sortie;
 }
 
-Texture2D textureEntree;  // la texture
-SamplerState SampleState;  // l'�tat de sampling
+Texture2D textureEntree;
+SamplerState SampleState;
+StructuredBuffer<PointLight> PointLights;
+//StructuredBuffer<BetterSpotLight> SpotLights;
 
 float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 {
-	float3 couleur;
+   // Default color : missing magenta
+    float4 color = float4(1.f, 0.f, 1.f, 1.f);
 
-	// Normaliser les param�tres
+   // Use texture if any
+    if (HasTexture > 0) {
+        color = textureEntree.Sample(SampleState, vs.coordTex);
+    }
+
+	// Normalise inputs
 	float3 N = normalize(vs.Norm);
-	float3 L = normalize(vs.vDirLum);
 	float3 V = normalize(vs.vDirCam);
+	
+    // Default add ambiant light
+    float3 phong = Ambient.Value;
+    
+    // TODO directionnal lighting
+    
+    uint LightCount = 0, Stride;
 
-	// Valeur de la composante diffuse
-	float3 diff = saturate(dot(N, L));
+    // Calc all Point lights
+    PointLights.GetDimensions(LightCount, Stride);
+    for (uint i = 0; i < LightCount; i += Stride) {
+        phong += PointLights[i].CalcPhong(N, V, vs.PosWorld);
+    }
 
-	// R = 2 * (N.L) * N � L
-	float3 R = normalize(2 * diff * N - L);
- 
-	// Calcul de la sp�cularit� 
-	float3 S = pow(saturate(dot(R, V)), 4.0f);
-
-	float3 couleurTexture;
-
-	if (bTex>0)
-	{
-		// �chantillonner la couleur du pixel � partir de la texture
-		couleurTexture = textureEntree.Sample(SampleState, vs.coordTex).rgb;
-
-		// I = A + D * N.L + (R.V)n
-		couleur = couleurTexture * vAEcl.rgb +
-				   couleurTexture * vDEcl.rgb * diff +
-					vSEcl.rgb * vSMat.rgb * S;
-	}
-	else
-	{
-		couleur = vAEcl.rgb * vAMat.rgb + vDEcl.rgb * vDMat.rgb * diff +
-			vSEcl.rgb * vSMat.rgb * S;
-	}
-    return Lights[0].Color;
+    return color * saturate(float4(phong, 0.0f));
 }
 
 technique11 MiniPhong
 {
 	pass pass0
 	{
-		SetVertexShader(CompileShader(vs_4_0, MiniPhongVS()));
-		SetPixelShader(CompileShader(ps_4_0, MiniPhongPS()));
+		SetVertexShader(CompileShader(vs_5_0, MiniPhongVS()));
+		SetPixelShader(CompileShader(ps_5_0, MiniPhongPS()));
 		SetGeometryShader(NULL);
 	}
 }

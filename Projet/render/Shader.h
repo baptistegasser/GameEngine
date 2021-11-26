@@ -2,27 +2,28 @@
 
 #include "d3dx11effect.h"
 
-struct ShadersParams {
+#include "LightConfig.h"
 
-	DirectX::XMMATRIX matWorldViewProj;
-	DirectX::XMMATRIX matWorld;
-	DirectX::XMVECTOR vLumiere;
-	DirectX::XMVECTOR vCamera;
-	DirectX::XMVECTOR vAEcl;
-	DirectX::XMVECTOR vAMat;
-	DirectX::XMVECTOR vDEcl;
-	DirectX::XMVECTOR vDMat;
-	DirectX::XMVECTOR vSEcl;
-	DirectX::XMVECTOR vSMat;
-	float puissance;
-	int bTex;
-	DirectX::XMFLOAT2 remplissage;
-};
-
-struct BufferStruct
+struct ShaderMaterial
 {
-	float color[4];
+	DirectX::XMVECTOR Ambient;
+	DirectX::XMVECTOR Roughness;
+	DirectX::XMVECTOR Specular;
+	float Intensity;
+	DirectX::XMFLOAT3 _FILL_;
 };
+
+struct ShadersParams {
+	DirectX::XMMATRIX MatWorldViewProj;
+	DirectX::XMMATRIX MatWorld;
+	DirectX::XMVECTOR CameraPos;
+	AmbientLight Ambient;
+	DirectionalLight Directional;
+	ShaderMaterial Mat;
+	bool HasTexture;
+	DirectX::XMFLOAT3 _FILL_;
+};
+static_assert(sizeof(ShadersParams) % 16 == 0);
 
 struct Shader {
 	const wchar_t* FileName;
@@ -38,9 +39,13 @@ struct Shader {
 	ID3D11SamplerState* pSampleState;
 
 	// Light buffers
-	ID3D11Buffer* pStructuredBuffer;
-	ID3D11ShaderResourceView* pStructuredBufferView;
+	ID3D11Buffer* PPointLightsBuffer;
+	ID3D11ShaderResourceView* PPointLightsBufferView;
+	ID3D11Buffer* PSpotLightsBuffer;
+	ID3D11ShaderResourceView* PSpotLightsBufferView;
 
 	Shader(const wchar_t* FileName);
 	~Shader();
+
+	void UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext, const LightConfig& LightConfig) const;
 };

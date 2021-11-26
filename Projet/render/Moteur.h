@@ -325,6 +325,16 @@ protected:
 		MyPlayer->AddComponent<RigidBody>(false, false, 10.f);
 		CurrentScene->AddActor(std::move(MyPlayer));
 
+		CurrentScene->LightConfig.SetAmbient(AmbientLight{ 0.5f, 0.5f, 0.5f });
+		PointLight Light;
+		Light.Intensity = 0.8f;
+		Light.InnerRadius = 10.f;
+		Light.OuterRadius = 60.f;
+		Light.Position = { 0.f, 8.f, 0.f };
+		Light.Specular = { 0.5f, 0.5f, 0.5f };
+		Light.Roughness = { 0.5f, 0.5f, 0.5f };
+		CurrentScene->LightConfig.AddPointLight(Light);
+
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),

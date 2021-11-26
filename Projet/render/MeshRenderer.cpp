@@ -23,14 +23,15 @@ MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* Mes
 	TypeFlags |= RENDER_COMPONENT;
 }
 
+bool once = true;
 void MeshRenderer::Tick(const float& delta_time)
 {
 	// Update position
 	matWorld = Math::TransformToMatrix(ParentActor->Transform);
 
-
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
+	const auto& LightConfig = PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig;
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -48,34 +49,21 @@ void MeshRenderer::Tick(const float& delta_time)
 	// Initialiser et sélectionner les «constantes» de l'effet
 	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
 
-	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
-	ShaderParams.matWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.vCamera = XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f);
+	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
+	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
+	ShaderParams.CameraPos = XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f);
 
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
 
-
 	// Update lighting
-
-	std::vector<ILight*> SceneLights;
-	SceneLights.push_back(new BaseLight{});
-
-	BufferStruct BF{ 1.0f, 0.f, 0.f, 1.f };
-
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	//  Disable GPU access to the vertex buffer data.
-	pImmediateContext->Map(MeshShader->pStructuredBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	//  Update the vertex buffer here.
-	memcpy(mappedResource.pData, &BF, sizeof(BufferStruct));
-	//  Reenable GPU access to the vertex buffer data.
-	pImmediateContext->Unmap(MeshShader->pStructuredBuffer, 0);
-
-	auto variableTexture = MeshShader->PEffect->GetVariableByName("Lights")->AsShaderResource();
-	variableTexture->SetResource(MeshShader->pStructuredBufferView);
+	if (LightConfig.Changed()) {
+		MeshShader->UpdateLightsBuffer(pImmediateContext, LightConfig);
+	}
+	ShaderParams.Ambient = LightConfig.GetAmbient();
+	ShaderParams.Directional = LightConfig.GetDirectional();
 
 	// Dessiner les subsets non-transparents
 	for (int32_t i = 0; i < Mesh->SubsetCount; ++i)
@@ -84,10 +72,10 @@ void MeshRenderer::Tick(const float& delta_time)
 		int32_t indexDrawAmount = Mesh->SubsetIndex[i + 1] - Mesh->SubsetIndex[i];
 		if (indexDrawAmount)
 		{
-			ShaderParams.vAMat = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Ambiante);
-			ShaderParams.vDMat = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Roughness);
-			ShaderParams.vSMat = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Specular);
-			ShaderParams.puissance = Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Power;
+			ShaderParams.Mat.Ambient = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Ambiante);
+			ShaderParams.Mat.Roughness = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Roughness);
+			ShaderParams.Mat.Specular = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Specular);
+			ShaderParams.Mat.Intensity = Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Power;
 
 			// Activation de la texture ou non
 			if (Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->GetD3DTexture() != nullptr)
@@ -95,11 +83,11 @@ void MeshRenderer::Tick(const float& delta_time)
 				ID3DX11EffectShaderResourceVariable* variableTexture;
 				variableTexture = MeshShader->PEffect->GetVariableByName("textureEntree")->AsShaderResource();
 				variableTexture->SetResource(Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->GetD3DTexture());
-				ShaderParams.bTex = 1;
+				ShaderParams.HasTexture = true;
 			}
 			else
 			{
-				ShaderParams.bTex = 1;
+				ShaderParams.HasTexture = false;
 			}
 
 			// IMPORTANT pour ajuster les param.

@@ -280,7 +280,7 @@ protected:
 		auto Mesh = Pitbull::Actor::New();
 		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
-		Mesh->Transform.p.y = -2.f;
+		Mesh->Transform.PosRot.p.y = -2.f;
 		Mesh->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh));
 
@@ -288,9 +288,12 @@ protected:
 		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
-		Mesh2->Transform.p.y = 0.f;
-		Mesh2->Transform.p.z = -7.f;
-		Mesh2->Transform.p.x = 1.f;
+		Mesh2->Transform.PosRot.p.y = 0.f;
+		Mesh2->Transform.PosRot.p.z = -7.f;
+		Mesh2->Transform.PosRot.p.x = 1.f;
+		Mesh2->Transform.Scale.y = 5.f;
+		Mesh2->Transform.Scale.z = 5.f;
+		Mesh2->Transform.Scale.x = 5.f;
 		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh2));
 
@@ -298,9 +301,9 @@ protected:
 		auto MyPlateform = Pitbull::Actor::New();
 		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlateform->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		MyPlateform->Transform.p.y = 0.f;
-		MyPlateform->Transform.p.z = -7.f;
-		MyPlateform->Transform.p.x = 1.f;
+		MyPlateform->Transform.PosRot.p.y = 0.f;
+		MyPlateform->Transform.PosRot.p.z = -7.f;
+		MyPlateform->Transform.PosRot.p.x = 1.f;
 		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 		MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5), PxQuat(PxHalfPi, PxVec3(0, 1.0f, 0))), PxTransform(PxVec3(-3, 5, 5), PxQuat(-PxHalfPi, PxVec3(0, 1.0f, 0))), true);
 		CurrentScene->AddActor(std::move(MyPlateform));

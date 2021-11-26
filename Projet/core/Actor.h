@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Component.h"
+#include "Transform.h"
 
 namespace Pitbull
 {
@@ -31,7 +32,7 @@ namespace Pitbull
 		/// The name of this actor, used to identify this actor easily.
 		/// </summary>
 		const std::string Name;
-		physx::PxTransform Transform;
+		Transform Transform;
 
 		explicit Actor();
 		explicit Actor(std::string name);

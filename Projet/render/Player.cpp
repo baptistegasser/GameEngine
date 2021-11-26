@@ -66,10 +66,10 @@ void Player::Tick(const float& DeltaTime)
 	}
 
 	if (ViewType == CameraViewType::Third) {
-		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.p) - Direction * 1.5 + XMVectorSet(0, 0.75f, 0, 0));
+		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.PosRot.p) - Direction * 1.5 + XMVectorSet(0, 0.75f, 0, 0));
 	}
 	else {
-		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.p) + Direction + XMVectorSet(0, 0.75f, 0, 0));
+		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.PosRot.p) + Direction + XMVectorSet(0, 0.75f, 0, 0));
 	}
 	MyCamera->SetDirection(Direction);
 }

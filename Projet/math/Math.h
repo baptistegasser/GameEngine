@@ -2,6 +2,7 @@
 
 #include "PxPhysicsAPI.h"
 #include <DirectXMath.h>
+#include "../core/Transform.h"
 
 namespace Math
 {
@@ -11,5 +12,5 @@ namespace Math
 
 	physx::PxQuat XMVector2Quat(const DirectX::XMVECTOR& Vec) noexcept;
 
-	DirectX::XMMATRIX TransformToMatrix(const physx::PxTransform& Transform) noexcept;
+	DirectX::XMMATRIX TransformToMatrix(const Transform& Transform) noexcept;
 } // namespace Math

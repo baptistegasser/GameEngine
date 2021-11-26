@@ -18,12 +18,12 @@ namespace Math
 		return physx::PxQuat{ DirectX::XMVectorGetX(Vec), DirectX::XMVectorGetY(Vec), DirectX::XMVectorGetZ(Vec), 1.0f };
 	}
 
-	DirectX::XMMATRIX TransformToMatrix(const physx::PxTransform& Transform) noexcept
+	DirectX::XMMATRIX TransformToMatrix(const Transform& Transform) noexcept
 	{
 		using namespace DirectX;
-		XMMATRIX Scale = XMMatrixScalingFromVector({ 1.0f, 1.f, 1.f });
-		XMMATRIX Translation = XMMatrixTranslationFromVector({ Transform.p.x, Transform.p.y, Transform.p.z });
-		XMMATRIX Rotation = XMMatrixRotationQuaternion(XMVectorSet(Transform.q.x, Transform.q.y, Transform.q.z, Transform.q.w));
+		XMMATRIX Scale = XMMatrixScalingFromVector(PX2XMVector(Transform.Scale));
+		XMMATRIX Translation = XMMatrixTranslationFromVector(PX2XMVector(Transform.PosRot.p));
+		XMMATRIX Rotation = XMMatrixRotationQuaternion(XMVectorSet(Transform.PosRot.q.x, Transform.PosRot.q.y, Transform.PosRot.q.z, Transform.PosRot.q.w));
 
 		return Scale * Rotation * Translation;
 	}

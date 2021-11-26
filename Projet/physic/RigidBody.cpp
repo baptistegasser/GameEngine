@@ -26,13 +26,13 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	// Create appropriate physx actor
 	switch (ActorType) {
 	case RigidActorType::Static:
-		RigidActor = Physics->createRigidStatic(ParentActor->Transform);
+		RigidActor = Physics->createRigidStatic(ParentActor->Transform.PosRot);
 		break;
 	case RigidActorType::Dynamic:
-		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
+		RigidActor = Physics->createRigidDynamic(ParentActor->Transform.PosRot);
 		break;
 	case RigidActorType::Kinematic:
-		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
+		RigidActor = Physics->createRigidDynamic(ParentActor->Transform.PosRot);
 		static_cast<PxRigidDynamic*>(RigidActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
 		break;
 	default: throw "Invalid actor type";
@@ -53,13 +53,14 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 void RigidBody::PreFixedTick() const
 {
 	// Update the transform with the actor's own to match change made by other components
-	RigidActor->setGlobalPose(ParentActor->Transform);
+	RigidActor->setGlobalPose(ParentActor->Transform.PosRot);
+	PxScaleRigidActor(*RigidActor, ParentActor->Transform.Scale.y, true);
 }
 
 void RigidBody::FixedTick(const float& DeltaTime)
 {
 	// Update the actor transform with the simulated one
-	ParentActor->Transform = RigidActor->getGlobalPose();
+	ParentActor->Transform.PosRot = RigidActor->getGlobalPose();
 }
 
 physx::PxRigidDynamic* RigidBody::GetAsDynamic() const noexcept

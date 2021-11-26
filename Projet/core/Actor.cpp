@@ -6,13 +6,13 @@ namespace Pitbull
 	Actor::Actor()
 		: Name{ "Actor_" + std::to_string(NextID) }
 		, ID{ ++NextID }
-		, Transform{ 0.f, 0.f, 0.f }
-	{}
+		, Transform{}
+{}
 
 	Actor::Actor(std::string name)
 		: Name{std::move(name)}
 		, ID{ ++NextID }
-		, Transform{ 0.f, 0.f, 0.f }
+		, Transform{}
 	{}
 
 	void Actor::Init()

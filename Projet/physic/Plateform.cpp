@@ -23,10 +23,10 @@ void Plateform::Tick(const float& DeltaTime)
 	if (Loop) {
 
 		if (DepartureIsGoal) {
-			Direction = Departure.p - ParentActor->Transform.p;
+			Direction = Departure.p - ParentActor->Transform.PosRot.p;
 			if (Point(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.p + Direction * Speed), PxQuat(ParentActor->Transform.q)));
+				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.PosRot.p + Direction * Speed), PxQuat(ParentActor->Transform.PosRot.q)));
 			}
 			else {
 				DepartureIsGoal = false;
@@ -34,10 +34,10 @@ void Plateform::Tick(const float& DeltaTime)
 			}
 		}
 		else {
-			Direction = Destination.p - ParentActor->Transform.p;
+			Direction = Destination.p - ParentActor->Transform.PosRot.p;
 			if (Point(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.p + Direction * Speed), PxQuat(ParentActor->Transform.q)));
+				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.PosRot.p + Direction * Speed), PxQuat(ParentActor->Transform.PosRot.q)));
 			}
 			else {
 				DepartureIsGoal = true;

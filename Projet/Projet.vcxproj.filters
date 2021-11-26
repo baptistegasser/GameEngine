@@ -219,6 +219,9 @@
     <ClCompile Include="physic\Plateform.cpp">
       <Filter>Source Files\physic\components</Filter>
     </ClCompile>
+    <ClCompile Include="core\Transform.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -397,6 +400,9 @@
     </ClInclude>
     <ClInclude Include="physic\Plateform.h">
       <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Transform.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

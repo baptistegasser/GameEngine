@@ -108,7 +108,7 @@ Octree::Octree(const BoundingBox& Boundary)
 bool Octree::Add(ActorType Actor)
 {
     // Prepare leaf
-    Leaf Leaf{ Actors.size(), Actor->Transform };
+    Leaf Leaf{ Actors.size(), Actor->Transform.PosRot };
 
     // Ignore out of bound for this tree
     if (!VolumeContains(Root.Boundary, Leaf.Position))
@@ -137,7 +137,7 @@ bool Octree::Remove(const ActorPtr Actor)
         return true;
 
     // Create matching leaf
-    const Leaf Leaf{static_cast<Leaf::ID>(it - Actors.begin()), Actor->Transform };
+    const Leaf Leaf{static_cast<Leaf::ID>(it - Actors.begin()), Actor->Transform.PosRot };
 
     // Remove from actors
     Actors.erase(it);
@@ -175,9 +175,9 @@ void Octree::Update()
         for (; It != Node->Leafs.end();) {
             Leaf CurLeaf = *It;
             // The leaf is now invalid
-        	if (CurLeaf.Position != Actors[CurLeaf.ActorID]->Transform) {
+        	if (CurLeaf.Position != Actors[CurLeaf.ActorID]->Transform.PosRot) {
                 // Update position, store to add back and remove from current node
-                CurLeaf.Position = Actors[CurLeaf.ActorID]->Transform;
+                CurLeaf.Position = Actors[CurLeaf.ActorID]->Transform.PosRot;
                 LeafToUpdate.push_back(CurLeaf);
                 It = Node->Leafs.erase(It);
             }

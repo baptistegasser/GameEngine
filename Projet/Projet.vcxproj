@@ -169,6 +169,7 @@
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
+    <ClCompile Include="core\Transform.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\BoundingBox.cpp" />
     <ClCompile Include="math\BoundingSphere.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
+    <ClInclude Include="core\Transform.h" />
     <ClInclude Include="math\BoundingBox.h" />
     <ClInclude Include="math\BoundingSphere.h" />
     <ClInclude Include="math\BoundingVolume.h" />

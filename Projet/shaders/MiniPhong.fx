@@ -27,7 +27,7 @@ struct PointLight
 
     float3 CalcPhong(float3 N, float3 V, float3 WorldPosition)
     {
-        float3 color = (float4) 1.0;
+        float3 color = (float3) 1.0;
 
         float3 L = normalize(Position - WorldPosition);
         
@@ -109,7 +109,7 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 	float3 V = normalize(vs.vDirCam);
 	
     // Default add ambiant light
-    float3 phong = Ambient.Value;
+    float3 phong = Ambient.Value.rgb;
     
     // TODO directionnal lighting
     

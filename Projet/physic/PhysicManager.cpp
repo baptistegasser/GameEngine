@@ -29,7 +29,7 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 	CurrentScene = Scene;
 
 	PxSceneDesc sceneDesc(Physics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -0.1f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = Dispatcher;
 

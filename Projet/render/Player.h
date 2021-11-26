@@ -32,7 +32,7 @@ public :
 	DirectX::XMVECTOR RelativeZ;
 
 	float Speed = 1.0f;
-	float JumpSpeed = 1.5f;
+	float JumpSpeed = 10.f;
 
 private:
 	RigidBody* MyRigidBody;

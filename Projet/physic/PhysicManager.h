@@ -29,11 +29,12 @@ public:
 	ContactHandler& GetContactHandler() noexcept;
 
 	physx::PxPhysics* Physics = nullptr;
+	physx::PxCooking* Cooking = nullptr;
 	std::shared_ptr<Scene> CurrentScene;
 
 private:
-	PhysicManager() {};
-	~PhysicManager() noexcept {};
+	PhysicManager() = default;
+	~PhysicManager() = default;
 	static physx::PxDefaultAllocator Allocator;
 	static physx::PxDefaultErrorCallback ErrorCallback;
 

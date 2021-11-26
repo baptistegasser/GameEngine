@@ -61,6 +61,6 @@ void Scene::SetCurrentCamera(const Camera* NewCamera) noexcept
 
 const Octree::ActorPtrList Scene::GetVisibleActors() noexcept
 {
-	VisionVolume = BoundingSphere{ 10.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
+	VisionVolume = BoundingSphere{ 1000.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
 	return Tree.Find(VisionVolume);
 }

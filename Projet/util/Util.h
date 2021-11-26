@@ -5,6 +5,44 @@
 // Physx resources cleaning
 #define PX_RELEASE(res) if(res) { res->release(); res = nullptr; }
 
+// DirectX resources cleaning
+template <class Type>
+inline void DX_TRY(const Type & Resultat)
+{
+	if (Resultat != S_OK)
+	{
+		throw Resultat;
+	}
+}
+
+template <class Type1, class Type2>
+inline void DX_TRY(const Type1 & Resultat, const Type2 & unCode)
+{
+	if (Resultat != S_OK)
+	{
+		throw unCode;
+	}
+}
+
+template <class Type>
+inline void DX_VALIDATE(const void* UnPointeur, const Type & unCode)
+{
+	if (UnPointeur == nullptr)
+	{
+		throw unCode;
+	}
+}
+
+template <class Type>
+inline void DX_RELEASE(Type & UnPointeur)
+{
+	if (UnPointeur != nullptr)
+	{
+		UnPointeur->Release();
+		UnPointeur = nullptr;
+	}
+}
+
 const wchar_t* str2wchar(const std::string& str) noexcept;
 const std::string wchar2str(const wchar_t* wchars) noexcept;
 

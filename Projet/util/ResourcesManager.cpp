@@ -31,13 +31,13 @@ Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)
 	return PShader;
 }
 
-PM3D::CTexture* ResourcesManager::GetTexture(const std::wstring& TextureName)
+Texture* ResourcesManager::GetTexture(const std::wstring& TextureName)
 {
 	const std::string Name = wstr2str(TextureName);
 	auto PTexture = Textures[Name].get();
 
 	if (!PTexture) {
-		PTexture = new PM3D::CTexture{ TextureName };
+		PTexture = new Texture{ TextureName };
 		Textures[Name].reset(PTexture);
 	}
 

@@ -1,16 +1,8 @@
 #pragma once
 #include "dispositif.h"
 
-#include "Objet3D.h"
-#include "Bloc.h"
-#include "BlocEffet1.h"
-#include "ObjetMesh.h"
-#include "ChargeurOBJ.h"
-
-#include "AfficheurSprite.h"
 #include "AfficheurTexte.h"
 #include "DIManipulateur.h"
-#include "Terrain.h"
 
 #include "core/Actor.h"
 #include "core/Scene.h"
@@ -29,6 +21,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Player.h"
+#include "render/Landscape.h"
 // Gameplay components
 
 using namespace physx;
@@ -141,9 +134,9 @@ public:
 		return true;
 	}
 
-	const XMMATRIX& GetMatView() const { return m_MatView; }
-	const XMMATRIX& GetMatProj() const { return m_MatProj; }
-	const XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
+	const DirectX::XMMATRIX& GetMatView() const { return m_MatView; }
+	const DirectX::XMMATRIX& GetMatProj() const { return m_MatProj; }
+	const DirectX::XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
@@ -211,6 +204,7 @@ protected:
 
 	virtual int InitScene()
 	{
+		using namespace DirectX;
 		//// Initialisation des objets 3D - création et/ou chargement
 		//if (!InitObjets())
 		//{
@@ -277,12 +271,20 @@ protected:
 
  	bool InitObjets()
 	{
+		using namespace DirectX;
+
 		auto Mesh = Pitbull::Actor::New();
 		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
 		Mesh->Transform.PosRot.p.y = -2.f;
 		Mesh->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh));
+
+		auto Terrain = std::unique_ptr<Landscape>(new Landscape{ L".\\modeles\\Heightmap.bmp", {1, 0.3f, 1}, ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx") });
+		Terrain->Texture1 = ResourcesManager.GetTexture(L".\\modeles\\gazon.dds");
+		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
+		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
+		CurrentScene->AddActor(std::move(Terrain));
 
 		auto Mesh2 = Pitbull::Actor::New();
 		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
@@ -422,9 +424,9 @@ protected:
 	std::shared_ptr<Scene> CurrentScene;
 
 	// Les matrices
-	XMMATRIX m_MatView;
-	XMMATRIX m_MatProj;
-	XMMATRIX m_MatViewProj;
+	DirectX::XMMATRIX m_MatView;
+	DirectX::XMMATRIX m_MatProj;
+	DirectX::XMMATRIX m_MatViewProj;
 
 	// Pour le texte
 	std::unique_ptr<CAfficheurTexte> pTexte1;
@@ -435,9 +437,6 @@ protected:
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
 	ResourcesManager ResourcesManager;
-
-	// Le Terrain
-	Terrain* terrain;
 };
 
 } // namespace PM3D

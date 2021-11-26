@@ -19,6 +19,8 @@ void PhysicManager::Init()
 
 	Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *Foundation, PxTolerancesScale(), true, Pvd);
 
+	Cooking = PxCreateCooking(PX_PHYSICS_VERSION, *Foundation, PxCookingParams{ PxTolerancesScale{} });
+
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
 }
 
@@ -62,6 +64,7 @@ void PhysicManager::Cleanup()
 	PX_RELEASE(CurrentScene->PhysxScene);
 	PX_RELEASE(Dispatcher);
 	PX_RELEASE(Physics);
+	PX_RELEASE(Cooking);
 	if (Pvd)
 	{
 		PxPvdTransport* transport = Pvd->getTransport();

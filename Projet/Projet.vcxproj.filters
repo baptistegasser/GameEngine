@@ -81,12 +81,6 @@
     <ClCompile Include="render\ChargeurOBJ.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="render\BlocEffet1.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Bloc.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\AfficheurTexte.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -106,12 +100,6 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\ObjetMesh.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Terrain.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\sommetbloc.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="physic\PhysicManager.cpp">
@@ -213,6 +201,12 @@
     <ClCompile Include="render\ObjectMesh.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
+    <ClCompile Include="render\Landscape.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\HeightFieldCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
     <ClCompile Include="render\Player.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
@@ -238,9 +232,6 @@
     </ClInclude>
     <ClInclude Include="Pitbull.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="render\BlocEffet1.h">
-      <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\chargeur.h">
       <Filter>Header Files\render</Filter>
@@ -281,22 +272,10 @@
     <ClInclude Include="render\ObjetMesh.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\sommetbloc.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\sommetTerrain.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Terrain.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\AfficheurSprite.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\AfficheurTexte.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Bloc.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="physic\PhysicManager.h">
@@ -392,10 +371,16 @@
     <ClInclude Include="render\ObjectMesh.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
+    <ClInclude Include="render\Landscape.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
     <ClInclude Include="render\Player.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="physic\ForceMode.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\HeightFieldCollider.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
     <ClInclude Include="physic\Plateform.h">
@@ -425,9 +410,6 @@
     <FxCompile Include="shaders\sprite1.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\MiniPhong.phl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\MiniPhong.vhl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -435,6 +417,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\vs1.vhl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\MiniPhongTerrain.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

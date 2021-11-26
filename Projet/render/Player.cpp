@@ -20,6 +20,8 @@ void Player::Init()
 
 void Player::Tick(const float& DeltaTime)
 {
+	using namespace DirectX;
+
 	PM3D::CDIManipulateur& rGestionnaireDeSaisie = PM3D::CMoteurWindows::GetInstance().GetGestionnaireDeSaisie();
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));

@@ -16,7 +16,6 @@ struct ShadersParams {
 	float puissance;
 	int bTex;
 	DirectX::XMFLOAT2 remplissage;
-
 };
 
 struct Shader {

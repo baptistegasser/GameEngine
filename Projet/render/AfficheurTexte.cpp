@@ -47,7 +47,8 @@ CAfficheurTexte::CAfficheurTexte(CDispositifD3D11* pDispositif, int largeur, int
 
 	// Accéder aux bits du bitmap
 	Gdiplus::BitmapData bmData;
-	pCharBitmap->LockBits(&Gdiplus::Rect(0, 0, TexWidth, TexHeight), Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
+	const auto& Rect = Gdiplus::Rect(0, 0, TexWidth, TexHeight);
+	pCharBitmap->LockBits(&Rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
 
 	// Création d'une texture de même dimension sur la carte graphique
 	D3D11_TEXTURE2D_DESC texDesc;
@@ -113,7 +114,8 @@ void CAfficheurTexte::Ecrire(const std::wstring& s)
 
 	// Transférer
 	Gdiplus::BitmapData bmData;
-	pCharBitmap->LockBits(&Gdiplus::Rect(0, 0, TexWidth, TexHeight), Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
+	const auto& Rect = Gdiplus::Rect(0, 0, TexWidth, TexHeight);
+	pCharBitmap->LockBits(&Rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
 
 	pDispo->GetImmediateContext()->UpdateSubresource(pTexture, 0, 0, bmData.Scan0, TexWidth * 4, 0);
 

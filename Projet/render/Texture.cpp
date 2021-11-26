@@ -1,44 +1,28 @@
-#include "StdAfx.h"
-#include "strsafe.h"
-#include "dispositifD3D11.h"
+#include "stdafx.h"
 #include "Texture.h"
-#include "resources/resource.h"
-#include "util/util.h"
 #include "DDSTextureLoader.h"
+#include "dispositifD3D11.h"
 #include "MoteurWindows.h"
+#include "resources/resource.h"
+#include "util/Util.h"
 
 using namespace DirectX;
 
-namespace PM3D
+Texture::~Texture()
 {
-
-CTexture::~CTexture()
-{
-	DXRelacher(m_TexturResource);
-	DXRelacher(m_Texture);
+	DX_RELEASE(TextureResource);
+	DX_RELEASE(TextureView);
 }
 
-const std::wstring& CTexture::GetFilename() const
+Texture::Texture(const std::wstring& filename)
+	: Filename(filename)
+	, TextureView(nullptr)
 {
-	return m_Filename;
-}
-
-ID3D11ShaderResourceView* CTexture::GetD3DTexture()
-{
-	return m_Texture;
-}
-
-CTexture::CTexture(const std::wstring& filename)
-	: m_Filename(filename)
-	, m_Texture(nullptr)
-{
-	ID3D11Device* pDevice = CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
+	ID3D11Device* pDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
 	// Charger la texture en ressource
-	DXEssayer(CreateDDSTextureFromFile(pDevice,
-		m_Filename.c_str(),
-		&m_TexturResource,
-		&m_Texture), DXE_FICHIERTEXTUREINTROUVABLE);
+	DX_TRY(CreateDDSTextureFromFile(pDevice,
+		Filename.c_str(),
+		&TextureResource,
+		&TextureView), DXE_FICHIERTEXTUREINTROUVABLE);
 }
-
-} // namespace PM3D

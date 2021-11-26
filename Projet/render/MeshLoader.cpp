@@ -2,6 +2,7 @@
 #include "MeshLoader.h"
 
 #include "MoteurWindows.h"
+#include "Vertex.h"
 #include "util/Util.h"
 #include "resources/resource.h"
 
@@ -9,26 +10,26 @@ void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 {
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
-	std::ifstream fichier;
-	fichier.open(FileName, std::ios::in | std::ios_base::binary);
-	assert(fichier.is_open());
+	std::ifstream File;
+	File.open(FileName, std::ios::in | std::ios_base::binary);
+	assert(File.is_open());
 
 	// Read vertices
 	{
-		int32_t nombreSommets;
-		fichier.read((char*)&nombreSommets, sizeof(nombreSommets));
+		int32_t VertexCount;
+		File.read((char*)&VertexCount, sizeof(VertexCount));
 
-		std::unique_ptr<PM3D::CSommetBloc[]> ts(new PM3D::CSommetBloc[nombreSommets]);
+		std::unique_ptr<Vertex[]> ts(new Vertex[VertexCount]);
 
-		// 1. SOMMETS b) Lecture des sommets à partir d'un fichier binaire
-		fichier.read((char*)ts.get(), nombreSommets * sizeof(PM3D::CSommetBloc));
+		// 1. SOMMETS b) Lecture des sommets ï¿½ partir d'un fichier binaire
+		File.read((char*)ts.get(), VertexCount * sizeof(Vertex));
 
-		// 1. SOMMETS b) Création du vertex buffer et copie des sommets
+		// 1. SOMMETS b) Crï¿½ation du vertex buffer et copie des sommets
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 
 		bd.Usage = D3D11_USAGE_IMMUTABLE;
-		bd.ByteWidth = sizeof(PM3D::CSommetBloc) * nombreSommets;
+		bd.ByteWidth = sizeof(Vertex) * VertexCount;
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
@@ -42,17 +43,17 @@ void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 
 	// 2. INDEX 
 	{
-		int32_t nombreIndex;
-		fichier.read((char*)&nombreIndex, sizeof(nombreIndex));
+		int32_t IndexCount;
+		File.read((char*)&IndexCount, sizeof(IndexCount));
 
-		std::unique_ptr<uint32_t[]> index(new uint32_t[nombreIndex]);
-		fichier.read((char*)index.get(), nombreIndex * sizeof(uint32_t));
+		std::unique_ptr<uint32_t[]> index(new uint32_t[IndexCount]);
+		File.read((char*)index.get(), IndexCount * sizeof(uint32_t));
 
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
 
 		bd.Usage = D3D11_USAGE_IMMUTABLE;
-		bd.ByteWidth = sizeof(uint32_t) * nombreIndex;
+		bd.ByteWidth = sizeof(uint32_t) * IndexCount;
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
@@ -65,28 +66,28 @@ void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 	}
 
 	// 3. Les sous-objets
-	fichier.read((char*)&Mesh.SubsetCount, sizeof(Mesh.SubsetCount));
-	//    Début de chaque sous-objet et un pour la fin
+	File.read((char*)&Mesh.SubsetCount, sizeof(Mesh.SubsetCount));
+	//    Dï¿½but de chaque sous-objet et un pour la fin
 	{
 		std::unique_ptr<int32_t[]> si(new int32_t[Mesh.SubsetCount + 1]);
 
-		fichier.read((char*)si.get(), (Mesh.SubsetCount + 1) * sizeof(int32_t));
+		File.read((char*)si.get(), (Mesh.SubsetCount + 1) * sizeof(int32_t));
 		Mesh.SubsetIndex.assign(si.get(), si.get() + (Mesh.SubsetCount + 1));
 	}
 
 	// 4. MATERIAUX
-	// 4a) Créer un matériau de défaut en index 0
-	//     Vous pourriez changer les valeurs, j'ai conservé 
+	// 4a) Crï¿½er un matï¿½riau de dï¿½faut en index 0
+	//     Vous pourriez changer les valeurs, j'ai conservï¿½ 
 	//     celles du constructeur
-	int32_t NbMaterial;
-	fichier.read((char*)&NbMaterial, sizeof(int32_t));
+	int32_t MaterialCount;
+	File.read((char*)&MaterialCount, sizeof(int32_t));
 
-	Mesh.Materials.resize(NbMaterial);
+	Mesh.Materials.resize(MaterialCount);
 
 	RawMaterialBlock mb;
-	for (int32_t i = 0; i < NbMaterial; ++i)
+	for (int32_t i = 0; i < MaterialCount; ++i)
 	{
-		fichier.read((char*)&mb, sizeof(RawMaterialBlock));
+		File.read((char*)&mb, sizeof(RawMaterialBlock));
 		Mesh.Materials[i] = mb.ToMat();
 	}
 
@@ -94,7 +95,7 @@ void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 	{
 		std::unique_ptr<int32_t[]> smi(new int32_t[Mesh.SubsetCount]);
 
-		fichier.read((char*)smi.get(), (Mesh.SubsetCount) * sizeof(int32_t));
+		File.read((char*)smi.get(), (Mesh.SubsetCount) * sizeof(int32_t));
 		Mesh.SubsetMaterialIndex.assign(smi.get(), smi.get() + Mesh.SubsetCount);
 	}
 

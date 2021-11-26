@@ -36,24 +36,24 @@ namespace Pitbull
 
 		explicit Actor();
 		explicit Actor(std::string name);
-		~Actor() = default;
+		virtual ~Actor() = default;
 
 		void Init();
 		/// <summary>
 		/// Call all components \ref Component::Tick method.
 		/// </summary>
-		void Tick(const float ElapsedTime);
+		virtual void Tick(const float ElapsedTime);
 		/// <summary>
 		/// Call all components \ref Component::FixedTick method.
 		/// </summary>
-		void FixedTick(const float DeltaTime);
+		virtual void FixedTick(const float DeltaTime);
 		/// <summary>
 		/// Call all components \ref Component::LateTick method.
 		/// </summary>
-		void LateTick(const float ElapsedTime);
+		virtual void LateTick(const float ElapsedTime);
 
 		template <class ... Args>
-		static std::unique_ptr<Actor> New(Args&&... args);
+		static std::unique_ptr<Actor> New(Args&&... Arguments);
 
 		/// <summary>
 		/// Create and add a component to this actor.
@@ -98,7 +98,7 @@ namespace Pitbull
 	};
 
 	template<class ...Args>
-	inline std::unique_ptr<Actor> Actor::New(Args && ...args)
+	std::unique_ptr<Actor> Actor::New(Args && ...Arguments)
 	{
 		return std::make_unique<Actor>(std::forward<Args>(Arguments)...);
 	}

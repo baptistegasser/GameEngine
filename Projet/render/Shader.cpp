@@ -3,14 +3,14 @@
 
 #include "resources/resource.h"
 #include "util/util.h"
-#include "sommetbloc.h"
 #include "MoteurWindows.h"
+#include "Vertex.h"
 
 Shader::Shader(const wchar_t* FileName)
 {
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
-	// Création d'un tampon pour les constantes du VS
+	// Crï¿½ation d'un tampon pour les constantes du VS
 	D3D11_BUFFER_DESC BuffDesc;
 	ZeroMemory(&BuffDesc, sizeof(BuffDesc));
 
@@ -23,7 +23,7 @@ Shader::Shader(const wchar_t* FileName)
 	// Pour l'effet
 	ID3DBlob* PFXBlob = nullptr;
 
-	PM3D::DXEssayer(D3DCompileFromFile(FileName, 0, 0, 0, "fx_5_0", 0, 0, &PFXBlob, 0), DXE_ERREURCREATION_FX);
+	DX_TRY(D3DCompileFromFile(FileName, 0, 0, 0, "fx_5_0", 0, 0, &PFXBlob, 0), DXE_ERREURCREATION_FX);
 
 	D3DX11CreateEffectFromMemory(PFXBlob->GetBufferPointer(), PFXBlob->GetBufferSize(), 0, PD3DDevice, &PEffect);
 
@@ -38,14 +38,14 @@ Shader::Shader(const wchar_t* FileName)
 	D3DX11_EFFECT_SHADER_DESC EffectDesc;
 	PassDesc.pShaderVariable->GetShaderDesc(PassDesc.ShaderIndex, &EffectDesc);
 
-	PM3D::DXEssayer(PD3DDevice->CreateInputLayout(PM3D::CSommetBloc::layout,
-		PM3D::CSommetBloc::numElements,
+	DX_TRY(PD3DDevice->CreateInputLayout(Vertex::Layout,
+		Vertex::LayoutCount,
 		EffectDesc.pBytecode,
 		EffectDesc.BytecodeLength,
 		&PInputLayout),
 		DXE_CREATIONLAYOUT);
 
-	// Initialisation des paramètres de sampling de la texture
+	// Initialisation des paramï¿½tres de sampling de la texture
 	D3D11_SAMPLER_DESC samplerDesc;
 
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
@@ -62,16 +62,16 @@ Shader::Shader(const wchar_t* FileName)
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	// Création de l'état de sampling
+	// Crï¿½ation de l'ï¿½tat de sampling
 	PD3DDevice->CreateSamplerState(&samplerDesc, &PSampleState);
 }
 
 Shader::~Shader()
 {
-	PM3D::DXRelacher(PConstantBuffer);
-	PM3D::DXRelacher(PEffectPass);
-	PM3D::DXRelacher(PEffectTechnique);
-	PM3D::DXRelacher(PInputLayout);
-	PM3D::DXRelacher(PSampleState);
-	PM3D::DXRelacher(PEffect);
+	DX_RELEASE(PConstantBuffer);
+	DX_RELEASE(PEffectPass);
+	DX_RELEASE(PEffectTechnique);
+	DX_RELEASE(PInputLayout);
+	DX_RELEASE(PSampleState);
+	DX_RELEASE(PEffect);
 }

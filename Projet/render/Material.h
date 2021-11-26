@@ -14,5 +14,5 @@ struct Material {
 	float Power;
 	bool Transparency;
 
-	PM3D::CTexture* Texture;
+	Texture* Texture;
 };

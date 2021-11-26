@@ -11,7 +11,9 @@ D3D11_INPUT_ELEMENT_DESC Vertex::Layout[] =
 
 UINT Vertex::LayoutCount = ARRAYSIZE(Vertex::Layout);
 
-Vertex::Vertex(const XMFLOAT3& Position, const XMFLOAT3& Normal, const XMFLOAT2& TexCoord /*= XMFLOAT2(0.0f, 0.0f)*/)
+Vertex::Vertex(const DirectX::XMFLOAT3& Position,
+	const DirectX::XMFLOAT3& Normal,
+	const DirectX::XMFLOAT2& TexCoord)
 	: Position(Position)
 	, Normal(Normal)
 	, TexCoord(TexCoord)

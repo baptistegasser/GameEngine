@@ -5,6 +5,7 @@
 #include "MoteurWindows.h"
 #include "math/Math.h"
 #include "ObjectMesh.h"
+#include "Vertex.h"
 
 #include "util/ResourcesManager.h"
 
@@ -13,7 +14,7 @@ MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh)
 {}
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader)
-	: Pitbull::Component{ Parent }
+	: Component{ Parent }
 	, Mesh{ Mesh }
 	, MeshShader{ MeshShader }
 	, matWorld{ DirectX::XMMatrixIdentity() }
@@ -21,9 +22,10 @@ MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* Mes
 
 void MeshRenderer::LateTick(const float& ElapsedTime)
 {
+	using namespace DirectX;
+
 	// Update position
 	matWorld = Math::TransformToMatrix(ParentActor->Transform);
-
 
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
@@ -37,11 +39,11 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	// Index buffer
 	pImmediateContext->IASetIndexBuffer(Mesh->PIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	// Vertex buffer
-	UINT stride = sizeof(PM3D::CSommetBloc);
+	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	pImmediateContext->IASetVertexBuffers(0, 1, &Mesh->PVertexBuffer, &stride, &offset);
 
-	// Initialiser et sélectionner les «constantes» de l'effet
+	// Initialiser et sï¿½lectionner les ï¿½constantesï¿½ de l'effet
 	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
 
 	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
@@ -70,11 +72,11 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 			ShaderParams.puissance = Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Power;
 
 			// Activation de la texture ou non
-			if (Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->GetD3DTexture() != nullptr)
+			if (Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->TextureView != nullptr)
 			{
 				ID3DX11EffectShaderResourceVariable* variableTexture;
 				variableTexture = MeshShader->PEffect->GetVariableByName("textureEntree")->AsShaderResource();
-				variableTexture->SetResource(Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->GetD3DTexture());
+				variableTexture->SetResource(Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->TextureView);
 				ShaderParams.bTex = 1;
 			}
 			else

@@ -4,12 +4,12 @@
 
 using namespace physx;
 
-Plateform::Plateform(Pitbull::Actor* Parent, const Point& Departure, const Point& Destination, const bool& Loop)
+Plateform::Plateform(Pitbull::Actor* Parent, const PxTransform& Departure, const PxTransform& Destination, const bool& Loop)
 	: 
 	Component{Parent}
 	,Departure{Departure}
 	, Destination{Destination}
-	, Loop {Loop}
+	, FirstLoop {Loop}
 {}
 
 void Plateform::Init()
@@ -20,28 +20,30 @@ void Plateform::Init()
 
 void Plateform::Tick(const float& DeltaTime)
 {
-	if (FirstLoop) {
+	if (Loop) {
 
 		if (DepartureIsGoal) {
-			Direction = Departure - ParentActor->Transform.p;
+			Direction = Departure.p - ParentActor->Transform.p;
 			if (Point(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(PxTransform(ParentActor->Transform.p + Direction * Speed));
+				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.p + Direction * Speed), PxQuat(ParentActor->Transform.q)));
 			}
 			else {
 				DepartureIsGoal = false;
+				MyRigidBody->setKinematicTarget(Departure);
 			}
 		}
 		else {
-			Direction = Destination - ParentActor->Transform.p;
+			Direction = Destination.p - ParentActor->Transform.p;
 			if (Point(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(PxTransform(ParentActor->Transform.p + Direction * Speed));
+				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.p + Direction * Speed), PxQuat(ParentActor->Transform.q)));
 			}
 			else {
 				DepartureIsGoal = true;
-				if (!Loop)
-					FirstLoop = false;
+				if (!FirstLoop)
+					Loop = false;
+				MyRigidBody->setKinematicTarget(Destination);
 			}
 		}
 	}

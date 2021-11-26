@@ -40,8 +40,8 @@ struct Point : public physx::PxVec3 {
 	bool operator<=(const physx::PxVec3& Vec3) const noexcept
 	{
 		return this->x <= Vec3.x
-			&& this->y <= Vec3.y
-			&& this->z <= Vec3.z;
+			|| this->y <= Vec3.y
+			|| this->z <= Vec3.z;
 	}
 
 	float Distance(const Point& Other) const noexcept

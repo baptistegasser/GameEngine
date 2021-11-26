@@ -14,7 +14,7 @@ public :
 	/// <param name="Departure"></param>
 	/// <param name="Destination"></param>
 	/// <param name="Loop"></param>
-	Plateform(Pitbull::Actor* Parent, const Point& Departure, const Point& Destination, const bool& Loop);
+	Plateform(Pitbull::Actor* Parent, const physx::PxTransform& Departure, const physx::PxTransform& Destination, const bool& Loop);
 	~Plateform() override = default;
 
 	void Init() override;
@@ -30,11 +30,11 @@ public :
 private :
 	RigidBody* MyRigidBody;
 
-	Point Departure;
-	Point Destination;
+	const physx::PxTransform Departure;
+	const physx::PxTransform Destination;
 
-	bool Loop;
-	bool FirstLoop = true;
+	bool Loop = true;
+	const bool FirstLoop;
 
 	bool DepartureIsGoal = true;
 	physx::PxVec3 Direction;

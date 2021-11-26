@@ -296,13 +296,13 @@ protected:
 
 
 		auto MyPlateform = Pitbull::Actor::New();
-		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlateform->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		MyPlateform->Transform.p.y = 0.f;
 		MyPlateform->Transform.p.z = -7.f;
 		MyPlateform->Transform.p.x = 1.f;
 		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-		MyPlateform->AddComponent<Plateform>(Point(5, 5, 5), Point(7, 0, 3), true);
+		MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5), PxQuat(PxHalfPi, PxVec3(0, 1.0f, 0))), PxTransform(PxVec3(-3, 5, 5), PxQuat(-PxHalfPi, PxVec3(0, 1.0f, 0))), true);
 		CurrentScene->AddActor(std::move(MyPlateform));
 
 

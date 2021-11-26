@@ -13,3 +13,6 @@ Flèches directionnelles
 
 Changer de caméra :
 Touche M
+
+Plus d'informations :
+Pour plus d'informations, il y a un minirapport.

@@ -9,6 +9,8 @@
 
 #include "util/ResourcesManager.h"
 
+#include "Light.h"
+
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh)
 	: MeshRenderer{ Parent, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
 {}
@@ -29,6 +31,7 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
+	const auto& LightConfig = PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig;
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -46,18 +49,21 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	// Initialiser et s�lectionner les �constantes� de l'effet
 	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
 
-	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
-	ShaderParams.matWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.vLumiere = XMVectorSet(-10.0f, 10.0f, -15.0f, 1.0f);
-	ShaderParams.vCamera = XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f);
-	ShaderParams.vAEcl = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
-	ShaderParams.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-	ShaderParams.vSEcl = XMVectorSet(0.6f, 0.6f, 0.6f, 1.0f);
+	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
+	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
+	ShaderParams.CameraPos = PM3D::CMoteurWindows::GetInstance().GetScene().GetCurrentCamera().GetPosition();
 
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
+
+	// Update lighting
+	if (LightConfig.Changed()) {
+		MeshShader->UpdateLightsBuffer(pImmediateContext, LightConfig);
+	}
+	ShaderParams.Ambient = LightConfig.GetAmbient();
+	ShaderParams.Directional = LightConfig.GetDirectional();
 
 	// Dessiner les subsets non-transparents
 	for (int32_t i = 0; i < Mesh->SubsetCount; ++i)
@@ -66,22 +72,22 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 		int32_t indexDrawAmount = Mesh->SubsetIndex[i + 1] - Mesh->SubsetIndex[i];
 		if (indexDrawAmount)
 		{
-			ShaderParams.vAMat = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Ambiante);
-			ShaderParams.vDMat = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Roughness);
-			ShaderParams.vSMat = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Specular);
-			ShaderParams.puissance = Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Power;
+			ShaderParams.Mat.Ambient = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Ambiante);
+			ShaderParams.Mat.Roughness = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Roughness);
+			ShaderParams.Mat.Specular = XMLoadFloat4(&Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Specular);
+			ShaderParams.Mat.Intensity = Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Power;
 
 			// Activation de la texture ou non
 			if (Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->TextureView != nullptr)
 			{
 				ID3DX11EffectShaderResourceVariable* variableTexture;
 				variableTexture = MeshShader->PEffect->GetVariableByName("textureEntree")->AsShaderResource();
+				ShaderParams.HasTexture = true;
 				variableTexture->SetResource(Mesh->Materials[Mesh->SubsetMaterialIndex[i]].Texture->TextureView);
-				ShaderParams.bTex = 1;
 			}
 			else
 			{
-				ShaderParams.bTex = 1;
+				ShaderParams.HasTexture = false;
 			}
 
 			// IMPORTANT pour ajuster les param.

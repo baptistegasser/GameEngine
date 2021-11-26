@@ -201,14 +201,17 @@
     <ClCompile Include="render\ObjectMesh.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
-    <ClCompile Include="render\Landscape.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="physic\HeightFieldCollider.cpp">
-      <Filter>Source Files\physic\components</Filter>
-    </ClCompile>
+    <ClCompile Include="render\Landscape.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\HeightFieldCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
     <ClCompile Include="render\Player.cpp">
       <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\LightConfig.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="physic\Plateform.cpp">
       <Filter>Source Files\physic\components</Filter>
@@ -371,18 +374,24 @@
     <ClInclude Include="render\ObjectMesh.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
-    <ClInclude Include="render\Landscape.h">
+    <ClInclude Include="render\Landscape.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Player.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
-    <ClInclude Include="render\Player.h">
+    <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightConfig.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="physic\ForceMode.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
-    <ClInclude Include="physic\HeightFieldCollider.h">
-      <Filter>Header Files\physic\components</Filter>
-    </ClInclude>
+    <ClInclude Include="physic\HeightFieldCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
     <ClInclude Include="physic\Plateform.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
@@ -404,9 +413,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders\MiniPhong.fx">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\sprite1.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -419,12 +425,18 @@
     <FxCompile Include="shaders\vs1.vhl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\MiniPhongTerrain.fx">
+    <FxCompile Include="shaders\MiniPhong.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\MiniPhongTerrain.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
+    <None Include="shaders\Light.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

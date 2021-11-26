@@ -287,7 +287,7 @@ protected:
 		CurrentScene->AddActor(std::move(Terrain));
 
 		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
 		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
 		Mesh2->Transform.PosRot.p.y = 0.f;
@@ -345,6 +345,14 @@ protected:
 		CurrentScene->AddActor(std::move(MyPlayer));
 
 		PlayerBody->SetMass(10.f);
+
+		CurrentScene->LightConfig.SetAmbient(AmbientLight{ 0.5f, 0.5f, 0.5f });
+		PointLight Light;
+		Light.Intensity = 4.0f;
+		Light.Position = { 0.f, 20.f, 0.f };
+		Light.Specular = { 0.5f, 0.5f, 0.5f };
+		Light.Roughness = { 0.5f, 0.5f, 0.5f };
+		CurrentScene->LightConfig.AddPointLight(Light);
 
 		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),

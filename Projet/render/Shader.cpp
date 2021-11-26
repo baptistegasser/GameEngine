@@ -8,6 +8,7 @@
 
 Shader::Shader(const wchar_t* FileName)
 {
+	/* Creation of constant buffer : cbuffer */
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
 	// Cr�ation d'un tampon pour les constantes du VS
@@ -64,6 +65,25 @@ Shader::Shader(const wchar_t* FileName)
 
 	// Cr�ation de l'�tat de sampling
 	PD3DDevice->CreateSamplerState(&samplerDesc, &PSampleState);
+
+	const int MAX_LIGHT = 256;
+
+	// Create buffers for light
+	D3D11_BUFFER_DESC PointLightsBDesc;
+	PointLightsBDesc.BindFlags = D3D10_BIND_SHADER_RESOURCE;
+	PointLightsBDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	PointLightsBDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+	PointLightsBDesc.StructureByteStride = sizeof(PointLight);
+	PointLightsBDesc.ByteWidth = PointLightsBDesc.StructureByteStride * MAX_LIGHT;
+	PointLightsBDesc.Usage = D3D11_USAGE_DYNAMIC;
+	PD3DDevice->CreateBuffer(&PointLightsBDesc, nullptr, &PPointLightsBuffer);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC PointLightsBVDesc;
+	PointLightsBVDesc.Format = DXGI_FORMAT_UNKNOWN;
+	PointLightsBVDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+	PointLightsBVDesc.Buffer.ElementOffset = 0;
+	PointLightsBVDesc.Buffer.ElementWidth = MAX_LIGHT;
+	PD3DDevice->CreateShaderResourceView(PPointLightsBuffer, &PointLightsBVDesc, &PPointLightsBufferView);
 }
 
 Shader::~Shader()
@@ -73,5 +93,24 @@ Shader::~Shader()
 	DX_RELEASE(PEffectTechnique);
 	DX_RELEASE(PInputLayout);
 	DX_RELEASE(PSampleState);
+	DX_RELEASE(PPointLightsBufferView);
+	DX_RELEASE(PPointLightsBuffer);
 	DX_RELEASE(PEffect);
+}
+
+void Shader::UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext, const LightConfig& LightConfig) const
+{
+	const auto& PointLights = LightConfig.GetPointLights();
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	//  Disable GPU access to the vertex buffer data.
+	PDeviceContext->Map(PPointLightsBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//  Update the vertex buffer here.
+	memcpy(mappedResource.pData, PointLights.data(), sizeof(PointLight) * PointLights.size());
+	//  Reenable GPU access to the vertex buffer data.
+	PDeviceContext->Unmap(PPointLightsBuffer, 0);
+
+	const auto PointLightsRess = PEffect->GetVariableByName("PointLights")->AsShaderResource();
+	PointLightsRess->SetResource(PPointLightsBufferView);
 }

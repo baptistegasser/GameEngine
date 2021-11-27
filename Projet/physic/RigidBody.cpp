@@ -41,7 +41,7 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	// Create and add shapes for collisions
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for (const auto Collider : Colliders) {
-		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(), *Collider->GetPxMaterial());
+		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(), *Collider->GetPxMaterial(), true);
 		RigidActor->attachShape(*Shape);
 		PhysicManager.GetContactHandler().RegisterCollider(Shape, Collider);
 	}

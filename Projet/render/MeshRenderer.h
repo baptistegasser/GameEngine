@@ -3,6 +3,7 @@
 #include "core/Component.h"
 #include "ObjectMesh.h"
 #include "Shader.h"
+#include "Light.h"
 
 class MeshRenderer : public Pitbull::Component {
 public:

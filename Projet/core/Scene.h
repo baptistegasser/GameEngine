@@ -2,6 +2,7 @@
 
 #include "Octree.h"
 #include "render/Camera.h"
+#include "render/LightConfig.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -46,6 +47,7 @@ public:
 	/// Update the camera used to get visible actors.
 	/// </summary>
 	void SetCurrentCamera(const Camera* NewCamera) noexcept;
+	const Camera& GetCurrentCamera() const noexcept;
 
 	/// <summary>
 	/// Get all actors in current vision range.
@@ -54,6 +56,7 @@ public:
 
 	physx::PxScene* PhysxScene;
 
+	LightConfig LightConfig;
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;

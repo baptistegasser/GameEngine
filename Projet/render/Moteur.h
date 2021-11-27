@@ -287,15 +287,11 @@ protected:
 		CurrentScene->AddActor(std::move(Terrain));
 
 		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		//Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, PxVec3(100, 1, 100));
 		Mesh2->Transform.PosRot.p.y = 0.f;
 		Mesh2->Transform.PosRot.p.z = -7.f;
 		Mesh2->Transform.PosRot.p.x = 1.f;
-		Mesh2->Transform.Scale.y = 5.f;
-		Mesh2->Transform.Scale.z = 5.f;
-		Mesh2->Transform.Scale.x = 5.f;
 		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(Mesh2));
 
@@ -309,25 +305,6 @@ protected:
 		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 		MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5), PxQuat(PxHalfPi, PxVec3(0, 1.0f, 0))), PxTransform(PxVec3(-3, 5, 5), PxQuat(-PxHalfPi, PxVec3(0, 1.0f, 0))), true);
 		CurrentScene->AddActor(std::move(MyPlateform));
-
-
-		/*auto Other = Pitbull::Actor::New();
-		Other->Transform.p.y = 10.f;
-		Other->Transform.p.z = 0.5f;
-		Other->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		Other->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, physx::PxVec3{1.0f});
-		Other->AddComponent<RigidBody>(false, false, 10.f);
-		CurrentScene->AddActor(Other);*/
-
-		/*auto MyCamera = Pitbull::Actor::New();
-		MyCamera->AddComponent<Camera>(XMVectorSet(0.0f, -5.0f, 10.0f, 1.0f),
-			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
-			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
-			&m_MatView,
-			&m_MatProj,
-			&m_MatViewProj);*/
-		//CurrentScene->AddActor(MyCamera);
-		//AreaManager::GetInstance().PlaceCamera(MyCamera);
 
 		auto MyPlayer = Pitbull::Actor::New();
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
@@ -346,53 +323,13 @@ protected:
 
 		PlayerBody->SetMass(10.f);
 
-		/*camera = CCamera{XMVectorSet(0.0f, -10.0f, 10.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, -1.0f, 1.0f),
-			XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f),
-			&m_MatView,
-			&m_MatProj,
-			&m_MatViewProj };*/
-
-		// Puis, il est ajouté à la scène
-		//char* filename = new char[50]("./src/Heightmap.bmp");
-		//ListeScene.emplace_back(std::make_unique<Terrain>(filename, XMFLOAT3(20.0f, 3.0f, 20.0f), pDispositif));
-
-		
-		////// Constructeur avec format binaire
-		//std::unique_ptr<CObjetMesh> pMesh = std::make_unique<CObjetMesh>(".\\modeles\\jin\\jin.OMB", pDispositif);
-		//// Puis, il est ajouté à la scène
-		//ListeScene.push_back(std::move(pMesh));
-
-		////// Création de l'afficheur de sprites et ajout des sprites
-		//std::unique_ptr<CAfficheurSprite> pAfficheurSprite = std::make_unique<CAfficheurSprite>(pDispositif);
-
-		//// ajout de panneaux 
-		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-		//	XMFLOAT3(1.0f, 0.0f, 1.0f));
-		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-		//	XMFLOAT3(0.0f, 0.0f, -1.0f));
-		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-		//	XMFLOAT3(-1.0f, 0.0f, 0.5f));
-		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-		//	XMFLOAT3(-0.5f, 0.0f, 1.0f));
-		//pAfficheurSprite->AjouterPanneau("modeles\\grass_v1_basic_tex.dds",
-		//	XMFLOAT3(-2.0f, 0.0f, 2.0f));
-
-		//pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 200,400);
-		//pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 500,500, 100, 100);
-		//pAfficheurSprite->AjouterSprite("modeles\\tree02s.dds", 800,200, 100, 100);
-
-		//CAfficheurTexte::Init();
-		//const Gdiplus::FontFamily oFamily(L"Arial", nullptr);
-		//pPolice = std::make_unique<Gdiplus::Font>(&oFamily, 16.0f, Gdiplus::FontStyleBold, Gdiplus::UnitPixel);
-		//pTexte1 = std::make_unique<CAfficheurTexte>(pDispositif, 256, 256, pPolice.get());
-
-		//pAfficheurSprite->AjouterSpriteTexte(pTexte1->GetTextureView(), 0, 257);
-
-		//pTexte1->Ecrire(L"Test du texte");
-
-		//// Puis, il est ajouté à la scène
-		//ListeScene.push_back(std::move(pAfficheurSprite));
+		CurrentScene->LightConfig.SetAmbient(AmbientLight{ 0.5f, 0.5f, 0.5f });
+		PointLight Light;
+		Light.Intensity = 4.0f;
+		Light.Position = { 0.f, 20.f, 0.f };
+		Light.Specular = { 0.5f, 0.5f, 0.5f };
+		Light.Roughness = { 0.5f, 0.5f, 0.5f };
+		CurrentScene->LightConfig.AddPointLight(Light);
 
 		return true;
 	}

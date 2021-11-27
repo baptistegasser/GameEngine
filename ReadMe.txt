@@ -1,6 +1,6 @@
 Lancer le code :
 Il suffit de compiler et de lancer le jeu.
-Ce n'est qu'une démo, notre circuit n'est pas fait encore.
+Ce n'est qu'une démo le jeu va encore beaucoup évoluer.
 
 Se déplacer :
 Touches WSAD

@@ -54,7 +54,7 @@ void RigidBody::PreFixedTick() const
 {
 	// Update the transform with the actor's own to match change made by other components
 	RigidActor->setGlobalPose(ParentActor->Transform.PosRot);
-	PxScaleRigidActor(*RigidActor, ParentActor->Transform.Scale.y, true);
+	//PxScaleRigidActor(*RigidActor, ParentActor->Transform.Scale.y, true);
 }
 
 void RigidBody::FixedTick(const float& DeltaTime)

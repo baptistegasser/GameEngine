@@ -205,37 +205,6 @@ protected:
 	virtual int InitScene()
 	{
 		using namespace DirectX;
-		//// Initialisation des objets 3D - création et/ou chargement
-		//if (!InitObjets())
-		//{
-		//	return 1;
-		//}
-
-		///*
-		//// Initialisation des matrices View et Proj
-		//// Dans notre cas, ces matrices sont fixes
-		//m_MatView = XMMatrixLookAtLH(XMVectorSet(-2000.0f, 2000.0f, 2000.0f, 1.0f),
-		////m_MatView = XMMatrixLookAtLH(XMVectorSet(5.0f, 2.0f, 5.0f, 1.0f),
-		//	XMVectorSet(2.0f, 2.0f, 2.0f, 1.0f),
-		//	XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
-
-		//// Calcul de VP à l'avance
-		//m_MatViewProj = m_MatView * m_MatProj;
-		//*/
-
-		//const float champDeVision = XM_PI / 4; 	// 45 degrés
-		//const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
-		//const float planRapproche = 2.0f;
-		//const float planEloigne = 10000.0f;
-
-		//m_MatProj = XMMatrixPerspectiveFovLH(
-		//	champDeVision,
-		//	ratioDAspect,
-		//	planRapproche,
-		//	planEloigne);
-
-		//camera.init(XMVectorSet(-2000.0f, 2000.0f, 2000.0f, 1.0f), XMVectorSet(1.0f, -1.0f, -1.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f), &m_MatView, &m_MatProj, &m_MatViewProj, CCamera::CAMERA_TYPE::LEVEL);
-		//camera.update();
 
 		// Create actors
 		if (!InitObjets()) {
@@ -273,17 +242,11 @@ protected:
 	{
 		using namespace DirectX;
 
-		auto Mesh = Pitbull::Actor::New();
-		Mesh->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		Mesh->AddComponent<BoxCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.5f }, PxVec3(100, 1, 100));
-		Mesh->Transform.PosRot.p.y = -2.f;
-		Mesh->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
-		CurrentScene->AddActor(std::move(Mesh));
-
 		auto Terrain = std::unique_ptr<Landscape>(new Landscape{ L".\\modeles\\Heightmap.bmp", {1, 0.3f, 1}, ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx") });
 		Terrain->Texture1 = ResourcesManager.GetTexture(L".\\modeles\\gazon.dds");
 		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
 		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
+		Terrain->Transform.PosRot.p = { 0.f, -50.f, 0.f };
 		CurrentScene->AddActor(std::move(Terrain));
 
 		auto Mesh2 = Pitbull::Actor::New();
@@ -296,15 +259,9 @@ protected:
 		CurrentScene->AddActor(std::move(Mesh2));
 
 
-		auto MyPlateform = Pitbull::Actor::New();
-		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\jin\\jin.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		MyPlateform->Transform.PosRot.p.y = 0.f;
-		MyPlateform->Transform.PosRot.p.z = -7.f;
-		MyPlateform->Transform.PosRot.p.x = 1.f;
-		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-		MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5), PxQuat(PxHalfPi, PxVec3(0, 1.0f, 0))), PxTransform(PxVec3(-3, 5, 5), PxQuat(-PxHalfPi, PxVec3(0, 1.0f, 0))), true);
-		CurrentScene->AddActor(std::move(MyPlateform));
+		CreatePlatform(PxVec3(5, 5, 5), PxVec3(6, 0.25, 6));
+		CreatePlatform(PxVec3(0, -2.f, 0), PxVec3(200.f, 1.f, 200.f));
+		//MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5)), PxTransform(PxVec3(-3, 5, 5)), true);
 
 		auto MyPlayer = Pitbull::Actor::New();
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
@@ -317,7 +274,7 @@ protected:
 			&m_MatViewProj);
 		CurrentScene->SetCurrentCamera(PlayerCam);
 
-		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
+		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.2f }, 1.0f);
 		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 		CurrentScene->AddActor(std::move(MyPlayer));
 
@@ -332,6 +289,20 @@ protected:
 		CurrentScene->LightConfig.AddPointLight(Light);
 
 		return true;
+	}
+
+	void CreatePlatform(PxVec3 Pos, PxVec3 Scale)
+	{
+		auto MyPlateform = Pitbull::Actor::New();
+		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\platform\\plateform.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlateform->AddComponent<BoxCollider>(
+			PhysicMaterial{ 0.5f, 0.5f, 0.0f },
+			PxVec3{ Scale/2.f }
+		);
+		MyPlateform->Transform.PosRot.p = Pos;
+		MyPlateform->Transform.Scale = Scale;
+		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		CurrentScene->AddActor(std::move(MyPlateform));
 	}
 
 	bool AnimeScene(float tempsEcoule)

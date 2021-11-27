@@ -171,7 +171,6 @@
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="core\Transform.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="math\BoundingBox.cpp" />
     <ClCompile Include="math\BoundingSphere.cpp" />
     <ClCompile Include="math\BoundingVolume.cpp" />

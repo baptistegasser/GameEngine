@@ -60,9 +60,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -201,12 +198,12 @@
     <ClCompile Include="render\ObjectMesh.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
-    <ClCompile Include="render\Landscape.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="physic\HeightFieldCollider.cpp">
-      <Filter>Source Files\physic\components</Filter>
-    </ClCompile>
+    <ClCompile Include="render\Landscape.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\HeightFieldCollider.cpp">
+      <Filter>Source Files\physic\components</Filter>
+    </ClCompile>
     <ClCompile Include="render\Player.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
@@ -374,9 +371,9 @@
     <ClInclude Include="render\ObjectMesh.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
-    <ClInclude Include="render\Landscape.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
+    <ClInclude Include="render\Landscape.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
     <ClInclude Include="render\Player.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
@@ -389,9 +386,9 @@
     <ClInclude Include="physic\ForceMode.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
-    <ClInclude Include="physic\HeightFieldCollider.h">
-      <Filter>Header Files\physic\components</Filter>
-    </ClInclude>
+    <ClInclude Include="physic\HeightFieldCollider.h">
+      <Filter>Header Files\physic\components</Filter>
+    </ClInclude>
     <ClInclude Include="physic\Plateform.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
@@ -428,9 +425,9 @@
     <FxCompile Include="shaders\MiniPhong.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\MiniPhongTerrain.fx">
-      <Filter>Shaders</Filter>
-    </FxCompile>
+    <FxCompile Include="shaders\MiniPhongTerrain.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />

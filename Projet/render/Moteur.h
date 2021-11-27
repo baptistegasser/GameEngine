@@ -247,7 +247,7 @@ protected:
 		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
 		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
 		Terrain->Transform.PosRot.p = { 0.f, -50.f, 0.f };
-		CurrentScene->AddActor(std::move(Terrain));
+		CurrentScene->AddActor(std::move(Terrain), true);
 
 		auto Mesh2 = Pitbull::Actor::New();
 		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));

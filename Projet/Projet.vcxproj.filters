@@ -362,9 +362,6 @@
     <ClInclude Include="render\InfoDispositif.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\Moteur.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\MoteurWindows.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -406,6 +403,9 @@
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Moteur.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

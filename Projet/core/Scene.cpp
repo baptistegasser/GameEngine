@@ -12,21 +12,27 @@ Scene::Scene()
 
 void Scene::Tick(const float ElapsedTime)
 {
-	for (auto& Actor : GetActors()) {
+	for (auto& Actor : Tree.GetActors()) {
 		Actor->Tick(ElapsedTime);
 	}
 }
 
 void Scene::FixedTick(const float DeltaTime)
 {
-	for (auto& Actor : GetActors()) {
+	for (auto& Actor : Tree.GetActors()) {
+		Actor->FixedTick(DeltaTime);
+	}
+	for (auto& Actor : AlwaysVisibleActors) {
 		Actor->FixedTick(DeltaTime);
 	}
 }
 
 void Scene::LateTick(const float ElapsedTime)
 {
-	for (auto& Actor : GetActors()) {
+	for (auto& Actor : Tree.GetActors()) {
+		Actor->LateTick(ElapsedTime);
+	}
+	for (auto& Actor : AlwaysVisibleActors) {
 		Actor->LateTick(ElapsedTime);
 	}
 }
@@ -42,16 +48,19 @@ void Scene::Init() const
 	for (auto& Actor : Tree.GetActors()) {
 		Actor->Init();
 	}
+	for (auto& Actor : AlwaysVisibleActors) {
+		Actor->Init();
+	}
 }
 
-void Scene::AddActor(ActorPtr Actor)
+void Scene::AddActor(ActorPtr Actor, bool AlwaysVisible)
 {
-	Tree.Add(std::move(Actor));
-}
-
-const Octree::ActorList& Scene::GetActors()
-{
-	return Tree.GetActors();
+	if (AlwaysVisible) {
+		AlwaysVisibleActors.push_back(std::move(Actor));
+	}
+	else {
+		Tree.Add(std::move(Actor));
+	}
 }
 
 void Scene::SetCurrentCamera(const Camera* NewCamera) noexcept
@@ -66,6 +75,16 @@ const Camera& Scene::GetCurrentCamera() const noexcept
 
 const Octree::ActorPtrList Scene::GetVisibleActors() noexcept
 {
-	VisionVolume = BoundingSphere{ 1000.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
-	return Tree.Find(VisionVolume);
+	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
+	auto Actors = Tree.Find(VisionVolume);
+	ConcatVisibleActors(Actors);
+	return Actors;
+}
+
+void Scene::ConcatVisibleActors(Octree::ActorPtrList& Actors)
+{
+	for (auto& VisibleActor : AlwaysVisibleActors)
+	{
+		Actors.push_back(VisibleActor.get());
+	}
 }

@@ -40,8 +40,7 @@ public:
 	/// </summary>
 	void Update();
 
-	void AddActor(ActorPtr Actor);
-	const Octree::ActorList& GetActors();
+	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
 	/// <summary>
 	/// Update the camera used to get visible actors.
@@ -61,4 +60,7 @@ private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;
 	Octree Tree;
+	Octree::ActorList AlwaysVisibleActors;
+
+	void ConcatVisibleActors(Octree::ActorPtrList& Actors);
 };

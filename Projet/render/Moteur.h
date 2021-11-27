@@ -255,12 +255,17 @@ protected:
 		Mesh2->Transform.PosRot.p.y = 0.f;
 		Mesh2->Transform.PosRot.p.z = -7.f;
 		Mesh2->Transform.PosRot.p.x = 1.f;
-		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
+		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		Mesh2->AddComponent<Plateform>(
+			PxTransform(Mesh2->Transform.PosRot.p, PxQuat(-PxHalfPi, PxVec3(0,1,0)))
+			, PxTransform(Mesh2->Transform.PosRot.p + PxVec3(10, 0, 0), PxQuat(PxHalfPi, PxVec3(0, 1, 0))), true);
 		CurrentScene->AddActor(std::move(Mesh2));
 
 
-		CreatePlatform(PxVec3(5, 5, 5), PxVec3(6, 0.25, 6));
-		CreatePlatform(PxVec3(0, -2.f, 0), PxVec3(200.f, 1.f, 200.f));
+		//CreatePlatform(PxVec3(5, 5, 5), PxVec3(6, 0.25, 6));
+		CreatePlatform(PxVec3(0, -2.f, 0), PxVec3(20.f, 1.f, 20.f), PxVec3( 0.5f, 0.5f, 0.0f ));
+		CreateMobilePlatform(PxVec3(10.f, 10.f, 0), PxVec3(1.f, 1.f, 1.f), PxVec3(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB", PxVec3(0.5f, 0.5f, 0.0f));
+		CreateMobilePlatform(PxVec3(10.f, 10.f, 20.f), PxVec3(1.f, 1.f, 1.f), PxVec3(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB", PxVec3(0.75f, 0.75f, 0.0f));
 		//MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5)), PxTransform(PxVec3(-3, 5, 5)), true);
 
 		auto MyPlayer = Pitbull::Actor::New();
@@ -291,17 +296,34 @@ protected:
 		return true;
 	}
 
-	void CreatePlatform(PxVec3 Pos, PxVec3 Scale)
+	void CreatePlatform(PxVec3 Pos, PxVec3 Scale, PxVec3 Material)
 	{
 		auto MyPlateform = Pitbull::Actor::New();
 		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\platform\\plateform.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlateform->AddComponent<BoxCollider>(
 			PhysicMaterial{ 0.5f, 0.5f, 0.0f },
-			PxVec3{ Scale/2.f }
+			PxVec3{ 7 * Scale.x, 0.20f * Scale.y, 7  * Scale.z }
 		);
 		MyPlateform->Transform.PosRot.p = Pos;
 		MyPlateform->Transform.Scale = Scale;
 		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		CurrentScene->AddActor(std::move(MyPlateform));
+	}
+
+	void CreateMobilePlatform(PxVec3 Pos, PxVec3 Scale, PxVec3 End, const wchar_t* Filename, PxVec3 Material)
+	{
+		auto MyPlateform = Pitbull::Actor::New();
+		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(Filename), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+		MyPlateform->AddComponent<BoxCollider>(
+			PhysicMaterial{ Material.x, Material.y, Material.z },
+			PxVec3{ 7 * Scale.x, 0.20f * Scale.y, 7 * Scale.z }
+		);
+		MyPlateform->Transform.PosRot.p = Pos;
+		MyPlateform->Transform.Scale = Scale;
+		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		MyPlateform->AddComponent<Plateform>(
+			PxTransform(MyPlateform->Transform.PosRot.p)
+			, PxTransform(MyPlateform->Transform.PosRot.p + End), true);
 		CurrentScene->AddActor(std::move(MyPlateform));
 	}
 

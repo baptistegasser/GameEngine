@@ -61,9 +61,6 @@ Landscape::Landscape(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* S
 	ComputeIndexes();
 	ComputeNormals();
 	GenerateMesh();
-
-	//AddComponent<RigidBody>();
-	//AddComponent<HeightFieldCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.5f }, this);
 }
 
 Landscape::~Landscape()

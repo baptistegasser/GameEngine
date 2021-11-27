@@ -124,7 +124,6 @@ namespace Pitbull
 			}
 		}
 
-		//throw std::logic_error{ std::string{"The actor has no component of type "} + typeid(Impl).name() };
 		return nullptr;
 	}
 

@@ -16,7 +16,7 @@ public :
 	/// Update the direction of the player
 	/// Update the type of camera
 	/// </summary>
-	void Tick(const float& DeltaTime) override;
+	void FixedTick(const float& DeltaTime) override;
 
 	/// <summary>
 	/// Type of camera, first or third person
@@ -26,20 +26,20 @@ public :
 		Third
 	};
 
-	CameraViewType ViewType;
-
-	DirectX::XMVECTOR Direction;
-	DirectX::XMVECTOR RelativeZ;
-
-	float Speed = 1.0f;
-	float JumpSpeed = 10.f;
-
 private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;
 
 	float AngleRotation = 0.0f;
 	float RotationSpeed = 0.05f;
+
+	CameraViewType ViewType;
+
+	DirectX::XMVECTOR Direction;
+	DirectX::XMVECTOR RelativeZ;
+
+	float Speed = 100.0f;
+	float JumpSpeed = 10.f;
 
 	/// <summary>
 	/// Swap the camera's type

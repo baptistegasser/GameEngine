@@ -18,7 +18,7 @@ void Player::Init()
 	MyCamera = ParentActor->GetComponent<Camera>();
 }
 
-void Player::Tick(const float& DeltaTime)
+void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
 
@@ -27,19 +27,19 @@ void Player::Tick(const float& DeltaTime)
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_A)) {
-		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
+		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_D)) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed, ForceMode::Impulse);
+		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_W)) {
-		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
+		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_S)) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed, ForceMode::Impulse);
+		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
  	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {

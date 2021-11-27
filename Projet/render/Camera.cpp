@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Camera.h"
-#include <render/Player.h>
+#include <gameplay/Player.h>
 #include <core/Actor.h>
-#include "../math/Math.h"
+#include "math/Math.h"
 //#include "MoteurWindows.h"
 
 

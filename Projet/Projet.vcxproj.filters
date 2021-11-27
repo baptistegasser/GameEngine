@@ -58,44 +58,20 @@
     <Filter Include="Header Files\render\components">
       <UniqueIdentifier>{22d6f103-db7b-4336-af41-9417c3be1736}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gameplay">
+      <UniqueIdentifier>{d8a7aeb9-8dc2-45cf-bb9a-0c9f0b5af0cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameplay">
+      <UniqueIdentifier>{e07b4006-a3e4-42ce-bd9a-44f4dd12d8d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render\pm3d">
+      <UniqueIdentifier>{476bfc18-a045-42c4-8bb2-a2fa957c8aac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\render\pm3d">
+      <UniqueIdentifier>{f5e4d62c-8492-4ef2-8b28-dca664b4dd9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pitbull.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="render\dispositif.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\DIManipulateur.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\DDSTextureLoader.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\ChargeurOBJ.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\AfficheurTexte.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\AfficheurSprite.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\dispositifD3D11.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\InfoDispositif.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Moteur.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\MoteurWindows.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\ObjetMesh.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -144,19 +120,7 @@
     <ClCompile Include="util\Util.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="render\Texture.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Shader.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
     <ClCompile Include="render\MeshRenderer.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Material.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\MeshLoader.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="util\ResourcesManager.cpp">
@@ -171,20 +135,8 @@
     <ClCompile Include="util\Horloge.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="Contact.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Octree.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
     <ClCompile Include="math\BoundingBox.cpp">
       <Filter>Source Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Point.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="math\Volume.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="math\BoundingSphere.cpp">
       <Filter>Source Files\math</Filter>
@@ -192,29 +144,89 @@
     <ClCompile Include="math\BoundingVolume.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="render\Vertex.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\ObjectMesh.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Landscape.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
     <ClCompile Include="physic\HeightFieldCollider.cpp">
-      <Filter>Source Files\physic\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Player.cpp">
-      <Filter>Source Files\render\components</Filter>
-    </ClCompile>
-    <ClCompile Include="render\LightConfig.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="physic\Plateform.cpp">
       <Filter>Source Files\physic\components</Filter>
     </ClCompile>
     <ClCompile Include="core\Transform.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Volume.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Point.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Octree.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="physic\Contact.cpp">
+      <Filter>Source Files\physic</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\Plateform.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\Player.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\AfficheurSprite.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\AfficheurTexte.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ChargeurOBJ.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DDSTextureLoader.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DIManipulateur.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\dispositif.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\dispositifD3D11.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MoteurWindows.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\InfoDispositif.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Moteur.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Landscape.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\MeshLoader.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Material.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Shader.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Texture.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Vertex.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ObjectMesh.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="Pitbull.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="render\LightConfig.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,58 +236,7 @@
     <ClInclude Include="core\Component.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="resources\resource.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pitbull.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="render\chargeur.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\ChargeurOBJ.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\d3dx11effect.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\d3dxGlobal.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\DDSTextureLoader.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\DIManipulateur.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\dispositif.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\dispositifD3D11.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\InfoDispositif.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Moteur.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\MoteurWindows.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\objet3d.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\ObjetMesh.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurSprite.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurTexte.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="physic\PhysicManager.h">
@@ -317,19 +278,7 @@
     <ClInclude Include="physic\PhysicMaterial.h">
       <Filter>Header Files\physic</Filter>
     </ClInclude>
-    <ClInclude Include="render\Material.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
     <ClInclude Include="render\MeshRenderer.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Texture.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Shader.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\MeshLoader.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="util\ResourcesManager.h">
@@ -344,55 +293,118 @@
     <ClInclude Include="util\Horloge.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="Contact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Octree.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="math\BoundingBox.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="math\BoundingVolume.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="math\Volume.h">
-      <Filter>Source Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="math\BoundingSphere.h">
       <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Vertex.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\ObjectMesh.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Landscape.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Player.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Light.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\LightConfig.h">
-      <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="physic\ForceMode.h">
-      <Filter>Header Files\physic\components</Filter>
     </ClInclude>
     <ClInclude Include="physic\HeightFieldCollider.h">
       <Filter>Header Files\physic\components</Filter>
     </ClInclude>
-    <ClInclude Include="physic\Plateform.h">
-      <Filter>Header Files\physic\components</Filter>
-    </ClInclude>
     <ClInclude Include="core\Transform.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Volume.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Octree.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Point.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\Contact.h">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="physic\ForceMode.h">
+      <Filter>Header Files\physic</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Player.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Plateform.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\AfficheurSprite.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\AfficheurTexte.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\chargeur.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ChargeurOBJ.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\d3dx11effect.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\d3dxGlobal.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DDSTextureLoader.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DIManipulateur.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\dispositif.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\dispositifD3D11.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\InfoDispositif.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Moteur.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MoteurWindows.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\objet3d.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\resource.h">
+      <Filter>Header Files\render\pm3d</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Vertex.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Texture.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Shader.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Landscape.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightConfig.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Material.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\MeshLoader.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ObjectMesh.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="Pitbull.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>

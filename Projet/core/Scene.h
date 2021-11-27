@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Octree.h"
+#include "math/Octree.h"
 #include "render/Camera.h"
 #include "render/LightConfig.h"
 

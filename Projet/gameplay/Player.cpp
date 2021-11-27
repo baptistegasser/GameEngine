@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 
-#include "MoteurWindows.h"
-#include "../math/Math.h"
+#include "render/MoteurWindows.h"
+#include "math/Math.h"
 
 Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
 	: Component{ Parent }

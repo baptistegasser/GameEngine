@@ -16,11 +16,11 @@
 #include "physic/SphereCollider.h"
 #include "physic/BoxCollider.h"
 #include "physic/CapsuleCollider.h"
-#include "physic/Plateform.h"
+#include "gameplay/Plateform.h"
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
-#include "render/Player.h"
+#include "gameplay/Player.h"
 #include "render/Landscape.h"
 // Gameplay components
 

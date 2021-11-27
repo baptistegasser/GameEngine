@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../core/Component.h"
-#include "RigidBody.h"
-#include "../Point.h"
+#include "core/Component.h"
+#include "physic/RigidBody.h"
+#include "math/Point.h"
 
 class Plateform : public Pitbull::Component {
 public :

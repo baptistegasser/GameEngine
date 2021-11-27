@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Plateform.h"
-#include "../core/Actor.h"
+#include "core/Actor.h"
 
 using namespace physx;
 

@@ -21,7 +21,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "gameplay/Player.h"
-#include "render/Landscape.h"
+#include "render/Terrain.h"
 // Gameplay components
 
 using namespace physx;
@@ -242,7 +242,12 @@ protected:
 	{
 		using namespace DirectX;
 
-		auto Terrain = std::unique_ptr<Landscape>(new Landscape{ L".\\modeles\\Heightmap.bmp", {1, 0.3f, 1}, ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx") });
+		auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
+			L".\\modeles\\Heightmap.bmp",
+			{1, 0.3f, 1},
+			ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+		});
 		Terrain->Texture1 = ResourcesManager.GetTexture(L".\\modeles\\gazon.dds");
 		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
 		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");

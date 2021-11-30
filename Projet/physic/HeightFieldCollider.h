@@ -1,21 +1,20 @@
 ﻿#pragma once
 #include "Collider.h"
 
-class Landscape;
+class ATerrain;
 
 class HeightFieldCollider : public Collider {
 public:
-	physx::PxGeometry* GetGeometryImpl() const override;
+	[[nodiscard]] physx::PxGeometry* GetGeometryImpl() const override;
 
 protected:
 	friend class Pitbull::Actor;
-	explicit HeightFieldCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const Landscape* Landscape);
+	explicit HeightFieldCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const ATerrain* Terrain);
 
-	physx::PxHeightFieldSample* Samples;
 	physx::PxHeightField* HeightField;
 
+	float RowScale;
 	float HeightScale;
 	float ColumnScale;
-	float RowScale;
 };
 

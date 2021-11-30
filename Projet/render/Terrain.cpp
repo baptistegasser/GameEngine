@@ -1,18 +1,19 @@
 ﻿#include "stdafx.h"
 
-#include "Landscape.h"
+#include "Terrain.h"
 #include "Vertex.h"
 #include "MoteurWindows.h"
 #include "math/Math.h"
 #include "physic/HeightFieldCollider.h"
 #include "resources/resource.h"
+#include "physic/RigidBody.h"
 
-Landscape::Landscape(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* Shader)
+using namespace DirectX;
+
+ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material)
 	: Scale{ Scale }
 	, MeshShader{ Shader }
 {
-	using namespace DirectX;
-
 	BITMAPFILEHEADER bitmapFileHeader;
 	BITMAPINFOHEADER bitmapInfoHeader;
 
@@ -27,8 +28,8 @@ Landscape::Landscape(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* S
 	PolyCount = (Height - 1) * (Width - 1) * 2;
 
 	int imageSize;
-	bool extrabit = VertexCount % 2 != 0;
-	if (!extrabit) imageSize = Height * (Width * 3);
+	const bool extraBit = VertexCount % 2 != 0;
+	if (!extraBit) imageSize = Height * (Width * 3);
 	else imageSize = Height * ((Width * 3) + 1);
 
 	const auto bitmapImage = new unsigned char [imageSize];
@@ -41,19 +42,19 @@ Landscape::Landscape(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* S
 		for (int x = 0; x < Width; x++) {
 			const int i = (Width * (Height - 1 - z)) + x;
 
-			Vertices[i].Position = XMFLOAT3 {
-					(x - Width / 2) * Scale.x,
+			Vertices[i].Position = XMFLOAT3{
+					x * Scale.x,
 					bitmapImage[k] * Scale.y,
-					(z - Height / 2)* Scale.z
+					z * Scale.z
 			};
 			Vertices[i].TexCoord = XMFLOAT2{
-					(x - Width / 2) * Scale.x / TextureCoefficient,
-					(z - Height / 2) * Scale.z / TextureCoefficient
+					x * Scale.x / TextureCoefficient,
+					z * Scale.z / TextureCoefficient
 			};
 
 			k += 3;
 		}
-		if (extrabit) k++;
+		if (extraBit) k++;
 	}
 
 	delete[] bitmapImage;
@@ -61,19 +62,20 @@ Landscape::Landscape(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* S
 	ComputeIndexes();
 	ComputeNormals();
 	GenerateMesh();
+
+	AddComponent<HeightFieldCollider>(Material, this);
+	AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 }
 
-Landscape::~Landscape()
+ATerrain::~ATerrain()
 {
 	Actor::~Actor();
 	DX_RELEASE(PIndexBuffer);
 	DX_RELEASE(PVertexBuffer);
 }
 
-void Landscape::LateTick(const float ElapsedTime)
+void ATerrain::LateTick(const float ElapsedTime)
 {
-	using namespace DirectX;
-
 	Actor::LateTick(ElapsedTime);
 
 	matWorld = Math::TransformToMatrix(Transform);
@@ -122,10 +124,8 @@ void Landscape::LateTick(const float ElapsedTime)
 	pImmediateContext->DrawIndexed(static_cast<UINT>(PolyCount * 3), 0, 0);
 }
 
-void Landscape::ComputeNormal(int x, int z)
+void ATerrain::ComputeNormal(int x, int z)
 {
-	using namespace DirectX;
-
 	XMVECTOR n1, n2, n3, n4;
 	XMVECTOR v1, v2, v3, v4;
 
@@ -145,20 +145,20 @@ void Landscape::ComputeNormal(int x, int z)
 
 	n1 = n1 + n2 + n3 + n4;
 	n1 = -XMVector3Normalize(n1);
-	XMFLOAT3 result;
+	XMFLOAT3 result{};
 	XMStoreFloat3(&result, n1);
 
 	GetVertex(x, z).Normal = result;
 }
 
-void Landscape::ComputeNormals()
+void ATerrain::ComputeNormals()
 {
-	for (int z = 0; z < Width; z++)
-		for (int x = 0; x < Height; x++)
+	for (int z = 0; z < Height; z++)
+		for (int x = 0; x < Width; x++)
 			ComputeNormal(x, z);
 }
 
-void Landscape::GenerateMesh()
+void ATerrain::GenerateMesh()
 {
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
@@ -199,15 +199,14 @@ void Landscape::GenerateMesh()
 	}
 }
 
-void Landscape::ComputeIndexes()
+void ATerrain::ComputeIndexes()
 {
 	Indexes = std::vector<index_t>(PolyCount * 3);
 
 	int i{ 0 };
 
-	for (int z = 0; z < Width - 1; ++z)
-	{
-		for (int x = 0; x < Height - 1; ++x)
+	for (int z = 0; z < Height - 1; ++z)
+		for (int x = 0; x < Width - 1; ++x)
 		{
 			Indexes[i++] = z * Width + x;
 			Indexes[i++] = z * Width + (x + 1);
@@ -217,15 +216,19 @@ void Landscape::ComputeIndexes()
 			Indexes[i++] = (z + 1) * Width + (x + 1);
 			Indexes[i++] = (z + 1) * Width + x;
 		}
-	}
 }
 
-Landscape::vertex_t& Landscape::GetVertex(int x, int z)
+const ATerrain::vertex_t& ATerrain::GetVertex(int x, int z) const
 {
 	return Vertices[Width * (Height - 1 - z) + x];
 }
 
-DirectX::XMVECTOR Landscape::GetVertexPositionVector(int x, int z)
+ATerrain::vertex_t& ATerrain::GetVertex(int x, int z)
 {
-	return XMLoadFloat3(&const_cast<DirectX::XMFLOAT3&>(GetVertex(x, z).Position));
+	return Vertices[Width * (Height - 1 - z) + x];
+}
+
+DirectX::XMVECTOR ATerrain::GetVertexPositionVector(int x, int z)
+{
+	return XMLoadFloat3(&GetVertex(x, z).Position);
 }

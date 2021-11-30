@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "HeightFieldCollider.h"
-#include "render/Landscape.h"
+#include "render/Terrain.h"
 #include "PhysicManager.h"
 
 using namespace physx;
@@ -12,27 +12,34 @@ PxGeometry* HeightFieldCollider::GetGeometryImpl() const
 	);
 }
 
-HeightFieldCollider::HeightFieldCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const Landscape* Landscape)
+HeightFieldCollider::HeightFieldCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const ATerrain* Terrain)
 	: Collider{ Parent, Material }
-	, HeightScale(Landscape->Scale.z)
-	, ColumnScale(Landscape->Scale.x)
-	, RowScale(Landscape->Scale.y)
+	, RowScale(Terrain->Scale.x)
+	, HeightScale(1)
+	, ColumnScale(Terrain->Scale.z)
 {
-	Samples = new PxHeightFieldSample[Landscape->Vertices.size()];
-
 	unsigned int i{ 0 };
-	for (const auto& Vertex : Landscape->Vertices)
-	{
-		Samples[i++] = PxHeightFieldSample{ static_cast<short>(Vertex.Position.z) }; //TODO materials
-	}
+
+	const auto Samples = new PxHeightFieldSample[Terrain->VertexCount];
+	for (int x = 0; x < Terrain->Width; x++) // No idea why I have to flip
+		for (int z = 0; z < Terrain->Height; z++)
+		{
+			Samples[i++] = PxHeightFieldSample{
+			static_cast<short>(Terrain->GetVertex(x, z).Position.y),
+			0,
+			0
+			};
+		}
 
 	PxHeightFieldDesc HeightFieldDesc;
 	HeightFieldDesc.format = PxHeightFieldFormat::eS16_TM;
-	HeightFieldDesc.nbColumns = Landscape->Height;
-	HeightFieldDesc.nbRows = Landscape->Width;
+	HeightFieldDesc.nbColumns = Terrain->Height;
+	HeightFieldDesc.nbRows = Terrain->Width;
 	HeightFieldDesc.samples.data = Samples;
 	HeightFieldDesc.samples.stride = sizeof(PxHeightFieldSample);
 
 	auto& PhysicManager = PhysicManager::GetInstance();
 	HeightField = PhysicManager.Cooking->createHeightField(HeightFieldDesc, PhysicManager.Physics->getPhysicsInsertionCallback());
+
+	delete[] Samples;
 }

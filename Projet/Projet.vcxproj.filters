@@ -198,7 +198,7 @@
     <ClCompile Include="render\Moteur.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
-    <ClCompile Include="render\Landscape.cpp">
+    <ClCompile Include="render\Terrain.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\MeshLoader.cpp">
@@ -380,7 +380,7 @@
     <ClInclude Include="render\Shader.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Landscape.h">
+    <ClInclude Include="render\Terrain.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\Light.h">

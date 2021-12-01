@@ -24,6 +24,9 @@
 #include "render/Terrain.h"
 // Gameplay components
 
+// Sprite
+#include "render/AfficheurSprite.h"
+
 using namespace physx;
 
 #include <iostream>
@@ -185,6 +188,10 @@ protected:
 			Actor->LateTick(ElapsedTime);
 		}
 
+		for (const auto& Actor : Actors) {
+			Actor->SpriteTick(ElapsedTime);
+		}
+
 		EndRenderSceneSpecific();
 		return true;
 	}
@@ -297,6 +304,20 @@ protected:
 		Light.Specular = { 0.5f, 0.5f, 0.5f };
 		Light.Roughness = { 0.5f, 0.5f, 0.5f };
 		CurrentScene->LightConfig.AddPointLight(Light);
+
+
+		std::unique_ptr<CAfficheurSprite> pAfficheurSprite =
+			std::make_unique<CAfficheurSprite>(pDispositif);
+		
+
+		pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 200, 400);
+		pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 500, 500, 100, 100);
+		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 800, 200, 100, 100);
+		pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 800, 200, 0 }, 100, 100);
+		//pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 200, 0, 0 }, 1000, 1000);
+		//pAfficheurSprite->AjouterPanneau(L".\\modeles\\grass_v1_basic_tex.dds", XMFLOAT3(1.0f, 0.0f, 1.0f));
+		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 800, 200, 100, 100);
+		CurrentScene->AddActor(std::move(pAfficheurSprite));
 
 		return true;
 	}

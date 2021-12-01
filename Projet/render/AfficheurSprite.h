@@ -1,17 +1,22 @@
 #pragma once
+#include "stdafx.h"
 #include "d3dx11effect.h"
-#include "Objet3D.h"
+#include "core/Actor.h"
+
+#include "util/ResourcesManager.h"
+
+using namespace DirectX;
 
 namespace PM3D
 {
 
 class CDispositifD3D11;
 
-class CSommetSprite
+class SpriteVertex
 {
 public:
-	CSommetSprite() = default;
-	CSommetSprite(const XMFLOAT3& position, const XMFLOAT2& coordTex)
+	SpriteVertex() = default;
+	SpriteVertex(const XMFLOAT3& position, const XMFLOAT2& coordTex)
 		: m_Position(position)
 		, m_CoordTex(coordTex)
 	{
@@ -25,29 +30,36 @@ public:
 	XMFLOAT2 m_CoordTex;
 };
 
-class CAfficheurSprite : public CObjet3D
+class CAfficheurSprite : public Pitbull::Actor
 {
 public:
 	CAfficheurSprite(CDispositifD3D11* _pDispositif);
 	virtual ~CAfficheurSprite();
-	virtual void Draw() override;
+	void SpriteTick(const float ElapsedTime) override;
 
-	void AjouterSprite(const std::string& NomTexture, int _x, int _y, int _dx = 0, int _dy = 0);
-	void AjouterPanneau(const std::string& NomTexture, const XMFLOAT3& _position,
+	void AjouterSprite(const wchar_t* FileName, int _x, int _y, int _dx = 0, int _dy = 0);
+	void AjouterPanneau(const wchar_t* FileName, const XMFLOAT3& _position,
 		float _dx = 0.0f, float _dy = 0.0f);
-	void AjouterSpriteTexte(ID3D11ShaderResourceView* pTexture, int _x, int _y);
+	//void AjouterSpriteTexte(ID3D11ShaderResourceView* pTexture, int _x, int _y);
 
 private:
+
+	// TO DO enlveer cette merde
+	ResourcesManager ResourcesManager;
+
+
 	class CSprite
 	{
 	public:
-		ID3D11ShaderResourceView * pTextureD3D;
+		//ID3D11ShaderResourceView * pTextureD3D;
+		Texture* Texture;
 
 		XMMATRIX matPosDim;
 		bool bPanneau;
 		CSprite()
 			: bPanneau(false)
-			, pTextureD3D(nullptr)
+			//, pTextureD3D(nullptr)
+			, Texture{nullptr}
 		{
 		}
 	};
@@ -64,7 +76,7 @@ private:
 		}
 	};
 
-	static CSommetSprite sommets[6];
+	static SpriteVertex sommets[6];
 	ID3D11Buffer* pVertexBuffer;
 	CDispositifD3D11* pDispositif;
 

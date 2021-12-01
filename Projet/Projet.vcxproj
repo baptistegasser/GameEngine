@@ -201,6 +201,8 @@
     <ClCompile Include="render\dispositifD3D11.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
     <ClCompile Include="render\LightConfig.cpp" />
+    <ClCompile Include="render\Sprite.cpp" />
+    <ClCompile Include="render\SpriteRenderer.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
     <ClCompile Include="render\Material.cpp" />
     <ClCompile Include="render\MeshLoader.cpp" />
@@ -263,6 +265,8 @@
     <ClInclude Include="render\InfoDispositif.h" />
     <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\LightConfig.h" />
+    <ClInclude Include="render\Sprite.h" />
+    <ClInclude Include="render\SpriteRenderer.h" />
     <ClInclude Include="render\Terrain.h" />
     <ClInclude Include="render\Material.h" />
     <ClInclude Include="render\MeshLoader.h" />

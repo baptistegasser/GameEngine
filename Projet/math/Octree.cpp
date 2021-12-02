@@ -71,7 +71,7 @@ void Node::Subdivide()
 
     // Create childrens
     for (int i = 0, j = 0; i < 8; ++i) {
-        Point ChildCenter = Boundary.Center;
+        Math::Vec3f ChildCenter = Boundary.Center;
         ChildCenter.x += HW * Scales[j++];
         ChildCenter.y += HH * Scales[j++];
         ChildCenter.z += HD * Scales[j++];
@@ -108,7 +108,7 @@ Octree::Octree(const BoundingBox& Boundary)
 bool Octree::Add(ActorType Actor)
 {
     // Prepare leaf
-    Leaf Leaf{ Actors.size(), Actor->Transform.PosRot };
+    Leaf Leaf{ Actors.size(), Actor->Transform.Position };
 
     // Ignore out of bound for this tree
     if (!VolumeContains(Root.Boundary, Leaf.Position))
@@ -137,7 +137,7 @@ bool Octree::Remove(const ActorPtr Actor)
         return true;
 
     // Create matching leaf
-    const Leaf Leaf{static_cast<Leaf::ID>(it - Actors.begin()), Actor->Transform.PosRot };
+    const Leaf Leaf{static_cast<Leaf::ID>(it - Actors.begin()), Actor->Transform.Position };
 
     // Remove from actors
     Actors.erase(it);
@@ -175,9 +175,9 @@ void Octree::Update()
         for (; It != Node->Leafs.end();) {
             Leaf CurLeaf = *It;
             // The leaf is now invalid
-        	if (CurLeaf.Position != Actors[CurLeaf.ActorID]->Transform.PosRot) {
+        	if (CurLeaf.Position != Actors[CurLeaf.ActorID]->Transform.Position) {
                 // Update position, store to add back and remove from current node
-                CurLeaf.Position = Actors[CurLeaf.ActorID]->Transform.PosRot;
+                CurLeaf.Position = Actors[CurLeaf.ActorID]->Transform.Position;
                 LeafToUpdate.push_back(CurLeaf);
                 It = Node->Leafs.erase(It);
             }
@@ -197,7 +197,7 @@ const Octree::ActorList& Octree::GetActors() const noexcept
     return Actors;
 }
 
-Octree::ActorPtrList Octree::Find(const Point& Pos, float MaxDistance) const
+Octree::ActorPtrList Octree::Find(const Math::Vec3f& Pos, float MaxDistance) const
 {
 	return Find(BoundingSphere{ MaxDistance, Pos });
 }

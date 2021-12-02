@@ -4,6 +4,9 @@
 #include "PxPhysicsAPI.h"
 #include "ForceMode.h"
 
+#include "math/Vec3f.h"
+#include "math/Transform.h"
+
 class RigidBody : public Pitbull::Component {
 public:
 	/// <summary>
@@ -15,27 +18,29 @@ public:
 		Kinematic
 	};
 
+	void Init() override;
 	~RigidBody() override = default;
 
-	/// <summary>
-	/// Specific function used to update the component before the fixed update.
-	/// </summary>
-	void PreFixedTick() const;
-	void FixedTick(const float& DeltaTime) override;
+	void PrePhysicSimulation() noexcept;
+	void PostPhysicSimulation() noexcept;
+
+	const bool IsStatic() const noexcept;
+	const bool IsDynamic() const noexcept;
+	const bool IsKinematic() const noexcept;
 
 	/// <summary>
 	/// Adds a force to the Rigidbody.
 	/// </summary>
-	void AddForce(const physx::PxVec3& Force, const ForceMode& ForceMode = ForceMode::Force) const;
+	void AddForce(const Math::Vec3f& Force, const ForceMode& ForceMode = ForceMode::Force) const;
 	/// <summary>
 	/// Adds a torque to the Rigidbody.
 	/// </summary>
-	void AddTorque(const physx::PxVec3& Torque, const ForceMode& ForceMode) const;
+	void AddTorque(const Math::Vec3f& Torque, const ForceMode& ForceMode = ForceMode::Force) const;
 	/// <summary>
 	/// Set the Rigidbody's velocity.
 	///	Not recommended, please use \ref AddForce.
 	/// </summary>
-	void SetVelocity(const physx::PxVec3& Velocity) const;
+	void SetVelocity(const Math::Vec3f& Velocity) const;
 	/// <summary>
 	/// Set the Rigidbody's mass, assuming constant density.
 	/// </summary>
@@ -47,7 +52,7 @@ public:
 	/// <summary>
 	/// Set the target so the actor follow a path to it.
 	/// </summary>
-	void setKinematicTarget(const physx::PxTransform& Target) const;
+	void setKinematicTarget(const Math::Transform& Target) const;
 
 protected:
 	friend class Pitbull::Actor;
@@ -63,4 +68,15 @@ private:
 	///	\warning This will fail if used on a static actor.
 	/// </summary>
 	[[nodiscard]] physx::PxRigidDynamic* GetAsDynamic() const noexcept;
+
+	/// <summary>
+	/// Update the shapes associated to the physx actor.
+	/// </summary>
+	void UpdateActorShapes() noexcept;
+
+	/// <summary>
+	/// Store the previous scale to detect scale changes.
+	/// This is needed as changing/recreating shapes is costly.
+	/// </summary>
+	Math::Vec3f PreviousScale;
 };

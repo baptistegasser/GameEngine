@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Actor.h"
 
+#include "physic/RigidBody.h"
+
 namespace Pitbull
 {
 	Actor::Actor()
@@ -17,6 +19,12 @@ namespace Pitbull
 
 	void Actor::Init()
 	{
+		// Enforce presence of a rigidbody, if none found default to a static body
+		const auto RB = GetComponent<RigidBody>();
+		if (!RB) {
+			AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
+		}
+
 		for (const auto& Comp : Components) {
 			Comp->Init();
 		}

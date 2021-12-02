@@ -6,6 +6,7 @@
 
 class ContactHandler : public physx::PxSimulationEventCallback, public physx::PxContactModifyCallback {
 public:
+    void ClearRegistredCollider(const physx::PxShape* Shape) noexcept;
     // Register the Collider component associated with a physx shape
     void RegisterCollider(const physx::PxShape* Shape, const Collider* Collider) noexcept;
 
@@ -18,7 +19,7 @@ public:
     void onContactModify(physx::PxContactModifyPair* const pairs, physx::PxU32 count) override;
 
 private:
-    std::unordered_map<const physx::PxShape*, const Collider*> RegisteredColliders;
+    std::unordered_map<const physx::PxShape*, std::vector<const Collider*>> RegisteredColliders;
 
     void NotifyPairCollider(physx::PxContactModifyPair& ContactPair) noexcept;
 };

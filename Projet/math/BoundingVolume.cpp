@@ -43,23 +43,19 @@ bool Intersect::operator()(const BoundingSphere& V0, const BoundingBox& V1) cons
 
 bool Contains::operator()(const BoundingBox& Rect) const
 {
-    return -Rect.HalfWidth  <= Point.x && Point.x <= Rect.HalfWidth
-        && -Rect.HalfHeight <= Point.y && Point.y <= Rect.HalfHeight
-        && -Rect.HalfDepth  <= Point.z && Point.z <= Rect.HalfDepth;
+    return -Rect.HalfWidth  <= Pos.x && Pos.x <= Rect.HalfWidth
+        && -Rect.HalfHeight <= Pos.y && Pos.y <= Rect.HalfHeight
+        && -Rect.HalfDepth  <= Pos.z && Pos.z <= Rect.HalfDepth;
 }
 
 bool Contains::operator()(const BoundingSphere& Sphere) const
 {
-    return sqrtf(
-        powf(Point.x - Sphere.Center.x, 2.f) +
-        powf(Point.y - Sphere.Center.y, 2.f) +
-        powf(Point.z - Sphere.Center.z, 2.f)
-    ) <= Sphere.Radius;
+    return Pos.Distance(Sphere.Center) <= Sphere.Radius;
 }
 
-bool VolumeContains(const BoundingVolume& Volume, const Point& Point)
+bool VolumeContains(const BoundingVolume& Volume, const Math::Vec3f& Pos)
 {
-    return std::visit(Contains{Point}, Volume);
+    return std::visit(Contains{Pos}, Volume);
 }
 
 bool VolumesIntersect(const BoundingVolume& V0, const BoundingVolume& V1)

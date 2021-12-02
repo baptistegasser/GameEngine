@@ -3,6 +3,9 @@
 
 #include "render/MoteurWindows.h"
 #include "math/Math.h"
+#include "math/Vec3f.h"
+
+using namespace Math;
 
 Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
 	: Component{ Parent }
@@ -43,7 +46,7 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
  	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
-		MyRigidBody->AddForce(PxVec3(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_M)) {
@@ -54,6 +57,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
+		using namespace physx;
+
 		AngleRotation -= RotationSpeed;
 		PxQuat qx = PxQuat(-RotationSpeed, PxVec3(0, 1, 0));
 		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
@@ -61,6 +66,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_RIGHT)) {
+		using namespace physx;
+
 		AngleRotation += RotationSpeed;
 		PxQuat qx = PxQuat(RotationSpeed, PxVec3(0, 1, 0));
 		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
@@ -68,10 +75,10 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
 	if (ViewType == CameraViewType::Third) {
-		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.PosRot.p) - Direction * 1.5 + XMVectorSet(0, 0.75f, 0, 0));
+		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.Position) - Direction * 1.5 + XMVectorSet(0, 0.75f, 0, 0));
 	}
 	else {
-		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.PosRot.p) + Direction + XMVectorSet(0, 0.75f, 0, 0));
+		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.Position) + Direction + XMVectorSet(0, 0.75f, 0, 0));
 	}
 	MyCamera->SetDirection(Direction);
 }

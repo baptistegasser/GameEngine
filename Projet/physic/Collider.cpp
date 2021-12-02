@@ -1,21 +1,23 @@
 #include "stdafx.h"
 #include "Collider.h"
 
-Collider::Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material)
-	: Component{ Parent }
-	, Geometry{ nullptr }
+#include "util/Util.h"
+
+const Math::Vec3f Collider::DefaultOffset{ 0.f };
+const PhysicMaterial Collider::DefaultMaterial{ 0.6f, 0.6f, 0.f };
+
+Collider::Collider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const Math::Vec3f& Offset)
+	: Component{Parent}
+	, Offset{ Offset }
 	, Material{ Material }
 {}
 
-physx::PxGeometry* Collider::GetPxGeometry()
+physx::PxGeometry* Collider::GetPxGeometry(const Math::Vec3f& Scale) noexcept
 {
-	if (!Geometry) {
-		Geometry = std::unique_ptr<physx::PxGeometry>(GetGeometryImpl());
-	}
-	return Geometry.get();
+	return GetGeometryImpl(Scale);
 }
 
-physx::PxMaterial* Collider::GetPxMaterial()
+physx::PxMaterial* Collider::GetPxMaterial() noexcept
 {
 	return Material.GetPxMaterial();
 }

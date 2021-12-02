@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Point.h"
+#include "math/Vec3f.h"
 
 /// <summary>
 /// Structure representing a 3D Box.
@@ -9,7 +9,7 @@ struct BoundingSphere
 {
 	float Radius;
 	// The center of this box
-	Point Center;
+	Math::Vec3f Center;
 
-	BoundingSphere(float Radius, Point Center = Point{ 0.f });
+	BoundingSphere(float Radius, Math::Vec3f Center = { 0.f });
 };

@@ -169,7 +169,6 @@
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
-    <ClCompile Include="core\Transform.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
     <ClCompile Include="math\BoundingBox.cpp" />
@@ -177,7 +176,9 @@
     <ClCompile Include="math\BoundingVolume.cpp" />
     <ClCompile Include="math\Math.cpp" />
     <ClCompile Include="math\Octree.cpp" />
-    <ClCompile Include="math\Point.cpp" />
+    <ClCompile Include="math\Quaternion.cpp" />
+    <ClCompile Include="math\Transform.cpp" />
+    <ClCompile Include="math\Vec3f.cpp" />
     <ClCompile Include="math\Volume.cpp" />
     <ClCompile Include="physic\BoxCollider.cpp" />
     <ClCompile Include="physic\CapsuleCollider.cpp" />
@@ -226,7 +227,6 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
-    <ClInclude Include="core\Transform.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />
     <ClInclude Include="math\BoundingBox.h" />
@@ -234,7 +234,9 @@
     <ClInclude Include="math\BoundingVolume.h" />
     <ClInclude Include="math\Math.h" />
     <ClInclude Include="math\Octree.h" />
-    <ClInclude Include="math\Point.h" />
+    <ClInclude Include="math\Quaternion.h" />
+    <ClInclude Include="math\Transform.h" />
+    <ClInclude Include="math\Vec3f.h" />
     <ClInclude Include="math\Volume.h" />
     <ClInclude Include="physic\BoxCollider.h" />
     <ClInclude Include="physic\CapsuleCollider.h" />
@@ -279,6 +281,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util\Horloge.h" />
     <ClInclude Include="util\NonCopyable.h" />
+    <ClInclude Include="util\Observable.h" />
     <ClInclude Include="util\ResourcesManager.h" />
     <ClInclude Include="util\Singleton.h" />
     <ClInclude Include="util\Util.h" />

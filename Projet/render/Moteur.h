@@ -213,17 +213,13 @@ protected:
 	{
 		using namespace DirectX;
 
-		// Create actors
-		if (!InitObjets()) {
-			return 1;
-		}
-
 		//// Initialisation des matrices View et Proj
 		//// Dans notre cas, ces matrices sont fixes
-		m_MatView = XMMatrixLookAtLH(
-			XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f),
-			XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
+		m_MatView = XMMatrixLookAtLH(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f), XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f) + XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
+
+		//XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
+		//	XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
+		//	XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f)
 
 		const float champDeVision = XM_PI / 2; 	// 45 degr�s
 		const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
@@ -238,6 +234,11 @@ protected:
 
 		// Calcul de VP a l'avance
 		m_MatViewProj = m_MatView * m_MatProj;
+
+		// Create actors
+		if (!InitObjets()) {
+			return 1;
+		}
 
 		// Finally init the scene
 		CurrentScene->Init();
@@ -284,7 +285,7 @@ protected:
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
 		auto PlayerCam = MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
-			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
+			XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
 			&m_MatView,
 			&m_MatProj,
@@ -310,10 +311,10 @@ protected:
 			std::make_unique<CAfficheurSprite>(pDispositif);
 		
 
-		pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 200, 400);
-		pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 500, 500, 100, 100);
+		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 200, 400);
+		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 500, 500, 100, 100);
 		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 800, 200, 100, 100);
-		pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 800, 200, 0 }, 100, 100);
+		pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 0.80f, 0.4f, 0 }, 0, 0);
 		//pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 200, 0, 0 }, 1000, 1000);
 		//pAfficheurSprite->AjouterPanneau(L".\\modeles\\grass_v1_basic_tex.dds", XMFLOAT3(1.0f, 0.0f, 1.0f));
 		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 800, 200, 100, 100);

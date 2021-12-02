@@ -5,6 +5,7 @@
 #include "render/Shader.h"
 #include "render/Texture.h"
 #include "render/ObjectMesh.h"
+#include "render/Sprite.h"
 
 ResourcesManager::~ResourcesManager()
 {
@@ -30,6 +31,19 @@ Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)
 
 	return PShader;
 }
+
+//ShaderSprite* ResourcesManager::GetShaderBillBoard(const wchar_t* ShaderName)
+//{
+//	const std::string Name = wchar2str(ShaderName);
+//	auto PShader = ShadersSprite[Name].get();
+//
+//	if (!PShader) {
+//		PShader = new ShaderSprite{ ShaderName };
+//		ShadersSprite[Name].reset(PShader);
+//	}
+//
+//	return PShader;
+//}
 
 Texture* ResourcesManager::GetTexture(const std::wstring& TextureName)
 {

@@ -84,6 +84,8 @@ Shader::Shader(const wchar_t* FileName)
 	PointLightsBVDesc.Buffer.ElementOffset = 0;
 	PointLightsBVDesc.Buffer.ElementWidth = MAX_LIGHT;
 	PD3DDevice->CreateShaderResourceView(PPointLightsBuffer, &PointLightsBVDesc, &PPointLightsBufferView);
+
+	// Create buffer for billboard
 }
 
 Shader::~Shader()

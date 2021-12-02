@@ -148,7 +148,7 @@ void CAfficheurSprite::InitEffet()
 
 void CAfficheurSprite::SpriteTick(const float ElapsedTime)
 {
-
+	pDispositif->DisableBackFaceCulling();
 	//Actor::SpriteTick(ElapsedTime);
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext =
@@ -185,7 +185,15 @@ void CAfficheurSprite::SpriteTick(const float ElapsedTime)
 	{
 		// Initialiser et sélectionner les «constantes» de l'effet
 		ShadersParams sp;
-		sp.matWVP = XMMatrixTranspose(sprite->matPosDim);
+
+		XMMATRIX blop = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
+		XMMATRIX yo = XMMatrixScaling(10.f,
+			1.0f, 10.f) * XMMatrixTranslationFromVector(XMVECTOR{ -5.0f, 0.0f, 0.0f }) * blop;
+		//yo.r->vector4_f32[11] = 1.5f;
+		sp.matWVP = XMMatrixTranspose( yo/*sprite->matPosDim **/
+			/*XMMatrixTranslationFromVector(XMVECTOR{ 0.0f, 0.0f, -5.0f })*/ /** blop*/);
+		
+		
 		pImmediateContext->UpdateSubresource(pConstantBuffer, 0, nullptr,
 			&sp, 0, 0);
 
@@ -201,6 +209,8 @@ void CAfficheurSprite::SpriteTick(const float ElapsedTime)
 	}
 
 	pDispositif->DesactiverMelangeAlpha();
+
+	pDispositif->EnableBackFaceCulling();
 }
 
 void CAfficheurSprite::AjouterSprite(const wchar_t* FileName, int _x, int _y, int _dx, int _dy)
@@ -261,7 +271,7 @@ void CAfficheurSprite::AjouterPanneau(const wchar_t* FileName, const XMFLOAT3& _
 	//float posX, posY;
 	//float facteurX, facteurY;
 
-	
+
 	std::unique_ptr<CPanneau> pPanneau = std::make_unique<CPanneau>();;
 
 	pPanneau->Texture =
@@ -297,47 +307,18 @@ void CAfficheurSprite::AjouterPanneau(const wchar_t* FileName, const XMFLOAT3& _
 	const XMMATRIX& viewProj = CMoteurWindows::GetInstance().GetMatViewProj();
 	pPanneau->position = _position;
 
-	pPanneau->matPosDim = XMMatrixScaling(1.0f,
-		1.0f, 1.0f) *
-		XMMatrixTranslation(pPanneau->position.x * 2.0f / pDispositif->GetLargeur() - 1.0f,
-			1.0f - pPanneau->position.y * 2.0f / pDispositif->GetHauteur(), 0.0f);
-		//*viewProj;
+	/*pPanneau->matPosDim = XMMatrixScaling(pPanneau->dimension.x,
+		pPanneau->dimension.y, 1.0f) *
+		XMMatrixTranslation(1.0f, 2.0f, -10.0f)
+		* viewProj;*/
 
+	pPanneau->matPosDim = XMMatrixScaling(1000,
+		1000, 1.0f); //XMMatrixTranslationFromVector(XMVECTOR{1.f, 0.0f, -7.0f}) * viewProj;
 
-	/*posX = x * 2.0f / pDispositif->GetLargeur() - 1.0f;
-	posY = 1.0f - y * 2.0f / pDispositif->GetHauteur();
-
-	pPanneau->matPosDim = XMMatrixScaling(facteurX, facteurY, 1.0f) *
-		XMMatrixTranslation(posX, posY, 0.0f);*/
 
 	// On l'ajoute à notre vecteur
 	tabSprites.push_back(std::move(pPanneau));
 
-
-	//	// Dimension en facteur
-	//	pPanneau->dimension.x = pPanneau->dimension.x * 2.0f / pDispositif->GetLargeur();
-	//	pPanneau->dimension.y = pPanneau->dimension.y * 2.0f / pDispositif->GetHauteur();
-	//}
-
-	////// Position en coordonnées du monde
-	////const XMMATRIX& viewProj = CMoteurWindows::GetInstance().GetMatViewProj();
-	////pPanneau->position = _position;
-
-	////pPanneau->matPosDim = XMMatrixScaling(pPanneau->dimension.x,
-	////	pPanneau->dimension.y, 1.0f) *
-	////	XMMatrixTranslation(pPanneau->position.x,
-	////		pPanneau->position.y, pPanneau->position.z) *
-	////	viewProj;
-	//float facteurX = pPanneau->dimension.x * 2.0f / pDispositif->GetLargeur();
-	//float facteurY = pPanneau->dimension.y * 2.0f / pDispositif->GetHauteur();
-	//float posX = pPanneau->position.x * 2.0f / pDispositif->GetLargeur() - 1.0f;
-	//float posY = 1.0f - pPanneau->position.y * 2.0f / pDispositif->GetHauteur();
-
-	//pPanneau->matPosDim = XMMatrixScaling(facteurX, facteurY, 1.0f) *
-	//	XMMatrixTranslation(posX, posY, 0.0f);
-
-	//// On l'ajoute à notre vecteur
-	//tabSprites.push_back(std::move(pPanneau));
 }
 
 //void CAfficheurSprite::AjouterSpriteTexte(

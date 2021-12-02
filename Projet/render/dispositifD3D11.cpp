@@ -33,6 +33,16 @@ namespace PM3D
 	uint32_t CDispositifD3D11::GetLargeur() const { return largeurEcran; }
 	uint32_t CDispositifD3D11::GetHauteur() const { return hauteurEcran; }
 
+	void CDispositifD3D11::EnableBackFaceCulling()
+	{
+		pImmediateContext->RSSetState(mSolidCullBackRS);
+	}
+
+	void CDispositifD3D11::DisableBackFaceCulling()
+	{
+		pImmediateContext->RSSetState(mSolidNoCullbackRS);
+	}
+
 	//  FONCTION : CDispositifD3D11, constructeur paramètré 
 	//  BUT :	Constructeur de notre classe spécifique de dispositif 
 	//  PARAMÈTRES:		
@@ -165,6 +175,10 @@ namespace PM3D
 		rsDesc.CullMode = D3D11_CULL_BACK;
 		rsDesc.FrontCounterClockwise = false;
 		pD3DDevice->CreateRasterizerState(&rsDesc, &mSolidCullBackRS);
+
+		// Without backface culling
+		rsDesc.CullMode = D3D11_CULL_NONE;
+		pD3DDevice->CreateRasterizerState(&rsDesc, &mSolidNoCullbackRS);
 
 		pImmediateContext->RSSetState(mSolidCullBackRS);
 	}

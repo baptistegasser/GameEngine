@@ -32,6 +32,16 @@ namespace PM3D
 		uint32_t GetLargeur() const;
 		uint32_t GetHauteur() const;
 
+		/// <summary>
+		/// Enable Back Face Culling
+		/// </summary>
+		void EnableBackFaceCulling();
+
+		/// <summary>
+		/// Disable Back Face Culling
+		/// </summary>
+		void DisableBackFaceCulling();
+
 	private:
 		ID3D11Device* pD3DDevice;
 		ID3D11DeviceContext* pImmediateContext;
@@ -55,6 +65,7 @@ namespace PM3D
 
 		// Variables d’état
 		ID3D11RasterizerState* mSolidCullBackRS;
+		ID3D11RasterizerState* mSolidNoCullbackRS;
 	};
 
 } // namespace PM3D

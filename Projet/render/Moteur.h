@@ -2,10 +2,10 @@
 #include "dispositif.h"
 
 #include "AfficheurTexte.h"
-#include "DIManipulateur.h"
 
 #include "core/Actor.h"
 #include "core/Scene.h"
+#include "core/InputManager.h"
 #include "physic/PhysicManager.h"
 
 #include "util/ResourcesManager.h"
@@ -110,13 +110,11 @@ public:
 			PhysicAccumulator -= PhysicDeltaStep;
 		}
 
-		// Update inputs states
-		GestionnaireDeSaisie.StatutClavier();
-		GestionnaireDeSaisie.SaisirEtatSouris();
-
 		// Est-il temps de rendre l'image?
 		if (TempsEcoule > EcartTemps)
 		{
+			InputManager::GetInstance().Tick();
+
 			// Affichage optimisé
 			pDispositif->Present();
 
@@ -138,7 +136,6 @@ public:
 	const DirectX::XMMATRIX& GetMatProj() const { return m_MatProj; }
 	const DirectX::XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
 
-	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
@@ -368,8 +365,6 @@ protected:
 
 	std::unique_ptr<Gdiplus::Font> pPolice;
 
-	// Les saisies
-	CDIManipulateur GestionnaireDeSaisie;
 	ResourcesManager ResourcesManager;
 };
 

@@ -43,6 +43,17 @@ inline void DX_RELEASE(Type & UnPointeur)
 	}
 }
 
+
+template <class Type>
+inline void DX_RELEASE_INPUT(Type& Pointer)
+{
+	if (Pointer != nullptr) {
+		Pointer->Unacquire();
+		Pointer->Release();
+		Pointer = nullptr;
+	}
+}
+
 const wchar_t* str2wchar(const std::string& str) noexcept;
 const std::string wchar2str(const wchar_t* wchars) noexcept;
 

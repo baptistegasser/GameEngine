@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
+    <ClCompile Include="core\InputManager.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
@@ -197,7 +198,6 @@
     <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\ChargeurOBJ.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
-    <ClCompile Include="render\DIManipulateur.cpp" />
     <ClCompile Include="render\dispositif.cpp" />
     <ClCompile Include="render\dispositifD3D11.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
@@ -226,6 +226,7 @@
   <ItemGroup>
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
+    <ClInclude Include="core\InputManager.h" />
     <ClInclude Include="core\Scene.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />
@@ -259,7 +260,6 @@
     <ClInclude Include="render\d3dx11effect.h" />
     <ClInclude Include="render\d3dxGlobal.h" />
     <ClInclude Include="render\DDSTextureLoader.h" />
-    <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\dispositif.h" />
     <ClInclude Include="render\dispositifD3D11.h" />
     <ClInclude Include="render\InfoDispositif.h" />

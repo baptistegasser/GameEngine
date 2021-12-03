@@ -174,9 +174,6 @@
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
-    <ClCompile Include="render\DIManipulateur.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\dispositif.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
@@ -230,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="core\InputManager.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -347,9 +347,6 @@
     <ClInclude Include="render\DDSTextureLoader.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\DIManipulateur.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\dispositif.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -412,6 +409,12 @@
     </ClInclude>
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Observable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\InputManager.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

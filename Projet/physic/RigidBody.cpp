@@ -12,6 +12,10 @@
 #define ASSERT_DYNAMIC assert("This method must be called on a dynamic body only" && IsDynamic());
 #define ASSERT_KINEMATIC assert("This method must be called on a kinematic body only" && IsKinematic());
 #define ASSERT_NOT_KINEMATIC assert("This method can not be called on a kinematic body" && !IsKinematic());
+#else
+#define ASSERT_DYNAMIC
+#define ASSERT_KINEMATIC
+#define ASSERT_NOT_KINEMATIC
 #endif
 
 using namespace physx;

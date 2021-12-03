@@ -100,7 +100,7 @@ int CMoteurWindows::InitialisationsSpecific()
 	Show();
 
 	// Initialisation de DirectInput
-	GestionnaireDeSaisie.Init(hAppInstance, hMainWnd);
+	InputManager::GetInstance().Init(hAppInstance, hMainWnd);
 
 	return 0;
 }
@@ -120,7 +120,7 @@ bool CMoteurWindows::RunSpecific()
 	bool bBoucle = true;
 
 	if (Focused != PreviousFocused) {
-		GetGestionnaireDeSaisie().HandleFocusChange(Focused, hMainWnd);
+		InputManager::GetInstance().HandleFocusChange(Focused);
 		PreviousFocused = Focused;
 	}
 

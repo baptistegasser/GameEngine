@@ -35,6 +35,18 @@ namespace PM3D
 const int IMAGESPARSECONDE = 60;
 const double EcartTemps = 1.0 / static_cast<double>(IMAGESPARSECONDE);
 
+/// <summary>
+/// Represent the state of the engine.
+/// As state are represent by bit flag, multiple state can be possible at any given time.
+/// </summary>
+enum EngineState
+{
+	Starting  = 1 << 0,
+	Running	  = 1 << 1,
+	Paused	  = 1 << 2,
+	Stopping  = 1 << 3,
+};
+
 //
 //   TEMPLATE : CMoteur
 //
@@ -54,23 +66,25 @@ public:
 
 	virtual void Run()
 	{
-		bool bBoucle = true;
+		// We have passed the init phase no we are running !
+		UnsetState(EngineState::Starting);
+		SetState(EngineState::Running);
 
-		while (bBoucle)
-		{
-			// Propre à la plateforme - (Conditions d'arrêt, interface, messages)
-			bBoucle = RunSpecific();
+		while (!IsStopping()) {
+			// Platfom specific stuff, ignore pause state or the app might freeze
+			// -> keep treating windows events, keyboard events...
+			RunSpecific();
 
 			// appeler la fonction d'animation
-			if (bBoucle)
-			{
-				bBoucle = Animation();
-			}
+			Animation();
 		}
 	}
 
 	virtual int Initialisations()
 	{
+		// Set the engine state.
+		SetState(EngineState::Starting);
+
 		// Propre à la plateforme
 		InitialisationsSpecific();
 
@@ -92,7 +106,7 @@ public:
 		return 0;
 	}
 
-	virtual bool Animation()
+	virtual void Animation()
 	{
 		// méthode pour lire l'heure et calculer le 
 		// temps écoulé
@@ -102,36 +116,36 @@ public:
 		const double PhysicElapsedTime = GetTimeIntervalsInSec(CurrentPhysicTime, TempsCompteurCourant);
 		CurrentPhysicTime = TempsCompteurCourant;
 
-		// Update physic state
-		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
-		while (PhysicAccumulator >= PhysicDeltaStep) {
-			CurrentScene->FixedTick(PhysicDeltaStep);
-			PhysicManager::GetInstance().Step(PhysicDeltaStep);
-			PhysicAccumulator -= PhysicDeltaStep;
-		}
-
 		// Update inputs states
 		GestionnaireDeSaisie.StatutClavier();
 		GestionnaireDeSaisie.SaisirEtatSouris();
 
+		// Update physic state
+		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
+		while (PhysicAccumulator >= PhysicDeltaStep) {
+			CurrentScene->FixedTick(PhysicDeltaStep);
+			if (!IsPaused()) PhysicManager::GetInstance().Step(PhysicDeltaStep);
+			PhysicAccumulator -= PhysicDeltaStep;
+		}
+
 		// Est-il temps de rendre l'image?
 		if (TempsEcoule > EcartTemps)
 		{
-			// Affichage optimisé
-			pDispositif->Present();
-
 			// On prépare la prochaine image
 			AnimeScene(static_cast<float>(TempsEcoule));
 
-			// On rend l'image sur la surface de travail
-			// (tampon d'arrière plan)
-			RenderScene(static_cast<float>(TempsEcoule));
+			if (!IsPaused()) {
+				// Affichage optimisé
+				pDispositif->Present();
+
+				// On rend l'image sur la surface de travail
+				// (tampon d'arrière plan)
+				RenderScene(static_cast<float>(TempsEcoule));
+			}
 
 			// Calcul du temps du prochain affichage
 			TempsCompteurPrecedent = TempsCompteurCourant;
 		}
-
-		return true;
 	}
 
 	const DirectX::XMMATRIX& GetMatView() const { return m_MatView; }
@@ -143,6 +157,13 @@ public:
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
 
+	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
+	bool IsStopping() const noexcept { return IsStateSet(EngineState::Stopping); }
+
+	void Pause() noexcept { CurrentState |= EngineState::Paused; }
+	void UnPause() noexcept { CurrentState &= ~EngineState::Paused; }
+	bool IsPaused() const noexcept { return IsStateSet(EngineState::Paused); }
+
 protected:
 	~CMoteur()
 	{
@@ -150,7 +171,7 @@ protected:
 	}
 
 	// Spécifiques - Doivent être implantés
-	virtual bool RunSpecific() = 0;
+	virtual void RunSpecific() = 0;
 	virtual int InitialisationsSpecific() = 0;
 
 	virtual int64_t GetTimeSpecific() const = 0;
@@ -343,6 +364,13 @@ protected:
 	}
 
 protected:
+	/// <summary>
+	/// The current state of the engine, can have multiple values at a time.
+	/// The values are defined via \ref EngineState flags.
+	/// </summary>
+	uint32_t CurrentState = EngineState::Starting;
+
+	// Physic variable
 	const float PhysicDeltaStep = 1.0f / 60.0f;
 	float PhysicAccumulator = 0;
 	int64_t CurrentPhysicTime;
@@ -371,6 +399,30 @@ protected:
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
 	ResourcesManager ResourcesManager;
+
+private:
+	/// <summary>
+	/// Set a specific state flag to be true for the current state.
+	/// </summary>
+	void SetState(const EngineState& State) noexcept
+	{
+		CurrentState |= State;
+	}
+	/// <summary>
+	/// Remove a specific state flag from the current state.
+	/// </summary>
+	void UnsetState(const EngineState& State) noexcept
+	{
+		CurrentState &= ~State;
+	}
+
+	/// <summary>
+	/// Test if a given state is set in the current state.
+	/// </summary>
+	bool IsStateSet(const EngineState& State) const noexcept
+	{
+		return (CurrentState & State) == State;
+	}
 };
 
 } // namespace PM3D

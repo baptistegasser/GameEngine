@@ -413,6 +413,9 @@
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
+    <ClInclude Include="util\Observable.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico">

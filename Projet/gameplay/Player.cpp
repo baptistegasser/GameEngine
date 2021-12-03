@@ -25,7 +25,8 @@ void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
 
-	PM3D::CDIManipulateur& rGestionnaireDeSaisie = PM3D::CMoteurWindows::GetInstance().GetGestionnaireDeSaisie();
+	auto& Engine = PM3D::CMoteurWindows::GetInstance();
+	PM3D::CDIManipulateur& rGestionnaireDeSaisie = Engine.GetGestionnaireDeSaisie();
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
@@ -47,6 +48,14 @@ void Player::FixedTick(const float& DeltaTime)
 
  	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
 		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+	}
+
+	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_P)) {
+		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
+	}
+
+	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_ESCAPE)) {
+		Engine.Stop();
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_M)) {

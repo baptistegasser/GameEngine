@@ -200,6 +200,7 @@
     <ClCompile Include="render\DIManipulateur.cpp" />
     <ClCompile Include="render\dispositif.cpp" />
     <ClCompile Include="render\dispositifD3D11.cpp" />
+    <ClCompile Include="render\GameFactory.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
     <ClCompile Include="render\LightConfig.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\dispositif.h" />
     <ClInclude Include="render\dispositifD3D11.h" />
+    <ClInclude Include="render\GameFactory.h" />
     <ClInclude Include="render\InfoDispositif.h" />
     <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\LightConfig.h" />

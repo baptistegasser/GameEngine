@@ -26,6 +26,8 @@ public :
 		Third
 	};
 
+	void HalfRotate();
+
 private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;

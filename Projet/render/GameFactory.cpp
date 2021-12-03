@@ -22,10 +22,21 @@ void GameFactory::LoadLevel()
 {
 	CreateTerrain();
 	CreateEnemy();
-	CreatePlayer();
-	CreatePlatform(Math::Vec3f(0, -2.f, 0), Math::Vec3f(20.f, 1.f, 20.f));
-	CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 0), Math::Vec3f(5.f, 1.f, 1.f), Math::Vec3f(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB");
-	CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
+	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
+	CreatePlatform(Math::Vec3f(0, 10.f, 0), Math::Vec3f(5.f, 1.f, 2.f));
+	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
+	
+	CreatePlatform(Math::Vec3f(0, 10.f, 60), Math::Vec3f(5.f, 1.f, 2.f));
+
+	//TODO Trop d'acteur
+	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(0, 0, -10), L".\\modeles\\cube\\cube.OMB");
+	//CreateMobilePlatform(Math::Vec3f(-20.f, 10.f, 85), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+	//CreateMobilePlatform(Math::Vec3f(0.f, 10.f, 105), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
+	//CreateMobilePlatform(Math::Vec3f(20.f, 10.f, 85), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+
+
+	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
 	CreateLights();
 }
 
@@ -46,20 +57,24 @@ void GameFactory::CreateTerrain()
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
 }
 
-void GameFactory::CreatePlayer()
+void GameFactory::CreatePlayer(Math::Vec3f Pos)
 {
 	auto MyPlayer = Pitbull::Actor::New();
 	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball3\\ball.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
+	MyPlayer->Transform.Position = Pos;
+
 	auto PlayerCam = MyPlayer->AddComponent<Camera>(DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
-	                                                DirectX::XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
+	                                                DirectX::XMVectorSet(0.0f, 0.4f, 1.0f, 1.0f),
 	                                                DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
 	                                                &PM3D::CMoteurWindows::GetInstance().GetMatView(),
 	                                                &PM3D::CMoteurWindows::GetInstance().GetMatProj(),
 	                                                &PM3D::CMoteurWindows::GetInstance().GetMatViewProj());
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().SetCurrentCamera(PlayerCam);
+
+	MyPlayer->GetComponent<Player>()->HalfRotate();
 
 	MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
 	auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);

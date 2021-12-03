@@ -83,6 +83,16 @@ void Player::FixedTick(const float& DeltaTime)
 	MyCamera->SetDirection(Direction);
 }
 
+void Player::HalfRotate()
+{
+	using namespace physx;
+
+	AngleRotation += physx::PxHalfPi*2;
+	PxQuat qx = PxQuat(physx::PxHalfPi*2, PxVec3(0, 1, 0));
+	Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
+	Direction = XMVector4Normalize(Direction);
+}
+
 void Player::SwapCameraMode()
 {
 	if (ViewType == CameraViewType::First)

@@ -15,7 +15,7 @@ struct Leaf {
 	using ID = std::size_t;
 
 	ID ActorID;
-	Point Position;
+	Math::Vec3f Position;
 
 	bool operator==(const Leaf& lhr) const noexcept { return ActorID == lhr.ActorID; };
 };
@@ -53,7 +53,7 @@ public:
 	void Update();
 
 	const ActorList& GetActors() const noexcept;
-	ActorPtrList Find(const Point& Pos, float MaxDistance) const;
+	ActorPtrList Find(const Math::Vec3f& Pos, float MaxDistance) const;
 	ActorPtrList Find(const BoundingVolume Volume) const;
 
 private:

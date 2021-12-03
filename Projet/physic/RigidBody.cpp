@@ -9,8 +9,9 @@
 #include <cassert>
 
 #ifdef _DEBUG
-#define ASSERT_DYNAMIC assert("This method must be called on a dynamic actor only" && ActorType == RigidActorType::Dynamic);
-#define ASSERT_KINEMATIC assert("This method must be called on a kinematic actor only" && ActorType == RigidActorType::Kinematic);
+#define ASSERT_DYNAMIC assert("This method must be called on a dynamic body only" && IsDynamic());
+#define ASSERT_KINEMATIC assert("This method must be called on a kinematic body only" && IsKinematic());
+#define ASSERT_NOT_KINEMATIC assert("This method can not be called on a kinematic body" && !IsKinematic());
 #endif
 
 using namespace physx;
@@ -20,47 +21,99 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 	, ActorType{ ActorType }
 	, RigidActor{ nullptr }
 {
-	auto& PhysicManager = PhysicManager::GetInstance();
-	const auto Physics = PhysicManager.Physics;
+	const auto Physics = PhysicManager::GetInstance().Physics;
 
 	// Create appropriate physx actor
 	switch (ActorType) {
 	case RigidActorType::Static:
-		RigidActor = Physics->createRigidStatic(ParentActor->Transform.PosRot);
+		RigidActor = Physics->createRigidStatic(ParentActor->Transform);
 		break;
 	case RigidActorType::Dynamic:
-		RigidActor = Physics->createRigidDynamic(ParentActor->Transform.PosRot);
+		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
 		break;
 	case RigidActorType::Kinematic:
-		RigidActor = Physics->createRigidDynamic(ParentActor->Transform.PosRot);
+		RigidActor = Physics->createRigidDynamic(ParentActor->Transform);
 		static_cast<PxRigidDynamic*>(RigidActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
 		break;
 	default: throw "Invalid actor type";
 	}
+}
 
+void RigidBody::PrePhysicSimulation() noexcept
+{
+	// Update the transform with the actor's own to match change made by other components
+	RigidActor->setGlobalPose(ParentActor->Transform);
+	// Change scale only if it changed
+	if (PreviousScale != ParentActor->Transform.Scale) {
+		UpdateActorShapes();
+	}
+}
+
+void RigidBody::PostPhysicSimulation() noexcept
+{
+	// Update the actor transform with the simulated one
+	ParentActor->Transform = RigidActor->getGlobalPose();
+}
+
+void RigidBody::Init()
+{
 	// Create and add shapes for collisions
+	UpdateActorShapes();
+
+	// Notify the big boss that we exist
+	PhysicManager::GetInstance().RegisterRigidBody(this);
+}
+
+void RigidBody::UpdateActorShapes() noexcept
+{
+	auto& PhysicManager = PhysicManager::GetInstance();
+	const auto Physics = PhysicManager.Physics;
+
+	// Release current shapes
+	const physx::PxU32 ShapesCount = RigidActor->getNbShapes();
+	if (ShapesCount) {
+		PxShape** Shapes = (PxShape**)malloc(sizeof(PxShape*) * ShapesCount);
+		RigidActor->getShapes(Shapes, ShapesCount);
+		const auto ClearShape = [this, &PhysicManager](PxShape* Shape) {
+			// Unregister associated collider
+			PhysicManager.GetContactHandler().ClearRegistredCollider(Shape);
+			RigidActor->detachShape(*Shape);
+		};
+		std::for_each_n(Shapes, ShapesCount, ClearShape);
+		free(Shapes);
+	}
+
+	// Create new shapes from colliders
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for (const auto Collider : Colliders) {
-		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(), *Collider->GetPxMaterial(), true);
+		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(ParentActor->Transform.Scale), *Collider->GetPxMaterial(), true);
+		
+		// Create Shape transform based on the actor's transform and the collider offset
+		auto LocalTransform = ParentActor->Transform;
+		LocalTransform.Position = Collider->Offset;
+		Shape->setLocalPose(LocalTransform);
+
 		RigidActor->attachShape(*Shape);
 		PhysicManager.GetContactHandler().RegisterCollider(Shape, Collider);
 	}
 
-	// Notify the big boss that we exist
-	PhysicManager.RegisterRigidBody(this);
+	// Update the scale as change are now taken in account
+	PreviousScale = ParentActor->Transform.Scale;
 }
 
-void RigidBody::PreFixedTick() const
+const bool RigidBody::IsStatic() const noexcept
 {
-	// Update the transform with the actor's own to match change made by other components
-	RigidActor->setGlobalPose(ParentActor->Transform.PosRot);
-	//PxScaleRigidActor(*RigidActor, ParentActor->Transform.Scale.y, true);
+	return ActorType == RigidActorType::Static;
 }
 
-void RigidBody::FixedTick(const float& DeltaTime)
+const bool RigidBody::IsDynamic() const noexcept
 {
-	// Update the actor transform with the simulated one
-	ParentActor->Transform.PosRot = RigidActor->getGlobalPose();
+	return ActorType == RigidActorType::Dynamic || ActorType == RigidActorType::Kinematic;
+}
+
+const bool RigidBody::IsKinematic() const noexcept
+{
+	return ActorType == RigidActorType::Kinematic;
 }
 
 physx::PxRigidDynamic* RigidBody::GetAsDynamic() const noexcept
@@ -68,21 +121,21 @@ physx::PxRigidDynamic* RigidBody::GetAsDynamic() const noexcept
 	return static_cast<PxRigidDynamic*>(RigidActor); // NOLINT(cppcoreguidelines-pro-type-static-cast-downcast)
 }
 
-void RigidBody::AddForce(const physx::PxVec3& Force, const ForceMode& ForceMode) const
+void RigidBody::AddForce(const Math::Vec3f& Force, const ForceMode& ForceMode) const
 {
-	ASSERT_DYNAMIC
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
 	GetAsDynamic()->addForce(Force, PhysxForce(ForceMode));
 }
 
-void RigidBody::AddTorque(const physx::PxVec3& Torque, const ForceMode& ForceMode) const
+void RigidBody::AddTorque(const Math::Vec3f& Torque, const ForceMode& ForceMode) const
 {
-	ASSERT_DYNAMIC
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
 	GetAsDynamic()->addTorque(Torque, PhysxForce(ForceMode));
 }
 
-void RigidBody::SetVelocity(const physx::PxVec3& Velocity) const
+void RigidBody::SetVelocity(const Math::Vec3f& Velocity) const
 {
-	ASSERT_DYNAMIC
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
 	GetAsDynamic()->setLinearVelocity(Velocity);
 }
 
@@ -97,7 +150,7 @@ void RigidBody::SetFollowGravity(const bool FollowGravity) const
 	RigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !FollowGravity);
 }
 
-void RigidBody::setKinematicTarget(const physx::PxTransform& Target) const
+void RigidBody::setKinematicTarget(const Math::Transform& Target) const
 {
 	ASSERT_KINEMATIC;
 	GetAsDynamic()->setKinematicTarget(Target);

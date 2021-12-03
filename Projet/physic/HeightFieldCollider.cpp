@@ -5,18 +5,15 @@
 
 using namespace physx;
 
-PxGeometry* HeightFieldCollider::GetGeometryImpl() const
+PxGeometry* HeightFieldCollider::GetGeometryImpl(const Math::Vec3f& Scale) const noexcept
 {
 	return new PxHeightFieldGeometry(HeightField, PxMeshGeometryFlags(),
-		HeightScale, RowScale, ColumnScale
+		Scale.x, Scale.y, Scale.z
 	);
 }
 
 HeightFieldCollider::HeightFieldCollider(Pitbull::Actor* Parent, const PhysicMaterial& Material, const ATerrain* Terrain)
-	: Collider{ Parent, Material }
-	, RowScale(Terrain->Scale.x)
-	, HeightScale(1)
-	, ColumnScale(Terrain->Scale.z)
+	: Collider{ Parent, Material, DefaultOffset }
 {
 	unsigned int i{ 0 };
 

@@ -27,7 +27,7 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	using namespace DirectX;
 
 	// Update position
-	matWorld = Math::TransformToMatrix(ParentActor->Transform);
+	matWorld = ParentActor->Transform;
 
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();

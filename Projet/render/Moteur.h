@@ -12,23 +12,24 @@
 #include "util/Singleton.h"
 #include "render/Sprite.h"
 
+// Math components
+#include "math/Math.h"
 // Physic components
 #include "physic/RigidBody.h"
 #include "physic/SphereCollider.h"
 #include "physic/BoxCollider.h"
 #include "physic/CapsuleCollider.h"
-#include "gameplay/Plateform.h"
 // Render components
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
-#include "gameplay/Player.h"
 #include "render/Terrain.h"
 // Gameplay components
+#include "gameplay/Plateform.h"
+#include "gameplay/Player.h"
 
 // Sprite
 #include "render/SpriteRenderer.h"
 
-using namespace physx;
 
 #include <iostream>
 #include <chrono>
@@ -109,8 +110,8 @@ public:
 		// Update physic state
 		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
 		while (PhysicAccumulator >= PhysicDeltaStep) {
-			PhysicManager::GetInstance().Step(PhysicDeltaStep);
 			CurrentScene->FixedTick(PhysicDeltaStep);
+			PhysicManager::GetInstance().Step(PhysicDeltaStep);
 			PhysicAccumulator -= PhysicDeltaStep;
 		}
 
@@ -246,6 +247,8 @@ protected:
 
  	bool InitObjets()
 	{
+		using namespace Math;
+		using namespace physx;
 		using namespace DirectX;
 
 		auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
@@ -257,29 +260,29 @@ protected:
 		Terrain->Texture1 = ResourcesManager.GetTexture(L".\\modeles\\gazon.dds");
 		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
 		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
-		Terrain->Transform.PosRot.p = { 0.f, -50.f, 0.f };
+		Terrain->Transform.Position = { 0.f, -50.f, 0.f };
+		Terrain->Transform.Scale.x = 2.f;
+		Terrain->Transform.Scale.z = 2.f;
 		CurrentScene->AddActor(std::move(Terrain), true);
 
 		auto Mesh2 = Pitbull::Actor::New();
 		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		Mesh2->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 1.0f }, 1.0f);
-		Mesh2->Transform.PosRot.p.y = 0.f;
-		Mesh2->Transform.PosRot.p.z = -7.f;
-		Mesh2->Transform.PosRot.p.x = 1.f;
-		Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		Mesh2->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Vec3f{ 2.f, 0.f, 0.0f });
+		Mesh2->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Vec3f{ -2.f, 0.f, 0.0f });
+		Mesh2->Transform.Position.y = 0.f;
+		Mesh2->Transform.Position.z = -7.f;
+		Mesh2->Transform.Position.x = 1.f;
+		auto body = Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 		Mesh2->AddComponent<Plateform>(
-			PxTransform(Mesh2->Transform.PosRot.p, PxQuat(-PxHalfPi, PxVec3(0,1,0)))
-			, PxTransform(Mesh2->Transform.PosRot.p + PxVec3(10, 0, 0), PxQuat(PxHalfPi, PxVec3(0, 1, 0))), true);
+			Transform(Mesh2->Transform.Position, Quaternion(-PxHalfPi, Vec3f(0, 1, 0)))
+			, Transform(Mesh2->Transform.Position + Vec3f(10, 0, 0), Quaternion(PxHalfPi, Vec3f(0, 1, 0))), true);
 		CurrentScene->AddActor(std::move(Mesh2));
 
 
-		//CreatePlatform(PxVec3(5, 5, 5), PxVec3(6, 0.25, 6));
-		CreatePlatform(PxVec3(0, -2.f, 0), PxVec3(20.f, 1.f, 20.f), PxVec3( 0.5f, 0.5f, 0.0f ));
-		CreateMobilePlatform(PxVec3(10.f, 10.f, 0), PxVec3(1.f, 1.f, 1.f), PxVec3(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB", PxVec3(0.5f, 0.5f, 0.0f));
-		CreateMobilePlatform(PxVec3(10.f, 10.f, 20.f), PxVec3(1.f, 1.f, 1.f), PxVec3(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB", PxVec3(0.75f, 0.75f, 0.0f));
-		//MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5)), PxTransform(PxVec3(-3, 5, 5)), true);
 
-		XMVECTOR p = XMVECTOR{ 0.0f, 2.0f, 10.0f, 1.0f };
+		CreatePlatform(Vec3f(0, -2.f, 0), Vec3f(20.f, 1.f, 20.f));
+		CreateMobilePlatform(Vec3f(10.f, 10.f, 0), Vec3f(5.f, 1.f, 1.f), Vec3f(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB");
+		CreateMobilePlatform(Vec3f(10.f, 10.f, 20.f), Vec3f(1.f, 1.f, 1.f), Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
 
 		Position = XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f);
 
@@ -294,7 +297,7 @@ protected:
 			&m_MatViewProj);
 		CurrentScene->SetCurrentCamera(PlayerCam);
 
-		MyPlayer->AddComponent<SphereCollider>(PhysicMaterial{ 0.5f, 0.5f, 0.2f }, 1.0f);
+		MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
 		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 		CurrentScene->AddActor(std::move(MyPlayer));
 
@@ -311,9 +314,10 @@ protected:
 
 
 		auto mySprite = std::unique_ptr<SpriteRenderer>(new SpriteRenderer{ 
-			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false });
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true });
 		mySprite->Transform.Scale.x = 2.0f;
 		mySprite->Transform.Scale.y = 2.0f;
+		mySprite->Transform.Position.z = 5.0f;
 		CurrentScene->AddActor(std::move(mySprite));
 
 
@@ -321,34 +325,30 @@ protected:
 		return true;
 	}
 
-	void CreatePlatform(PxVec3 Pos, PxVec3 Scale, PxVec3 Material)
+	void CreatePlatform(Math::Vec3f Pos, Math::Vec3f Scale = { 1.f }, PhysicMaterial Material = Collider::DefaultMaterial)
 	{
 		auto MyPlateform = Pitbull::Actor::New();
 		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\platform\\plateform.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<BoxCollider>(
-			PhysicMaterial{ 0.5f, 0.5f, 0.0f },
-			PxVec3{ 7 * Scale.x, 0.20f * Scale.y, 7  * Scale.z }
-		);
-		MyPlateform->Transform.PosRot.p = Pos;
+		MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
+		MyPlateform->Transform.Position = Pos;
 		MyPlateform->Transform.Scale = Scale;
-		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+		//auto body = MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 		CurrentScene->AddActor(std::move(MyPlateform));
 	}
 
-	void CreateMobilePlatform(PxVec3 Pos, PxVec3 Scale, PxVec3 End, const wchar_t* Filename, PxVec3 Material)
+	void CreateMobilePlatform(Math::Vec3f Pos, Math::Vec3f Scale, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial)
 	{
+		using namespace Math;
+
 		auto MyPlateform = Pitbull::Actor::New();
 		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(Filename), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<BoxCollider>(
-			PhysicMaterial{ Material.x, Material.y, Material.z },
-			PxVec3{ 7 * Scale.x, 0.20f * Scale.y, 7 * Scale.z }
-		);
-		MyPlateform->Transform.PosRot.p = Pos;
+		MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
+		MyPlateform->Transform.Position = Pos;
 		MyPlateform->Transform.Scale = Scale;
 		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 		MyPlateform->AddComponent<Plateform>(
-			PxTransform(MyPlateform->Transform.PosRot.p)
-			, PxTransform(MyPlateform->Transform.PosRot.p + End), true);
+			Transform(MyPlateform->Transform.Position)
+			, Transform(MyPlateform->Transform.Position + End), true);
 		CurrentScene->AddActor(std::move(MyPlateform));
 	}
 

@@ -25,7 +25,7 @@ public:
 	void Step(const float& ElapsedTime);
 	void Cleanup();
 
-	void RegisterRigidBody(const RigidBody* RigidBody);
+	void RegisterRigidBody(RigidBody* RigidBody);
 	ContactHandler& GetContactHandler() noexcept;
 
 	physx::PxPhysics* Physics = nullptr;
@@ -47,5 +47,5 @@ private:
 	/// <summary>
 	/// List of all RigidBody created during runtime.
 	/// </summary>
-	std::vector<const RigidBody*> RigidBodies;
+	std::vector<RigidBody*> RigidBodies;
 };

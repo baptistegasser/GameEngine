@@ -59,17 +59,17 @@ void SpriteRenderer::SpriteTick(const float ElapsedTime)
 
 	pD3DDevice.ActiverMelangeAlpha();
 
-	XMMATRIX Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ Actor::Transform.PosRot.p.x, Actor::Transform.PosRot.p.y, Actor::Transform.PosRot.p.z });
+	XMMATRIX Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ Actor::Transform.Position.x, Actor::Transform.Position.y, Actor::Transform.Position.z });
 	XMMATRIX Scale = DirectX::XMMatrixScaling(Dimension.x * Actor::Transform.Scale.x, Dimension.y * Actor::Transform.Scale.y, 1.f);
 	if (BillBoard) {
-		XMMATRIX blop = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
-		XMVECTOR blip = PM3D::CMoteurWindows::GetInstance().GetPosition();
+		XMMATRIX ViewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
+		XMVECTOR PositionCamera = PM3D::CMoteurWindows::GetInstance().GetPosition();
 
-		float angle = atan2f(Actor::Transform.PosRot.p.x - blip.vector4_f32[0], Actor::Transform.PosRot.p.z - blip.vector4_f32[2]);
+		float Angle = atan2f(Actor::Transform.Position.x - PositionCamera.vector4_f32[0], Actor::Transform.Position.z - PositionCamera.vector4_f32[2]);
 
-		XMMATRIX rot = DirectX::XMMatrixRotationY(angle);
+		XMMATRIX Rotation = DirectX::XMMatrixRotationY(Angle);
 
-		Position = Scale * rot * Position * blop;
+		Position = Scale * Rotation * Position * ViewProj;
 
 	}
 	else {

@@ -78,7 +78,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 {
 	Actor::LateTick(ElapsedTime);
 
-	matWorld = Math::TransformToMatrix(Transform);
+	matWorld = Transform;
 
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
 

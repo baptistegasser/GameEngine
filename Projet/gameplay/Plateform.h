@@ -2,7 +2,8 @@
 
 #include "core/Component.h"
 #include "physic/RigidBody.h"
-#include "math/Point.h"
+#include "math/Vec3f.h"
+#include "math/Transform.h"
 
 class Plateform : public Pitbull::Component {
 public :
@@ -14,7 +15,7 @@ public :
 	/// <param name="Departure"></param>
 	/// <param name="Destination"></param>
 	/// <param name="Loop"></param>
-	Plateform(Pitbull::Actor* Parent, const physx::PxTransform& Departure, const physx::PxTransform& Destination, const bool& Loop);
+	Plateform(Pitbull::Actor* Parent, const Math::Transform& Departure, const Math::Transform& Destination, const bool& Loop);
 	~Plateform() override = default;
 
 	void Init() override;
@@ -30,13 +31,13 @@ public :
 private :
 	RigidBody* MyRigidBody;
 
-	const physx::PxTransform Departure;
-	const physx::PxTransform Destination;
+	const Math::Transform Departure;
+	const Math::Transform Destination;
 
 	bool Loop = true;
 	const bool FirstLoop;
 
 	bool DepartureIsGoal = true;
-	physx::PxVec3 Direction;
+	Math::Vec3f Direction;
 	float Speed = 0.1f;
 };

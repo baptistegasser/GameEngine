@@ -2,12 +2,11 @@
 #include "Plateform.h"
 #include "core/Actor.h"
 
-using namespace physx;
+using namespace Math;
 
-Plateform::Plateform(Pitbull::Actor* Parent, const PxTransform& Departure, const PxTransform& Destination, const bool& Loop)
-	: 
-	Component{Parent}
-	,Departure{Departure}
+Plateform::Plateform(Pitbull::Actor* Parent, const Transform& Departure, const Transform& Destination, const bool& Loop)
+	: Component{Parent}
+	, Departure{Departure}
 	, Destination{Destination}
 	, FirstLoop {Loop}
 {}
@@ -23,10 +22,10 @@ void Plateform::Tick(const float& DeltaTime)
 	if (Loop) {
 
 		if (DepartureIsGoal) {
-			Direction = Departure.p - ParentActor->Transform.PosRot.p;
-			if (Point(Speed) <= Direction.abs()) {
+			Direction = Departure.Position - ParentActor->Transform.Position;
+			if (Vec3f(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.PosRot.p + Direction * Speed), PxQuat(ParentActor->Transform.PosRot.q)));
+				MyRigidBody->setKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), ParentActor->Transform.Rotation));
 			}
 			else {
 				DepartureIsGoal = false;
@@ -34,10 +33,10 @@ void Plateform::Tick(const float& DeltaTime)
 			}
 		}
 		else {
-			Direction = Destination.p - ParentActor->Transform.PosRot.p;
-			if (Point(Speed) <= Direction.abs()) {
+			Direction = Destination.Position - ParentActor->Transform.Position;
+			if (Vec3f(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(PxTransform(PxVec3(ParentActor->Transform.PosRot.p + Direction * Speed), PxQuat(ParentActor->Transform.PosRot.q)));
+				MyRigidBody->setKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), ParentActor->Transform.Rotation));
 			}
 			else {
 				DepartureIsGoal = true;

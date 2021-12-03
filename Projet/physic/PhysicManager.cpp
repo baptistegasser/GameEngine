@@ -52,11 +52,15 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 
 void PhysicManager::Step(const float& ElapsedTime)
 {
-	const auto CallPreTick = [](const RigidBody* RB) { RB->PreFixedTick(); };
-	std::for_each(RigidBodies.begin(), RigidBodies.end(), CallPreTick);
+	const static auto CallPreUpdate = [](RigidBody* RB) { RB->PrePhysicSimulation(); };
+	const static auto CallPostUpdate = [](RigidBody* RB) { RB->PostPhysicSimulation(); };
+	
+	std::for_each(RigidBodies.begin(), RigidBodies.end(), CallPreUpdate);
 
 	CurrentScene->PhysxScene->simulate(ElapsedTime);
 	CurrentScene->PhysxScene->fetchResults(true);
+
+	std::for_each(RigidBodies.begin(), RigidBodies.end(), CallPostUpdate);
 }
 
 void PhysicManager::Cleanup()
@@ -74,7 +78,7 @@ void PhysicManager::Cleanup()
 	PX_RELEASE(Foundation);
 }
 
-void PhysicManager::RegisterRigidBody(const RigidBody* RigidBody)
+void PhysicManager::RegisterRigidBody(RigidBody* RigidBody)
 {
 	CurrentScene->PhysxScene->addActor(*RigidBody->RigidActor);
 	RigidBodies.push_back(RigidBody);

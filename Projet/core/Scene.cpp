@@ -6,7 +6,7 @@
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
-	, Tree{ BoundingBox{ 10000.f } }
+	, Tree{ BoundingBox{ 5000.f } }
 	, VisionVolume{ BoundingSphere{ 0.f } }
 {}
 

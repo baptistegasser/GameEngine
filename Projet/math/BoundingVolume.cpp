@@ -43,9 +43,9 @@ bool Intersect::operator()(const BoundingSphere& V0, const BoundingBox& V1) cons
 
 bool Contains::operator()(const BoundingBox& Rect) const
 {
-    return -Rect.HalfWidth  <= Pos.x && Pos.x <= Rect.HalfWidth
-        && -Rect.HalfHeight <= Pos.y && Pos.y <= Rect.HalfHeight
-        && -Rect.HalfDepth  <= Pos.z && Pos.z <= Rect.HalfDepth;
+    return Rect.Center.x - Rect.HalfWidth  <= Pos.x && Pos.x <= Rect.Center.x + Rect.HalfWidth
+        && Rect.Center.y - Rect.HalfHeight <= Pos.y && Pos.y <= Rect.Center.y + Rect.HalfHeight
+        && Rect.Center.z - Rect.HalfDepth  <= Pos.z && Pos.z <= Rect.Center.z + Rect.HalfDepth;
 }
 
 bool Contains::operator()(const BoundingSphere& Sphere) const

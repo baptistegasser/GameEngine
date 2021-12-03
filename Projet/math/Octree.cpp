@@ -54,14 +54,14 @@ bool Node::Remove(const Leaf& Leaf)
 void Node::Subdivide()
 {
     // Combinaisons of coordinate directions scale
-    const static float* Scales = new float[24]{
-        1.f, 1.f, 1.f,
-        1.f, 1.f, -1.f,
-        1.f, -1.f, 1.f,
-        1.f, -1.f, -1.f,
-        -1.f, 1.f, 1.f,
-        -1.f, 1.f, -1.f,
-        -1.f, -1.f, 1.f,
+    const static float* Pos = new float[24]{
+         1.f,  1.f,  1.f,
+         1.f,  1.f, -1.f,
+         1.f, -1.f,  1.f,
+         1.f, -1.f, -1.f,
+        -1.f,  1.f,  1.f,
+        -1.f,  1.f, -1.f,
+        -1.f, -1.f,  1.f,
         -1.f, -1.f, -1.f
     };
 
@@ -69,12 +69,15 @@ void Node::Subdivide()
         HH = Boundary.HalfHeight / 2.f,
         HD = Boundary.HalfDepth / 2.f;
 
+    // Reserve size to be sure to use just enought memory
+    Children.reserve(8);
+
     // Create childrens
     for (int i = 0, j = 0; i < 8; ++i) {
         Math::Vec3f ChildCenter = Boundary.Center;
-        ChildCenter.x += HW * Scales[j++];
-        ChildCenter.y += HH * Scales[j++];
-        ChildCenter.z += HD * Scales[j++];
+        ChildCenter.x += HW * Pos[j++];
+        ChildCenter.y += HH * Pos[j++];
+        ChildCenter.z += HD * Pos[j++];
         Children.push_back(std::make_unique<Node>(BoundingBox{ HW, HH, HD, ChildCenter }));
     }
 
@@ -187,9 +190,12 @@ void Octree::Update()
         }
     }
 
-    // Add Leafs back to their correct places
-    const auto AddToRoot = std::bind(&Node::Add, &Root, std::placeholders::_1);
-    std::for_each(begin(LeafToUpdate), end(LeafToUpdate), AddToRoot);
+    // Update leafs and handle out of bound as unrecoverable error
+    for (const Leaf& L : LeafToUpdate) {
+        if (!Root.Add(L)) {
+            throw "Out of bound object !";
+        }
+    }
 }
 
 const Octree::ActorList& Octree::GetActors() const noexcept

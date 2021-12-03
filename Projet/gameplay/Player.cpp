@@ -26,6 +26,7 @@ void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
 
+	auto& Engine = PM3D::CMoteurWindows::GetInstance();
 	auto& InputManager = InputManager::GetInstance();
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
@@ -48,6 +49,14 @@ void Player::FixedTick(const float& DeltaTime)
 
 	if (InputManager.IsKeyPressed(DIK_SPACE)) {
 		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+	}
+
+	if (InputManager.IsKeyDown(DIK_P)) {
+		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
+	}
+
+	if (InputManager.IsKeyDown(DIK_ESCAPE)) {
+		Engine.Stop();
 	}
 
 	if (InputManager.IsKeyPressed(DIK_M)) {

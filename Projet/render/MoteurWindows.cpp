@@ -114,10 +114,9 @@ int CMoteurWindows::InitialisationsSpecific()
 //		Il s'agit d'une version modifiée spécifiquement pour nos besoins des 
 //      éléments de la boucle message de Windows
 //
-bool CMoteurWindows::RunSpecific()
+void CMoteurWindows::RunSpecific()
 {
 	MSG msg;
-	bool bBoucle = true;
 
 	if (Focused != PreviousFocused) {
 		InputManager::GetInstance().HandleFocusChange(Focused);
@@ -128,7 +127,9 @@ bool CMoteurWindows::RunSpecific()
 	while (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{
 		// Est-ce un message de fermeture ?
-		if (msg.message == WM_QUIT) bBoucle = false;
+		if (msg.message == WM_QUIT) {
+			Stop();
+		}
 
 		// distribuer le message
 		if (!::TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -137,8 +138,6 @@ bool CMoteurWindows::RunSpecific()
 			::DispatchMessage(&msg);
 		}
 	}
-
-	return bBoucle;
 }
 
 //

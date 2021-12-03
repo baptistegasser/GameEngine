@@ -276,6 +276,11 @@ protected:
 		Mesh2->AddComponent<Plateform>(
 			Transform(Mesh2->Transform.Position, Quaternion(-PxHalfPi, Vec3f(0, 1, 0)))
 			, Transform(Mesh2->Transform.Position + Vec3f(10, 0, 0), Quaternion(PxHalfPi, Vec3f(0, 1, 0))), true);
+		auto Hat = Mesh2->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetTexture(L".\\modeles\\hat.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
+		Hat->Offset.Position.y = 1.9f;
+		Hat->Offset.Scale.x = 4.0f;
+		Hat->Offset.Scale.y = 4.0f;
 		CurrentScene->AddActor(std::move(Mesh2));
 
 
@@ -312,13 +317,16 @@ protected:
 		CurrentScene->LightConfig.AddPointLight(Light);
 
 
-
-		auto mySprite = std::unique_ptr<SpriteRenderer>(new SpriteRenderer{ 
-			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true });
+		auto mySprite = Pitbull::Actor::New();
+		mySprite->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true );
 		mySprite->Transform.Scale.x = 10.0f;
 		mySprite->Transform.Scale.y = 10.0f;
 		mySprite->Transform.Position.z = 5.0f;
 		mySprite->Transform.Position.y = 2.0f;
+		auto bla = mySprite->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
+		bla->Offset.Position.y = 5.0f;
 		CurrentScene->AddActor(std::move(mySprite));
 
 

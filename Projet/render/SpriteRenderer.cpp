@@ -4,8 +4,9 @@
 
 using namespace DirectX;
 
-SpriteRenderer::SpriteRenderer(Texture* TextureSprite, ShaderSprite* Shader, bool BillBoard)
-	: TextureSprite{TextureSprite}
+SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* TextureSprite, ShaderSprite* Shader, bool BillBoard)
+	: Component{ Parent }
+	, TextureSprite{TextureSprite}
 	, Shader{Shader}
 	, BillBoard{BillBoard}
 {
@@ -28,9 +29,8 @@ SpriteRenderer::SpriteRenderer(Texture* TextureSprite, ShaderSprite* Shader, boo
 	Dimension.y = Dimension.y * 2.0f / pD3DDevice.GetHauteur();
 }
 
-void SpriteRenderer::SpriteTick(const float ElapsedTime)
+void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 {
-	Actor::SpriteTick(ElapsedTime);
 
 	auto& pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
 
@@ -59,13 +59,13 @@ void SpriteRenderer::SpriteTick(const float ElapsedTime)
 
 	pD3DDevice.ActiverMelangeAlpha();
 
-	XMMATRIX Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ Actor::Transform.Position.x, Actor::Transform.Position.y, Actor::Transform.Position.z });
-	XMMATRIX Scale = DirectX::XMMatrixScaling(Dimension.x * Actor::Transform.Scale.x, Dimension.y * Actor::Transform.Scale.y, 1.f);
+	XMMATRIX Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ ParentActor->Transform.Position.x + Offset.Position.x, ParentActor->Transform.Position.y + Offset.Position.y, ParentActor->Transform.Position.z  + Offset.Position.z});
+	XMMATRIX Scale = DirectX::XMMatrixScaling(Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x, Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
 	if (BillBoard) {
 		XMMATRIX ViewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
 		XMVECTOR PositionCamera = PM3D::CMoteurWindows::GetInstance().GetPosition();
 
-		float Angle = atan2f(Actor::Transform.Position.x - PositionCamera.vector4_f32[0], Actor::Transform.Position.z - PositionCamera.vector4_f32[2]);
+		float Angle = atan2f(ParentActor->Transform.Position.x - PositionCamera.vector4_f32[0], ParentActor->Transform.Position.z - PositionCamera.vector4_f32[2]);
 
 		XMMATRIX Rotation = DirectX::XMMatrixRotationY(Angle);
 

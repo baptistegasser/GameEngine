@@ -8,7 +8,7 @@
 
 using namespace DirectX;
 
-Camera::Camera(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Position, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection, DirectX::XMMATRIX* PMatView, DirectX::XMMATRIX* PMatProj, DirectX::XMMATRIX* PMatViewProj)
+Camera::Camera(Pitbull::Actor* Parent, DirectX::XMVECTOR* Position, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection, DirectX::XMMATRIX* PMatView, DirectX::XMMATRIX* PMatProj, DirectX::XMMATRIX* PMatViewProj)
 	: Component{ Parent }
 	, NeedToUpdate{ true }
 	, Position{ Position }
@@ -22,7 +22,7 @@ Camera::Camera(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Position, const 
 void Camera::LateTick(const float& DeltaTime)
 {
 	// Calc view matrix
-	*PMatView = XMMatrixLookAtLH(Position, Position + Direction, UpDirection);
+	*PMatView = XMMatrixLookAtLH(*Position, *Position + Direction, UpDirection);
 
 	// Calc the view projection
 	*PMatViewProj = (*PMatView) * (*PMatProj);
@@ -31,9 +31,9 @@ void Camera::LateTick(const float& DeltaTime)
 	NeedToUpdate = false;
 }
 
-void Camera::SetPosition(const DirectX::XMVECTOR& Position) noexcept
+void Camera::SetPosition(const DirectX::XMVECTOR Position) noexcept
 {
-	this->Position = Position;
+	*this->Position = Position;
 	NeedToUpdate = true;
 }
 
@@ -51,5 +51,5 @@ void Camera::SetUpDirection(const DirectX::XMVECTOR& UpDirection) noexcept
 
 const DirectX::XMVECTOR& Camera::GetPosition() const noexcept
 {
-	return Position;
+	return *Position;
 }

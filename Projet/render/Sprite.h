@@ -1,26 +1,15 @@
 #pragma once
-#include "stdafx.h"
-#include "core/Component.h"
-
-using namespace DirectX;
-
+#include "d3dx11effect.h"
 
 class SpriteVertex
 {
 public:
-	SpriteVertex() = default;
-	SpriteVertex(const XMFLOAT3& position, const XMFLOAT2& coordTex)
-		: m_Position(position)
-		, m_CoordTex(coordTex)
-	{
-	}
+	SpriteVertex(const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT2& CoordTex);
+	static UINT NumElements;
+	static D3D11_INPUT_ELEMENT_DESC Layout[];
 
-public:
-	static UINT numElements;
-	static D3D11_INPUT_ELEMENT_DESC layout[];
-
-	XMFLOAT3 m_Position;
-	XMFLOAT2 m_CoordTex;
+	DirectX::XMFLOAT3 Position;
+	DirectX::XMFLOAT2 CoordTex;
 };
 
 struct ShaderParamsSprite {
@@ -30,18 +19,19 @@ struct ShaderParamsSprite {
 struct ShaderSprite {
 	const wchar_t* FileName;
 
-	//ID3D11Buffer* pVertexBuffer;
-	//ID3D11Buffer* pConstantBuffer;
-	//ID3DX11Effect* pEffet;
-	//ID3DX11EffectTechnique* pTechnique;
-	//ID3DX11EffectPass* pPasse;
-	//ID3D11InputLayout* pVertexLayout;
+	ID3D11Buffer* pVertexBuffer;
+	ID3D11Buffer* pConstantBuffer;
+	ID3DX11Effect* pEffet;
+	ID3DX11EffectTechnique* pTechnique;
+	ID3DX11EffectPass* pPasse;
+	ID3D11InputLayout* pVertexLayout;
 
-	//ID3D11SamplerState* pSampleState;
+	ID3D11SamplerState* pSampleState;
 
 	static SpriteVertex sommets[6];
 
 	ShaderSprite(const wchar_t* FileName);
+	~ShaderSprite();
 };
 
 

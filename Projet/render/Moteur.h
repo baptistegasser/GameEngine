@@ -10,6 +10,7 @@
 
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
+#include "render/Sprite.h"
 
 // Physic components
 #include "physic/RigidBody.h"
@@ -25,7 +26,7 @@
 // Gameplay components
 
 // Sprite
-#include "render/AfficheurSprite.h"
+#include "render/SpriteRenderer.h"
 
 using namespace physx;
 
@@ -137,6 +138,7 @@ public:
 		return true;
 	}
 
+	const DirectX::XMVECTOR GetPosition() const { return Position; }
 	const DirectX::XMMATRIX& GetMatView() const { return m_MatView; }
 	const DirectX::XMMATRIX& GetMatProj() const { return m_MatProj; }
 	const DirectX::XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
@@ -217,10 +219,6 @@ protected:
 		//// Dans notre cas, ces matrices sont fixes
 		m_MatView = XMMatrixLookAtLH(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f), XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f) + XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
-		//XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
-		//	XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
-		//	XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f)
-
 		const float champDeVision = XM_PI / 2; 	// 45 degr�s
 		const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
 		const float planRapproche = 1.0;
@@ -281,10 +279,14 @@ protected:
 		CreateMobilePlatform(PxVec3(10.f, 10.f, 20.f), PxVec3(1.f, 1.f, 1.f), PxVec3(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB", PxVec3(0.75f, 0.75f, 0.0f));
 		//MyPlateform->AddComponent<Plateform>(PxTransform(PxVec3(5, 5, 5)), PxTransform(PxVec3(-3, 5, 5)), true);
 
+		XMVECTOR p = XMVECTOR{ 0.0f, 2.0f, 10.0f, 1.0f };
+
+		Position = XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f);
+
 		auto MyPlayer = Pitbull::Actor::New();
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
-		auto PlayerCam = MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
+		auto PlayerCam = MyPlayer->AddComponent<Camera>(&Position,
 			XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f),
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
 			&m_MatView,
@@ -307,18 +309,14 @@ protected:
 		CurrentScene->LightConfig.AddPointLight(Light);
 
 
-		std::unique_ptr<CAfficheurSprite> pAfficheurSprite =
-			std::make_unique<CAfficheurSprite>(pDispositif);
-		
 
-		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 200, 400);
-		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 500, 500, 100, 100);
-		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 800, 200, 100, 100);
-		pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 0.80f, 0.4f, 0 }, 0, 0);
-		//pAfficheurSprite->AjouterPanneau(L".\\modeles\\tree02s.dds", XMFLOAT3{ 200, 0, 0 }, 1000, 1000);
-		//pAfficheurSprite->AjouterPanneau(L".\\modeles\\grass_v1_basic_tex.dds", XMFLOAT3(1.0f, 0.0f, 1.0f));
-		//pAfficheurSprite->AjouterSprite(L".\\modeles\\tree02s.dds", 800, 200, 100, 100);
-		CurrentScene->AddActor(std::move(pAfficheurSprite));
+		auto mySprite = std::unique_ptr<SpriteRenderer>(new SpriteRenderer{ 
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false });
+		mySprite->Transform.Scale.x = 2.0f;
+		mySprite->Transform.Scale.y = 2.0f;
+		CurrentScene->AddActor(std::move(mySprite));
+
+
 
 		return true;
 	}
@@ -379,6 +377,9 @@ protected:
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;
+
+	// Position of the camera
+	DirectX::XMVECTOR Position;
 
 	// Les matrices
 	DirectX::XMMATRIX m_MatView;

@@ -315,11 +315,11 @@ protected:
 
 		auto mySprite = std::unique_ptr<SpriteRenderer>(new SpriteRenderer{ 
 			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true });
-		mySprite->Transform.Scale.x = 2.0f;
-		mySprite->Transform.Scale.y = 2.0f;
+		mySprite->Transform.Scale.x = 10.0f;
+		mySprite->Transform.Scale.y = 10.0f;
 		mySprite->Transform.Position.z = 5.0f;
+		mySprite->Transform.Position.y = 2.0f;
 		CurrentScene->AddActor(std::move(mySprite));
-
 
 
 		return true;

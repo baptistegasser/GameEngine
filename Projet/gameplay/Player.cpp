@@ -55,7 +55,7 @@ void Player::FixedTick(const float& DeltaTime)
 		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
 	}
 
-	if (InputManager.IsKeyDown(DIK_ESCAPE)) {
+	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
 		Engine.Stop();
 	}
 

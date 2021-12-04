@@ -64,9 +64,9 @@ void InputManager::Tick() noexcept
 				Status = KeyFlag::Pressed;
 			}
 		}
-		else {
+		else if (Status != KeyFlag::None) {
 			// First frame this key is released
-			if (Status != KeyFlag::None) {
+			if ((Status & KeyFlag::Up) != KeyFlag::Up) {
 				Status = KeyFlag::Up;
 			}
 			// Seconde frame this key is pressed

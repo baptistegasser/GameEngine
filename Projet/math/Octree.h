@@ -3,6 +3,7 @@
 #include "math/BoundingVolume.h"
 
 #include <vector>
+#include <deque>
 #include <memory>
 
 constexpr unsigned int MAX_LEAFS_COUNT = 6;
@@ -73,15 +74,15 @@ bool Octree<T>::Add(DataType Data)
 	if (!VolumeContains(Root.Boundary, Leaf.Position))
 		return false;
 
-	// Ignore if already have this Actor in the tree
+	// Ignore if already have this Data in the tree
 	{
-		const auto it = std::find(begin(Actors), end(Actors), Actor);
-		if (it != Actors.end())
+		const auto it = std::find(begin(Datas), end(Datas), Data);
+		if (it != Datas.end())
 			return false;
 	}
 
-	// Insert the actor in the array
-	Actors.push_back(std::move(Actor));
+	// Insert the data in the array
+	Datas.push_back(std::move(Data));
 
 	// Insert in the tree
 	return Root.Add(Leaf);
@@ -99,7 +100,7 @@ bool Octree<T>::Remove(const DataPtr Data)
 	// Create matching leaf
 	const Leaf Leaf{ static_cast<Leaf::ID>(it - Datas.begin()), Data->Transform.Position };
 
-	// Remove from actors
+	// Remove from Datas
 	Datas.erase(it);
 
 	// Remove from tree
@@ -157,19 +158,19 @@ void Octree<T>::Update()
 }
 
 template <class T>
-const Octree<T>::DataList& Octree<T>::GetDatas() const noexcept
+const typename Octree<T>::DataList& Octree<T>::GetDatas() const noexcept
 {
 	return Datas;
 }
 
 template <class T>
-Octree<T>::DataPtrList Octree<T>::Find(const Math::Vec3f& Pos, float MaxDistance) const
+typename Octree<T>::DataPtrList Octree<T>::Find(const Math::Vec3f& Pos, float MaxDistance) const
 {
 	return Find(BoundingSphere{ MaxDistance, Pos });
 }
 
 template <class T>
-Octree<T>::DataPtrList Octree<T>::Find(const BoundingVolume Volume) const
+typename Octree<T>::DataPtrList Octree<T>::Find(const BoundingVolume Volume) const
 {
 	using NodePtr = const Node*;
 

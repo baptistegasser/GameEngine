@@ -6,20 +6,20 @@
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
-	, Tree{ BoundingBox{ 5000.f } }
+	, Tree{ new Octree<Pitbull::Actor>{BoundingBox{ 5000.f }} }
 	, VisionVolume{ BoundingSphere{ 0.f } }
 {}
 
 void Scene::Tick(const float ElapsedTime)
 {
-	for (auto& Actor : Tree.GetDatas()) {
+	for (auto& Actor : Tree->GetDatas()) {
 		Actor->Tick(ElapsedTime);
 	}
 }
 
 void Scene::FixedTick(const float DeltaTime)
 {
-	for (auto& Actor : Tree.GetDatas()) {
+	for (auto& Actor : Tree->GetDatas()) {
 		Actor->FixedTick(DeltaTime);
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -29,7 +29,7 @@ void Scene::FixedTick(const float DeltaTime)
 
 void Scene::LateTick(const float ElapsedTime)
 {
-	for (auto& Actor : Tree.GetDatas()) {
+	for (auto& Actor : Tree->GetDatas()) {
 		Actor->LateTick(ElapsedTime);
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -40,12 +40,12 @@ void Scene::LateTick(const float ElapsedTime)
 void Scene::Update()
 {
 	// Update the Octree
-	Tree.Update();
+	Tree->Update();
 }
 
 void Scene::Init() const
 {
-	for (auto& Actor : Tree.GetDatas()) {
+	for (auto& Actor : Tree->GetDatas()) {
 		Actor->Init();
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -59,7 +59,7 @@ void Scene::AddActor(ActorPtr Actor, bool AlwaysVisible)
 		AlwaysVisibleActors.push_back(std::move(Actor));
 	}
 	else {
-		Tree.Add(std::move(Actor));
+		Tree->Add(std::move(Actor));
 	}
 }
 
@@ -76,7 +76,7 @@ const Camera& Scene::GetCurrentCamera() const noexcept
 const Scene::ActorPtrList Scene::GetVisibleActors() noexcept
 {
 	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
-	auto Actors = Tree.Find(VisionVolume);
+	auto Actors = Tree->Find(VisionVolume);
 	ConcatVisibleActors(Actors);
 	return Actors;
 }

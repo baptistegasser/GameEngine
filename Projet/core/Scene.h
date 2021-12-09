@@ -62,7 +62,7 @@ public:
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;
-	ActorTree Tree;
+	ActorTree* Tree;
 	ActorTree::DataList AlwaysVisibleActors;
 
 	void ConcatVisibleActors(ActorPtrList& Actors);

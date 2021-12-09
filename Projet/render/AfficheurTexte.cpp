@@ -7,7 +7,7 @@ namespace PM3D
 
 ULONG_PTR CAfficheurTexte::token = 0;
 
-CAfficheurTexte::CAfficheurTexte(CDispositifD3D11* pDispositif, int largeur, int hauteur, Gdiplus::Font* pPolice)
+CAfficheurTexte::CAfficheurTexte(DeviceD3D11* pDispositif, int largeur, int hauteur, Gdiplus::Font* pPolice)
 	: pDispo(pDispositif)
 	, TexWidth(largeur)
 	, TexHeight(hauteur)
@@ -70,7 +70,7 @@ CAfficheurTexte::CAfficheurTexte(CDispositifD3D11* pDispositif, int largeur, int
 	data.SysMemSlicePitch = 0;
 
 	// Création de la texture à partir des données du bitmap
-	DXEssayer(pDispo->GetD3DDevice()->CreateTexture2D(&texDesc, &data, &pTexture));
+	DXEssayer(pDispo->D3DDevice->CreateTexture2D(&texDesc, &data, &pTexture));
 
 	// Création d'un «resourve view» pour accéder facilement à la texture
 	//     (comme pour les sprites)
@@ -80,7 +80,7 @@ CAfficheurTexte::CAfficheurTexte(CDispositifD3D11* pDispositif, int largeur, int
 	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 
-	DXEssayer(pDispositif->GetD3DDevice()->CreateShaderResourceView(pTexture, &srvDesc, &pTextureView));
+	DXEssayer(pDispo->D3DDevice->CreateShaderResourceView(pTexture, &srvDesc, &pTextureView));
 
 	pCharBitmap->UnlockBits(&bmData);
 }
@@ -117,7 +117,7 @@ void CAfficheurTexte::Ecrire(const std::wstring& s)
 	const auto& Rect = Gdiplus::Rect(0, 0, TexWidth, TexHeight);
 	pCharBitmap->LockBits(&Rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
 
-	pDispo->GetImmediateContext()->UpdateSubresource(pTexture, 0, 0, bmData.Scan0, TexWidth * 4, 0);
+	pDispo->ImmediateContext->UpdateSubresource(pTexture, 0, 0, bmData.Scan0, TexWidth * 4, 0);
 
 	pCharBitmap->UnlockBits(&bmData);
 }

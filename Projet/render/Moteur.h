@@ -1,5 +1,5 @@
 #pragma once
-#include "dispositif.h"
+#include "Device.h"
 
 #include "AfficheurTexte.h"
 #include "DIManipulateur.h"
@@ -60,7 +60,7 @@ enum EngineState
 //        le dispositif Direct3D), l'utilisation d'un singleton 
 //        nous simplifiera plusieurs aspects.
 //
-template <class T, class TClasseDispositif> class CMoteur :public Singleton<T>
+template <class T, class TDevice> class CMoteur :public Singleton<T>
 {
 public:
 
@@ -89,7 +89,7 @@ public:
 		InitialisationsSpecific();
 
 		// * Initialisation du dispositif de rendu
-		pDispositif = CreationDispositifSpecific(CDS_FENETRE);
+		pDispositif = CreationDispositifSpecific(CDS_MODE::CDS_FENETRE);
 
 		CurrentScene = std::make_shared<Scene>();
 
@@ -155,7 +155,7 @@ public:
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
-	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
+	DeviceD3D11& GetDispositif() noexcept { return *pDispositif; }
 
 	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
 	bool IsStopping() const noexcept { return IsStateSet(EngineState::Stopping); }
@@ -177,7 +177,7 @@ protected:
 	virtual int64_t GetTimeSpecific() const = 0;
 	virtual double GetTimeIntervalsInSec(int64_t start, int64_t stop) const = 0;
 
-	virtual TClasseDispositif* CreationDispositifSpecific(const CDS_MODE cdsMode) = 0;
+	virtual TDevice* CreationDispositifSpecific(const CDS_MODE cdsMode) = 0;
 	virtual void BeginRenderSceneSpecific() = 0;
 	virtual void EndRenderSceneSpecific() = 0;
 
@@ -240,7 +240,7 @@ protected:
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
 		const float champDeVision = XM_PI / 2; 	// 45 degr�s
-		const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
+		const float ratioDAspect = static_cast<float>(pDispositif->ScreenWidth) / static_cast<float>(pDispositif->ScreenHeight);
 		const float planRapproche = 1.0;
 		const float planEloigne = 300.0;
 
@@ -380,7 +380,7 @@ protected:
 	int64_t TempsCompteurPrecedent;
 
 	// Le dispositif de rendu
-	TClasseDispositif* pDispositif;
+	TDevice* pDispositif;
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;

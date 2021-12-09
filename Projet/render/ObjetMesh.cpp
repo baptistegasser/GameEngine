@@ -3,7 +3,7 @@
 #include "ObjetMesh.h"
 #include "moteurWindows.h"
 #include "util/util.h"
-#include "dispositifD3D11.h"
+#include "DeviceD3D11.h"
 #include "resources/resource.h"
 
 namespace PM3D
@@ -37,7 +37,7 @@ struct ShadersParams // toujours un multiple de 16 pour les constantes
 };
 
 // Ancien constructeur
-CObjetMesh::CObjetMesh(const IChargeur& chargeur, CDispositifD3D11* _pDispositif)
+CObjetMesh::CObjetMesh(const IChargeur& chargeur, DeviceD3D11* _pDispositif)
 	: pDispositif(_pDispositif) // prendre en note le dispositif
 {
 	// Placer l'objet sur la carte graphique
@@ -53,7 +53,7 @@ CObjetMesh::CObjetMesh(const IChargeur& chargeur, CDispositifD3D11* _pDispositif
 
 // Constructeur de conversion
 // Constructeur pour test ou pour cr�ation d'un objet de format OMB
-CObjetMesh::CObjetMesh(const IChargeur& chargeur, const std::string& nomfichier, CDispositifD3D11* _pDispositif)
+CObjetMesh::CObjetMesh(const IChargeur& chargeur, const std::string& nomfichier, DeviceD3D11* _pDispositif)
 	: pDispositif(_pDispositif) // prendre en note le dispositif
 {
 	//// Placer l'objet sur la carte graphique
@@ -72,7 +72,7 @@ CObjetMesh::CObjetMesh(const IChargeur& chargeur, const std::string& nomfichier,
 }
 
 // Constructeur pour lecture d'un objet de format OMB
-CObjetMesh::CObjetMesh(const std::string& nomfichier, CDispositifD3D11* _pDispositif)
+CObjetMesh::CObjetMesh(const std::string& nomfichier, DeviceD3D11* _pDispositif)
 	: pDispositif(_pDispositif) // prendre en note le dispositif
 {
 	// Placer l'objet sur la carte graphique
@@ -100,7 +100,7 @@ CObjetMesh::~CObjetMesh()
 void CObjetMesh::InitEffet()
 {
 	// Compilation et chargement du vertex shader
-	ID3D11Device* pD3DDevice = pDispositif->GetD3DDevice();
+	ID3D11Device* pD3DDevice = pDispositif->D3DDevice;
 
 	// Cr�ation d'un tampon pour les constantes du VS
 	D3D11_BUFFER_DESC bd;
@@ -178,7 +178,7 @@ void CObjetMesh::Anime(float tempsEcoule)
 void CObjetMesh::Draw()
 {
 	// Obtenir le contexte
-	ID3D11DeviceContext* pImmediateContext = pDispositif->GetImmediateContext();
+	ID3D11DeviceContext* pImmediateContext = pDispositif->ImmediateContext;
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -250,7 +250,7 @@ void CObjetMesh::Draw()
 
 void CObjetMesh::TransfertObjet(const IChargeur& chargeur)
 {
-	ID3D11Device* pD3DDevice = pDispositif->GetD3DDevice();
+	ID3D11Device* pD3DDevice = pDispositif->D3DDevice;
 
 	// 1. SOMMETS a) Cr�ations des sommets dans un tableau temporaire
 	{
@@ -452,7 +452,7 @@ void CObjetMesh::EcrireFichierBinaire(const IChargeur& chargeur, const std::stri
 
 void CObjetMesh::LireFichierBinaire(const std::string& nomFichier)
 {
-	ID3D11Device* pD3DDevice = pDispositif->GetD3DDevice();
+	ID3D11Device* pD3DDevice = pDispositif->D3DDevice;
 
 	std::ifstream fichier;
 	fichier.open(nomFichier, std::ios::in | std::ios_base::binary);

@@ -1,9 +1,9 @@
-﻿#include "StdAfx.h"
+﻿#include "stdafx.h"
 #include "AfficheurSprite.h"
-#include "resources/resource.h"
+#include "DeviceD3D11.h"
 #include "MoteurWindows.h"
-#include "util/util.h"
-#include "DispositifD3D11.h"
+#include "resources/resource.h"
+#include "util/Util.h"
 
 namespace PM3D
 {
@@ -31,7 +31,7 @@ CSommetSprite CAfficheurSprite::sommets[6] =
 				CSommetSprite(XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f))
 };
 
-CAfficheurSprite::CAfficheurSprite(CDispositifD3D11* _pDispositif)
+CAfficheurSprite::CAfficheurSprite(DeviceD3D11* _pDispositif)
 	: pDispositif(_pDispositif)
 	, pVertexBuffer(nullptr)
 	, pConstantBuffer(nullptr)
@@ -42,7 +42,7 @@ CAfficheurSprite::CAfficheurSprite(CDispositifD3D11* _pDispositif)
 	, pSampleState(nullptr)
 {
 	// Création du vertex buffer et copie des sommets
-	ID3D11Device* pD3DDevice = pDispositif->GetD3DDevice();
+	ID3D11Device* pD3DDevice = pDispositif->D3DDevice;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -78,7 +78,7 @@ CAfficheurSprite ::~CAfficheurSprite()
 void CAfficheurSprite::InitEffet()
 {
 	// Compilation et chargement du vertex shader
-	ID3D11Device* pD3DDevice = pDispositif->GetD3DDevice();
+	ID3D11Device* pD3DDevice = pDispositif->D3DDevice;
 
 	// Création d'un tampon pour les constantes de l'effet
 	D3D11_BUFFER_DESC bd;
@@ -149,8 +149,7 @@ void CAfficheurSprite::InitEffet()
 void CAfficheurSprite::Draw()
 {
 	// Obtenir le contexte
-	ID3D11DeviceContext* pImmediateContext =
-		pDispositif->GetImmediateContext();
+	ID3D11DeviceContext* pImmediateContext = pDispositif->ImmediateContext;
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(
@@ -176,7 +175,7 @@ void CAfficheurSprite::Draw()
 	variableTexture =
 		pEffet->GetVariableByName("textureEntree")->AsShaderResource();
 
-	pDispositif->ActiverMelangeAlpha();
+	pDispositif->ActivateAlphaBlending();
 
 	// Faire le rendu de tous nos sprites
 	for (auto& sprite : tabSprites)
@@ -198,7 +197,7 @@ void CAfficheurSprite::Draw()
 		pImmediateContext->Draw(6, 0);
 	}
 
-	pDispositif->DesactiverMelangeAlpha();
+	pDispositif->DeactivateAlphaBlending();
 }
 
 void CAfficheurSprite::AjouterSprite(const std::string& NomTexture,
@@ -236,16 +235,16 @@ void CAfficheurSprite::AjouterSprite(const std::string& NomTexture,
 	}
 
 	// Dimension en facteur
-	facteurX = dx * 2.0f / pDispositif->GetLargeur();
-	facteurY = dy * 2.0f / pDispositif->GetHauteur();
+	facteurX = dx * 2.0f / pDispositif->ScreenWidth;
+	facteurY = dy * 2.0f / pDispositif->ScreenHeight;
 
 	// Position en coordonnées logiques
 	// 0,0 pixel = -1,1   
 	x = float(_x);
 	y = float(_y);
 
-	posX = x * 2.0f / pDispositif->GetLargeur() - 1.0f;
-	posY = 1.0f - y * 2.0f / pDispositif->GetHauteur();
+	posX = x * 2.0f / pDispositif->ScreenWidth - 1.0f;
+	posY = 1.0f - y * 2.0f / pDispositif->ScreenHeight;
 
 	pSprite->matPosDim = XMMatrixScaling(facteurX, facteurY, 1.0f) *
 		XMMatrixTranslation(posX, posY, 0.0f);
@@ -283,8 +282,8 @@ void CAfficheurSprite::AjouterPanneau(const std::string& NomTexture,
 		pPanneau->dimension.y = float(desc.Height);
 
 		// Dimension en facteur
-		pPanneau->dimension.x = pPanneau->dimension.x * 2.0f / pDispositif->GetLargeur();
-		pPanneau->dimension.y = pPanneau->dimension.y * 2.0f / pDispositif->GetHauteur();
+		pPanneau->dimension.x = pPanneau->dimension.x * 2.0f / pDispositif->ScreenWidth;
+		pPanneau->dimension.y = pPanneau->dimension.y * 2.0f / pDispositif->ScreenHeight;
 	}
 	else
 	{
@@ -327,16 +326,16 @@ void CAfficheurSprite::AjouterSpriteTexte(
 	const float dy = float(desc.Height);
 
 	// Dimension en facteur
-	const float facteurX = dx * 2.0f / pDispositif->GetLargeur();
-	const float facteurY = dy * 2.0f / pDispositif->GetHauteur();
+	const float facteurX = dx * 2.0f / pDispositif->ScreenWidth;
+	const float facteurY = dy * 2.0f / pDispositif->ScreenHeight;
 
 	// Position en coordonnées logiques
 	// 0,0 pixel = -1,1   
 	const float x = float(_x);
 	const float y = float(_y);
 
-	const float posX = x * 2.0f / pDispositif->GetLargeur() - 1.0f;
-	const float posY = 1.0f - y * 2.0f / pDispositif->GetHauteur();
+	const float posX = x * 2.0f / pDispositif->ScreenWidth - 1.0f;
+	const float posY = 1.0f - y * 2.0f / pDispositif->ScreenHeight;
 
 	pSprite->matPosDim = XMMatrixScaling(facteurX, facteurY, 1.0f) *
 		XMMatrixTranslation(posX, posY, 0.0f);

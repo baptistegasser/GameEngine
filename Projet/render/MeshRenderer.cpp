@@ -30,7 +30,7 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	matWorld = ParentActor->Transform;
 
 	// Obtenir le contexte
-	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
+	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
 	const auto& LightConfig = PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig;
 
 	// Choisir la topologie des primitives

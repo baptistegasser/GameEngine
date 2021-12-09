@@ -12,14 +12,14 @@ Scene::Scene()
 
 void Scene::Tick(const float ElapsedTime)
 {
-	for (auto& Actor : Tree.GetActors()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->Tick(ElapsedTime);
 	}
 }
 
 void Scene::FixedTick(const float DeltaTime)
 {
-	for (auto& Actor : Tree.GetActors()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->FixedTick(DeltaTime);
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -29,7 +29,7 @@ void Scene::FixedTick(const float DeltaTime)
 
 void Scene::LateTick(const float ElapsedTime)
 {
-	for (auto& Actor : Tree.GetActors()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->LateTick(ElapsedTime);
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -45,7 +45,7 @@ void Scene::Update()
 
 void Scene::Init() const
 {
-	for (auto& Actor : Tree.GetActors()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->Init();
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -73,7 +73,7 @@ const Camera& Scene::GetCurrentCamera() const noexcept
 	return *CurrentCamera;
 }
 
-const Octree::ActorPtrList Scene::GetVisibleActors() noexcept
+const Scene::ActorPtrList Scene::GetVisibleActors() noexcept
 {
 	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
 	auto Actors = Tree.Find(VisionVolume);
@@ -81,7 +81,7 @@ const Octree::ActorPtrList Scene::GetVisibleActors() noexcept
 	return Actors;
 }
 
-void Scene::ConcatVisibleActors(Octree::ActorPtrList& Actors)
+void Scene::ConcatVisibleActors(ActorPtrList& Actors)
 {
 	for (auto& VisibleActor : AlwaysVisibleActors)
 	{

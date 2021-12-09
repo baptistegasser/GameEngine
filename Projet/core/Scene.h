@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Actor.h"
 #include "math/Octree.h"
 #include "render/Camera.h"
 #include "render/LightConfig.h"
@@ -10,7 +11,9 @@
 
 class Scene {
 public:
-	using ActorPtr = Octree::ActorType;
+	using ActorTree = Octree<Pitbull::Actor>;
+	using ActorPtr = ActorTree::DataType;
+	using ActorPtrList = ActorTree::DataPtrList;
 
 	Scene();
 	~Scene() = default;
@@ -51,7 +54,7 @@ public:
 	/// <summary>
 	/// Get all actors in current vision range.
 	/// </summary>
-	const Octree::ActorPtrList GetVisibleActors() noexcept;
+	const ActorPtrList GetVisibleActors() noexcept;
 
 	physx::PxScene* PhysxScene;
 
@@ -59,8 +62,8 @@ public:
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;
-	Octree Tree;
-	Octree::ActorList AlwaysVisibleActors;
+	ActorTree Tree;
+	ActorTree::DataList AlwaysVisibleActors;
 
-	void ConcatVisibleActors(Octree::ActorPtrList& Actors);
+	void ConcatVisibleActors(ActorPtrList& Actors);
 };

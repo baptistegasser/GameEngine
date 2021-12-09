@@ -40,6 +40,9 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	//ID3D11DepthStencilView* pDepthStencilView = pD3DDevice.GetDepthStencilView();
+	//pImmediateContext->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 	// Source des sommets
 	const UINT stride = sizeof(SpriteVertex);
 	const UINT offset = 0;

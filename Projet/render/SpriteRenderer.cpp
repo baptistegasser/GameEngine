@@ -3,16 +3,24 @@
 #include "MoteurWindows.h"
 
 using namespace DirectX;
+using namespace std;
 
-SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* TextureSprite, ShaderSprite* Shader, bool BillBoard)
+SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, std::variant<Texture*, Font*> Sprite, ShaderSprite* Shader, bool BillBoard)
 	: Component{ Parent }
-	, TextureSprite{TextureSprite}
-	, Shader{Shader}
-	, BillBoard{BillBoard}
+	, Shader{ Shader }
+	, Sprite{ Sprite }
+	, BillBoard{ BillBoard }
 {
+	auto& pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+
 	ID3D11Resource* pResource;
 	ID3D11Texture2D* pTextureInterface = 0;
-	TextureSprite->TextureView->GetResource(&pResource);
+	if (holds_alternative<Texture*>(Sprite)) {
+		get<Texture*>(Sprite)->TextureView->GetResource(&pResource);
+	}
+	else {
+		get<Font*>(Sprite)->pTextureView->GetResource(&pResource);
+	}
 	pResource->QueryInterface<ID3D11Texture2D>(&pTextureInterface);
 	D3D11_TEXTURE2D_DESC desc;
 	pTextureInterface->GetDesc(&desc);
@@ -23,8 +31,6 @@ SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* TextureSprite, S
 	Dimension.x = float(desc.Width);
 	Dimension.y = float(desc.Height);
 
-	auto& pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
-	
 	Dimension.x = Dimension.x * 2.0f / pD3DDevice.GetLargeur();
 	Dimension.y = Dimension.y * 2.0f / pD3DDevice.GetHauteur();
 }
@@ -62,9 +68,13 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 
 	pD3DDevice.ActiverMelangeAlpha();
 
-	XMMATRIX Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ ParentActor->Transform.Position.x + Offset.Position.x, ParentActor->Transform.Position.y + Offset.Position.y, ParentActor->Transform.Position.z  + Offset.Position.z});
-	XMMATRIX Scale = DirectX::XMMatrixScaling(Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x, Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
+	XMMATRIX Position;
+	XMMATRIX Scale;
+
 	if (BillBoard) {
+		Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ ParentActor->Transform.Position.x + Offset.Position.x, ParentActor->Transform.Position.y + Offset.Position.y, ParentActor->Transform.Position.z + Offset.Position.z });
+		Scale = DirectX::XMMatrixScaling(Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x, Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
+
 		XMMATRIX ViewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
 		XMVECTOR PositionCamera = PM3D::CMoteurWindows::GetInstance().GetPosition();
 
@@ -76,6 +86,9 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 
 	}
 	else {
+		Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ ParentActor->Transform.Position.x + Offset.Position.x, ParentActor->Transform.Position.y + Offset.Position.y, 0.0f });
+		Scale = DirectX::XMMatrixScaling(Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x, Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
+
 		Position = Scale * Position;
 	}
 	ShaderParams.MatWorldViewProj = DirectX::XMMatrixTranspose(Position);
@@ -85,7 +98,12 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	pCB->SetConstantBuffer(Shader->pConstantBuffer);
 
 	// Activation de la texture
-	variableTexture->SetResource(TextureSprite->TextureView);
+	if (holds_alternative<Texture*>(Sprite)) {
+		variableTexture->SetResource(get<Texture*>(Sprite)->TextureView);
+	}
+	else {
+		variableTexture->SetResource(get<Font*>(Sprite)->pTextureView);
+	}
 
 	Shader->pPasse->Apply(0, pImmediateContext);
 
@@ -95,4 +113,23 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	pD3DDevice.DesactiverMelangeAlpha();
 }
 
+void SpriteRenderer::Write(const std::wstring& s)
+{
+	// Effacer
+	get<Font*>(Sprite)->pCharGraphics->Clear(Gdiplus::Color(0, 0, 0, 0));
+
+	// Écrire le nouveau texte
+	get<Font*>(Sprite)->pCharGraphics->DrawString(s.c_str(), static_cast<int>(s.size()), get<Font*>(Sprite)->pFont.get(), Gdiplus::PointF(0.0f, 0.0f), get<Font*>(Sprite)->pBlackBrush.get());
+
+	// Transférer
+	Gdiplus::BitmapData bmData;
+	const auto& Rect = Gdiplus::Rect(0, 0, get<Font*>(Sprite)->TexWidth, get<Font*>(Sprite)->TexHeight);
+	get<Font*>(Sprite)->pCharBitmap->LockBits(&Rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
+
+	auto& pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+
+	pD3DDevice.GetImmediateContext()->UpdateSubresource(get<Font*>(Sprite)->pTexture, 0, 0, bmData.Scan0, get<Font*>(Sprite)->TexWidth * 4, 0);
+
+	get<Font*>(Sprite)->pCharBitmap->UnlockBits(&bmData);
+}
 

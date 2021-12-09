@@ -30,7 +30,6 @@
 // Sprite
 #include "render/SpriteRenderer.h"
 
-
 #include <iostream>
 #include <chrono>
 
@@ -319,7 +318,7 @@ protected:
 
 		auto mySprite = Pitbull::Actor::New();
 		mySprite->AddComponent<SpriteRenderer>(
-			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true );
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
 		mySprite->Transform.Scale.x = 10.0f;
 		mySprite->Transform.Scale.y = 10.0f;
 		mySprite->Transform.Position.z = 5.0f;
@@ -329,6 +328,19 @@ protected:
 		bla->Offset.Position.y = 5.0f;
 		CurrentScene->AddActor(std::move(mySprite));
 
+		//auto Sprite = Pitbull::Actor::New();
+		//Sprite->AddComponent<SpriteRenderer>(
+		//	ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+		//CurrentScene->AddActor(std::move(Sprite), true);
+
+
+
+		auto Text = Pitbull::Actor::New();
+
+		auto t = Text->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+		t->Write(L"oooo");
+		CurrentScene->AddActor(std::move(Text), true);
 
 		return true;
 	}

@@ -11,6 +11,7 @@ struct Shader;
 struct ObjectMesh;
 struct Texture;
 struct ShaderSprite;
+struct Font;
 
 class ResourcesManager {
 private:
@@ -18,8 +19,10 @@ private:
 	std::map<const std::string, std::unique_ptr<Texture>> Textures;
 	std::map<const std::string, std::unique_ptr<ObjectMesh>> Meshes;
 	std::map<const std::string, std::unique_ptr<ShaderSprite>> Sprites;
+	std::map<const std::string, std::unique_ptr<Font>> Fonts;
 
 public:
+	ResourcesManager();
 	~ResourcesManager();
 	void Cleanup() noexcept;
 
@@ -27,4 +30,9 @@ public:
 	ShaderSprite* GetShaderSprite(const wchar_t* ShaderName);
 	Texture* GetTexture(const std::wstring& TextureName);
 	ObjectMesh* GetMesh(const wchar_t* MeshName);
+	Font* GetFont(const wchar_t* FontName);
+
+private :
+	// Variables statiques pour GDI+
+	static ULONG_PTR token;
 };

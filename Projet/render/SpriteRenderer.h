@@ -5,14 +5,18 @@
 #include "render/Texture.h"
 #include "render/Sprite.h"
 #include "math/Transform.h"
+#include "render/Font.h"
+#include <variant>
 
 class SpriteRenderer : public Pitbull::Component {
 
 
 public :
-	SpriteRenderer(Pitbull::Actor* Parent, Texture* TextureSprite, ShaderSprite* Shader, bool BillBoard);
+	SpriteRenderer(Pitbull::Actor* Parent, std::variant<Texture*,Font*> Sprite, ShaderSprite* Shader, bool BillBoard);
 
 	void SpriteTick(const float& ElapsedTime) override;
+
+	void Write(const std::wstring& s);
 
 	ShaderParamsSprite ShaderParams;
 	Math::Transform Offset;
@@ -20,7 +24,7 @@ public :
 private :
 	
 	bool BillBoard;
-	Texture* TextureSprite;
 	ShaderSprite* Shader;
 	DirectX::XMFLOAT2 Dimension;
+	std::variant<Texture*, Font*> Sprite;
 };

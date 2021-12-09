@@ -237,6 +237,9 @@
     <ClCompile Include="render\SpriteRenderer.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
+    <ClCompile Include="render\Font.cpp">
+      <Filter>Source Files\render\pm3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -424,6 +427,12 @@
     </ClInclude>
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Observable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Font.h">
+      <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

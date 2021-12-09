@@ -6,6 +6,16 @@
 #include "render/Texture.h"
 #include "render/ObjectMesh.h"
 #include "render/Sprite.h"
+#include "render/Font.h"
+
+ULONG_PTR ResourcesManager::token = 0;
+
+ResourcesManager::ResourcesManager()
+{
+	Gdiplus::GdiplusStartupInput  startupInput(0, TRUE, TRUE);
+	Gdiplus::GdiplusStartupOutput startupOutput;
+	GdiplusStartup(&token, &startupInput, &startupOutput);
+}
 
 ResourcesManager::~ResourcesManager()
 {
@@ -18,6 +28,8 @@ void ResourcesManager::Cleanup() noexcept
 	Shaders.clear();
 	Textures.clear();
 	Sprites.clear();
+	Fonts.clear();
+	Gdiplus::GdiplusShutdown(token);
 }
 
 Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)
@@ -70,4 +82,17 @@ ObjectMesh* ResourcesManager::GetMesh(const wchar_t* MeshName)
 	}
 
 	return PMesh;
+}
+
+Font* ResourcesManager::GetFont(const wchar_t* FontName)
+{
+	const std::string Name = wchar2str(FontName);
+	auto PFont = Fonts[Name].get();
+
+	if (!PFont) {
+		PFont = new Font{ FontName };
+		Fonts[Name].reset(PFont);
+	}
+
+	return PFont;
 }

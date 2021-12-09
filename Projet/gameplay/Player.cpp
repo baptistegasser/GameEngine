@@ -19,6 +19,7 @@ void Player::Init()
 	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
+	MyCollider = ParentActor->GetComponent<SphereCollider>();
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -47,7 +48,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
  	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
-		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+	    if (isGrounded())
+			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_P)) {
@@ -90,6 +92,19 @@ void Player::FixedTick(const float& DeltaTime)
 		MyCamera->SetPosition(Math::PX2XMVector(ParentActor->Transform.Position) + Direction + XMVectorSet(0, 0.75f, 0, 0));
 	}
 	MyCamera->SetDirection(Direction);
+}
+
+bool Player::isGrounded() const
+{
+	static auto& Scene = PM3D::CMoteurWindows::GetInstance().GetScene();
+
+	auto Origin = ParentActor->Transform.Position;
+	Origin.y -= MyCollider->Radius + 0.1f; // Little more than radius
+	auto Hit = Scene.Raycast(
+		Origin,
+		{0.0f, -1.0f, 0.0f}, 
+		0.1f);
+	return Hit.hasAnyHits();
 }
 
 void Player::SwapCameraMode()

@@ -81,6 +81,13 @@ const Octree::ActorPtrList Scene::GetVisibleActors() noexcept
 	return Actors;
 }
 
+physx::PxRaycastBuffer Scene::Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const
+{
+	physx::PxRaycastBuffer Hit;
+	PhysxScene->raycast(Origin, Direction, Distance, Hit);
+	return Hit;
+}
+
 void Scene::ConcatVisibleActors(Octree::ActorPtrList& Actors)
 {
 	for (auto& VisibleActor : AlwaysVisibleActors)

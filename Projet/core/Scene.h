@@ -53,6 +53,8 @@ public:
 	/// </summary>
 	const Octree::ActorPtrList GetVisibleActors() noexcept;
 
+	physx::PxRaycastBuffer Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const;
+
 	physx::PxScene* PhysxScene;
 
 	LightConfig LightConfig;

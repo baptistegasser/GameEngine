@@ -2,6 +2,7 @@
 
 #include "core/Component.h"
 #include "physic/RigidBody.h"
+#include "physic/SphereCollider.h"
 #include "render/Camera.h"
 
 class Player : public Pitbull::Component
@@ -18,6 +19,8 @@ public :
 	/// </summary>
 	void FixedTick(const float& DeltaTime) override;
 
+	bool isGrounded() const;
+
 	/// <summary>
 	/// Type of camera, first or third person
 	/// </summary>
@@ -29,6 +32,7 @@ public :
 private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;
+	SphereCollider* MyCollider;
 
 	float AngleRotation = 0.0f;
 	float RotationSpeed = 0.05f;

@@ -36,7 +36,7 @@ private:
 	bool RemoveFromChildren(const Leaf& Leaf);
 };
 
-template <class T>
+template <class T, class ToPos>
 class Octree {
 public:
 	using DataPtr = T*;
@@ -57,18 +57,19 @@ public:
 protected:
 	Node Root;
 	DataList Datas;
+	ToPos ToPos;
 };
 
-template <class T>
-Octree<T>::Octree(const BoundingBox& Boundary)
+template <class T, class ToPos>
+Octree<T, ToPos>::Octree(const BoundingBox& Boundary)
 	: Root{ Boundary }
 {}
 
-template <class T>
-bool Octree<T>::Add(DataType Data)
+template <class T, class ToPos>
+bool Octree<T, ToPos>::Add(DataType Data)
 {
 	// Prepare leaf
-	Leaf Leaf{ Datas.size(), Data->Transform.Position };
+	Leaf Leaf{ Datas.size(), ToPos(Data) };
 
 	// Ignore out of bound for this tree
 	if (!VolumeContains(Root.Boundary, Leaf.Position))
@@ -88,8 +89,8 @@ bool Octree<T>::Add(DataType Data)
 	return Root.Add(Leaf);
 }
 
-template <class T>
-bool Octree<T>::Remove(const DataPtr Data)
+template <class T, class ToPos>
+bool Octree<T, ToPos>::Remove(const DataPtr Data)
 {
 	// Ignore if not in tree
 	const auto PtrMatcher = [&Data](const DataType& uptr) { return uptr.get() == Data; };
@@ -98,7 +99,7 @@ bool Octree<T>::Remove(const DataPtr Data)
 		return true;
 
 	// Create matching leaf
-	const Leaf Leaf{ static_cast<Leaf::ID>(it - Datas.begin()), Data->Transform.Position };
+	const Leaf Leaf{ static_cast<Leaf::ID>(it - Datas.begin()), Data(Data) };
 
 	// Remove from Datas
 	Datas.erase(it);
@@ -109,8 +110,8 @@ bool Octree<T>::Remove(const DataPtr Data)
 	return true;
 }
 
-template <class T>
-void Octree<T>::Update()
+template <class T, class ToPos>
+void Octree<T, ToPos>::Update()
 {
 	using NodePtr = Node*;
 
@@ -137,9 +138,9 @@ void Octree<T>::Update()
 		for (; It != Node->Leafs.end();) {
 			Leaf CurLeaf = *It;
 			// The leaf is now invalid
-			if (CurLeaf.Position != Datas[CurLeaf.DataID]->Transform.Position) {
+			if (CurLeaf.Position != ToPos(Datas[CurLeaf.DataID])) {
 				// Update position, store to add back and remove from current node
-				CurLeaf.Position = Datas[CurLeaf.DataID]->Transform.Position;
+				CurLeaf.Position = ToPos(Datas[CurLeaf.DataID]);
 				LeafToUpdate.push_back(CurLeaf);
 				It = Node->Leafs.erase(It);
 			}
@@ -157,20 +158,20 @@ void Octree<T>::Update()
 	}
 }
 
-template <class T>
-const typename Octree<T>::DataList& Octree<T>::GetDatas() const noexcept
+template <class T, class ToPos>
+const typename Octree<T, ToPos>::DataList& Octree<T, ToPos>::GetDatas() const noexcept
 {
 	return Datas;
 }
 
-template <class T>
-typename Octree<T>::DataPtrList Octree<T>::Find(const Math::Vec3f& Pos, float MaxDistance) const
+template <class T, class ToPos>
+typename Octree<T, ToPos>::DataPtrList Octree<T, ToPos>::Find(const Math::Vec3f& Pos, float MaxDistance) const
 {
 	return Find(BoundingSphere{ MaxDistance, Pos });
 }
 
-template <class T>
-typename Octree<T>::DataPtrList Octree<T>::Find(const BoundingVolume Volume) const
+template <class T, class ToPos>
+typename Octree<T, ToPos>::DataPtrList Octree<T, ToPos>::Find(const BoundingVolume Volume) const
 {
 	using NodePtr = const Node*;
 

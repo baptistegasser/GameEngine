@@ -22,6 +22,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Terrain.h"
+#include "render/PointLight.h"
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
@@ -314,13 +315,31 @@ protected:
 
 		PlayerBody->SetMass(10.f);
 
-		CurrentScene->LightConfig.SetAmbient(AmbientLight{ 0.5f, 0.5f, 0.5f });
-		PointLight Light;
-		Light.Intensity = 4.0f;
-		Light.Position = { 0.f, 20.f, 0.f };
-		Light.Specular = { 0.5f, 0.5f, 0.5f };
-		Light.Roughness = { 0.5f, 0.5f, 0.5f };
-		CurrentScene->LightConfig.AddPointLight(Light);
+		CurrentScene->LightManager.AmbientColor = { 0.5f };
+		
+		auto ALightRed = new APointLight;
+		auto LightRed = ALightRed->GetLight();
+		LightRed->Position = { 0.f, 5.f, 0.f };
+		LightRed->Color = { 1.0f, 0.0f, 0.0f };
+		LightRed->Range = 20.f;
+		LightRed->Intensity = 10.0f;
+		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
+
+		auto ALightBlue = new APointLight;
+		auto LightBlue = ALightBlue->GetLight();
+		LightBlue->Position = { -40.f, 5.f, 0.f };
+		LightBlue->Color = { 0.f, 0.0f, 1.0f };
+		LightBlue->Range = 20.f;
+		LightBlue->Intensity = 10.0f;
+		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
+
+		auto ALightGreen = new APointLight;
+		auto LightGreen = ALightGreen->GetLight();
+		LightGreen->Position = { 40.f, 5.f, 0.f };
+		LightGreen->Color = { 0.0f, 1.0f, 0.0f };
+		LightGreen->Range = 20.f;
+		LightGreen->Intensity = 10.0f;
+		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
 
 		return true;
 	}

@@ -1,3 +1,15 @@
+/****************************************************************************
+ *                                  Utils                                   *
+ ****************************************************************************/
+// Macro used to fill to match 16 byte stride
+#define FILL(size) float##size __FILL__
+// Used for some default values
+#define BLACK float3(0.f, 0.f, 0.f)
+
+/****************************************************************************
+ *                     Rendering data structures                            *
+ ****************************************************************************/
+// Reprensetation of a material
 struct Material
 {
     float4 Ambient;
@@ -7,62 +19,103 @@ struct Material
     float3 _FILL_;
 };
 
-struct AmbientLight {
-    float4 Value;
-};
+/****************************************************************************
+ *                   Light data structures and methods                      *
+ ****************************************************************************/
+// Light types definition
+#define LightType_Spot 0
+#define LightType_Point 1
+#define LightType_Directionnal 2
 
-struct DirectionalLight
+// Generic Representation of a light
+struct Light
 {
-    float4 Direction;
-    float4 Specular;
-    float4 Roughness;
-};
-
-struct PointLight
-{
+    int Type;
+    float3 Color;
     float3 Position;
-    float3 Specular;
-    float3 Roughness;
-    float InnerRadius, OuterRadius, Intensity;
+    float3 Direction;
+    float Range;
+    float SpotAngle;
+    float Intensity;
 
-    float3 CalcPhong(float3 N, float3 V, float3 WorldPosition)
-    {
-        float3 color = (float3) 1.0;
-
-        float3 L = normalize(Position - WorldPosition);
-        
-        // Valeur de la composante diffuse 
-        float3 diff = saturate(dot(N, L));
- 
-         // R = 2 * (N.L) * N – L 
-        float3 R = normalize(2 * diff * N - L);
- 
-         // Puissance de 4 - pour l’exemple 
-        float S = pow(saturate(dot(R, V)), 4.0f);
- 
-         // Échantillonner la couleur du pixel à partir de la texture 
-        //float3 couleurTexture = textureEntree.Sample(SampleState, vs.coordTex).rgb;
- 
-         // I = A + D * N.L + (R.V)n 
-        color = color * Roughness.rgb * diff;
- 
-        color += S;
-  
-        return color;
-    }
+    FILL(3);
 };
 
+// Calculate the phong value for a spot light
+float3 CalcSpotPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
+{
+    return BLACK;
+}
+
+// Calculate the phong value for a point light
+float3 CalcPointPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
+{
+    float3 color = (float3) 1.0;
+
+    float3 L = light.Position - Pos;
+    float distance = length(L);
+    L /= distance;
+        
+    // Valeur de la composante diffuse 
+    float3 diff = saturate(dot(N, L));
+        
+    // specular shading
+    float3 reflectDir = reflect(-L, N);
+    float spec = pow(max(dot(V, reflectDir), 0.0), mat.Ambient);
+        
+    // attenuation
+    // calculate basic attenuation
+    float denom = (distance / light.Range) + 1;
+    float attenuation = 1 / (denom * denom);
+    attenuation = max(attenuation, 0);
+
+    // combine results
+    float3 ambient = light.Color * mat.Roughness.xyz;
+    float3 diffuse = light.Color * diff * mat.Roughness.xyz;
+    float3 specular = light.Color * spec * mat.Specular.xyz;
+
+    return (ambient + diffuse + specular) * attenuation;
+}
+
+// Calculate the phong value for a directionnal light
+float3 CalcDirectionnalPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
+{
+    return BLACK;
+}
+
+// Compute the phong value given by a light
+float3 CalcPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
+{
+    switch (light.Type)
+    {
+        case LightType_Spot:
+            return CalcSpotPhong(N, V, Pos, mat, light);
+        case LightType_Point:
+            return CalcPointPhong(N, V, Pos, mat, light);
+        case LightType_Directionnal:
+            return CalcDirectionnalPhong(N, V, Pos, mat, light);
+        default:
+            return BLACK;
+    }
+}
+
+/****************************************************************************
+ *                          Input data and buffers                          *
+ ****************************************************************************/
 cbuffer param
 { 
 	float4x4 MatWorldViewProj;
 	float4x4 MatWorld;
 	float4 CameraPos;
-    AmbientLight Ambient;
-    DirectionalLight Directional;
+    float4 AmbientColor;
     Material Mat;
 	bool HasTexture;
 	float3 _FILL_;
 }
+
+Texture2D textureEntree;
+SamplerState SampleState;
+StructuredBuffer<Light> LightsBuffer;
 
 struct VS_Sortie
 {
@@ -73,6 +126,11 @@ struct VS_Sortie
 	float2 coordTex : TEXCOORD3;
 };
 
+
+
+/****************************************************************************
+ *                               S H A D E R S !                            *
+ ****************************************************************************/
 VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coordTex : TEXCOORD)
 {
 	VS_Sortie sortie = (VS_Sortie)0;
@@ -89,11 +147,6 @@ VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coo
 	return sortie;
 }
 
-Texture2D textureEntree;
-SamplerState SampleState;
-StructuredBuffer<PointLight> PointLights;
-//StructuredBuffer<BetterSpotLight> SpotLights;
-
 float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 {
    // Default color : missing magenta
@@ -109,16 +162,15 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 	float3 V = normalize(vs.vDirCam);
 	
     // Default add ambiant light
-    float3 phong = Ambient.Value.rgb;
+    float3 phong = AmbientColor.rgb;
     
-    // TODO directionnal lighting
-    
+    // Retrieve lights
     uint LightCount = 0, Stride;
-
+    LightsBuffer.GetDimensions(LightCount, Stride);
     // Calc all Point lights
-    PointLights.GetDimensions(LightCount, Stride);
-    for (uint i = 0; i < LightCount; i += Stride) {
-        phong += PointLights[i].CalcPhong(N, V, vs.PosWorld);
+    for (int i = 0; i < LightCount; i += 1)
+    {
+        phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
     }
 
     return color * saturate(float4(phong, 0.0f));

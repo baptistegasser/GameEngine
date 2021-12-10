@@ -1,23 +1,43 @@
 #pragma once
 
-struct AmbientLight {
-	DirectX::XMVECTOR Value;
+#include "core/Component.h"
+#include "math/Vec3f.h"
+#include "util/Util.h"
 
-    AmbientLight() : AmbientLight(1.0f, 1.0f, 1.0f) {}
-    AmbientLight(float r, float g, float b) : Value{r,g,b,1.0f} {}
+/// <summary>
+/// Representation of a light, identical to the shader usage
+/// </summary>
+struct Light
+{
+    enum class LightType
+    {
+        Spot,
+        Point,
+        Directionnal,
+    } Type;
+
+    Math::Vec3f Color;
+    Math::Vec3f Position;
+    Math::Vec3f Direction;
+    float Range;
+    float SpotAngle;
+    float Intensity;
+
+    DX_HLSL_FILL(3);
 };
 
-struct DirectionalLight
-{
-    DirectX::XMVECTOR Direction;
-    DirectX::XMVECTOR Specular;
-    DirectX::XMVECTOR Roughness;
-};
+DX_HLSL_ASSERT_ALLIGN(Light);
 
-struct PointLight
+/// <summary>
+/// Special class to create a light implementation that is a Component
+/// but can still be cast to the raw light struct for HLSL.
+/// </summary>
+class LightComponent : public Light, public Pitbull::Component
 {
-    DirectX::XMFLOAT3 Position;
-    DirectX::XMFLOAT3 Specular;
-    DirectX::XMFLOAT3 Roughness;
-    float InnerRadius, OuterRadius, Intensity;
+public:
+    LightComponent(Pitbull::Actor* Parent, LightType Type) : Component{Parent}, Light{ Type } {}
+
+    void Init() override;
+    const Light* GetRawLightPtr() const noexcept;
+    const Light GetRawLight() const noexcept;
 };

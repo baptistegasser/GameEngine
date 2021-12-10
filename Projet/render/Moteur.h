@@ -23,6 +23,7 @@
 #include "render/Camera.h"
 #include "render/Terrain.h"
 #include "render/PointLight.h"
+#include "render/DirectionalLight.h"
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
@@ -156,6 +157,7 @@ public:
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
+	Scene& GetScene() noexcept { return *CurrentScene; }
 	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
 
 	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
@@ -316,13 +318,14 @@ protected:
 		PlayerBody->SetMass(10.f);
 
 		CurrentScene->LightManager.AmbientColor = { 0.5f };
+		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(new ADirectionalLight));
 		
 		auto ALightRed = new APointLight;
 		auto LightRed = ALightRed->GetLight();
 		LightRed->Position = { 0.f, 5.f, 0.f };
 		LightRed->Color = { 1.0f, 0.0f, 0.0f };
-		LightRed->Range = 20.f;
-		LightRed->Intensity = 10.0f;
+		LightRed->Range = 1.f;
+		LightRed->Intensity = 100.0f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
 
 		auto ALightBlue = new APointLight;
@@ -330,7 +333,7 @@ protected:
 		LightBlue->Position = { -40.f, 5.f, 0.f };
 		LightBlue->Color = { 0.f, 0.0f, 1.0f };
 		LightBlue->Range = 20.f;
-		LightBlue->Intensity = 10.0f;
+		LightBlue->Intensity = 1.0f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
 
 		auto ALightGreen = new APointLight;
@@ -338,7 +341,7 @@ protected:
 		LightGreen->Position = { 40.f, 5.f, 0.f };
 		LightGreen->Color = { 0.0f, 1.0f, 0.0f };
 		LightGreen->Range = 20.f;
-		LightGreen->Intensity = 10.0f;
+		LightGreen->Intensity = 1.f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
 
 		return true;

@@ -62,11 +62,10 @@ float3 CalcPointPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
     // specular shading
     float3 reflectDir = reflect(-L, N);
     float spec = pow(max(dot(V, reflectDir), 0.0), mat.Ambient);
-        
+
     // attenuation
     // calculate basic attenuation
-    float denom = (distance / light.Range) + 1;
-    float attenuation = 1 / (denom * denom);
+    float attenuation = light.Intensity / pow((distance / light.Range) + 1, 2.f);
     attenuation = max(attenuation, 0);
 
     // combine results

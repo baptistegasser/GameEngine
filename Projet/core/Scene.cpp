@@ -6,7 +6,8 @@
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
-	, Tree{ new Octree<Pitbull::Actor>{BoundingBox{ 5000.f }} }
+	, Tree{ new ActorTree{BoundingBox{ 5000.f }} }
+	, LightManager{ BoundingBox{ 5000.f } }
 	, VisionVolume{ BoundingSphere{ 0.f } }
 {}
 
@@ -79,6 +80,13 @@ const Scene::ActorPtrList Scene::GetVisibleActors() noexcept
 	auto Actors = Tree->Find(VisionVolume);
 	ConcatVisibleActors(Actors);
 	return Actors;
+}
+
+const LightManager::LightList Scene::GetVisibleLights() noexcept
+{
+	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
+	auto Lights = LightManager.GetLights(VisionVolume);
+	return Lights;
 }
 
 void Scene::ConcatVisibleActors(ActorPtrList& Actors)

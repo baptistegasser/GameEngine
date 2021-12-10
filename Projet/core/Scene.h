@@ -3,15 +3,23 @@
 #include "Actor.h"
 #include "math/Octree.h"
 #include "render/Camera.h"
-#include "render/LightConfig.h"
+#include "render/LightManager.h"
 
 #include "PxPhysicsAPI.h"
 
 #include <memory>
 
+struct ActorToPos
+{
+	Math::Vec3f operator()(const std::unique_ptr<Pitbull::Actor>& Actor) const noexcept
+	{
+		return Actor->Transform.Position;
+	}
+};
+
 class Scene {
 public:
-	using ActorTree = Octree<Pitbull::Actor>;
+	using ActorTree = Octree<Pitbull::Actor, ActorToPos>;
 	using ActorPtr = ActorTree::DataType;
 	using ActorPtrList = ActorTree::DataPtrList;
 
@@ -56,9 +64,14 @@ public:
 	/// </summary>
 	const ActorPtrList GetVisibleActors() noexcept;
 
-	physx::PxScene* PhysxScene;
+	/// <summary>
+	/// Get all actors in current vision range.
+	/// </summary>
+	const LightManager::LightList GetVisibleLights() noexcept;
 
-	LightConfig LightConfig;
+	physx::PxScene* PhysxScene;
+	LightManager LightManager;
+
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;

@@ -219,9 +219,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="render\LightConfig.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="math\Vec3f.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
@@ -230,6 +227,21 @@
     </ClCompile>
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpotLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\PointLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\LightManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DirectionalLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Light.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -383,9 +395,6 @@
     <ClInclude Include="render\Light.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\LightConfig.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -415,6 +424,18 @@
     </ClInclude>
     <ClInclude Include="util\Observable.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="render\PointLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpotLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DirectionalLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightManager.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

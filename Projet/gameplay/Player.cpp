@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 
-#include "render/MoteurWindows.h"
+#include "render/EngineD3D11.h"
 #include "math/Math.h"
 #include "math/Vec3f.h"
 
@@ -25,47 +25,47 @@ void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
 
-	auto& Engine = PM3D::CMoteurWindows::GetInstance();
-	PM3D::CDIManipulateur& rGestionnaireDeSaisie = Engine.GetGestionnaireDeSaisie();
+	auto& Engine = EngineD3D11::GetInstance();
+	PM3D::CDIManipulateur& InputManager = Engine.InputManager;
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_A)) {
+	if (InputManager.ToucheAppuyee(DIK_A)) {
 		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_D)) {
+	if (InputManager.ToucheAppuyee(DIK_D)) {
 		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_W)) {
+	if (InputManager.ToucheAppuyee(DIK_W)) {
 		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_S)) {
+	if (InputManager.ToucheAppuyee(DIK_S)) {
 		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
- 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
+ 	if (InputManager.ToucheAppuyee(DIK_SPACE)) {
 		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_P)) {
+	if (InputManager.ToucheAppuyee(DIK_P)) {
 		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_ESCAPE)) {
+	if (InputManager.ToucheAppuyee(DIK_ESCAPE)) {
 		Engine.Stop();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_M)) {
+	if (InputManager.ToucheAppuyee(DIK_M)) {
 		WaitForSwap = true;
 	}
 	else {
 		if (WaitForSwap) SwapCameraMode();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
+	if (InputManager.ToucheAppuyee(DIK_LEFT)) {
 		using namespace physx;
 
 		AngleRotation -= RotationSpeed;
@@ -74,7 +74,7 @@ void Player::FixedTick(const float& DeltaTime)
 		Direction = XMVector4Normalize( Direction);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_RIGHT)) {
+	if (InputManager.ToucheAppuyee(DIK_RIGHT)) {
 		using namespace physx;
 
 		AngleRotation += RotationSpeed;

@@ -2,7 +2,7 @@
 #include "MeshRenderer.h"
 
 #include "MeshLoader.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "math/Math.h"
 #include "ObjectMesh.h"
 #include "Vertex.h"
@@ -12,14 +12,14 @@
 #include "Light.h"
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh)
-	: MeshRenderer{ Parent, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
+	: MeshRenderer{ Parent, Mesh, EngineD3D11::GetInstance().ResourcesManager.GetShader(L"Default.fx")}
 {}
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader)
 	: Component{ Parent }
-	, Mesh{ Mesh }
-	, MeshShader{ MeshShader }
-	, matWorld{ DirectX::XMMatrixIdentity() }
+	, matWorld{DirectX::XMMatrixIdentity()}
+	, Mesh{Mesh}
+	, MeshShader{MeshShader}
 {}
 
 void MeshRenderer::LateTick(const float& ElapsedTime)
@@ -30,8 +30,8 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	matWorld = ParentActor->Transform;
 
 	// Obtenir le contexte
-	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
-	const auto& LightConfig = PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig;
+	ID3D11DeviceContext* pImmediateContext = EngineD3D11::GetInstance().Device->ImmediateContext;
+	const auto& LightConfig = EngineD3D11::GetInstance().GetScene().LightConfig;
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -47,11 +47,11 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	pImmediateContext->IASetVertexBuffers(0, 1, &Mesh->PVertexBuffer, &stride, &offset);
 
 	// Initialiser et s�lectionner les �constantes� de l'effet
-	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
+	const XMMATRIX& viewProj = EngineD3D11::GetInstance().MatViewProj;
 
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.CameraPos = PM3D::CMoteurWindows::GetInstance().GetScene().GetCurrentCamera().GetPosition();
+	ShaderParams.CameraPos = EngineD3D11::GetInstance().GetScene().GetCurrentCamera().GetPosition();
 
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;

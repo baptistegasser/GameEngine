@@ -25,24 +25,24 @@ void Plateform::Tick(const float& DeltaTime)
 			Direction = Departure.Position - ParentActor->Transform.Position;
 			if (Vec3f(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), ParentActor->Transform.Rotation));
+				MyRigidBody->SetKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), ParentActor->Transform.Rotation));
 			}
 			else {
 				DepartureIsGoal = false;
-				MyRigidBody->setKinematicTarget(Departure);
+				MyRigidBody->SetKinematicTarget(Departure);
 			}
 		}
 		else {
 			Direction = Destination.Position - ParentActor->Transform.Position;
 			if (Vec3f(Speed) <= Direction.abs()) {
 				Direction.normalize();
-				MyRigidBody->setKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), ParentActor->Transform.Rotation));
+				MyRigidBody->SetKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), ParentActor->Transform.Rotation));
 			}
 			else {
 				DepartureIsGoal = true;
 				if (!FirstLoop)
 					Loop = false;
-				MyRigidBody->setKinematicTarget(Destination);
+				MyRigidBody->SetKinematicTarget(Destination);
 			}
 		}
 	}

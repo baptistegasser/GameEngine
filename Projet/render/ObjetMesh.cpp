@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 
 #include "ObjetMesh.h"
-#include "moteurWindows.h"
+#include "EngineD3D11.h"
 #include "util/util.h"
 #include "DeviceD3D11.h"
 #include "resources/resource.h"
@@ -195,7 +195,7 @@ void CObjetMesh::Draw()
 
 	// Initialiser et s�lectionner les �constantes� de l'effet
 	ShadersParams sp;
-	const XMMATRIX& viewProj = CMoteurWindows::GetInstance().GetMatViewProj();
+	const XMMATRIX& viewProj = EngineD3D11::GetInstance().MatViewProj;
 
 	sp.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	sp.matWorld = XMMatrixTranspose(matWorld);
@@ -348,14 +348,14 @@ void CObjetMesh::TransfertObjet(const IChargeur& chargeur)
 	}
 
 	// 4d) Chargement des textures
-	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = EngineD3D11::GetInstance().GetTextureManager();
 
 	for (uint32_t i = 0; i < Material.size(); ++i)
 	{
 		if (Material[i].NomFichierTexture.length() > 0)
 		{
 			const std::wstring ws(Material[i].NomFichierTexture.begin(), Material[i].NomFichierTexture.end());
-			//Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+			//Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), Device)->GetD3DTexture();
 		}
 	}
 }
@@ -547,14 +547,14 @@ void CObjetMesh::LireFichierBinaire(const std::string& nomFichier)
 	}
 
 	// 4d) Chargement des textures
-	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = EngineD3D11::GetInstance().GetTextureManager();
 
 	for (uint32_t i = 0; i < Material.size(); ++i)
 	{
 		if (Material[i].NomFichierTexture.length() > 0)
 		{
 			std::wstring ws(Material[i].NomFichierTexture.begin(), Material[i].NomFichierTexture.end());
-			//Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+			//Material[i].pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), Device)->GetD3DTexture();
 		}
 	}
 }

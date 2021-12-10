@@ -52,7 +52,7 @@ public:
 	/// <summary>
 	/// Set the target so the actor follow a path to it.
 	/// </summary>
-	void setKinematicTarget(const Math::Transform& Target) const;
+	void SetKinematicTarget(const Math::Transform& Target) const;
 
 protected:
 	friend class Pitbull::Actor;

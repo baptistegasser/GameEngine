@@ -177,12 +177,6 @@
     <ClCompile Include="render\DIManipulateur.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
-    <ClCompile Include="render\MoteurWindows.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Moteur.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\Terrain.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -229,6 +223,12 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\Device.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Engine.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\EngineD3D11.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -350,9 +350,6 @@
     <ClInclude Include="render\DIManipulateur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\MoteurWindows.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\objet3d.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -392,7 +389,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="render\Moteur.h">
+    <ClInclude Include="render\Engine.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="math\Vec3f.h">
@@ -414,6 +411,9 @@
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\DeviceInfoD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\EngineD3D11.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "AfficheurSprite.h"
 #include "DeviceD3D11.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "resources/resource.h"
 #include "util/Util.h"
 
@@ -258,12 +258,12 @@ void CAfficheurSprite::AjouterPanneau(const std::string& NomTexture,
 	float _dx, float _dy)
 {
 	// Initialisation de la texture
-	//CGestionnaireDeTextures& TexturesManager = CMoteurWindows::GetInstance().GetTextureManager();
+	//CGestionnaireDeTextures& TexturesManager = EngineD3D11::GetInstance().GetTextureManager();
 
 	std::wstring ws(NomTexture.begin(), NomTexture.end());
 
 	std::unique_ptr<CPanneau> pPanneau = std::make_unique<CPanneau>();
-	//pPanneau->pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), pDispositif)->GetD3DTexture();
+	//pPanneau->pTextureD3D = TexturesManager.GetNewTexture(ws.c_str(), Device)->GetD3DTexture();
 
 	// Obtenir la dimension de la texture si _dx et _dy sont à 0;
 	if (_dx == 0.0f && _dy == 0.0f)
@@ -292,7 +292,7 @@ void CAfficheurSprite::AjouterPanneau(const std::string& NomTexture,
 	}
 
 	// Position en coordonnées du monde
-	const XMMATRIX& viewProj = CMoteurWindows::GetInstance().GetMatViewProj();
+	const XMMATRIX& viewProj = EngineD3D11::GetInstance().MatViewProj;
 	pPanneau->position = _position;
 
 	pPanneau->matPosDim = XMMatrixScaling(pPanneau->dimension.x,

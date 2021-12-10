@@ -29,6 +29,7 @@
 
 // Sprite
 #include "render/SpriteRenderer.h"
+#include "render/Timer.h"
 
 #include <iostream>
 #include <chrono>
@@ -340,6 +341,12 @@ protected:
 		auto t = Text->AddComponent<SpriteRenderer>(
 			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
 		t->Write(L"oooo");
+		t->Offset.Scale.x = 10;
+		t->Offset.Position.y = 0.7f;
+		auto o = Text->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+		o->Write(L"blop");
+		Text->AddComponent<Timer>();
 		CurrentScene->AddActor(std::move(Text), true);
 
 		return true;

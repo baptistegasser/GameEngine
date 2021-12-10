@@ -9,7 +9,7 @@ using namespace DirectX;
 //ULONG_PTR Font::token = 0;
 
 Font::Font(const wchar_t* FontName)
-: TexWidth(100)
+: TexWidth(1000)
 , TexHeight(100)
 , pTexture(nullptr)
 , pTextureView(nullptr)

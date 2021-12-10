@@ -215,6 +215,7 @@
     <ClCompile Include="render\ObjetMesh.cpp" />
     <ClCompile Include="render\Shader.cpp" />
     <ClCompile Include="render\Texture.cpp" />
+    <ClCompile Include="render\Timer.cpp" />
     <ClCompile Include="render\Vertex.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -282,6 +283,7 @@
     <ClInclude Include="render\ObjetMesh.h" />
     <ClInclude Include="render\Shader.h" />
     <ClInclude Include="render\Texture.h" />
+    <ClInclude Include="render\Timer.h" />
     <ClInclude Include="render\Vertex.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="stdafx.h" />

@@ -37,4 +37,9 @@ public:
 	/// Get all managed lights that are inside a bounding volume.
 	/// </summary>
 	LightList GetLights(const BoundingVolume& Boundary) const noexcept;
+
+private:
+	LightComponent* DirectionalLight{ nullptr };
+
+	bool HasDirectionalLight() const noexcept;
 };

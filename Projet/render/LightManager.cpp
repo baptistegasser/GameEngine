@@ -5,16 +5,12 @@ void LightManager::RegisterLight(LightComponent *Light)
 {
 	// Assert only one directionnal light
 	if (Light->Type == Light::LightType::Directionnal) {
-		const auto it = std::find_if(
-			begin(Datas),
-			end(Datas),
-			[](const DataType& Light) {
-				return Light->Type == Light::LightType::Directionnal;
-			}
-		);
-		if (it != Datas.end()) {
+		if (HasDirectionalLight()) {
 			throw std::runtime_error{ "Only one directionnal light is allowed at a time." };
 		}
+
+		DirectionalLight = Light;
+		return;
 	}
 
 	this->Add(std::move(DataType{ Light }));
@@ -22,7 +18,7 @@ void LightManager::RegisterLight(LightComponent *Light)
 
 std::size_t LightManager::GetLightCount() const noexcept
 {
-	return Datas.size();
+	return Datas.size() + (HasDirectionalLight() ? 1 : 0);
 }
 
 std::vector<Light> LightManager::GetLights() const noexcept
@@ -43,5 +39,15 @@ std::vector<Light> LightManager::GetLights(const BoundingVolume& Boundary) const
 	static const auto PtrToValue = [](const DataPtr& Ptr) { return Ptr->GetRawLight(); };
 	std::transform(begin(FoundLights), end(FoundLights), std::back_inserter(Lights), PtrToValue);
 
+	// Add directional if present
+	if (HasDirectionalLight()) {
+		Lights.push_back(PtrToValue(DirectionalLight));
+	}
+
 	return Lights;
+}
+
+bool LightManager::HasDirectionalLight() const noexcept
+{
+	return DirectionalLight != nullptr;
 }

@@ -318,14 +318,17 @@ protected:
 		PlayerBody->SetMass(10.f);
 
 		CurrentScene->LightManager.AmbientColor = { 0.5f };
-		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(new ADirectionalLight));
+		
+		auto DirLight = new ADirectionalLight;
+		DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
+		DirLight->GetLight()->Color = { 0.f, 0.f, 1.f };
+		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
 		
 		auto ALightRed = new APointLight;
 		auto LightRed = ALightRed->GetLight();
 		LightRed->Position = { 0.f, 5.f, 0.f };
 		LightRed->Color = { 1.0f, 0.0f, 0.0f };
-		LightRed->Range = 1.f;
-		LightRed->Intensity = 100.0f;
+		LightRed->Range = 20.f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
 
 		auto ALightBlue = new APointLight;
@@ -333,7 +336,6 @@ protected:
 		LightBlue->Position = { -40.f, 5.f, 0.f };
 		LightBlue->Color = { 0.f, 0.0f, 1.0f };
 		LightBlue->Range = 20.f;
-		LightBlue->Intensity = 1.0f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
 
 		auto ALightGreen = new APointLight;
@@ -341,7 +343,6 @@ protected:
 		LightGreen->Position = { 40.f, 5.f, 0.f };
 		LightGreen->Color = { 0.0f, 1.0f, 0.0f };
 		LightGreen->Range = 20.f;
-		LightGreen->Intensity = 1.f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
 
 		return true;

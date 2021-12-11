@@ -198,6 +198,7 @@
     <ClCompile Include="render\ChargeurOBJ.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\DIManipulateur.cpp" />
+    <ClCompile Include="render\GameFactory.cpp" />
     <ClCompile Include="render\Device.cpp" />
     <ClCompile Include="render\DeviceD3D11.cpp" />
     <ClCompile Include="render\DeviceInfoD3D11.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="render\d3dxGlobal.h" />
     <ClInclude Include="render\DDSTextureLoader.h" />
     <ClInclude Include="render\DIManipulateur.h" />
+    <ClInclude Include="render\GameFactory.h" />
     <ClInclude Include="render\Device.h" />
     <ClInclude Include="render\DeviceD3D11.h" />
     <ClInclude Include="render\DeviceInfoD3D11.h" />

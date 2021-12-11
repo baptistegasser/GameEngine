@@ -7,11 +7,10 @@
 
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
+Player::Player(Pitbull::Actor* Parent)
 	: Component{ Parent }
-	, Direction{ XMVector3Normalize(Direction) }
 	, ViewType{ CameraViewType::Third }
-	, WaitForSwap{false}
+	, Direction{}
 {}
 
 void Player::Init()
@@ -19,6 +18,9 @@ void Player::Init()
 	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
+	MyCollider = ParentActor->GetComponent<SphereCollider>();
+
+	Direction = ParentActor->Transform.Forward().ToXMVector();
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -47,7 +49,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
  	if (InputManager.ToucheAppuyee(DIK_SPACE)) {
-		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+	    if (isGrounded())
+			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
 	if (InputManager.ToucheAppuyee(DIK_P)) {
@@ -92,6 +95,19 @@ void Player::FixedTick(const float& DeltaTime)
 	MyCamera->SetDirection(Direction);
 }
 
+bool Player::isGrounded() const
+{
+	static auto& Scene = EngineD3D11::GetInstance().GetScene();
+
+	auto Origin = ParentActor->Transform.Position;
+	Origin.y -= MyCollider->Radius + 0.1f; // Little more than radius
+	auto Hit = Scene.Raycast(
+		Origin,
+		{0.0f, -1.0f, 0.0f}, 
+		0.1f);
+	return Hit.hasAnyHits();
+}
+
 void Player::SwapCameraMode()
 {
 	if (ViewType == CameraViewType::First)
@@ -101,4 +117,3 @@ void Player::SwapCameraMode()
 
 	WaitForSwap = false;
 }
-

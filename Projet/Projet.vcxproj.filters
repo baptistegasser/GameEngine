@@ -222,6 +222,9 @@
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="render\GameFactory.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
     <ClCompile Include="render\DeviceD3D11.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -403,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Observable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\GameFactory.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="util\Observable.h">
       <Filter>Header Files\util</Filter>

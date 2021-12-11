@@ -8,7 +8,7 @@
 class Player : public Pitbull::Component
 {
 public :
-	Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction);
+	Player(Pitbull::Actor* Parent);
 	~Player() override = default;
 
 	void Init() override;

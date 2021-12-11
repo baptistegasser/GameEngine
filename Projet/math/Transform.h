@@ -24,6 +24,7 @@ namespace Math
 
 		Transform() noexcept = default;
 		Transform(const Math::Vec3f& Position) noexcept;
+		Transform(const Math::Vec3f& Position, const Math::Vec3f& Scale) noexcept;
 		Transform(const Math::Vec3f& Position, const Math::Quaternion& Rotation) noexcept;
 
 		/// <summary>

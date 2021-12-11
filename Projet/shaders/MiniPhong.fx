@@ -58,7 +58,10 @@ float3 CalcPointPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
     L /= distance;
 
     // Valeur de la composante diffuse 
-    float3 diff = saturate(dot(N, L));
+    float diff = dot(N, L);
+    
+    if (diff <= 0.0001f || distance > light.Range)
+        return BLACK;
 
     // specular shading
     float3 reflectDir = reflect(L, N);
@@ -85,7 +88,9 @@ float3 CalcDirectionalPhong(float3 N, float3 V, float3 Pos, Material mat, Light 
     float3 L = normalize(-light.Direction);
 
     // Valeur de la composante diffuse 
-    float3 diff = saturate(dot(N, L));
+    float diff = dot(N, L);
+    if (diff <= 0.0001f)
+        return BLACK;
 
     // specular shading
     float3 reflectDir = reflect(L, N);

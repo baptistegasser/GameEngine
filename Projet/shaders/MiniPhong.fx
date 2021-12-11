@@ -26,7 +26,7 @@ struct Material
 // Light types definition
 #define LightType_Spot 0
 #define LightType_Point 1
-#define LightType_Directionnal 2
+#define LightType_Directional 2
 
 // Generic Representation of a light
 struct Light
@@ -77,8 +77,8 @@ float3 CalcPointPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
     return (ambient + diffuse + specular) * attenuation;
 }
 
-// Calculate the phong value for a directionnal light
-float3 CalcDirectionnalPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
+// Calculate the phong value for a directional light
+float3 CalcDirectionalPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
 {
     float3 color = WHITE;
 
@@ -108,8 +108,8 @@ float3 CalcPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
             return CalcSpotPhong(N, V, Pos, mat, light);
         case LightType_Point:
             return CalcPointPhong(N, V, Pos, mat, light);
-        case LightType_Directionnal:
-            return CalcDirectionnalPhong(N, V, Pos, mat, light);
+        case LightType_Directional:
+            return CalcDirectionalPhong(N, V, Pos, mat, light);
         default:
             return BLACK;
     }
@@ -141,7 +141,6 @@ struct VS_Sortie
 	float3 vDirCam : TEXCOORD2;
 	float2 coordTex : TEXCOORD3;
 };
-
 
 
 /****************************************************************************
@@ -177,14 +176,14 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 	float3 N = normalize(vs.Norm);
 	float3 V = normalize(vs.vDirCam);
 	
-    // Default add ambiant light
+    // Default add ambient light
     float3 phong = AmbientColor.rgb;
     
     // Retrieve lights
     uint LightCount = 0, Stride;
     LightsBuffer.GetDimensions(LightCount, Stride);
     // Calc all Point lights
-    for (int i = 0; i < LightCount; i += 1)
+    for (uint i = 0; i < LightCount; i += 1)
     {
         phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
     }

@@ -23,12 +23,22 @@ class LightManager : Octree<LightComponent, LightToPos>
 public:
 	using LightList = std::vector<Light>;
 
-	LightManager(const BoundingBox& Boundary) : Octree{Boundary} {}
-
+	/// <summary>
+	/// The base lighting color for the scene, use it
+	/// to add a default light level + ambiance style.
+	/// </summary>
 	Math::Vec3f AmbientColor{ 0.5f };
 
+	/// <param name="Boundary">
+	/// The bounding limit defining if an object belong in this manager.
+	/// Should idealy match the scene boundary.
+	/// </param>
+	LightManager(const BoundingBox& Boundary) : Octree{Boundary} {}
+
+	/// <summary>
+	/// Register a light component to be tracked by this manager.
+	/// </summary>
 	void RegisterLight(LightComponent *Light);
-	std::size_t GetLightCount() const noexcept;
 	/// <summary>
 	/// Get all managed lights.
 	/// </summary>
@@ -39,7 +49,11 @@ public:
 	LightList GetLights(const BoundingVolume& Boundary) const noexcept;
 
 private:
+	/// <summary>
+	/// Store the directional has there can be only one.
+	/// </summary>
 	LightComponent* DirectionalLight{ nullptr };
 
+	/// <returns>True if a directional light was registered.</returns>
 	bool HasDirectionalLight() const noexcept;
 };

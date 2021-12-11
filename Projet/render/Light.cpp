@@ -5,16 +5,13 @@
 
 void LightComponent::Init()
 {
+	Component::Init();
 	auto& Scene = PM3D::CMoteurWindows::GetInstance().GetScene();
 	Scene.LightManager.RegisterLight(this);
 }
 
-const Light* LightComponent::GetRawLightPtr() const noexcept
-{
-    return static_cast<const Light*>(static_cast<const LightComponent*>(this));
-}
-
 const Light LightComponent::GetRawLight() const noexcept
 {
-    return *GetRawLightPtr();
+	const auto ptr = static_cast<const Light*>(static_cast<const LightComponent*>(this));
+    return *ptr;
 }

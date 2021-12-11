@@ -70,6 +70,9 @@ public:
 	const LightManager::LightList GetVisibleLights() noexcept;
 
 	physx::PxScene* PhysxScene;
+	/// <summary>
+	/// Manager that keep track of lights in the scene.
+	/// </summary>
 	LightManager LightManager;
 
 private:

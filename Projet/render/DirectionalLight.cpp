@@ -2,7 +2,7 @@
 #include "DirectionalLight.h"
 
 DirectionalLight::DirectionalLight(Pitbull::Actor* Parent)
-	: LightComponent{ Parent, LightType::Directionnal }
+	: LightComponent{ Parent, LightType::Directional }
 {}
 
 ADirectionalLight::ADirectionalLight()

@@ -3,8 +3,9 @@
  ****************************************************************************/
 // Macro used to fill to match 16 byte stride
 #define FILL(size) float##size __FILL__
-// Used for some default values
+// Colors used for some default values
 #define BLACK float3(0.f, 0.f, 0.f)
+#define WHITE float3(1.f, 1.f, 1.f)
 
 /****************************************************************************
  *                     Rendering data structures                            *
@@ -50,17 +51,17 @@ float3 CalcSpotPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
 // Calculate the phong value for a point light
 float3 CalcPointPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
 {
-    float3 color = (float3) 1.0;
+    float3 color = WHITE;
 
     float3 L = light.Position - Pos;
     float distance = length(L);
     L /= distance;
-        
+
     // Valeur de la composante diffuse 
     float3 diff = saturate(dot(N, L));
-        
+
     // specular shading
-    float3 reflectDir = reflect(-L, N);
+    float3 reflectDir = reflect(L, N);
     float spec = pow(max(dot(V, reflectDir), 0.0), mat.Ambient);
 
     // attenuation
@@ -79,7 +80,23 @@ float3 CalcPointPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
 // Calculate the phong value for a directionnal light
 float3 CalcDirectionnalPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
 {
-    return BLACK;
+    float3 color = WHITE;
+
+    float3 L = normalize(-light.Direction);
+
+    // Valeur de la composante diffuse 
+    float3 diff = saturate(dot(N, L));
+
+    // specular shading
+    float3 reflectDir = reflect(L, N);
+    float spec = pow(max(dot(V, reflectDir), 0.0), mat.Ambient);
+
+    // combine results
+    float3 ambient = light.Color * mat.Roughness.xyz;
+    float3 diffuse = light.Color * diff * mat.Roughness.xyz;
+    float3 specular = light.Color * spec * mat.Specular.xyz;
+
+    return (ambient + diffuse + specular);
 }
 
 // Compute the phong value given by a light

@@ -14,7 +14,9 @@ class ADirectionalLight : public Pitbull::Actor
 {
 public:
     ADirectionalLight();
+    DirectionalLight* GetLight() noexcept;
 
 private:
     using Actor::AddComponent;
+    DirectionalLight* DirectionalLight;
 };

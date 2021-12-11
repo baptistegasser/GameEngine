@@ -8,5 +8,10 @@ DirectionalLight::DirectionalLight(Pitbull::Actor* Parent)
 ADirectionalLight::ADirectionalLight()
 	: Actor{}
 {
-	AddComponent<DirectionalLight>();
+	DirectionalLight = AddComponent<::DirectionalLight>();
+}
+
+DirectionalLight* ADirectionalLight::GetLight() noexcept
+{
+	return DirectionalLight;
 }

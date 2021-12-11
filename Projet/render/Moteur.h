@@ -29,7 +29,9 @@
 
 // Sprite
 #include "render/SpriteRenderer.h"
+#include "render/TextRenderer.h"
 #include "render/Timer.h"
+#include "render/Speed.h"
 
 #include <iostream>
 #include <chrono>
@@ -304,6 +306,13 @@ protected:
 
 		MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
 		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
+
+		// Speed
+		auto t2 = MyPlayer->AddComponent<TextRenderer>(
+			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"));
+		t2->Offset.Position.y = 0.7f;
+		t2->Offset.Position.x = -0.5f;
+		MyPlayer->AddComponent<Speed>();
 		CurrentScene->AddActor(std::move(MyPlayer));
 
 		PlayerBody->SetMass(10.f);
@@ -329,24 +338,26 @@ protected:
 		bla->Offset.Position.y = 5.0f;
 		CurrentScene->AddActor(std::move(mySprite));
 
-		//auto Sprite = Pitbull::Actor::New();
-		//Sprite->AddComponent<SpriteRenderer>(
-		//	ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
-		//CurrentScene->AddActor(std::move(Sprite), true);
+		auto Sprite = Pitbull::Actor::New();
+		Sprite->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+		auto s = Sprite->AddComponent<SpriteRenderer>(
+			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+		s->Offset.Position.y = 0.5f;
+		CurrentScene->AddActor(std::move(Sprite), true);
 
 
 
 		auto Text = Pitbull::Actor::New();
-
-		auto t = Text->AddComponent<SpriteRenderer>(
-			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
-		t->Write(L"oooo");
-		t->Offset.Scale.x = 10;
-		t->Offset.Position.y = 0.7f;
-		auto o = Text->AddComponent<SpriteRenderer>(
-			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
-		o->Write(L"blop");
+		auto te = Text->AddComponent<TextRenderer>(
+			ResourcesManager.GetFont(L"Times new roman"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"));
 		Text->AddComponent<Timer>();
+		te->Offset.Position.x = -0.2f;
+		auto t = Text->AddComponent<TextRenderer>(
+			ResourcesManager.GetFont(L"Arial"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"));
+		t->Offset.Position.y = 0.5f;
+		t->Offset.Position.x = -0.5f;
+		t->Write(L"yoo");
 		CurrentScene->AddActor(std::move(Text), true);
 
 		return true;

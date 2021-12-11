@@ -4,16 +4,16 @@
 #pragma comment(lib, "gdiplus.lib")
 
 struct Font {
-	UINT TexWidth;
-	UINT TexHeight;
+	UINT TextWidth;
+	UINT TextHeight;
 
-	ID3D11Texture2D* pTexture;
-	ID3D11ShaderResourceView* pTextureView;
+	ID3D11Texture2D* Texture;
+	ID3D11ShaderResourceView* TextureView;
 
-	std::unique_ptr<Gdiplus::Font> pFont;
-	std::unique_ptr<Gdiplus::Bitmap> pCharBitmap;
-	std::unique_ptr<Gdiplus::Graphics> pCharGraphics;
-	std::unique_ptr<Gdiplus::SolidBrush> pBlackBrush;
+	std::unique_ptr<Gdiplus::Font> FontType;
+	std::unique_ptr<Gdiplus::Bitmap> CharBitmap;
+	std::unique_ptr<Gdiplus::Graphics> CharGraphics;
+	std::unique_ptr<Gdiplus::SolidBrush> BlackBrush;
 
 	Font(const wchar_t* FontName);
 	~Font();

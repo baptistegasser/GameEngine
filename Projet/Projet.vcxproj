@@ -203,6 +203,7 @@
     <ClCompile Include="render\Font.cpp" />
     <ClCompile Include="render\InfoDispositif.cpp" />
     <ClCompile Include="render\LightConfig.cpp" />
+    <ClCompile Include="render\Speed.cpp" />
     <ClCompile Include="render\Sprite.cpp" />
     <ClCompile Include="render\SpriteRenderer.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="render\ObjectMesh.cpp" />
     <ClCompile Include="render\ObjetMesh.cpp" />
     <ClCompile Include="render\Shader.cpp" />
+    <ClCompile Include="render\TextRenderer.cpp" />
     <ClCompile Include="render\Texture.cpp" />
     <ClCompile Include="render\Timer.cpp" />
     <ClCompile Include="render\Vertex.cpp" />
@@ -270,6 +272,7 @@
     <ClInclude Include="render\InfoDispositif.h" />
     <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\LightConfig.h" />
+    <ClInclude Include="render\Speed.h" />
     <ClInclude Include="render\Sprite.h" />
     <ClInclude Include="render\SpriteRenderer.h" />
     <ClInclude Include="render\Terrain.h" />
@@ -282,6 +285,7 @@
     <ClInclude Include="render\objet3d.h" />
     <ClInclude Include="render\ObjetMesh.h" />
     <ClInclude Include="render\Shader.h" />
+    <ClInclude Include="render\TextRenderer.h" />
     <ClInclude Include="render\Texture.h" />
     <ClInclude Include="render\Timer.h" />
     <ClInclude Include="render\Vertex.h" />

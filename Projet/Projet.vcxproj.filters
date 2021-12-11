@@ -231,17 +231,23 @@
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="render\Sprite.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\SpriteRenderer.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Font.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\Timer.cpp">
       <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\TextRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Speed.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpriteRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Sprite.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Font.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,12 +422,6 @@
     <ClInclude Include="render\Moteur.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Sprite.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\SpriteRenderer.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="math\Vec3f.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
@@ -434,10 +434,22 @@
     <ClInclude Include="util\Observable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="render\Font.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\Timer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\TextRenderer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Speed.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Sprite.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Font.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpriteRenderer.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
   </ItemGroup>

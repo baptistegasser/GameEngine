@@ -54,6 +54,11 @@ public:
 	/// </summary>
 	void setKinematicTarget(const Math::Transform& Target) const;
 
+	/// <summary>
+	/// Get the Rigidbody's velocity.
+	/// </summary>
+	const Math::Vec3f GetVelocity() const;
+
 protected:
 	friend class Pitbull::Actor;
 	friend class PhysicManager;

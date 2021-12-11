@@ -2,8 +2,6 @@
 #include "Sprite.h"
 #include "MoteurWindows.h"
 #include "resources/resource.h"
-//#include "util/util.h"
-//#include "MoteurWindows.h"
 
 using namespace DirectX;
 
@@ -22,7 +20,7 @@ D3D11_INPUT_ELEMENT_DESC SpriteVertex::Layout[] =
 
 UINT SpriteVertex::NumElements = ARRAYSIZE(Layout);
 
-SpriteVertex ShaderSprite::sommets[6] =
+SpriteVertex ShaderSprite::Vertices[6] =
 {
 	SpriteVertex(XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT2(0.0f, 1.0f)),
 	SpriteVertex(XMFLOAT3(-0.5f, 0.5f, 0.0f), XMFLOAT2(0.0f, 0.0f)),
@@ -38,24 +36,22 @@ SpriteVertex ShaderSprite::sommets[6] =
 ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 	FileName{FileName}
 {
-	// Création du vertex buffer et copie des sommets
 	ID3D11Device* pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 
 	bd.Usage = D3D11_USAGE_IMMUTABLE;
-	bd.ByteWidth = sizeof(sommets);
+	bd.ByteWidth = sizeof(Vertices);
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = sommets;
+	InitData.pSysMem = Vertices;
 
-	DX_TRY(pD3DDevice->CreateBuffer(&bd, &InitData, &pVertexBuffer), DXE_CREATIONVERTEXBUFFER);
+	DX_TRY(pD3DDevice->CreateBuffer(&bd, &InitData, &VertexBuffer), DXE_CREATIONVERTEXBUFFER);
 
-	// Création d'un tampon pour les constantes de l'effet
 	D3D11_BUFFER_DESC bd2;
 	ZeroMemory(&bd2, sizeof(bd2));
 
@@ -64,23 +60,21 @@ ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 	bd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd2.CPUAccessFlags = 0;
 	
-	pD3DDevice->CreateBuffer(&bd2, nullptr, &pConstantBuffer);
+	pD3DDevice->CreateBuffer(&bd2, nullptr, &ConstantBuffer);
 
-	// Pour l'effet
 	ID3DBlob* pFXBlob = nullptr;
 
 	DX_TRY(D3DCompileFromFile(FileName, 0, 0, 0, "fx_5_0", 0, 0, &pFXBlob, 0), DXE_ERREURCREATION_FX);
 
-	D3DX11CreateEffectFromMemory(pFXBlob->GetBufferPointer(), pFXBlob->GetBufferSize(), 0, pD3DDevice, &pEffet);
+	D3DX11CreateEffectFromMemory(pFXBlob->GetBufferPointer(), pFXBlob->GetBufferSize(), 0, pD3DDevice, &Effet);
 
 	pFXBlob->Release();
 
-	pTechnique = pEffet->GetTechniqueByIndex(0);
-	pPasse = pTechnique->GetPassByIndex(0);
+	Technique = Effet->GetTechniqueByIndex(0);
+	Passe = Technique->GetPassByIndex(0);
 
-	// Créer l'organisation des sommets pour le VS de notre effet
 	D3DX11_PASS_SHADER_DESC effectVSDesc;
-	pPasse->GetVertexShaderDesc(&effectVSDesc);
+	Passe->GetVertexShaderDesc(&effectVSDesc);
 
 	D3DX11_EFFECT_SHADER_DESC effectVSDesc2;
 	effectVSDesc.pShaderVariable->GetShaderDesc(effectVSDesc.ShaderIndex, &effectVSDesc2);
@@ -93,9 +87,8 @@ ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 		SpriteVertex::NumElements,
 		vsCodePtr,
 		vsCodeLen,
-		&pVertexLayout), DXE_CREATIONLAYOUT);
+		&VertexLayout), DXE_CREATIONLAYOUT);
 
-	// Initialisation des paramètres de sampling de la texture
 	D3D11_SAMPLER_DESC samplerDesc;
 
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
@@ -112,15 +105,14 @@ ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	// Création de l'état de sampling
-	pD3DDevice->CreateSamplerState(&samplerDesc, &pSampleState);
+	pD3DDevice->CreateSamplerState(&samplerDesc, &SampleState);
 }
 
 ShaderSprite::~ShaderSprite()
 {
-	DX_RELEASE(pConstantBuffer);
-	DX_RELEASE(pSampleState);
-	DX_RELEASE(pEffet);
-	DX_RELEASE(pVertexLayout);
-	DX_RELEASE(pVertexBuffer);
+	DX_RELEASE(ConstantBuffer);
+	DX_RELEASE(SampleState);
+	DX_RELEASE(Effet);
+	DX_RELEASE(VertexLayout);
+	DX_RELEASE(VertexBuffer);
 }

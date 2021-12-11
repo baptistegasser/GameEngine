@@ -1,6 +1,9 @@
 #pragma once
 #include "d3dx11effect.h"
 
+/// <summary>
+/// The vertex of a sprite
+/// </summary>
 class SpriteVertex
 {
 public:
@@ -12,47 +15,30 @@ public:
 	DirectX::XMFLOAT2 CoordTex;
 };
 
+/// <summary>
+/// The parameters of the shader of a sprite
+/// </summary>
 struct ShaderParamsSprite {
 	DirectX::XMMATRIX MatWorldViewProj;
 };
 
+/// <summary>
+/// The shader of a sprite
+/// </summary>
 struct ShaderSprite {
 	const wchar_t* FileName;
 
-	ID3D11Buffer* pVertexBuffer;
-	ID3D11Buffer* pConstantBuffer;
-	ID3DX11Effect* pEffet;
-	ID3DX11EffectTechnique* pTechnique;
-	ID3DX11EffectPass* pPasse;
-	ID3D11InputLayout* pVertexLayout;
+	ID3D11Buffer* VertexBuffer;
+	ID3D11Buffer* ConstantBuffer;
+	ID3DX11Effect* Effet;
+	ID3DX11EffectTechnique* Technique;
+	ID3DX11EffectPass* Passe;
+	ID3D11InputLayout* VertexLayout;
 
-	ID3D11SamplerState* pSampleState;
+	ID3D11SamplerState* SampleState;
 
-	static SpriteVertex sommets[6];
+	static SpriteVertex Vertices[6];
 
 	ShaderSprite(const wchar_t* FileName);
 	~ShaderSprite();
 };
-
-
-
-
-
-
-
-//
-//
-//	class Sprite : public Pitbull::Component
-//	{
-//	public:
-//		Texture* TextureSprite;
-//		XMMATRIX matPosDim;
-//		bool BillBoard;
-//
-//		Sprite(Pitbull::Actor* Parent, Texture* TextureSprite, const bool& BillBoard);
-//		~Sprite() = default;
-//
-//		void SpriteTick(const float& ElapsedTime);
-//
-//	};
-//

@@ -19,6 +19,12 @@ public:
 	void ActivateAlphaBlending() const;
 	void DeactivateAlphaBlending() const;
 
+	void ActivateCullBack() const;
+	void DeactivateCullBack() const;
+
+	void ActivateZBuffer() const;
+	void DeactivateZBuffer() const;
+
 	ID3D11Device* D3DDevice{};
 	ID3D11DeviceContext* ImmediateContext{};
 	IDXGISwapChain* SwapChain{};
@@ -29,6 +35,9 @@ public:
 	uint32_t ScreenWidth;
 	uint32_t ScreenHeight;
 
+	ID3D11DepthStencilState* pDepthStencilDephtEnable;
+	ID3D11DepthStencilState* pDepthStencilDephtDisable;
+
 private:
 	void InitDepthBuffer();
 	void InitBlendStates();
@@ -37,4 +46,7 @@ private:
 	ID3D11BlendState* AlphaBlendDisable{};
 
 	ID3D11RasterizerState* SolidCullBackRS{};
+	ID3D11RasterizerState* SolidNoneCullBackRS{};
+
+
 };

@@ -22,6 +22,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Terrain.h"
+#include "render/Skybox.h"
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
@@ -200,6 +201,8 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
+		SkyBox->LateTick(ElapsedTime);
+
 		// Get actors in vision range
 		const auto Actors = CurrentScene->GetVisibleActors();
 		for (const auto& Actor : Actors) {
@@ -296,7 +299,7 @@ protected:
 		CreatePlatform(Vec3f(0, -2.f, 0), Vec3f(20.f, 1.f, 20.f));
 		CreateMobilePlatform(Vec3f(10.f, 10.f, 0), Vec3f(5.f, 1.f, 1.f), Vec3f(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB");
 		CreateMobilePlatform(Vec3f(10.f, 10.f, 20.f), Vec3f(1.f, 1.f, 1.f), Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
-
+		
 		auto MyPlayer = Pitbull::Actor::New();
 		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
@@ -310,6 +313,11 @@ protected:
 
 		MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
 		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
+
+
+		SkyBox = std::unique_ptr<Pitbull::Actor>(std::move(new Skybox{
+		&MyPlayer->Transform, ResourcesManager.GetMesh(L".\\modeles\\sky\\sky.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx") }));
+
 		CurrentScene->AddActor(std::move(MyPlayer));
 
 		PlayerBody->SetMass(10.f);
@@ -384,6 +392,7 @@ protected:
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;
+	std::unique_ptr<Pitbull::Actor> SkyBox;
 
 	// Les matrices
 	DirectX::XMMATRIX m_MatView;

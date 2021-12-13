@@ -190,6 +190,9 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
+		// Tick the skybox at first
+		CurrentScene->SkyBox->LateTick(ElapsedTime);
+
 		// Get actors in vision range
 		const auto Actors = CurrentScene->GetVisibleActors();
 		for (const auto& Actor : Actors) {

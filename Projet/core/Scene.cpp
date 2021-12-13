@@ -64,6 +64,11 @@ void Scene::AddActor(ActorPtr Actor, bool AlwaysVisible)
 	}
 }
 
+void Scene::AddSkyBox(ActorPtr& Actor)
+{
+	SkyBox = std::move(Actor);
+}
+
 void Scene::SetCurrentCamera(const Camera* NewCamera) noexcept
 {
 	CurrentCamera = NewCamera;

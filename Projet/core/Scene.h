@@ -53,6 +53,8 @@ public:
 
 	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
+	void AddSkyBox(ActorPtr& Actor);
+
 	/// <summary>
 	/// Update the camera used to get visible actors.
 	/// </summary>
@@ -77,6 +79,10 @@ public:
 	/// </summary>
 	LightManager LightManager;
 
+	/// <summary>
+	/// The skybox of the scene
+	/// </summary>
+	ActorPtr SkyBox;
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;

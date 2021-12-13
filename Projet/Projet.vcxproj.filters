@@ -246,6 +246,9 @@
     <ClCompile Include="render\Light.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="render\Skybox.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -445,6 +448,9 @@
     </ClInclude>
     <ClInclude Include="render\LightManager.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Skybox.h">
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

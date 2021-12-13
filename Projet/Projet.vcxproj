@@ -208,6 +208,7 @@
     <ClCompile Include="render\LightManager.cpp" />
     <ClCompile Include="render\PointLight.cpp" />
     <ClCompile Include="render\SpotLight.cpp" />
+    <ClCompile Include="render\Skybox.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
     <ClCompile Include="render\Material.cpp" />
     <ClCompile Include="render\MeshLoader.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="render\LightManager.h" />
     <ClInclude Include="render\PointLight.h" />
     <ClInclude Include="render\SpotLight.h" />
+    <ClInclude Include="render\Skybox.h" />
     <ClInclude Include="render\Terrain.h" />
     <ClInclude Include="render\Material.h" />
     <ClInclude Include="render\MeshLoader.h" />

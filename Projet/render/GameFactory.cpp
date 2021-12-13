@@ -16,6 +16,7 @@
 #include "render/SpotLight.h"
 #include "render/PointLight.h"
 #include "render/DirectionalLight.h"
+#include "render/Skybox.h"
 
 // Gameplay components
 #include "gameplay/Plateform.h"
@@ -80,7 +81,13 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 	PlayerBody->SetMass(10.f);
 
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(std::unique_ptr<Pitbull::Actor>(std::move( new Skybox{
+	&MyPlayer->Transform, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB"),
+	PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx") })));
+
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlayer));
+
+
 }
 
 void GameFactory::CreateEnemy(Math::Transform Transform)
@@ -133,7 +140,7 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 
 	auto DirLight = new ADirectionalLight;
 	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
-	DirLight->GetLight()->Color = { 0.f, 0.f, 1.f };
+	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
 
 	auto ALightRed = new APointLight;

@@ -249,6 +249,9 @@
     <ClCompile Include="render\Skybox.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
+    <ClCompile Include="gameplay\IntelligentEnemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="render\Skybox.h">
       <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\IntelligentEnemy.h">
+      <Filter>Header Files\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

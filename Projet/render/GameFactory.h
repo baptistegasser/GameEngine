@@ -25,15 +25,21 @@ private:
 	/// <summary>
 	/// Create the player
 	/// </summary>
-	/// <param name="Pos"> : init pos for the player  </param>
+	/// <param name="Transform"> : init transform for the player  </param>
 	void CreatePlayer(Math::Transform Transform);
 
 	/// <summary>
 	/// Create an enemy
 	/// </summary>
-	///	<param name="Pos"> : position of the enemy  </param>
-	///	<param name="Scale"> : scale of the enemy  </param>
+	///	<param name="Transform"> : transform of the enemy  </param>
 	void CreateEnemy(Math::Transform Transform);
+
+	/// <summary>
+	/// Create an intelligent enemy
+	/// </summary>
+	///	<param name="Transform"> : transform of the enemy  </param>
+	/// <param name="ToFollow"> transform of the actor we want to follow </param>
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow);
 
 	/// <summary>
 	/// Create a fixed platform
@@ -65,4 +71,6 @@ private:
 	///	<param name="OuterRadius"> : outerRadius of the light </param>
 	void CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity = 0.f, float InnerRadius = 0.f, float OuterRadius = 0.f);
 
+private :
+	Math::Transform* PlayerTransform;
 };

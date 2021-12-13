@@ -21,6 +21,7 @@
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
+#include "gameplay/IntelligentEnemy.h"
 
 void GameFactory::LoadLevel()
 {
@@ -38,6 +39,8 @@ void GameFactory::LoadLevel()
 	CreateMobilePlatform(Math::Vec3f(20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+
+	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 50.f, 1.f }, PlayerTransform);
 
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
@@ -81,8 +84,9 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 	PlayerBody->SetMass(10.f);
 
+	PlayerTransform = &MyPlayer->Transform;
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(std::unique_ptr<Pitbull::Actor>(std::move( new Skybox{
-	&MyPlayer->Transform, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB"),
+	PlayerTransform, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB"),
 	PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx") })));
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlayer));
@@ -95,14 +99,25 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 	auto Ennemy = Pitbull::Actor::New();
 	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
-	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Math::Vec3f{ 2.f, 0.f, 0.0f });
-	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Math::Vec3f{ -2.f, 0.f, 0.0f });
+	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 
 	auto body = Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 	Ennemy->AddComponent<Plateform>(
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
 		, Math::Transform(Ennemy->Transform.Position + Math::Vec3f(10, 0, 0), Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
+}
+
+void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow)
+{
+	auto Ennemy = Pitbull::Actor::New();
+	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"),
+		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+	Ennemy->Transform = Transform;
+	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
+	Ennemy->AddComponent<IntelligentEnemy>(ToFollow);
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
 }
 

@@ -2,9 +2,6 @@
 #include "ResourcesManager.h"
 
 #include "util/Util.h"
-#include "render/Shader.h"
-#include "render/Texture.h"
-#include "render/ObjectMesh.h"
 
 ResourcesManager::~ResourcesManager()
 {

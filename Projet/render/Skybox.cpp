@@ -28,7 +28,6 @@ void Skybox::LateTick(const float ElapsedTime)
 
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
-	const auto& LightConfig = PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig;
 
 
 	// Choisir la topologie des primitives
@@ -56,12 +55,10 @@ void Skybox::LateTick(const float ElapsedTime)
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
 
-	// Update lighting
-	if (LightConfig.Changed()) {
-		MeshShader->UpdateLightsBuffer(pImmediateContext, LightConfig);
-	}
-	ShaderParams.Ambient = LightConfig.GetAmbient();
-	ShaderParams.Directional = LightConfig.GetDirectional();
+	// Set lighting data
+	const auto& LightManager = PM3D::CMoteurWindows::GetInstance().GetScene().LightManager;
+	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
+	MeshShader->UpdateLightsBuffer(pImmediateContext);
 
 	// Dessiner les subsets non-transparents
 	for (int32_t i = 0; i < Mesh->SubsetCount; ++i)

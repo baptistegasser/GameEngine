@@ -43,6 +43,13 @@ inline void DX_RELEASE(Type & UnPointeur)
 	}
 }
 
+// Assert that a type used for hlsl is correctly alligned
+#define DX_HLSL_ASSERT_ALLIGN(type) \
+	static_assert(sizeof(type) % 16 == 0, "HLSL require, " #type " to be aligned to 16 bytes.");
+
+// Filler helper to respect allignement
+#define DX_HLSL_FILL(i) float __HLSL_FILL__[i] = {};
+
 const wchar_t* str2wchar(const std::string& str) noexcept;
 const std::string wchar2str(const wchar_t* wchars) noexcept;
 

@@ -7,9 +7,9 @@
 
 // Don't include manadged ressources in case they might need the
 // ResourcesManager which would lead to circulard dependancies
-struct Shader;
-struct ObjectMesh;
-struct Texture;
+#include "render/Shader.h"
+#include "render/Texture.h"
+#include "render/ObjectMesh.h"
 
 class ResourcesManager {
 private:

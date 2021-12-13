@@ -210,9 +210,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="render\LightConfig.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="math\Vec3f.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
@@ -232,6 +229,21 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\Device.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpotLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\PointLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\LightManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DirectionalLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Light.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\Skybox.cpp">
@@ -380,9 +392,6 @@
     <ClInclude Include="render\Light.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\LightConfig.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -428,6 +437,18 @@
     <ClInclude Include="render\DeviceInfoD3D11.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
+    <ClInclude Include="render\PointLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpotLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DirectionalLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightManager.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
     <ClInclude Include="render\Skybox.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
@@ -468,7 +489,13 @@
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
-    <None Include="shaders\Light.hlsli">
+    <None Include="Shaders\Lights.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Material.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Util.hlsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

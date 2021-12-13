@@ -67,8 +67,9 @@ private:
 	DirectX::XMVECTOR Direction;
 	DirectX::XMVECTOR RelativeZ;
 
-	float Speed = 100.0f;
-	float JumpSpeed = 10.f;
+	float Speed = 110.0f;
+	float JumpSpeed = 30.f;
+	float MaxSpeed = 15.0f;
 
 	/// <summary>
 	/// Swap the camera's type

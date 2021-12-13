@@ -32,6 +32,10 @@ void Player::FixedTick(const float& DeltaTime)
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
+	/****
+	 *  KEYBOARD CONTROL
+	 ****/
+
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_A)) {
 		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
@@ -68,22 +72,41 @@ void Player::FixedTick(const float& DeltaTime)
 		if (WaitForSwap) SwapCameraMode();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
-		using namespace physx;
+	/****
+	 *  MOUSE CONTROL
+	 ****/
 
-		AngleRotation -= RotationSpeed;
-		PxQuat qx = PxQuat(-RotationSpeed, PxVec3(0, 1, 0));
-		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
-		Direction = XMVector4Normalize( Direction);
+	// Calculate sensibility of the camera
+	auto CalculateSpeed = [](int speed) { return 1000.f * static_cast<float>(speed) + 2000.f; };
+
+	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_RIGHT)) {
-		using namespace physx;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
 
-		AngleRotation += RotationSpeed;
-		PxQuat qx = PxQuat(RotationSpeed, PxVec3(0, 1, 0));
-		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
-		Direction = XMVector4Normalize(Direction);
+	//Vérifier si déplacement vers la gauche
+	if (rGestionnaireDeSaisie.EtatSouris().lX < 0) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
+
+	// Vérifier si déplacement vers la droite
+	if (rGestionnaireDeSaisie.EtatSouris().lX > 0) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
+
+	//Vérifier si déplacement vers le haut
+	if (rGestionnaireDeSaisie.EtatSouris().lY < 0 && AngleRotationVertical > MIN_ANGLE_VERTICAL) {
+		AngleRotationVertical -= AngleRotationSpeedVertical;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
+	}
+
+	// Vérifier si déplacement vers le bas
+	if (rGestionnaireDeSaisie.EtatSouris().lY > 0 && AngleRotationVertical < MAX_ANGLE_VERTICAL) {
+		AngleRotationVertical += AngleRotationSpeedVertical;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, -XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
 	}
 
 	if (ViewType == CameraViewType::Third) {

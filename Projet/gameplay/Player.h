@@ -34,8 +34,33 @@ private:
 	Camera* MyCamera;
 	SphereCollider* MyCollider;
 
-	float AngleRotation = 0.0f;
-	float RotationSpeed = 0.05f;
+	/****
+	 *
+	 * VERTICAL CAMERA ANGLE
+	 *
+	 *****/
+	const float MIN_ANGLE_VERTICAL = 0.f;
+	const float MAX_ANGLE_VERTICAL = 20.f;
+	float AngleRotationVertical = 10.0f;
+	const float AngleRotationSpeedVertical = 0.5f;
+
+	/****
+	 *
+	 * SENSIBILITY OF HORIZONTAL CAMERA
+	 *
+	 *****/
+	const int MIN_SENSIBILITY_HORIZONTAL = 0;
+	const int MAX_SENSIBILITY_HORIZONTAL = 5;
+	int SensibilityHorizontal = 2;
+
+	/****
+	 *
+	 * SENSIBILITY OF VERTICAL CAMERA
+	 *
+	 *****/
+	const int MIN_SENSIBILITY_VERTICAL = 0;
+	const int MAX_SENSIBILITY_VERTICAL = 5;
+	int SensibilityVertical = 3;
 
 	CameraViewType ViewType;
 

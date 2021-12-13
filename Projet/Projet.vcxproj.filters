@@ -234,6 +234,9 @@
     <ClCompile Include="render\Device.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="gameplay\CheckPoint.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="render\DeviceInfoD3D11.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\CheckPoint.h">
+      <Filter>Header Files\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

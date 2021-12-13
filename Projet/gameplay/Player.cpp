@@ -23,7 +23,7 @@ void Player::Init()
 	Direction = ParentActor->Transform.Forward().ToXMVector();
 }
 
-void Player::Tick(const float& elapsed_time)
+void Player::Tick(const float& ElapsedTime)
 {
 	if (IsDead())
 	{

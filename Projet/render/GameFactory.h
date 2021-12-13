@@ -65,4 +65,10 @@ private:
 	///	<param name="OuterRadius"> : outerRadius of the light </param>
 	void CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity = 0.f, float InnerRadius = 0.f, float OuterRadius = 0.f);
 
+	/// <summary>
+	/// Create an enemy
+	/// </summary>
+	///	<param name="Pos"> : position of the enemy  </param>
+	///	<param name="Scale"> : scale of the enemy  </param>
+	void CreateCheckPoint(Math::Transform Transform);
 };

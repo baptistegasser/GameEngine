@@ -17,6 +17,7 @@
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
+#include "gameplay/CheckPoint.h"
 
 void GameFactory::LoadLevel()
 {
@@ -35,6 +36,7 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
+	CreateCheckPoint(Math::Vec3f{ 0.f, 11.f, 5.f });
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
 	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f },  4.f);
@@ -133,4 +135,18 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	Light.Specular = Specular;
 	Light.Roughness = Roughness;
 	PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig.AddPointLight(Light);
+}
+
+void GameFactory::CreateCheckPoint(Math::Transform Transform)
+{
+	auto MyCheckPoint = Pitbull::Actor::New();
+	MyCheckPoint->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\checkPoint\\star.OMB"),
+		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+
+	MyCheckPoint->Transform = Transform;
+	MyCheckPoint->AddComponent<CheckPoint>();
+
+	MyCheckPoint->AddComponent<CapsuleCollider>(0.4f, 0.01f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
+
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyCheckPoint));
 }

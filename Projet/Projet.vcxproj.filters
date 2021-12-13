@@ -474,5 +474,14 @@
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
+    <None Include="Shaders\Lights.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Material.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Util.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

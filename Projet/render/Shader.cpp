@@ -25,7 +25,7 @@ Shader::Shader(const wchar_t* FileName)
 	// Pour l'effet
 	ID3DBlob* PFXBlob = nullptr;
 
-	DX_TRY(D3DCompileFromFile(FileName, 0, 0, 0, "fx_5_0", 0, 0, &PFXBlob, 0), DXE_ERREURCREATION_FX);
+	DX_TRY(D3DCompileFromFile(FileName, 0, D3D_COMPILE_STANDARD_FILE_INCLUDE, 0, "fx_5_0", 0, 0, &PFXBlob, 0), DXE_ERREURCREATION_FX);
 
 	D3DX11CreateEffectFromMemory(PFXBlob->GetBufferPointer(), PFXBlob->GetBufferSize(), 0, PD3DDevice, &PEffect);
 

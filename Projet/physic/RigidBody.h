@@ -37,10 +37,26 @@ public:
 	/// </summary>
 	void AddTorque(const Math::Vec3f& Torque, const ForceMode& ForceMode = ForceMode::Force) const;
 	/// <summary>
+	/// Clear a force to the Rigidbody.
+	/// </summary>
+	void ClearForce() const;
+	/// <summary>
+	/// Clear a torque to the Rigidbody.
+	/// </summary>
+	void ClearTorque() const;
+	/// <summary>
 	/// Set the Rigidbody's velocity.
 	///	Not recommended, please use \ref AddForce.
 	/// </summary>
 	void SetVelocity(const Math::Vec3f& Velocity) const;
+	/// <summary>
+	/// Clear the Rigidbody's velocity.
+	/// </summary>
+	void ClearVelocity() const;
+	/// <summary>
+	/// Clear the Rigidbody's velocity.
+	/// </summary>
+	void ClearAngularVelocity() const;
 	/// <summary>
 	/// Set the Rigidbody's mass, assuming constant density.
 	/// </summary>

@@ -23,6 +23,14 @@ void Player::Init()
 	Direction = ParentActor->Transform.Forward().ToXMVector();
 }
 
+void Player::Tick(const float& elapsed_time)
+{
+	if (IsDead())
+	{
+		ResetPlayer(Math::Vec3f(0, 10.5f, 0));
+	}
+}
+
 void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
@@ -139,4 +147,19 @@ void Player::SwapCameraMode()
 		ViewType = CameraViewType::First;
 
 	WaitForSwap = false;
+}
+
+bool Player::IsDead() const
+{
+	if (ParentActor->Transform.Position.y < -10) return true;
+	return false;
+}
+
+void Player::ResetPlayer(Math::Vec3f Pos) const
+{
+	ParentActor->Transform = Transform(Pos,Math::Quaternion(0.0f,0.0f,0.0f));
+	MyRigidBody->ClearForce();
+	MyRigidBody->ClearTorque();
+	MyRigidBody->ClearVelocity();
+	MyRigidBody->ClearAngularVelocity();
 }

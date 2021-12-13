@@ -14,6 +14,11 @@ public :
 	void Init() override;
 
 	/// <summary>
+	/// Update the death state
+	/// </summary>
+	void Tick(const float& ElapsedTime) override;
+
+	/// <summary>
 	/// Update the direction of the player
 	/// Update the type of camera
 	/// </summary>
@@ -74,6 +79,16 @@ private:
 	/// Swap the camera's type
 	/// </summary>
 	void SwapCameraMode();
+
+	/// <summary>
+	/// Check if player is dead
+	/// </summary>
+	[[nodiscard]] bool IsDead() const;
+
+	/// <summary>
+	/// Reset player value
+	/// </summary>
+	void ResetPlayer(Math::Vec3f Pos) const;
 
 	bool WaitForSwap = false;
 };

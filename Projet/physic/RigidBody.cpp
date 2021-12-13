@@ -133,10 +133,33 @@ void RigidBody::AddTorque(const Math::Vec3f& Torque, const ForceMode& ForceMode)
 	GetAsDynamic()->addTorque(Torque, PhysxForce(ForceMode));
 }
 
+void RigidBody::ClearForce() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->clearForce();
+}
+
+void RigidBody::ClearTorque() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->clearTorque();
+}
+
 void RigidBody::SetVelocity(const Math::Vec3f& Velocity) const
 {
 	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
 	GetAsDynamic()->setLinearVelocity(Velocity);
+}
+void RigidBody::ClearVelocity() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->setLinearVelocity(PxVec3(0.0f, 0.0f, 0.0f));
+}
+
+void RigidBody::ClearAngularVelocity() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->setAngularVelocity(PxVec3(0.0f, 0.0f, 0.0f));
 }
 
 void RigidBody::SetMass(const float Mass) const

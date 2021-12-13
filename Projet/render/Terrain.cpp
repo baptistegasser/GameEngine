@@ -82,6 +82,8 @@ void ATerrain::LateTick(const float ElapsedTime)
 
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
 
+	PM3D::CMoteurWindows::GetInstance().GetDispositif().DeactivateCullBack();
+
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	const UINT stride = sizeof(vertex_t);

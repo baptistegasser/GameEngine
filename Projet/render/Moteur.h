@@ -269,7 +269,7 @@ protected:
 		using namespace DirectX;
 
 		auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
-			L".\\modeles\\Heightmap.bmp",
+			L".\\modeles\\tunnel.bmp",
 			{1, 0.3f, 1},
 			ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
@@ -278,8 +278,9 @@ protected:
 		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
 		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
 		Terrain->Transform.Position = { 0.f, -50.f, 0.f };
-		Terrain->Transform.Scale.x = 2.f;
-		Terrain->Transform.Scale.z = 2.f;
+		//Terrain->Transform.Scale.x = 2.f;
+		//Terrain->Transform.Scale.z = 2.f;
+		//Terrain->Transform.Rotation = PxQuat(PxPi,PxVec3(0,0,1));
 		CurrentScene->AddActor(std::move(Terrain), true);
 
 		auto Mesh2 = Pitbull::Actor::New();

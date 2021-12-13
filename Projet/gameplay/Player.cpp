@@ -7,11 +7,10 @@
 
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
+Player::Player(Pitbull::Actor* Parent)
 	: Component{ Parent }
-	, Direction{ XMVector3Normalize(Direction) }
 	, ViewType{ CameraViewType::Third }
-	, WaitForSwap{false}
+	, Direction{}
 {}
 
 void Player::Init()
@@ -20,6 +19,8 @@ void Player::Init()
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
 	MyCollider = ParentActor->GetComponent<SphereCollider>();
+
+	Direction = ParentActor->Transform.Forward().ToXMVector();
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -116,4 +117,3 @@ void Player::SwapCameraMode()
 
 	WaitForSwap = false;
 }
-

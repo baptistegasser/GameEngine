@@ -77,9 +77,9 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 	PlayerBody->SetMass(10.f);
 
-	PM3D::CMoteurWindows::GetInstance().SetSkyBox(new Skybox{
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(std::unique_ptr<Pitbull::Actor>(std::move( new Skybox{
 	&MyPlayer->Transform, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB"),
-	PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx") });
+	PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx") })));
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlayer));
 

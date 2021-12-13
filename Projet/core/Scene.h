@@ -42,6 +42,8 @@ public:
 
 	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
+	void AddSkyBox(ActorPtr Actor);
+
 	/// <summary>
 	/// Update the camera used to get visible actors.
 	/// </summary>
@@ -57,12 +59,21 @@ public:
 
 	physx::PxScene* PhysxScene;
 
+	/// <summary>
+	/// The lights of the scene
+	/// </summary>
 	LightConfig LightConfig;
+
+	/// <summary>
+	/// The skybox of the scene
+	/// </summary>
+	Octree::ActorType SkyBox;
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;
 	Octree Tree;
 	Octree::ActorList AlwaysVisibleActors;
+
 
 	void ConcatVisibleActors(Octree::ActorPtrList& Actors);
 };

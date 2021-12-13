@@ -159,7 +159,6 @@ public:
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	Scene& GetScene() { return *CurrentScene; }
-	void SetSkyBox(Pitbull::Actor* Box) { SkyBox = std::unique_ptr<Pitbull::Actor>(std::move(Box)); }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	DeviceD3D11& GetDispositif() noexcept { return *pDispositif; }
 
@@ -206,7 +205,8 @@ protected:
 	{
 		BeginRenderSceneSpecific();
 
-		SkyBox->LateTick(ElapsedTime);
+		// Tick the skybox at first
+		CurrentScene->SkyBox->LateTick(ElapsedTime);
 
 		// Get actors in vision range
 		const auto Actors = CurrentScene->GetVisibleActors();
@@ -309,7 +309,6 @@ protected:
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;
-	std::unique_ptr<Pitbull::Actor> SkyBox;
 
 	// Les matrices
 	DirectX::XMMATRIX m_MatView;

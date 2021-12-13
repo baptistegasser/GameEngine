@@ -203,6 +203,7 @@
     <ClCompile Include="render\DeviceD3D11.cpp" />
     <ClCompile Include="render\DeviceInfoD3D11.cpp" />
     <ClCompile Include="render\LightConfig.cpp" />
+    <ClCompile Include="render\Skybox.cpp" />
     <ClCompile Include="render\Terrain.cpp" />
     <ClCompile Include="render\Material.cpp" />
     <ClCompile Include="render\MeshLoader.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="render\DeviceInfoD3D11.h" />
     <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\LightConfig.h" />
+    <ClInclude Include="render\Skybox.h" />
     <ClInclude Include="render\Terrain.h" />
     <ClInclude Include="render\Material.h" />
     <ClInclude Include="render\MeshLoader.h" />

@@ -22,6 +22,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Terrain.h"
+#include "render/Skybox.h"
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
@@ -203,6 +204,9 @@ protected:
 	virtual bool RenderScene(const float ElapsedTime)
 	{
 		BeginRenderSceneSpecific();
+
+		// Tick the skybox at first
+		CurrentScene->SkyBox->LateTick(ElapsedTime);
 
 		// Get actors in vision range
 		const auto Actors = CurrentScene->GetVisibleActors();

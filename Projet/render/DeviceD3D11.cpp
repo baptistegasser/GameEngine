@@ -126,7 +126,10 @@ DeviceD3D11::~DeviceD3D11()
 	DX_RELEASE(AlphaBlendEnable);
 	DX_RELEASE(AlphaBlendDisable);
 	DX_RELEASE(SolidCullBackRS);
+	DX_RELEASE(SolidNoneCullBackRS);
 	DX_RELEASE(DepthTexture);
+	DX_RELEASE(pDepthStencilDephtEnable);
+	DX_RELEASE(pDepthStencilDephtDisable);
 	DX_RELEASE(DepthStencilView);
 	DX_RELEASE(RenderTargetView);
 	DX_RELEASE(SwapChain);

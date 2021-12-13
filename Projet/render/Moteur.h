@@ -119,8 +119,7 @@ public:
 		CurrentPhysicTime = TempsCompteurCourant;
 
 		// Update inputs states
-		GestionnaireDeSaisie.StatutClavier();
-		GestionnaireDeSaisie.SaisirEtatSouris();
+		
 
 		// Update physic state
 		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
@@ -277,6 +276,9 @@ protected:
 
 	bool AnimeScene(float tempsEcoule)
 	{
+		GestionnaireDeSaisie.StatutClavier();
+		GestionnaireDeSaisie.SaisirEtatSouris();
+
 		// Make all component Tick
 		CurrentScene->Tick(tempsEcoule);
 

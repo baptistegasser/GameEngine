@@ -1,5 +1,5 @@
 #pragma once
-#include "dispositif.h"
+#include "Device.h"
 
 #include "AfficheurTexte.h"
 #include "DIManipulateur.h"
@@ -11,23 +11,7 @@
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
 
-// Math components
-#include "math/Math.h"
-// Physic components
-#include "physic/RigidBody.h"
-#include "physic/SphereCollider.h"
-#include "physic/BoxCollider.h"
-#include "physic/CapsuleCollider.h"
-// Render components
-#include "render/MeshRenderer.h"
-#include "render/Camera.h"
-#include "render/Terrain.h"
-#include "render/SpotLight.h"
-#include "render/PointLight.h"
-#include "render/DirectionalLight.h"
-// Gameplay components
-#include "gameplay/Plateform.h"
-#include "gameplay/Player.h"
+#include "render/GameFactory.h"
 
 #include <iostream>
 #include <chrono>
@@ -63,7 +47,7 @@ enum EngineState
 //        le dispositif Direct3D), l'utilisation d'un singleton 
 //        nous simplifiera plusieurs aspects.
 //
-template <class T, class TClasseDispositif> class CMoteur :public Singleton<T>
+template <class T, class TDevice> class CMoteur :public Singleton<T>
 {
 public:
 
@@ -92,7 +76,7 @@ public:
 		InitialisationsSpecific();
 
 		// * Initialisation du dispositif de rendu
-		pDispositif = CreationDispositifSpecific(CDS_FENETRE);
+		pDispositif = CreationDispositifSpecific(CDS_MODE::CDS_FENETRE);
 
 		CurrentScene = std::make_shared<Scene>();
 
@@ -120,8 +104,7 @@ public:
 		CurrentPhysicTime = TempsCompteurCourant;
 
 		// Update inputs states
-		GestionnaireDeSaisie.StatutClavier();
-		GestionnaireDeSaisie.SaisirEtatSouris();
+		
 
 		// Update physic state
 		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
@@ -151,15 +134,18 @@ public:
 		}
 	}
 
+	DirectX::XMMATRIX& GetMatView() { return m_MatView; }
 	const DirectX::XMMATRIX& GetMatView() const { return m_MatView; }
+	DirectX::XMMATRIX& GetMatProj() { return m_MatProj; }
 	const DirectX::XMMATRIX& GetMatProj() const { return m_MatProj; }
+	DirectX::XMMATRIX& GetMatViewProj() { return m_MatViewProj; }
 	const DirectX::XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	Scene& GetScene() noexcept { return *CurrentScene; }
-	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
+	DeviceD3D11& GetDispositif() noexcept { return *pDispositif; }
 
 	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
 	bool IsStopping() const noexcept { return IsStateSet(EngineState::Stopping); }
@@ -181,7 +167,7 @@ protected:
 	virtual int64_t GetTimeSpecific() const = 0;
 	virtual double GetTimeIntervalsInSec(int64_t start, int64_t stop) const = 0;
 
-	virtual TClasseDispositif* CreationDispositifSpecific(const CDS_MODE cdsMode) = 0;
+	virtual TDevice* CreationDispositifSpecific(const CDS_MODE cdsMode) = 0;
 	virtual void BeginRenderSceneSpecific() = 0;
 	virtual void EndRenderSceneSpecific() = 0;
 
@@ -244,7 +230,7 @@ protected:
 			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
 		const float champDeVision = XM_PI / 2; 	// 45 degr�s
-		const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
+		const float ratioDAspect = static_cast<float>(pDispositif->ScreenWidth) / static_cast<float>(pDispositif->ScreenHeight);
 		const float planRapproche = 1.0;
 		const float planEloigne = 300.0;
 
@@ -263,129 +249,18 @@ protected:
 		return 0;
 	}
 
- 	bool InitObjets()
+	bool InitObjets()
 	{
-		using namespace Math;
-		using namespace physx;
-		using namespace DirectX;
-
-		auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
-			L".\\modeles\\Heightmap.bmp",
-			{1, 0.3f, 1},
-			ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
-			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
-		});
-		Terrain->Texture1 = ResourcesManager.GetTexture(L".\\modeles\\gazon.dds");
-		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
-		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
-		Terrain->Transform.Position = { 0.f, -50.f, 0.f };
-		Terrain->Transform.Scale.x = 2.f;
-		Terrain->Transform.Scale.z = 2.f;
-		CurrentScene->AddActor(std::move(Terrain), true);
-
-		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		Mesh2->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Vec3f{ 2.f, 0.f, 0.0f });
-		Mesh2->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Vec3f{ -2.f, 0.f, 0.0f });
-		Mesh2->Transform.Position.y = 0.f;
-		Mesh2->Transform.Position.z = -7.f;
-		Mesh2->Transform.Position.x = 1.f;
-		auto body = Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-		Mesh2->AddComponent<Plateform>(
-			Transform(Mesh2->Transform.Position, Quaternion(-PxHalfPi, Vec3f(0,1,0)))
-			, Transform(Mesh2->Transform.Position + Vec3f(10, 0, 0), Quaternion(PxHalfPi, Vec3f(0, 1, 0))), true);
-		CurrentScene->AddActor(std::move(Mesh2));
-
-
-		CreatePlatform(Vec3f(0, -2.f, 0), Vec3f(20.f, 1.f, 20.f));
-		CreateMobilePlatform(Vec3f(10.f, 10.f, 0), Vec3f(5.f, 1.f, 1.f), Vec3f(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB");
-		CreateMobilePlatform(Vec3f(10.f, 10.f, 20.f), Vec3f(1.f, 1.f, 1.f), Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
-
-		auto MyPlayer = Pitbull::Actor::New();
-		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
-		auto PlayerCam = MyPlayer->AddComponent<Camera>(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
-			XMVectorSet(0.0f, 0.4f, -1.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
-			&m_MatView,
-			&m_MatProj,
-			&m_MatViewProj);
-		CurrentScene->SetCurrentCamera(PlayerCam);
-
-		MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
-		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
-		CurrentScene->AddActor(std::move(MyPlayer));
-
-		PlayerBody->SetMass(10.f);
-
-		CurrentScene->LightManager.AmbientColor = { 0.5f };
-		
-		auto DirLight = new ADirectionalLight;
-		DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
-		DirLight->GetLight()->Color = { 0.f, 0.f, 1.f };
-		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
-		
-		auto ALightRed = new APointLight;
-		auto LightRed = ALightRed->GetLight();
-		LightRed->Position = { 0.f, 5.f, 0.f };
-		LightRed->Color = { 1.0f, 0.0f, 0.0f };
-		LightRed->Range = 20.f;
-		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
-
-		auto ALightBlue = new APointLight;
-		auto LightBlue = ALightBlue->GetLight();
-		LightBlue->Position = { -40.f, 5.f, 0.f };
-		LightBlue->Color = { 0.f, 0.0f, 1.0f };
-		LightBlue->Range = 20.f;
-		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
-
-		auto ALightGreen = new APointLight;
-		auto LightGreen = ALightGreen->GetLight();
-		LightGreen->Position = { 40.f, 5.f, 0.f };
-		LightGreen->Color = { 0.0f, 1.0f, 0.0f };
-		LightGreen->Range = 20.f;
-		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
-
-		auto ASpotRed = new ASpotLight;
-		auto SpotRed = ASpotRed->GetLight();
-		SpotRed->Position = { 0.f, 5.f, -40.f };
-		SpotRed->Direction = { -30.f, 0.f, -40.f };
-		SpotRed->Color = { 1.0f, 0.0f, 0.0f };
-		SpotRed->Range = 20.f;
-		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
+		GameFactory::GetInstance().LoadLevel();
 
 		return true;
 	}
 
-	void CreatePlatform(Math::Vec3f Pos, Math::Vec3f Scale = { 1.f }, PhysicMaterial Material = Collider::DefaultMaterial)
-	{
-		auto MyPlateform = Pitbull::Actor::New();
-		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\platform\\plateform.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
-		MyPlateform->Transform.Position = Pos;
-		MyPlateform->Transform.Scale = Scale;
-		//auto body = MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
-		CurrentScene->AddActor(std::move(MyPlateform));
-	}
-
-	void CreateMobilePlatform(Math::Vec3f Pos, Math::Vec3f Scale, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial)
-	{
-		using namespace Math;
-
-		auto MyPlateform = Pitbull::Actor::New();
-		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(Filename), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
-		MyPlateform->Transform.Position = Pos;
-		MyPlateform->Transform.Scale = Scale;
-		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-		MyPlateform->AddComponent<Plateform>(
-			Transform(MyPlateform->Transform.Position)
-			, Transform(MyPlateform->Transform.Position + End), true);
-		CurrentScene->AddActor(std::move(MyPlateform));
-	}
-
 	bool AnimeScene(float tempsEcoule)
 	{
+		GestionnaireDeSaisie.StatutClavier();
+		GestionnaireDeSaisie.SaisirEtatSouris();
+
 		// Make all component Tick
 		CurrentScene->Tick(tempsEcoule);
 
@@ -412,7 +287,7 @@ protected:
 	int64_t TempsCompteurPrecedent;
 
 	// Le dispositif de rendu
-	TClasseDispositif* pDispositif;
+	TDevice* pDispositif;
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;

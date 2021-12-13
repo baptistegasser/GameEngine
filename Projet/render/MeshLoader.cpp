@@ -8,7 +8,7 @@
 
 void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 {
-	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
+	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
 
 	std::ifstream File;
 	File.open(FileName, std::ios::in | std::ios_base::binary);

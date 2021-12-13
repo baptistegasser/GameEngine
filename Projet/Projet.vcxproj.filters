@@ -177,16 +177,7 @@
     <ClCompile Include="render\DIManipulateur.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
-    <ClCompile Include="render\dispositif.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\dispositifD3D11.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\MoteurWindows.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\InfoDispositif.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
     <ClCompile Include="render\Moteur.cpp">
@@ -227,6 +218,18 @@
     </ClCompile>
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="render\GameFactory.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DeviceD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DeviceInfoD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Device.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\SpotLight.cpp">
       <Filter>Source Files\render\components</Filter>
@@ -362,15 +365,6 @@
     <ClInclude Include="render\DIManipulateur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\dispositif.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\dispositifD3D11.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\InfoDispositif.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\MoteurWindows.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -423,7 +417,22 @@
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="util\Observable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render\GameFactory.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Observable.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Device.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DeviceD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DeviceInfoD3D11.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\PointLight.h">
       <Filter>Header Files\render\components</Filter>

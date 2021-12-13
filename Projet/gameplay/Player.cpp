@@ -7,11 +7,10 @@
 
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
+Player::Player(Pitbull::Actor* Parent)
 	: Component{ Parent }
-	, Direction{ XMVector3Normalize(Direction) }
 	, ViewType{ CameraViewType::Third }
-	, WaitForSwap{false}
+	, Direction{}
 {}
 
 void Player::Init()
@@ -19,6 +18,9 @@ void Player::Init()
 	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
+	MyCollider = ParentActor->GetComponent<SphereCollider>();
+
+	Direction = ParentActor->Transform.Forward().ToXMVector();
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -29,6 +31,10 @@ void Player::FixedTick(const float& DeltaTime)
 	PM3D::CDIManipulateur& rGestionnaireDeSaisie = Engine.GetGestionnaireDeSaisie();
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
+
+	/****
+	 *  KEYBOARD CONTROL
+	 ****/
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_A)) {
 		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
@@ -47,7 +53,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
  	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
-		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+	    if (isGrounded())
+			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_P)) {
@@ -65,22 +72,41 @@ void Player::FixedTick(const float& DeltaTime)
 		if (WaitForSwap) SwapCameraMode();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
-		using namespace physx;
+	/****
+	 *  MOUSE CONTROL
+	 ****/
 
-		AngleRotation -= RotationSpeed;
-		PxQuat qx = PxQuat(-RotationSpeed, PxVec3(0, 1, 0));
-		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
-		Direction = XMVector4Normalize( Direction);
+	// Calculate sensibility of the camera
+	auto CalculateSpeed = [](int speed) { return 1000.f * static_cast<float>(speed) + 2000.f; };
+
+	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_RIGHT)) {
-		using namespace physx;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
 
-		AngleRotation += RotationSpeed;
-		PxQuat qx = PxQuat(RotationSpeed, PxVec3(0, 1, 0));
-		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
-		Direction = XMVector4Normalize(Direction);
+	//Vérifier si déplacement vers la gauche
+	if (rGestionnaireDeSaisie.EtatSouris().lX < 0) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
+
+	// Vérifier si déplacement vers la droite
+	if (rGestionnaireDeSaisie.EtatSouris().lX > 0) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
+
+	//Vérifier si déplacement vers le haut
+	if (rGestionnaireDeSaisie.EtatSouris().lY < 0 && AngleRotationVertical > MIN_ANGLE_VERTICAL) {
+		AngleRotationVertical -= AngleRotationSpeedVertical;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
+	}
+
+	// Vérifier si déplacement vers le bas
+	if (rGestionnaireDeSaisie.EtatSouris().lY > 0 && AngleRotationVertical < MAX_ANGLE_VERTICAL) {
+		AngleRotationVertical += AngleRotationSpeedVertical;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, -XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
 	}
 
 	if (ViewType == CameraViewType::Third) {
@@ -92,6 +118,19 @@ void Player::FixedTick(const float& DeltaTime)
 	MyCamera->SetDirection(Direction);
 }
 
+bool Player::isGrounded() const
+{
+	static auto& Scene = PM3D::CMoteurWindows::GetInstance().GetScene();
+
+	auto Origin = ParentActor->Transform.Position;
+	Origin.y -= MyCollider->Radius + 0.1f; // Little more than radius
+	auto Hit = Scene.Raycast(
+		Origin,
+		{0.0f, -1.0f, 0.0f}, 
+		0.1f);
+	return Hit.hasAnyHits();
+}
+
 void Player::SwapCameraMode()
 {
 	if (ViewType == CameraViewType::First)
@@ -101,4 +140,3 @@ void Player::SwapCameraMode()
 
 	WaitForSwap = false;
 }
-

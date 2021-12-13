@@ -1,11 +1,10 @@
 #pragma once
 #include "d3dx11effect.h"
 #include "Objet3D.h"
+#include "DeviceD3D11.h"
 
 namespace PM3D
 {
-
-class CDispositifD3D11;
 
 class CSommetSprite
 {
@@ -28,7 +27,7 @@ public:
 class CAfficheurSprite : public CObjet3D
 {
 public:
-	CAfficheurSprite(CDispositifD3D11* _pDispositif);
+	CAfficheurSprite(DeviceD3D11* _pDispositif);
 	virtual ~CAfficheurSprite();
 	virtual void Draw() override;
 
@@ -66,7 +65,7 @@ private:
 
 	static CSommetSprite sommets[6];
 	ID3D11Buffer* pVertexBuffer;
-	CDispositifD3D11* pDispositif;
+	DeviceD3D11* pDispositif;
 
 	ID3D11Buffer* pConstantBuffer;
 	ID3DX11Effect* pEffet;

@@ -69,6 +69,8 @@ public:
 	/// </summary>
 	const LightManager::LightList GetVisibleLights() noexcept;
 
+	physx::PxRaycastBuffer Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const;
+
 	physx::PxScene* PhysxScene;
 	/// <summary>
 	/// Manager that keep track of lights in the scene.

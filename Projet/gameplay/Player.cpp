@@ -21,6 +21,8 @@ void Player::Init()
 	MyCollider = ParentActor->GetComponent<SphereCollider>();
 
 	Direction = ParentActor->Transform.Forward().ToXMVector();
+
+	MyRigidBody->setMaxLinearVelocity(MaxSpeed);
 }
 
 void Player::FixedTick(const float& DeltaTime)

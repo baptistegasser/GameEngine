@@ -27,14 +27,19 @@ struct Light
 float3 CalcSpotPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
 {
     float3 color = WHITE;
-
-    float3 L = normalize(-light.Direction);
     
-    float3 cone = dot(L, normalize(-L));
+    float3 L = light.Position - Pos;
+    float distance = length(L);
+    L /= distance;
+    float3 LigthToPos = -L;
+    
+    float3 D = normalize(light.Direction);
+    float spotCosine = dot(D, -L);
 
     // Valeur de la composante diffuse 
     float diff = dot(N, L);
-    if (diff <= 0.0001f)
+    
+    if (diff <= 0.0001f || distance > light.Range || spotCosine < radians(light.SpotAngle))
         return BLACK;
 
     // specular shading
@@ -46,7 +51,7 @@ float3 CalcSpotPhong(float3 N, float3 V, float3 Pos, Material mat, Light light)
     float3 diffuse = light.Color * diff * mat.Roughness.xyz;
     float3 specular = light.Color * spec * mat.Specular.xyz;
 
-    return (ambient + diffuse + specular) * cone;
+    return (ambient + diffuse + specular) * spotCosine;
 }
 
 // Calculate the phong value for a point light

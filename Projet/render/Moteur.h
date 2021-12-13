@@ -22,6 +22,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Terrain.h"
+#include "render/SpotLight.h"
 #include "render/PointLight.h"
 #include "render/DirectionalLight.h"
 // Gameplay components
@@ -344,6 +345,14 @@ protected:
 		LightGreen->Color = { 0.0f, 1.0f, 0.0f };
 		LightGreen->Range = 20.f;
 		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
+
+		auto ASpotRed = new ASpotLight;
+		auto SpotRed = ASpotRed->GetLight();
+		SpotRed->Position = { 0.f, 5.f, -40.f };
+		SpotRed->Direction = { -30.f, 0.f, -40.f };
+		SpotRed->Color = { 1.0f, 0.0f, 0.0f };
+		SpotRed->Range = 20.f;
+		CurrentScene->AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
 
 		return true;
 	}

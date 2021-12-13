@@ -13,6 +13,10 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Terrain.h"
+#include "render/SpotLight.h"
+#include "render/PointLight.h"
+#include "render/DirectionalLight.h"
+#include "render/Skybox.h"
 
 // Gameplay components
 #include "gameplay/Plateform.h"
@@ -130,13 +134,41 @@ void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f En
 
 void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity, float InnerRadius, float OuterRadius)
 {
-	PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig.SetAmbient(AmbientLight{ 0.5f, 0.5f, 0.5f });
-	PointLight Light;
-	Light.Intensity = Intensity;
-	Light.InnerRadius = InnerRadius;
-	Light.OuterRadius = OuterRadius;
-	Light.Position = Pos;
-	Light.Specular = Specular;
-	Light.Roughness = Roughness;
-	PM3D::CMoteurWindows::GetInstance().GetScene().LightConfig.AddPointLight(Light);
+	auto& CurrentScene = PM3D::CMoteurWindows::GetInstance().GetScene();
+
+	CurrentScene.LightManager.AmbientColor = { 0.5f };
+
+	auto DirLight = new ADirectionalLight;
+	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
+	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
+	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
+
+	auto ALightRed = new APointLight;
+	auto LightRed = ALightRed->GetLight();
+	LightRed->Position = { 0.f, 5.f, 0.f };
+	LightRed->Color = { 1.0f, 0.0f, 0.0f };
+	LightRed->Range = 20.f;
+	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
+
+	auto ALightBlue = new APointLight;
+	auto LightBlue = ALightBlue->GetLight();
+	LightBlue->Position = { -40.f, 5.f, 0.f };
+	LightBlue->Color = { 0.f, 0.0f, 1.0f };
+	LightBlue->Range = 20.f;
+	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
+
+	auto ALightGreen = new APointLight;
+	auto LightGreen = ALightGreen->GetLight();
+	LightGreen->Position = { 40.f, 5.f, 0.f };
+	LightGreen->Color = { 0.0f, 1.0f, 0.0f };
+	LightGreen->Range = 20.f;
+	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
+
+	auto ASpotRed = new ASpotLight;
+	auto SpotRed = ASpotRed->GetLight();
+	SpotRed->Position = { 0.f, 5.f, -40.f };
+	SpotRed->Direction = { -30.f, 0.f, -40.f };
+	SpotRed->Color = { 1.0f, 0.0f, 0.0f };
+	SpotRed->Range = 20.f;
+	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
 }

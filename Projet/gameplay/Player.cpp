@@ -5,13 +5,17 @@
 #include "math/Math.h"
 #include "math/Vec3f.h"
 
+#include "physic/ContactFilter.h"
+
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent)
+Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
-{}
+	, SpawnPos { Pos }
+{
+}
 
 void Player::Init()
 {
@@ -23,6 +27,14 @@ void Player::Init()
 	Direction = ParentActor->Transform.Forward().ToXMVector();
 
 	MyRigidBody->setMaxLinearVelocity(MaxSpeed);
+}
+
+void Player::Tick(const float& ElapsedTime)
+{
+	if (IsDead())
+	{
+		ResetPlayer();
+	}
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -141,4 +153,19 @@ void Player::SwapCameraMode()
 		ViewType = CameraViewType::First;
 
 	WaitForSwap = false;
+}
+
+bool Player::IsDead() const
+{
+	if (ParentActor->Transform.Position.y < -10) return true;
+	return false;
+}
+
+void Player::ResetPlayer() const
+{
+	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
+	MyRigidBody->ClearForce();
+	MyRigidBody->ClearTorque();
+	MyRigidBody->ClearVelocity();
+	MyRigidBody->ClearAngularVelocity();
 }

@@ -18,8 +18,7 @@ private:
 	/// Generate one terrain with Filename
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
-	///	<param name="Pos"> : position of the map  </param>
-	///	<param name="Scale"> : scale of the map  </param>
+	///	<param name="Transform"> : transform of the map  </param>
 	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform);
 
 	/// <summary>
@@ -46,19 +45,17 @@ private:
 	/// <summary>
 	/// Create a fixed platform
 	/// </summary>
-	/// <param name="Pos"> : init position of platform </param>
+	/// <param name="Transform"> : init transform of platform </param>
 	///	<param name="Filename"> : name of texture file </param>
-	///	<param name="Scale"> : scale for platform </param>
 	/// <param name="Material"> : material for platform </param>
 	void CreatePlatform(Math::Transform Transform, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial);
 
 	/// <summary>
 	/// Create a moved platform
 	/// </summary>
-	/// <param name="Pos"> : init position of platform </param>
+	/// <param name="Transform"> : init transform of platform </param>
 	///	<param name="End"> : vector direction of for platform movement </param>
 	///	<param name="Filename"> : name of texture file </param>
-	///	<param name="Scale"> : scale for platform </param>
 	/// <param name="Material"> : material for platform </param>
 	void CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial);
 
@@ -80,4 +77,9 @@ private:
 	void CreateSkyBox(Math::Transform* ToFollow);
 private :
 	Math::Transform* PlayerTransform;
+	/// <summary>
+	/// Create an CheckPoint to respawn a player
+	/// </summary>
+	///	<param name="Transform"> : the transform of the checkPoint  </param>
+	void CreateCheckPoint(Math::Transform Transform);
 };

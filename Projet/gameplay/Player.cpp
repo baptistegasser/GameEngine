@@ -33,7 +33,7 @@ void Player::Tick(const float& ElapsedTime)
 {
 	if (IsDead())
 	{
-		ResetPlayer();
+		RespawnPlayer();
 	}
 }
 
@@ -161,7 +161,7 @@ bool Player::IsDead() const
 	return false;
 }
 
-void Player::ResetPlayer() const
+void Player::RespawnPlayer() const
 {
 	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
 	MyRigidBody->ClearForce();

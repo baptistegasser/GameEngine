@@ -31,7 +31,8 @@ private:
 	/// Create an enemy
 	/// </summary>
 	///	<param name="Transform"> : transform of the enemy  </param>
-	void CreateEnemy(Math::Transform Transform);
+	///	<param name="End"> : deplacement of the enemy  </param>
+	void CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create an intelligent enemy
@@ -40,7 +41,7 @@ private:
 	///	<param name="Transform"> : transform of the enemy  </param>
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
 	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
-	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity());
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create a fixed platform
@@ -57,7 +58,7 @@ private:
 	///	<param name="End"> : vector direction of for platform movement </param>
 	///	<param name="Filename"> : name of texture file </param>
 	/// <param name="Material"> : material for platform </param>
-	void CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial);
+	void CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create a light

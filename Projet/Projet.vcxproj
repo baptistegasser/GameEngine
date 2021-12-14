@@ -171,6 +171,7 @@
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="gameplay\CheckPoint.cpp" />
+    <ClCompile Include="gameplay\Enemy.cpp" />
     <ClCompile Include="gameplay\IntelligentEnemy.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
     <ClInclude Include="gameplay\CheckPoint.h" />
+    <ClInclude Include="gameplay\Enemy.h" />
     <ClInclude Include="gameplay\IntelligentEnemy.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />

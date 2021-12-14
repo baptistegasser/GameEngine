@@ -4,10 +4,12 @@
 #include "physic/RigidBody.h"
 #include <limits>
 
-class IntelligentEnemy : public Pitbull::Component
+#include "Enemy.h"
+
+class IntelligentEnemy : public Enemy
 {
 public :
-	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity());
+	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
 	~IntelligentEnemy() override = default;
 
 	void Init() override;
@@ -21,7 +23,6 @@ public :
 	void SetSpeed(const float& SpeedNew);
 
 private:
-	RigidBody* MyRigidBody;
 	Math::Transform* ToFollow;
 	Math::Vec3f Direction;
 

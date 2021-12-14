@@ -255,6 +255,9 @@
     <ClCompile Include="gameplay\IntelligentEnemy.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="gameplay\Enemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -462,6 +465,9 @@
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="gameplay\IntelligentEnemy.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Enemy.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
   </ItemGroup>

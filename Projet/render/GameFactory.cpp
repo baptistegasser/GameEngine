@@ -26,11 +26,18 @@
 
 void GameFactory::LoadLevel()
 {
-	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
-	CreateEnemy(Math::Vec3f{ 0.f, -7.f, 1.f });
+	/***
+	 * Util Object
+	 ***/
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
+	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, 4.f);
+
+	/***
+	 * First state with platform ( z C 0,135)
+	 ***/
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
 	
@@ -42,14 +49,39 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
-	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 5.f });
-	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 65.f });
 	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 135.f });
 
+	/***
+	 * First State with arena ( z C 135,210)
+	 ***/
+	Math::Vec3f TerrainPos = { -38.f, 3.f, 145.f };
+	float PosYEnemie = 4.3f;
+
+	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
+		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} });
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemie, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemie, TerrainPos.z + 10.f }, true);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemie, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemie, TerrainPos.z + 20.f }, true);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemie, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemie, TerrainPos.z + 20.f }, true);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 25.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 25.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 45.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 45.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemie, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemie, TerrainPos.z + 42.5f }, true, 0.4f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemie, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemie, TerrainPos.z + 42.5f }, true, 0.4f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemie, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemie, TerrainPos.z + 62.5f }, true, 0.4f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemie, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemie, TerrainPos.z + 62.5f }, true, 0.4f);
+
+	/***
+	 * Second state with plateform
+	 ***/
+
+	CreatePlatform(Math::Transform{ Math::Vec3f(0, -3.f, 240), Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	CreateCheckPoint(Math::Vec3f{ 0.f, -2.5f, 240.f });
+
+	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
-	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f },  4.f);
+	
 }
 
 void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform)
@@ -96,22 +128,39 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 
 }
 
-void GameFactory::CreateEnemy(Math::Transform Transform)
+void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller, float Speed)
 {
-	auto Ennemy = Pitbull::Actor::New();
+	auto Ennemy = Pitbull::Actor::New("Enemy");
 	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
-	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+
+	Ennemy->AddComponent<Enemy>(IsKiller);
+
+	auto EnemyCollider = [](const Contact& Contact) -> void {
+		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player" && Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
+		{
+			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy" && Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
+		{
+			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+		}
+	};
+
+	auto Collider = Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+	Collider->OnContactCallBack = EnemyCollider;
+
 	Ennemy->Transform = Transform;
 
 	auto body = Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	Ennemy->AddComponent<Plateform>(
+	auto Movement = Ennemy->AddComponent<Plateform>(
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
-		, Math::Transform(Ennemy->Transform.Position + Math::Vec3f(10, 0, 0), Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+		, Math::Transform(End, Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+	Movement->SetSpeed(Speed);
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
 }
 
-void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance)
+void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance, bool IsKiller, float Speed)
 {
 	auto Ennemy = Pitbull::Actor::New();
 	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"),
@@ -119,7 +168,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Distance);
+	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Distance, IsKiller);
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
 }
 
@@ -133,7 +182,7 @@ void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filen
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
 }
 
-void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material)
+void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material, float Speed)
 {
 	auto MyPlateform = Pitbull::Actor::New();
 	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
@@ -141,9 +190,11 @@ void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f En
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
 	MyPlateform->Transform = Transform;
 	MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	MyPlateform->AddComponent<Plateform>(
+	auto Movement = MyPlateform->AddComponent<Plateform>(
 		Math::Transform(MyPlateform->Transform.Position)
 		, Math::Transform(MyPlateform->Transform.Position + End), true);
+	Movement->SetSpeed(Speed);
+
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
 }
 

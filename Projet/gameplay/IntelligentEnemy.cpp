@@ -7,8 +7,8 @@
 
 using namespace Math;
 
-IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance)
-	: Component{ Parent }
+IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance, bool IsKiller)
+	: Enemy( Parent , IsKiller)
 	, ToFollow{ ToFollow }
 	, Distance{Distance}
 {}
@@ -17,6 +17,7 @@ void IntelligentEnemy::Init()
 {
 	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
+	MyCollider = ParentActor->GetComponent<SphereCollider>();
 }
 
 void IntelligentEnemy::FixedTick(const float& DeltaTime)

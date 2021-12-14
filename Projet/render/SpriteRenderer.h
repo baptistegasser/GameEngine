@@ -15,6 +15,7 @@ public :
 	/// <param name="Shader"> The shader to use </param>
 	/// <param name="BillBoard"> True if it is a billboard, false otherwise </param>
 	SpriteRenderer(Pitbull::Actor* Parent, Texture* Sprite, ShaderSprite* Shader, bool BillBoard);
+	~SpriteRenderer() override = default;
 
 	void SpriteTick(const float& ElapsedTime) override;
 

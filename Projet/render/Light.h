@@ -56,7 +56,8 @@ DX_HLSL_ASSERT_ALLIGN(Light);
 class LightComponent : public Light, public Pitbull::Component
 {
 public:
-    LightComponent(Pitbull::Actor* Parent, LightType Type) : Component{Parent}, Light{ Type } {}
+    LightComponent(Pitbull::Actor* Parent, LightType Type)
+		: Light{Type}, Component{Parent} {}
 
     /// <summary>
     /// Allow light component to register themself.

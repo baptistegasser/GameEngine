@@ -46,7 +46,7 @@ public:
 
 	Octree(const BoundingBox& Boundary);
 
-	bool Add(DataType Data);
+	bool Add(DataPtr Data);
 	bool Remove(const DataPtr Data);
 	void Update();
 
@@ -66,7 +66,7 @@ Octree<T, ToPos>::Octree(const BoundingBox& Boundary)
 {}
 
 template <class T, class ToPos>
-bool Octree<T, ToPos>::Add(DataType Data)
+bool Octree<T, ToPos>::Add(DataPtr Data)
 {
 	// Prepare leaf
 	Leaf Leaf{ Datas.size(), ToPos(Data) };
@@ -83,7 +83,7 @@ bool Octree<T, ToPos>::Add(DataType Data)
 	}
 
 	// Insert the data in the array
-	Datas.push_back(std::move(Data));
+	Datas.push_back(std::unique_ptr<T>(Data));
 
 	// Insert in the tree
 	return Root.Add(Leaf);
@@ -138,9 +138,9 @@ void Octree<T, ToPos>::Update()
 		for (; It != Node->Leafs.end();) {
 			Leaf CurLeaf = *It;
 			// The leaf is now invalid
-			if (CurLeaf.Position != ToPos(Datas[CurLeaf.DataID])) {
+			if (CurLeaf.Position != ToPos(Datas[CurLeaf.DataID].get())) {
 				// Update position, store to add back and remove from current node
-				CurLeaf.Position = ToPos(Datas[CurLeaf.DataID]);
+				CurLeaf.Position = ToPos(Datas[CurLeaf.DataID].get());
 				LeafToUpdate.push_back(CurLeaf);
 				It = Node->Leafs.erase(It);
 			}

@@ -57,16 +57,16 @@ void Scene::Init() const
 void Scene::AddActor(ActorPtr Actor, bool AlwaysVisible)
 {
 	if (AlwaysVisible) {
-		AlwaysVisibleActors.push_back(std::move(Actor));
+		AlwaysVisibleActors.push_back(Actor);
 	}
 	else {
-		Tree->Add(std::move(Actor));
+		Tree->Add(Actor);
 	}
 }
 
-void Scene::AddSkyBox(ActorPtr& Actor)
+void Scene::AddSkyBox(ActorPtr Actor)
 {
-	SkyBox = std::move(Actor);
+	SkyBox = Actor;
 }
 
 void Scene::SetCurrentCamera(const Camera* NewCamera) noexcept
@@ -105,6 +105,6 @@ void Scene::ConcatVisibleActors(ActorPtrList& Actors)
 {
 	for (auto& VisibleActor : AlwaysVisibleActors)
 	{
-		Actors.push_back(VisibleActor.get());
+		Actors.push_back(VisibleActor);
 	}
 }

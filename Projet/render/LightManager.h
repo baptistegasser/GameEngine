@@ -9,7 +9,7 @@
 /// </summary>
 struct LightToPos
 {
-	Math::Vec3f operator()(const std::unique_ptr<LightComponent>& Light) const noexcept
+	Math::Vec3f operator()(LightComponent* Light) const noexcept
 	{
 		return Light->Position;
 	}

@@ -1,7 +1,7 @@
 #pragma once
 #include "dispositif.h"
 
-#include "AfficheurTexte.h"
+#include "dispositifD3D11.h"
 #include "DIManipulateur.h"
 
 #include "core/Actor.h"
@@ -10,7 +10,6 @@
 
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
-#include "render/Sprite.h"
 
 // Math components
 #include "math/Math.h"
@@ -95,7 +94,7 @@ public:
 		// * Initialisation des paramètres de l'animation et 
 		//   préparation de la première image
 		InitAnimation();
-
+		
 		return 0;
 	}
 
@@ -403,11 +402,6 @@ protected:
 	DirectX::XMMATRIX m_MatProj;
 	DirectX::XMMATRIX m_MatViewProj;
 
-	// Pour le texte
-	std::unique_ptr<CAfficheurTexte> pTexte1;
-	std::wstring str;
-
-	std::unique_ptr<Gdiplus::Font> pPolice;
 
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;

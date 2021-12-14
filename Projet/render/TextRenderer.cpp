@@ -4,12 +4,25 @@
 
 using namespace DirectX;
 
+ULONG_PTR TextRenderer::GDIToken{};
+
 TextRenderer::TextRenderer(Pitbull::Actor* Parent, Font* Font, ShaderSprite* Shader, int CanvasHeight, int CanvasWidth)
 	: SpriteRenderer{ Parent, Shader, false }
 	, FontText{Font}
 	, CanvasHeight{CanvasHeight}
 	, CanvasWidth{CanvasWidth}
 {
+	static bool once = []() {
+		Gdiplus::GdiplusStartupInput  startupInput(0, TRUE, TRUE);
+		Gdiplus::GdiplusStartupOutput startupOutput;
+
+		GdiplusStartup(&GDIToken, &startupInput, &startupOutput);
+
+		return true;
+	} ();
+
+	Gdiplus::GdiplusShutdown(GDIToken);
+
 	UpdateCanvas(CanvasHeight, CanvasWidth);
 }
 

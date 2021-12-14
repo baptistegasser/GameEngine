@@ -192,8 +192,6 @@
     <ClCompile Include="physic\RigidBody.cpp" />
     <ClCompile Include="physic\SphereCollider.cpp" />
     <ClCompile Include="Pitbull.cpp" />
-    <ClCompile Include="render\AfficheurSprite.cpp" />
-    <ClCompile Include="render\AfficheurTexte.cpp" />
     <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\ChargeurOBJ.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
@@ -257,8 +255,6 @@
     <ClInclude Include="physic\RigidBody.h" />
     <ClInclude Include="physic\SphereCollider.h" />
     <ClInclude Include="Pitbull.h" />
-    <ClInclude Include="render\AfficheurSprite.h" />
-    <ClInclude Include="render\AfficheurTexte.h" />
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\chargeur.h" />
     <ClInclude Include="render\ChargeurOBJ.h" />

@@ -162,12 +162,6 @@
     <ClCompile Include="gameplay\Player.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="render\AfficheurSprite.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\AfficheurTexte.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\ChargeurOBJ.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
@@ -343,12 +337,6 @@
     </ClInclude>
     <ClInclude Include="gameplay\Plateform.h">
       <Filter>Header Files\gameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurSprite.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurTexte.h">
-      <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
     <ClInclude Include="render\chargeur.h">
       <Filter>Header Files\render\pm3d</Filter>

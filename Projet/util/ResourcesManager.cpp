@@ -25,6 +25,7 @@ void ResourcesManager::Cleanup() noexcept
 	Shaders.clear();
 	Textures.clear();
 	Sprites.clear();
+	Meshes.clear();
 	Gdiplus::GdiplusShutdown(GDIToken);
 }
 

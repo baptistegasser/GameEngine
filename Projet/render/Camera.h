@@ -12,7 +12,7 @@ public:
 
 	void Tick(const float& ElapsedTime) override;
 
-	void SetPosition(const DirectX::XMVECTOR Position) noexcept;
+	void SetPosition(const DirectX::XMVECTOR& Position) noexcept;
 	void SetDirection(const DirectX::XMVECTOR& Direction) noexcept;
 	void SetUpDirection(const DirectX::XMVECTOR& UpDirection) noexcept;
 

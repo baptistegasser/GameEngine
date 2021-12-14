@@ -84,7 +84,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 		&PM3D::CMoteurWindows::GetInstance().GetMatProj(),
 		&PM3D::CMoteurWindows::GetInstance().GetMatViewProj());
 
-	//PM3D::CMoteurWindows::GetInstance().GetScene().SetCurrentCamera(PlayerCam);
+	PM3D::CMoteurWindows::GetInstance().GetScene().SetCurrentCamera(PlayerCam);
 	MyPlayer->Transform.RotateX(-90.0f);
 
 	MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });

@@ -31,7 +31,7 @@ void Camera::Tick(const float& ElapsedTime)
 	NeedToUpdate = false;
 }
 
-void Camera::SetPosition(const DirectX::XMVECTOR Position) noexcept
+void Camera::SetPosition(const DirectX::XMVECTOR& Position) noexcept
 {
 	this->Position = Position;
 	NeedToUpdate = true;

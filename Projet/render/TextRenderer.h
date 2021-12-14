@@ -32,6 +32,4 @@ private :
 	std::unique_ptr<Gdiplus::Graphics> CharGraphics;
 
 	ID3D11Texture2D* Texture2D;
-
-	static ULONG_PTR GDIToken;
 };

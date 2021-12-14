@@ -28,7 +28,7 @@ void GameFactory::LoadLevel()
 	CreateEnemy(Math::Vec3f{ 0.f, 12.f, 1.f });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
-	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
 	
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
@@ -93,7 +93,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 void GameFactory::CreateEnemy(Math::Transform Transform)
 {
 	auto Ennemy = Pitbull::Actor::New();
-	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\bird\\bird.OMB"), 
+	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\tree_cloud\\tree_cloud.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Math::Vec3f{ 2.f, 0.f, 0.0f });
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Math::Vec3f{ -2.f, 0.f, 0.0f });
@@ -136,31 +136,31 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 {
 	auto& CurrentScene = PM3D::CMoteurWindows::GetInstance().GetScene();
 
-	CurrentScene.LightManager.AmbientColor = { 0.5f };
+	CurrentScene.LightManager.AmbientColor = { 0.7f };
 
 	auto DirLight = new ADirectionalLight;
-	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
-	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
+	DirLight->GetLight()->Direction = { 4.f, 4.f, 0.f };
+	DirLight->GetLight()->Color = { 1.f, 1.f, 1.f };
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
 
 	auto ALightRed = new APointLight;
 	auto LightRed = ALightRed->GetLight();
 	LightRed->Position = { 0.f, 5.f, 0.f };
-	LightRed->Color = { 1.0f, 0.0f, 0.0f };
+	LightRed->Color = { 1.0f, 1.0f, 1.0f };
 	LightRed->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
 
 	auto ALightBlue = new APointLight;
 	auto LightBlue = ALightBlue->GetLight();
 	LightBlue->Position = { -40.f, 5.f, 0.f };
-	LightBlue->Color = { 0.f, 0.0f, 1.0f };
+	LightBlue->Color = { 1.0f, 1.0f, 1.0f };
 	LightBlue->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
 
 	auto ALightGreen = new APointLight;
 	auto LightGreen = ALightGreen->GetLight();
 	LightGreen->Position = { 40.f, 5.f, 0.f };
-	LightGreen->Color = { 0.0f, 1.0f, 0.0f };
+	LightGreen->Color = { 1.0f, 1.0f, 1.0f };
 	LightGreen->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
 
@@ -168,7 +168,7 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	auto SpotRed = ASpotRed->GetLight();
 	SpotRed->Position = { 0.f, 5.f, -40.f };
 	SpotRed->Direction = { -30.f, 0.f, -40.f };
-	SpotRed->Color = { 1.0f, 0.0f, 0.0f };
+	SpotRed->Color = { 1.0f, 1.0f, 1.0f };
 	SpotRed->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
 }

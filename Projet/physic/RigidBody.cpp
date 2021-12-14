@@ -43,6 +43,7 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType, bool IsTr
 void RigidBody::PrePhysicSimulation() noexcept
 {
 	// Update the transform with the actor's own to match change made by other components
+	auto a = ParentActor->Transform.operator physx::PxTransform();
 	RigidActor->setGlobalPose(ParentActor->Transform);
 	// Change scale only if it changed
 	if (PreviousScale != ParentActor->Transform.Scale) {
@@ -97,6 +98,8 @@ void RigidBody::UpdateActorShapes() noexcept
 
 		// Create Shape transform based on the actor's transform and the collider offset
 		auto LocalTransform = ParentActor->Transform;
+		// Default rotation to not duplicate parent's rot
+		LocalTransform.Rotation = Math::Quaternion();
 		LocalTransform.Position = Collider->Offset;
 		Shape->setLocalPose(LocalTransform);
 

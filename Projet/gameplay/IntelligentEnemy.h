@@ -2,18 +2,19 @@
 
 #include "core/Component.h"
 #include "physic/RigidBody.h"
+#include <limits>
 
 class IntelligentEnemy : public Pitbull::Component
 {
 public :
-	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow);
+	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity());
 	~IntelligentEnemy() override = default;
 
 	void Init() override;
 
 	/// <summary>
-	/// Update the direction of the player
-	/// Update the type of camera
+	/// Update the position and rotation of the enemy
+	/// Follow the actor's transform only if he is at a distance under Distance
 	/// </summary>
 	void FixedTick(const float& DeltaTime) override;
 
@@ -25,5 +26,6 @@ private:
 	Math::Vec3f Direction;
 
 	float Speed = 0.1f;
+	float Distance;
 };
 

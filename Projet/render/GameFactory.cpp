@@ -40,7 +40,7 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 50.f, 1.f }, PlayerTransform);
+	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 20.f, 1.f }, PlayerTransform, 20.0f);
 
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
@@ -109,7 +109,7 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
 }
 
-void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow)
+void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance)
 {
 	auto Ennemy = Pitbull::Actor::New();
 	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"),
@@ -117,7 +117,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	Ennemy->AddComponent<IntelligentEnemy>(ToFollow);
+	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Distance);
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
 }
 
@@ -128,7 +128,6 @@ void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filen
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
 	MyPlateform->Transform = Transform;
-
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
 }
 
@@ -139,7 +138,6 @@ void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f En
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
 	MyPlateform->Transform = Transform;
-
 	MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 	MyPlateform->AddComponent<Plateform>(
 		Math::Transform(MyPlateform->Transform.Position)

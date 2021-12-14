@@ -36,10 +36,12 @@ private:
 
 	/// <summary>
 	/// Create an intelligent enemy
+	/// Follow the actor's tranform if the distance is under Distance
 	/// </summary>
 	///	<param name="Transform"> : transform of the enemy  </param>
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
-	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow);
+	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity());
 
 	/// <summary>
 	/// Create a fixed platform

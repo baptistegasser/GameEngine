@@ -1,6 +1,8 @@
 #pragma once
 
 #include "core/Component.h"
+#include "physic/CapsuleCollider.h"
+#include "physic/RigidBody.h"
 #include "physic/SphereCollider.h"
 
 class CheckPoint : public Pitbull::Component
@@ -17,5 +19,6 @@ public:
 	void Tick(const float& ElapsedTime) override;
 
 private:
-	SphereCollider* MyCollider;
+	CapsuleCollider* MyCollider;
+	RigidBody* MyRigidBody;
 };

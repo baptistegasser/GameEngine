@@ -10,7 +10,9 @@ CheckPoint::CheckPoint(Pitbull::Actor* Parent)
 
 void CheckPoint::Init()
 {
-	MyCollider = ParentActor->GetComponent<SphereCollider>();
+	MyCollider = ParentActor->GetComponent<CapsuleCollider>();
+	MyRigidBody = ParentActor->GetComponent<RigidBody>();
+	
 }
 
 void CheckPoint::Tick(const float& elapsed_time)

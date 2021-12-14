@@ -5,13 +5,17 @@
 #include "math/Math.h"
 #include "math/Vec3f.h"
 
+#include "physic/ContactFilter.h"
+
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent)
+Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
-{}
+	, SpawnPos { Pos }
+{
+}
 
 void Player::Init()
 {
@@ -27,7 +31,7 @@ void Player::Tick(const float& ElapsedTime)
 {
 	if (IsDead())
 	{
-		ResetPlayer(Math::Vec3f(0, 10.5f, 0));
+		ResetPlayer();
 	}
 }
 
@@ -155,9 +159,9 @@ bool Player::IsDead() const
 	return false;
 }
 
-void Player::ResetPlayer(Math::Vec3f Pos) const
+void Player::ResetPlayer() const
 {
-	ParentActor->Transform = Transform(Pos,Math::Quaternion(0.0f,0.0f,0.0f));
+	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
 	MyRigidBody->ClearForce();
 	MyRigidBody->ClearTorque();
 	MyRigidBody->ClearVelocity();

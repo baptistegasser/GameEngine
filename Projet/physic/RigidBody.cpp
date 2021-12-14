@@ -16,10 +16,11 @@
 
 using namespace physx;
 
-RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
+RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType, bool IsTrigger)
 	: Component{ Parent }
 	, ActorType{ ActorType }
 	, RigidActor{ nullptr }
+	, IsTrigger{ IsTrigger }
 {
 	const auto Physics = PhysicManager::GetInstance().Physics;
 
@@ -87,7 +88,13 @@ void RigidBody::UpdateActorShapes() noexcept
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for (const auto Collider : Colliders) {
 		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(ParentActor->Transform.Scale), *Collider->GetPxMaterial(), true);
-		
+
+		if (IsTrigger)
+		{
+			Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+		}
+
 		// Create Shape transform based on the actor's transform and the collider offset
 		auto LocalTransform = ParentActor->Transform;
 		LocalTransform.Position = Collider->Offset;

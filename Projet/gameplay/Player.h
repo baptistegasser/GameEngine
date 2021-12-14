@@ -8,7 +8,7 @@
 class Player : public Pitbull::Component
 {
 public :
-	Player(Pitbull::Actor* Parent);
+	Player(Pitbull::Actor* Parent, Math::Vec3f Pos);
 	~Player() override = default;
 
 	void Init() override;
@@ -34,10 +34,17 @@ public :
 		Third
 	};
 
+	void SetSpawnPos(const Math::Vec3f Pos)
+	{
+		SpawnPos = Pos;
+	}
+
 private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;
 	SphereCollider* MyCollider;
+
+	Math::Vec3f SpawnPos = Math::Vec3f{ 0.0f, 0.0f, 0.0f };
 
 	/****
 	 *
@@ -88,7 +95,7 @@ private:
 	/// <summary>
 	/// Reset player value
 	/// </summary>
-	void ResetPlayer(Math::Vec3f Pos) const;
+	void ResetPlayer() const;
 
 	bool WaitForSwap = false;
 };

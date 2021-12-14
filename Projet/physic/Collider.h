@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "core/Component.h"
 #include "PhysicMaterial.h"
 #include "Contact.h"
@@ -25,6 +27,8 @@ public:
 	/// </summary>
 	Math::Vec3f Offset;
 
+	std::function<void(Contact)> OnContactCallBack = [](const Contact& Contact) -> void {};
+
 	/// <summary>
 	/// Create a collider with an offset and material.
 	/// </summary>
@@ -38,7 +42,10 @@ public:
 	/// Method called when two actors enter in collision.
 	/// </summary>
 	/// <param name="Contact">The contact information.</param>
-	virtual void OnContact(const Contact& Contact) const {}
+	virtual void OnContact(const Contact& Contact) const
+	{
+		OnContactCallBack(Contact);
+	}
 
 	/// <summary>
 	/// Get the geometry of this collider, scaled appropriatly.
@@ -60,4 +67,10 @@ protected:
 	/// The scale should appropriatly calculated base on the geometry implementation.
 	/// </summary>
 	virtual physx::PxGeometry* GetGeometryImpl(const Math::Vec3f& Scale) const noexcept = 0;
+
+public:
+	void SetOnContactCallBack(const std::function<void(Contact)>& ContactCallBack)
+	{
+		OnContactCallBack = ContactCallBack;
+	}
 };

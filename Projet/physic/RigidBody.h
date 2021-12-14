@@ -73,7 +73,7 @@ public:
 protected:
 	friend class Pitbull::Actor;
 	friend class PhysicManager;
-	RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType);
+	RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType, bool IsTrigger = false);
 
 private:
 	RigidActorType ActorType;
@@ -95,4 +95,6 @@ private:
 	/// This is needed as changing/recreating shapes is costly.
 	/// </summary>
 	Math::Vec3f PreviousScale;
+
+	bool IsTrigger;
 };

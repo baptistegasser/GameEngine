@@ -59,10 +59,10 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 
 void GameFactory::CreatePlayer(Math::Transform Transform)
 {
-	auto MyPlayer = Pitbull::Actor::New();
+	auto MyPlayer = Pitbull::Actor::New("Player");
 	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball3\\ball.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
-	MyPlayer->AddComponent<Player>();
+	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;
 
 	auto PlayerCam = MyPlayer->AddComponent<Camera>(DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
@@ -139,14 +139,27 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 
 void GameFactory::CreateCheckPoint(Math::Transform Transform)
 {
-	auto MyCheckPoint = Pitbull::Actor::New();
+	auto MyCheckPoint = Pitbull::Actor::New("CheckPoint");
 	MyCheckPoint->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\checkPoint\\star.OMB"),
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 
 	MyCheckPoint->Transform = Transform;
 	MyCheckPoint->AddComponent<CheckPoint>();
 
-	MyCheckPoint->AddComponent<CapsuleCollider>(0.4f, 0.01f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
+	auto CheckPointCollider = [](const Contact& Contact) -> void {
+		const auto Actors = PM3D::CMoteurWindows::GetInstance().GetScene().GetVisibleActors();
+		for (const auto& Actor : Actors) {
+			std::cout << 1;
+			if (Actor->Name == "Player")
+			{
+				Actor->GetComponent<Player>()->SetSpawnPos(Math::Vec3f{ 0.0f, 10.5f, 10.0f });
+			}
+		}
+	};
+
+	auto Collider = MyCheckPoint->AddComponent<CapsuleCollider>(0.4f, 0.01f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
+	Collider->SetOnContactCallBack(CheckPointCollider);
+	MyCheckPoint->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyCheckPoint));
 }

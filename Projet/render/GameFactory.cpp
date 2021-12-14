@@ -28,6 +28,7 @@ void GameFactory::LoadLevel()
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
 	CreateEnemy(Math::Vec3f{ 0.f, -7.f, 1.f });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
+	CreateSkyBox(PlayerTransform);
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
@@ -40,7 +41,7 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 20.f, 1.f }, PlayerTransform, 20.0f);
+	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
 
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
@@ -85,9 +86,6 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	PlayerBody->SetMass(10.f);
 
 	PlayerTransform = &MyPlayer->Transform;
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(std::unique_ptr<Pitbull::Actor>(std::move( new Skybox{
-	PlayerTransform, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB"),
-	PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx") })));
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlayer));
 
@@ -184,4 +182,15 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	SpotRed->Color = { 1.0f, 0.0f, 0.0f };
 	SpotRed->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
+}
+
+void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
+{
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(
+		std::unique_ptr<Pitbull::Actor>(std::move(new Skybox{
+			ToFollow
+			, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB")
+			, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongSkyBox.fx")
+		}))
+	);
 }

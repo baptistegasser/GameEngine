@@ -73,6 +73,11 @@ private:
 	///	<param name="OuterRadius"> : outerRadius of the light </param>
 	void CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity = 0.f, float InnerRadius = 0.f, float OuterRadius = 0.f);
 
+	/// <summary>
+	/// Create a skybox
+	/// </summary>
+	/// <param name="ToFollow"> The actor's transform the skybox will follow </param>
+	void CreateSkyBox(Math::Transform* ToFollow);
 private :
 	Math::Transform* PlayerTransform;
 };

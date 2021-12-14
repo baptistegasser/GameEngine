@@ -491,6 +491,9 @@
     <FxCompile Include="shaders\MiniPhongTerrain.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\MiniPhongSkyBox.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />

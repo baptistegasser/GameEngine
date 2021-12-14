@@ -1,20 +1,14 @@
 #pragma once
-#include "d3dx11effect.h"
-#include <Gdiplus.h>
+#include <gdiplus.h>
 #pragma comment(lib, "gdiplus.lib")
 
 struct Font {
-	UINT TextWidth;
-	UINT TextHeight;
-
-	ID3D11Texture2D* Texture;
-	ID3D11ShaderResourceView* TextureView;
-
+	std::unique_ptr<Gdiplus::Brush> Brush;
 	std::unique_ptr<Gdiplus::Font> FontType;
-	std::unique_ptr<Gdiplus::Bitmap> CharBitmap;
-	std::unique_ptr<Gdiplus::Graphics> CharGraphics;
-	std::unique_ptr<Gdiplus::SolidBrush> BlackBrush;
 
-	Font(const wchar_t* FontName);
-	~Font();
+	[[nodiscard]] static Gdiplus::Font* CreateFont(const wchar_t* FontName, Gdiplus::FontStyle FontStyle, float FontSize);
+
+	Font(const wchar_t* FontName, Gdiplus::FontStyle FontStyle, float FontSize, Gdiplus::Color Color);
+	Font(Gdiplus::Font* Font, Gdiplus::Brush* Brush);
+	~Font() = default;
 };

@@ -6,10 +6,7 @@
 #include "math/Transform.h"
 
 class SpriteRenderer : public Pitbull::Component {
-
-
 public :
-
 	/// <summary>
 	/// The constructor for a sprite or a billboard
 	/// </summary>
@@ -27,18 +24,18 @@ public :
 	/// </summary>
 	Math::Transform Offset;
 
-protected :
+protected:
+	SpriteRenderer(Pitbull::Actor* Parent, ShaderSprite* Shader, bool BillBoard);
 
-	SpriteRenderer(Pitbull::Actor* Parent, ID3D11ShaderResourceView* TextureView, ShaderSprite* Shader, bool BillBoard);
-
-private :
-	ShaderParamsSprite ShaderParams;
-	ShaderSprite* Shader;
 	ID3D11ShaderResourceView* TextureView;
-	bool BillBoard;
 
 	/// <summary>
 	/// The dimension of the textureView
 	/// </summary>
 	DirectX::XMFLOAT2 Dimension;
+
+private:
+	ShaderParamsSprite ShaderParams{};
+	ShaderSprite* Shader;
+	bool BillBoard;
 };

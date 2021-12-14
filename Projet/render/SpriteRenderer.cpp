@@ -5,40 +5,38 @@
 using namespace DirectX;
 
 SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* Sprite, ShaderSprite* Shader, bool BillBoard)
-	: SpriteRenderer{ Parent, Sprite->TextureView, Shader, BillBoard }
-{}
+	: SpriteRenderer{ Parent, Shader, BillBoard }
+{
+	TextureView = Sprite->TextureView;
 
-SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, ID3D11ShaderResourceView* TextureView, ShaderSprite* Shader, bool BillBoard)
+	const auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+
+	ID3D11Resource* Resource;
+	ID3D11Texture2D* TextureInterface;
+
+	TextureView->GetResource(&Resource);
+
+	Resource->QueryInterface<ID3D11Texture2D>(&TextureInterface);
+	D3D11_TEXTURE2D_DESC desc;
+	TextureInterface->GetDesc(&desc);
+
+	DX_RELEASE(Resource);
+	DX_RELEASE(TextureInterface);
+
+	Dimension.x = static_cast<float>(desc.Width) * 2.0f / D3DDevice.GetLargeur();
+	Dimension.y = static_cast<float>(desc.Height) * 2.0f / D3DDevice.GetHauteur();
+}
+
+SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, ShaderSprite* Shader, bool BillBoard)
 	: Component{ Parent }
 	, Shader{ Shader }
-	, TextureView{ TextureView }
 	, BillBoard{ BillBoard }
-{
-	auto& pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
-
-	ID3D11Resource* pResource;
-	ID3D11Texture2D* pTextureInterface = 0;
-
-	TextureView->GetResource(&pResource);
-
-	pResource->QueryInterface<ID3D11Texture2D>(&pTextureInterface);
-	D3D11_TEXTURE2D_DESC desc;
-	pTextureInterface->GetDesc(&desc);
-
-	PM3D::DXRelacher(pResource);
-	PM3D::DXRelacher(pTextureInterface);
-
-	Dimension.x = float(desc.Width);
-	Dimension.y = float(desc.Height);
-
-	Dimension.x = Dimension.x * 2.0f / pD3DDevice.GetLargeur();
-	Dimension.y = Dimension.y * 2.0f / pD3DDevice.GetHauteur();
-}
+{}
 
 void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 {
-
-	auto& pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+	auto& Engine = PM3D::CMoteurWindows::GetInstance();
+	auto& pD3DDevice = Engine.GetDispositif();
 
 	ID3D11DeviceContext* pImmediateContext = pD3DDevice.GetImmediateContext();
 
@@ -64,26 +62,28 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	XMMATRIX Scale;
 
 	if (BillBoard) {
-		Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ ParentActor->Transform.Position.x + Offset.Position.x, ParentActor->Transform.Position.y + Offset.Position.y, ParentActor->Transform.Position.z + Offset.Position.z });
-		Scale = DirectX::XMMatrixScaling(Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x, Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
+		Position = XMMatrixTranslationFromVector(ParentActor->Transform.Position.ToXMVector() + Offset.Position.ToXMVector());
+		Scale = XMMatrixScaling(
+			Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x,
+			Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
 
-		XMMATRIX ViewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
-		XMVECTOR PositionCamera = PM3D::CMoteurWindows::GetInstance().GetPosition();
+		XMMATRIX ViewProj = Engine.GetMatViewProj();
+		XMVECTOR PositionCamera = Engine.GetPosition();
 
 		float Angle = atan2f(ParentActor->Transform.Position.x - PositionCamera.vector4_f32[0], ParentActor->Transform.Position.z - PositionCamera.vector4_f32[2]);
 
-		XMMATRIX Rotation = DirectX::XMMatrixRotationY(Angle);
+		XMMATRIX Rotation = XMMatrixRotationY(Angle);
 
 		Position = Scale * Rotation * Position * ViewProj;
 
 	}
 	else {
-		Position = DirectX::XMMatrixTranslationFromVector(XMVECTOR{ Offset.Position.x, Offset.Position.y, 0.0f });
-		Scale = DirectX::XMMatrixScaling(Dimension.x * Offset.Scale.x, Dimension.y * Offset.Scale.y, 1.f);
+		Position = XMMatrixTranslationFromVector(XMVECTOR{ Offset.Position.x, Offset.Position.y, 0.0f });
+		Scale = XMMatrixScaling(Dimension.x * Offset.Scale.x, Dimension.y * Offset.Scale.y, 1.f);
 
 		Position = Scale * Position;
 	}
-	ShaderParams.MatWorldViewProj = DirectX::XMMatrixTranspose(Position);
+	ShaderParams.MatWorldViewProj = XMMatrixTranspose(Position);
 
 	pImmediateContext->UpdateSubresource(Shader->ConstantBuffer, 0, nullptr, &ShaderParams, 0, 0);
 	

@@ -84,7 +84,7 @@ public:
 		// * Initialisation du dispositif de rendu
 		pDispositif = CreationDispositifSpecific(CDS_MODE::CDS_FENETRE);
 
-		CurrentScene = new Scene;
+		CurrentScene = new Scene{};
 
 		PhysicManager::GetInstance().Init();
 		PhysicManager::GetInstance().InitScene(CurrentScene->PhysxScene);

@@ -21,7 +21,7 @@ class PhysicManager : public Singleton<PhysicManager>
 
 public:
 	void Init();
-	void InitScene(physx::PxScene* Scene);
+	void InitScene(physx::PxScene*& Scene);
 	void Step(const float& ElapsedTime);
 	void Cleanup();
 

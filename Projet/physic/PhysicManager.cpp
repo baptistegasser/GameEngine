@@ -24,10 +24,8 @@ void PhysicManager::Init()
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
 }
 
-void PhysicManager::InitScene(physx::PxScene* Scene)
+void PhysicManager::InitScene(physx::PxScene*& Scene)
 {
-	CurrentScene = Scene;
-
 	PxSceneDesc sceneDesc(Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
@@ -48,6 +46,8 @@ void PhysicManager::InitScene(physx::PxScene* Scene)
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
+
+	Scene = CurrentScene;
 }
 
 void PhysicManager::Step(const float& ElapsedTime)

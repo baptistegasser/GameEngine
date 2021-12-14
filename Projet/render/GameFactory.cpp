@@ -36,8 +36,9 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateCheckPoint(Math::Vec3f{ 0.f, 11.f, 5.f });
-	CreateCheckPoint(Math::Vec3f{ 5.f, 11.f, 5.f });
+	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 5.f });
+	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 65.f });
+	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 135.f });
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
 	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f },  4.f);
@@ -152,11 +153,13 @@ void GameFactory::CreateCheckPoint(Math::Transform Transform)
 		{
 			Contact.SecondActor->GetComponent<Player>()->SetSpawnPos(Contact.FirstActor->Transform.Position);
 			Contact.FirstActor->GetComponent<CheckPoint>()->IsVisited = true;
+			Contact.FirstActor->GetComponent<MeshRenderer>()->Mesh = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\checkPoint\\green_star.OMB");
 		}
 		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "CheckPoint" && !Contact.SecondActor->GetComponent<CheckPoint>()->IsVisited)
 		{
 			Contact.FirstActor->GetComponent<Player>()->SetSpawnPos(Contact.SecondActor->Transform.Position);
 			Contact.SecondActor->GetComponent<CheckPoint>()->IsVisited = true;
+			Contact.SecondActor->GetComponent<MeshRenderer>()->Mesh = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\checkPoint\\green_star.OMB");
 		}
 	};
 

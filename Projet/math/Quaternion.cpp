@@ -22,19 +22,6 @@ namespace Math
 		auto QuatZ = PxQuat(Deg2Rad(roll), { 0.f, 0.f, 1.f });
 
 		*this = (QuatX * QuatY * QuatZ);
-		this->normalize();
-		//// using https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
-		//float cy = cosf(Deg2Rad(yaw) * 0.5f);
-		//float sy = sinf(Deg2Rad(yaw) * 0.5f);
-		//float cp = cosf(Deg2Rad(pitch) * 0.5f);
-		//float sp = sinf(Deg2Rad(pitch) * 0.5f);
-		//float cr = cosf(Deg2Rad(roll) * 0.5f);
-		//float sr = sinf(Deg2Rad(roll) * 0.5f);
-
-		//this->w = cr * cp * cy + sr * sp * sy;
-		//this->x = sr * cp * cy - cr * sp * sy;
-		//this->y = cr * sp * cy + sr * cp * sy;
-		//this->z = cr * cp * sy - sr * sp * cy;
 	}
 
 	Vec3f Quaternion::ToEuler() const noexcept

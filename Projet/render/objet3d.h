@@ -1,5 +1,5 @@
 #pragma once
-#include "dispositif.h"
+#include "Device.h"
 
 using namespace DirectX;
 

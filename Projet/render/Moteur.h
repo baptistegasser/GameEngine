@@ -1,7 +1,7 @@
 #pragma once
-#include "dispositif.h"
+#include "Device.h"
 
-#include "dispositifD3D11.h"
+#include "DeviceD3D11.h"
 #include "DIManipulateur.h"
 
 #include "core/Actor.h"
@@ -11,20 +11,7 @@
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
 
-// Math components
-#include "math/Math.h"
-// Physic components
-#include "physic/RigidBody.h"
-#include "physic/SphereCollider.h"
-#include "physic/BoxCollider.h"
-#include "physic/CapsuleCollider.h"
-// Render components
-#include "render/MeshRenderer.h"
-#include "render/Camera.h"
-#include "render/Terrain.h"
-// Gameplay components
-#include "gameplay/Plateform.h"
-#include "gameplay/Player.h"
+#include "render/GameFactory.h"
 
 // Sprite
 #include "render/SpriteRenderer.h"
@@ -41,6 +28,18 @@ namespace PM3D
 const int IMAGESPARSECONDE = 60;
 const double EcartTemps = 1.0 / static_cast<double>(IMAGESPARSECONDE);
 
+/// <summary>
+/// Represent the state of the engine.
+/// As state are represent by bit flag, multiple state can be possible at any given time.
+/// </summary>
+enum EngineState
+{
+	Starting  = 1 << 0,
+	Running	  = 1 << 1,
+	Paused	  = 1 << 2,
+	Stopping  = 1 << 3,
+};
+
 //
 //   TEMPLATE : CMoteur
 //
@@ -54,34 +53,36 @@ const double EcartTemps = 1.0 / static_cast<double>(IMAGESPARSECONDE);
 //        le dispositif Direct3D), l'utilisation d'un singleton 
 //        nous simplifiera plusieurs aspects.
 //
-template <class T, class TClasseDispositif> class CMoteur :public Singleton<T>
+template <class T, class TDevice> class CMoteur :public Singleton<T>
 {
 public:
 
 	virtual void Run()
 	{
-		bool bBoucle = true;
+		// We have passed the init phase no we are running !
+		UnsetState(EngineState::Starting);
+		SetState(EngineState::Running);
 
-		while (bBoucle)
-		{
-			// Propre à la plateforme - (Conditions d'arrêt, interface, messages)
-			bBoucle = RunSpecific();
+		while (!IsStopping()) {
+			// Platfom specific stuff, ignore pause state or the app might freeze
+			// -> keep treating windows events, keyboard events...
+			RunSpecific();
 
 			// appeler la fonction d'animation
-			if (bBoucle)
-			{
-				bBoucle = Animation();
-			}
+			Animation();
 		}
 	}
 
 	virtual int Initialisations()
 	{
+		// Set the engine state.
+		SetState(EngineState::Starting);
+
 		// Propre à la plateforme
 		InitialisationsSpecific();
 
 		// * Initialisation du dispositif de rendu
-		pDispositif = CreationDispositifSpecific(CDS_FENETRE);
+		pDispositif = CreationDispositifSpecific(CDS_MODE::CDS_FENETRE);
 
 		CurrentScene = std::make_shared<Scene>();
 
@@ -98,7 +99,7 @@ public:
 		return 0;
 	}
 
-	virtual bool Animation()
+	virtual void Animation()
 	{
 		// méthode pour lire l'heure et calculer le 
 		// temps écoulé
@@ -108,47 +109,57 @@ public:
 		const double PhysicElapsedTime = GetTimeIntervalsInSec(CurrentPhysicTime, TempsCompteurCourant);
 		CurrentPhysicTime = TempsCompteurCourant;
 
+		// Update inputs states
+		
+
 		// Update physic state
 		PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
 		while (PhysicAccumulator >= PhysicDeltaStep) {
 			CurrentScene->FixedTick(PhysicDeltaStep);
-			PhysicManager::GetInstance().Step(PhysicDeltaStep);
+			if (!IsPaused()) PhysicManager::GetInstance().Step(PhysicDeltaStep);
 			PhysicAccumulator -= PhysicDeltaStep;
 		}
-
-		// Update inputs states
-		GestionnaireDeSaisie.StatutClavier();
-		GestionnaireDeSaisie.SaisirEtatSouris();
 
 		// Est-il temps de rendre l'image?
 		if (TempsEcoule > EcartTemps)
 		{
-			// Affichage optimisé
-			pDispositif->Present();
-
 			// On prépare la prochaine image
 			AnimeScene(static_cast<float>(TempsEcoule));
 
-			// On rend l'image sur la surface de travail
-			// (tampon d'arrière plan)
-			RenderScene(static_cast<float>(TempsEcoule));
+			if (!IsPaused()) {
+				// Affichage optimisé
+				pDispositif->Present();
+
+				// On rend l'image sur la surface de travail
+				// (tampon d'arrière plan)
+				RenderScene(static_cast<float>(TempsEcoule));
+			}
 
 			// Calcul du temps du prochain affichage
 			TempsCompteurPrecedent = TempsCompteurCourant;
 		}
-
-		return true;
 	}
 
 	const DirectX::XMVECTOR GetPosition() const { return Position; }
+	DirectX::XMMATRIX& GetMatView() { return m_MatView; }
 	const DirectX::XMMATRIX& GetMatView() const { return m_MatView; }
+	DirectX::XMMATRIX& GetMatProj() { return m_MatProj; }
 	const DirectX::XMMATRIX& GetMatProj() const { return m_MatProj; }
+	DirectX::XMMATRIX& GetMatViewProj() { return m_MatViewProj; }
 	const DirectX::XMMATRIX& GetMatViewProj() const { return m_MatViewProj; }
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
-	CDispositifD3D11& GetDispositif() noexcept { return *pDispositif; }
+	Scene& GetScene() noexcept { return *CurrentScene; }
+	DeviceD3D11& GetDispositif() noexcept { return *pDispositif; }
+
+	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
+	bool IsStopping() const noexcept { return IsStateSet(EngineState::Stopping); }
+
+	void Pause() noexcept { CurrentState |= EngineState::Paused; }
+	void UnPause() noexcept { CurrentState &= ~EngineState::Paused; }
+	bool IsPaused() const noexcept { return IsStateSet(EngineState::Paused); }
 
 protected:
 	~CMoteur()
@@ -157,13 +168,13 @@ protected:
 	}
 
 	// Spécifiques - Doivent être implantés
-	virtual bool RunSpecific() = 0;
+	virtual void RunSpecific() = 0;
 	virtual int InitialisationsSpecific() = 0;
 
 	virtual int64_t GetTimeSpecific() const = 0;
 	virtual double GetTimeIntervalsInSec(int64_t start, int64_t stop) const = 0;
 
-	virtual TClasseDispositif* CreationDispositifSpecific(const CDS_MODE cdsMode) = 0;
+	virtual TDevice* CreationDispositifSpecific(const CDS_MODE cdsMode) = 0;
 	virtual void BeginRenderSceneSpecific() = 0;
 	virtual void EndRenderSceneSpecific() = 0;
 
@@ -185,6 +196,9 @@ protected:
 	virtual bool RenderScene(const float ElapsedTime)
 	{
 		BeginRenderSceneSpecific();
+
+		// Tick the skybox at first
+		CurrentScene->SkyBox->LateTick(ElapsedTime);
 
 		// Get actors in vision range
 		const auto Actors = CurrentScene->GetVisibleActors();
@@ -222,7 +236,7 @@ protected:
 		m_MatView = XMMatrixLookAtLH(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f), XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f) + XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
 		const float champDeVision = XM_PI / 2; 	// 45 degr�s
-		const float ratioDAspect = static_cast<float>(pDispositif->GetLargeur()) / static_cast<float>(pDispositif->GetHauteur());
+		const float ratioDAspect = static_cast<float>(pDispositif->ScreenWidth) / static_cast<float>(pDispositif->ScreenHeight);
 		const float planRapproche = 1.0;
 		const float planEloigne = 300.0;
 
@@ -246,130 +260,18 @@ protected:
 		return 0;
 	}
 
- 	bool InitObjets()
+	bool InitObjets()
 	{
-		using namespace Math;
-		using namespace physx;
-		using namespace DirectX;
-
-		auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
-			L".\\modeles\\Heightmap.bmp",
-			{1, 0.3f, 1},
-			ResourcesManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
-			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
-		});
-		Terrain->Texture1 = ResourcesManager.GetTexture(L".\\modeles\\gazon.dds");
-		Terrain->Texture2 = ResourcesManager.GetTexture(L".\\modeles\\roche.dds");
-		Terrain->Texture3 = ResourcesManager.GetTexture(L".\\modeles\\chemin.dds");
-		Terrain->Transform.Position = { 0.f, -50.f, 0.f };
-		Terrain->Transform.Scale.x = 2.f;
-		Terrain->Transform.Scale.z = 2.f;
-		CurrentScene->AddActor(std::move(Terrain), true);
-
-		auto Mesh2 = Pitbull::Actor::New();
-		Mesh2->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\cube\\cube.OMB" ), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		Mesh2->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Vec3f{ 2.f, 0.f, 0.0f });
-		Mesh2->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f }, Vec3f{ -2.f, 0.f, 0.0f });
-		Mesh2->Transform.Position.y = 0.f;
-		Mesh2->Transform.Position.z = -7.f;
-		Mesh2->Transform.Position.x = 1.f;
-		auto body = Mesh2->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-		Mesh2->AddComponent<Plateform>(
-			Transform(Mesh2->Transform.Position, Quaternion(-PxHalfPi, Vec3f(0, 1, 0)))
-			, Transform(Mesh2->Transform.Position + Vec3f(10, 0, 0), Quaternion(PxHalfPi, Vec3f(0, 1, 0))), true);
-		auto Hat = Mesh2->AddComponent<SpriteRenderer>(
-			ResourcesManager.GetTexture(L".\\modeles\\hat.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
-		Hat->Offset.Position.y = 1.9f;
-		Hat->Offset.Scale.x = 4.0f;
-		Hat->Offset.Scale.y = 4.0f;
-		CurrentScene->AddActor(std::move(Mesh2));
-
-
-
-		CreatePlatform(Vec3f(0, -2.f, 0), Vec3f(20.f, 1.f, 20.f));
-		CreateMobilePlatform(Vec3f(10.f, 10.f, 0), Vec3f(5.f, 1.f, 1.f), Vec3f(10, 0, 0), L".\\modeles\\plateform\\plateformRouge.OMB");
-		CreateMobilePlatform(Vec3f(10.f, 10.f, 20.f), Vec3f(1.f, 1.f, 1.f), Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
-
-		Position = XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f);
-
-		auto MyPlayer = Pitbull::Actor::New();
-		MyPlayer->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\ball3\\ball.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlayer->AddComponent<Player>(XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f));
-		auto PlayerCam = MyPlayer->AddComponent<Camera>(&Position,
-			XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
-			&m_MatView,
-			&m_MatProj,
-			&m_MatViewProj);
-		CurrentScene->SetCurrentCamera(PlayerCam);
-
-		MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
-		auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
-
-		const auto t2 = MyPlayer->AddComponent<TextRenderer>(
-			new Font{ L"Arial", Gdiplus::FontStyleBold, 32.0f, { 0, 0, 0} },
-			ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"),
-			100, 500);
-		t2->Offset.Position.y = 0.7f;
-		t2->Offset.Position.x = -0.5f;
-		MyPlayer->AddComponent<Speed>();
-		CurrentScene->AddActor(std::move(MyPlayer));
-
-		PlayerBody->SetMass(10.f);
-
-		CurrentScene->LightConfig.SetAmbient(AmbientLight{ 0.5f, 0.5f, 0.5f });
-		PointLight Light;
-		Light.Intensity = 4.0f;
-		Light.Position = { 0.f, 20.f, 0.f };
-		Light.Specular = { 0.5f, 0.5f, 0.5f };
-		Light.Roughness = { 0.5f, 0.5f, 0.5f };
-		CurrentScene->LightConfig.AddPointLight(Light);
-
-
-		auto mySprite = Pitbull::Actor::New();
-		mySprite->AddComponent<SpriteRenderer>(
-			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
-		mySprite->Transform.Scale.x = 10.0f;
-		mySprite->Transform.Scale.y = 10.0f;
-		mySprite->Transform.Position.z = 5.0f;
-		mySprite->Transform.Position.y = 2.0f;
-		auto bla = mySprite->AddComponent<SpriteRenderer>(
-			ResourcesManager.GetTexture(L".\\modeles\\tree02s.dds"), ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
-		bla->Offset.Position.y = 5.0f;
-		CurrentScene->AddActor(std::move(mySprite));
+		GameFactory::GetInstance().LoadLevel();
 
 		return true;
 	}
 
-	void CreatePlatform(Math::Vec3f Pos, Math::Vec3f Scale = { 1.f }, PhysicMaterial Material = Collider::DefaultMaterial)
-	{
-		auto MyPlateform = Pitbull::Actor::New();
-		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(L".\\modeles\\platform\\plateform.OMB"), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
-		MyPlateform->Transform.Position = Pos;
-		MyPlateform->Transform.Scale = Scale;
-		//auto body = MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
-		CurrentScene->AddActor(std::move(MyPlateform));
-	}
-
-	void CreateMobilePlatform(Math::Vec3f Pos, Math::Vec3f Scale, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial)
-	{
-		using namespace Math;
-
-		auto MyPlateform = Pitbull::Actor::New();
-		MyPlateform->AddComponent<MeshRenderer>(ResourcesManager.GetMesh(Filename), ResourcesManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-		MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
-		MyPlateform->Transform.Position = Pos;
-		MyPlateform->Transform.Scale = Scale;
-		MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-		MyPlateform->AddComponent<Plateform>(
-			Transform(MyPlateform->Transform.Position)
-			, Transform(MyPlateform->Transform.Position + End), true);
-		CurrentScene->AddActor(std::move(MyPlateform));
-	}
-
 	bool AnimeScene(float tempsEcoule)
 	{
+		GestionnaireDeSaisie.StatutClavier();
+		GestionnaireDeSaisie.SaisirEtatSouris();
+
 		// Make all component Tick
 		CurrentScene->Tick(tempsEcoule);
 
@@ -380,6 +282,13 @@ protected:
 	}
 
 protected:
+	/// <summary>
+	/// The current state of the engine, can have multiple values at a time.
+	/// The values are defined via \ref EngineState flags.
+	/// </summary>
+	uint32_t CurrentState = EngineState::Starting;
+
+	// Physic variable
 	const float PhysicDeltaStep = 1.0f / 60.0f;
 	float PhysicAccumulator = 0;
 	int64_t CurrentPhysicTime;
@@ -389,7 +298,7 @@ protected:
 	int64_t TempsCompteurPrecedent;
 
 	// Le dispositif de rendu
-	TClasseDispositif* pDispositif;
+	TDevice* pDispositif;
 
 	// La seule scène
 	std::shared_ptr<Scene> CurrentScene;
@@ -406,6 +315,30 @@ protected:
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
 	ResourcesManager ResourcesManager;
+
+private:
+	/// <summary>
+	/// Set a specific state flag to be true for the current state.
+	/// </summary>
+	void SetState(const EngineState& State) noexcept
+	{
+		CurrentState |= State;
+	}
+	/// <summary>
+	/// Remove a specific state flag from the current state.
+	/// </summary>
+	void UnsetState(const EngineState& State) noexcept
+	{
+		CurrentState &= ~State;
+	}
+
+	/// <summary>
+	/// Test if a given state is set in the current state.
+	/// </summary>
+	bool IsStateSet(const EngineState& State) const noexcept
+	{
+		return (CurrentState & State) == State;
+	}
 };
 
 } // namespace PM3D

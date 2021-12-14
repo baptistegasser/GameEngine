@@ -2,20 +2,6 @@
 #include "ResourcesManager.h"
 
 #include "util/Util.h"
-#include "render/Shader.h"
-#include "render/Texture.h"
-#include "render/ObjectMesh.h"
-#include "render/Sprite.h"
-#include "render/Font.h"
-
-ULONG_PTR ResourcesManager::token = 0;
-
-ResourcesManager::ResourcesManager()
-{
-	Gdiplus::GdiplusStartupInput  startupInput(0, TRUE, TRUE);
-	Gdiplus::GdiplusStartupOutput startupOutput;
-	GdiplusStartup(&token, &startupInput, &startupOutput);
-}
 
 ResourcesManager::~ResourcesManager()
 {
@@ -28,7 +14,6 @@ void ResourcesManager::Cleanup() noexcept
 	Shaders.clear();
 	Textures.clear();
 	Sprites.clear();
-	Gdiplus::GdiplusShutdown(token);
 }
 
 Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)

@@ -80,7 +80,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 
 	matWorld = Transform;
 
-	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetImmediateContext();
+	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
 
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -160,7 +160,7 @@ void ATerrain::ComputeNormals()
 
 void ATerrain::GenerateMesh()
 {
-	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
+	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
 
 	// Vertices
 	{

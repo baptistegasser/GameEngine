@@ -114,10 +114,9 @@ int CMoteurWindows::InitialisationsSpecific()
 //		Il s'agit d'une version modifiée spécifiquement pour nos besoins des 
 //      éléments de la boucle message de Windows
 //
-bool CMoteurWindows::RunSpecific()
+void CMoteurWindows::RunSpecific()
 {
 	MSG msg;
-	bool bBoucle = true;
 
 	if (Focused != PreviousFocused) {
 		GetGestionnaireDeSaisie().HandleFocusChange(Focused, hMainWnd);
@@ -128,7 +127,9 @@ bool CMoteurWindows::RunSpecific()
 	while (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{
 		// Est-ce un message de fermeture ?
-		if (msg.message == WM_QUIT) bBoucle = false;
+		if (msg.message == WM_QUIT) {
+			Stop();
+		}
 
 		// distribuer le message
 		if (!::TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -137,8 +138,6 @@ bool CMoteurWindows::RunSpecific()
 			::DispatchMessage(&msg);
 		}
 	}
-
-	return bBoucle;
 }
 
 //
@@ -165,15 +164,15 @@ double CMoteurWindows::GetTimeIntervalsInSec(int64_t start, int64_t stop) const
 //		 CDS_MODE: 	CDS_FENETRE 		application fenêtrée
 //					CDS_PLEIN_ECRAN 	application plein écran
 //
-CDispositifD3D11* CMoteurWindows::CreationDispositifSpecific(const CDS_MODE cdsMode)
+DeviceD3D11* CMoteurWindows::CreationDispositifSpecific(const CDS_MODE cdsMode)
 {
-	return new CDispositifD3D11(cdsMode, hMainWnd);
+	return new DeviceD3D11(cdsMode, hMainWnd);
 }
 
 void CMoteurWindows::BeginRenderSceneSpecific()
 {
-	ID3D11DeviceContext* pImmediateContext = pDispositif->GetImmediateContext();
-	ID3D11RenderTargetView* pRenderTargetView = pDispositif->GetRenderTargetView();
+	ID3D11DeviceContext* pImmediateContext = pDispositif->ImmediateContext;
+	ID3D11RenderTargetView* pRenderTargetView = pDispositif->RenderTargetView;
 
 
 	// On efface la surface de rendu
@@ -181,7 +180,7 @@ void CMoteurWindows::BeginRenderSceneSpecific()
 	pImmediateContext->ClearRenderTargetView(pRenderTargetView, Couleur);
 
 	// On ré-initialise le tampon de profondeur
-	ID3D11DepthStencilView* pDepthStencilView = pDispositif->GetDepthStencilView();
+	ID3D11DepthStencilView* pDepthStencilView = pDispositif->DepthStencilView;
 	pImmediateContext->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 

@@ -19,7 +19,7 @@ Camera::Camera(Pitbull::Actor* Parent, DirectX::XMVECTOR* Position, const Direct
 	, PMatViewProj{ PMatViewProj }
 {}
 
-void Camera::LateTick(const float& DeltaTime)
+void Camera::Tick(const float& ElapsedTime)
 {
 	// Calc view matrix
 	*PMatView = XMMatrixLookAtLH(*Position, *Position + Direction, UpDirection);

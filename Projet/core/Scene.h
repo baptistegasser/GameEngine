@@ -1,16 +1,27 @@
 #pragma once
 
+#include "Actor.h"
 #include "math/Octree.h"
 #include "render/Camera.h"
-#include "render/LightConfig.h"
+#include "render/LightManager.h"
 
 #include "PxPhysicsAPI.h"
 
 #include <memory>
 
+struct ActorToPos
+{
+	Math::Vec3f operator()(const std::unique_ptr<Pitbull::Actor>& Actor) const noexcept
+	{
+		return Actor->Transform.Position;
+	}
+};
+
 class Scene {
 public:
-	using ActorPtr = Octree::ActorType;
+	using ActorTree = Octree<Pitbull::Actor, ActorToPos>;
+	using ActorPtr = ActorTree::DataType;
+	using ActorPtrList = ActorTree::DataPtrList;
 
 	Scene();
 	~Scene() = default;
@@ -42,6 +53,8 @@ public:
 
 	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
+	void AddSkyBox(ActorPtr& Actor);
+
 	/// <summary>
 	/// Update the camera used to get visible actors.
 	/// </summary>
@@ -51,16 +64,30 @@ public:
 	/// <summary>
 	/// Get all actors in current vision range.
 	/// </summary>
-	const Octree::ActorPtrList GetVisibleActors() noexcept;
+	const ActorPtrList GetVisibleActors() noexcept;
+
+	/// <summary>
+	/// Get all actors in current vision range.
+	/// </summary>
+	const LightManager::LightList GetVisibleLights() noexcept;
+
+	physx::PxRaycastBuffer Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const;
 
 	physx::PxScene* PhysxScene;
+	/// <summary>
+	/// Manager that keep track of lights in the scene.
+	/// </summary>
+	LightManager LightManager;
 
-	LightConfig LightConfig;
+	/// <summary>
+	/// The skybox of the scene
+	/// </summary>
+	ActorPtr SkyBox;
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;
-	Octree Tree;
-	Octree::ActorList AlwaysVisibleActors;
+	ActorTree* Tree;
+	ActorTree::DataList AlwaysVisibleActors;
 
-	void ConcatVisibleActors(Octree::ActorPtrList& Actors);
+	void ConcatVisibleActors(ActorPtrList& Actors);
 };

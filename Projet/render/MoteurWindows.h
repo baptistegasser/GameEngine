@@ -1,14 +1,14 @@
 #pragma once
 
-#include "moteur.h"
-#include "dispositifD3D11.h"
+#include "Moteur.h"
+#include "DeviceD3D11.h"
 #include "util/Horloge.h"
 
 namespace PM3D
 {
 #define MAX_LOADSTRING 100
 
-class CMoteurWindows final : public CMoteur<CMoteurWindows, CDispositifD3D11>
+class CMoteurWindows final : public CMoteur<CMoteurWindows, DeviceD3D11>
 {
 public:
 	void SetWindowsAppInstance(HINSTANCE hInstance);
@@ -20,10 +20,10 @@ private:
 
 	// Les fonctions spécifiques
 	virtual int InitialisationsSpecific() override;
-	virtual bool RunSpecific() override;
+	virtual void RunSpecific() override;
 	virtual int64_t GetTimeSpecific() const override;
 	virtual double GetTimeIntervalsInSec(int64_t start, int64_t stop) const override;
-	virtual CDispositifD3D11* CreationDispositifSpecific(const CDS_MODE cdsMode) override;
+	virtual DeviceD3D11* CreationDispositifSpecific(const CDS_MODE cdsMode) override;
 	virtual void BeginRenderSceneSpecific() override;
 	virtual void EndRenderSceneSpecific() override;
 

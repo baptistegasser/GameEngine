@@ -2,11 +2,10 @@
 #include "objet3d.h"
 #include "d3dx11effect.h"
 #include "chargeur.h"
+#include "DeviceD3D11.h"
 
 namespace PM3D
 {
-
-class CDispositifD3D11;
 
 class CObjetMesh : public CObjet3D
 {
@@ -91,9 +90,9 @@ private:
 
 
 public:
-	CObjetMesh(const IChargeur& chargeur, CDispositifD3D11* pDispositif);
-	CObjetMesh(const IChargeur& chargeur, const std::string& nomfichier, CDispositifD3D11* _pDispositif);
-	CObjetMesh(const std::string& nomfichier, CDispositifD3D11* _pDispositif);
+	CObjetMesh(const IChargeur& chargeur, DeviceD3D11* pDispositif);
+	CObjetMesh(const IChargeur& chargeur, const std::string& nomfichier, DeviceD3D11* _pDispositif);
+	CObjetMesh(const std::string& nomfichier, DeviceD3D11* _pDispositif);
 
 	virtual ~CObjetMesh();
 
@@ -113,7 +112,7 @@ protected:
 	float rotation;
 
 	// Pour le dessin
-	CDispositifD3D11* pDispositif;		// On prend en note le dispositif
+	DeviceD3D11* pDispositif;		// On prend en note le dispositif
 
 	ID3D11Buffer* pVertexBuffer;
 	ID3D11Buffer* pIndexBuffer;

@@ -35,6 +35,11 @@ namespace Math
 		/// </summary>
 		/// <returns>A Vec3f matching this vector scaled.</returns>
 		Vec3f Scale(const Vec3f& Scaler) const noexcept;
+		/// <summary>
+		/// Calculate the Norm of the vector.
+		/// </summary>
+		/// <returns> The Norm </returns>
+		float Norm() const noexcept;
 
 		/// <summary>
 		/// Calculate the Norm of the vector.

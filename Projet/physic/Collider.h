@@ -1,8 +1,10 @@
 #pragma once
 
+#include <functional>
+
 #include "core/Component.h"
 #include "PhysicMaterial.h"
-#include "Contact.h"
+#include "physic/Contact.h"
 #include "math/Vec3f.h"
 
 #include "PxPhysicsAPI.h"
@@ -25,6 +27,8 @@ public:
 	/// </summary>
 	Math::Vec3f Offset;
 
+	std::function<void(Contact)> OnContactCallBack = [](const Contact& Contact) -> void {};
+
 	/// <summary>
 	/// Create a collider with an offset and material.
 	/// </summary>
@@ -38,7 +42,10 @@ public:
 	/// Method called when two actors enter in collision.
 	/// </summary>
 	/// <param name="Contact">The contact information.</param>
-	virtual void OnContact(const Contact& Contact) const {}
+	virtual void OnContact(const Contact& Contact) const
+	{
+		OnContactCallBack(Contact);
+	}
 
 	/// <summary>
 	/// Get the geometry of this collider, scaled appropriatly.

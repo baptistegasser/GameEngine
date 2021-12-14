@@ -231,6 +231,9 @@
     <ClCompile Include="render\Device.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="gameplay\CheckPoint.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
     <ClCompile Include="render\SpotLight.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
@@ -248,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="render\Skybox.cpp">
       <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\IntelligentEnemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,6 +443,9 @@
     <ClInclude Include="render\DeviceInfoD3D11.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\CheckPoint.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
     <ClInclude Include="render\PointLight.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
@@ -451,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="render\Skybox.h">
       <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\IntelligentEnemy.h">
+      <Filter>Header Files\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

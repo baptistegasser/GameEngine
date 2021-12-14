@@ -170,6 +170,8 @@
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
+    <ClCompile Include="gameplay\CheckPoint.cpp" />
+    <ClCompile Include="gameplay\IntelligentEnemy.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
     <ClCompile Include="math\BoundingBox.cpp" />
@@ -234,6 +236,8 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
+    <ClInclude Include="gameplay\CheckPoint.h" />
+    <ClInclude Include="gameplay\IntelligentEnemy.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />
     <ClInclude Include="math\BoundingBox.h" />

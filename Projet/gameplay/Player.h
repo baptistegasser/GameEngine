@@ -8,10 +8,15 @@
 class Player : public Pitbull::Component
 {
 public :
-	Player(Pitbull::Actor* Parent);
+	Player(Pitbull::Actor* Parent, Math::Vec3f Pos);
 	~Player() override = default;
 
 	void Init() override;
+
+	/// <summary>
+	/// Update the death state
+	/// </summary>
+	void Tick(const float& ElapsedTime) override;
 
 	/// <summary>
 	/// Update the direction of the player
@@ -29,10 +34,17 @@ public :
 		Third
 	};
 
+	void SetSpawnPos(const Math::Vec3f Pos)
+	{
+		SpawnPos = Pos;
+	}
+
 private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;
 	SphereCollider* MyCollider;
+
+	Math::Vec3f SpawnPos = Math::Vec3f{ 0.0f, 0.0f, 0.0f };
 
 	/****
 	 *
@@ -75,6 +87,16 @@ private:
 	/// Swap the camera's type
 	/// </summary>
 	void SwapCameraMode();
+
+	/// <summary>
+	/// Check if player is dead
+	/// </summary>
+	[[nodiscard]] bool IsDead() const;
+
+	/// <summary>
+	/// Reset player value
+	/// </summary>
+	void ResetPlayer() const;
 
 	bool WaitForSwap = false;
 };

@@ -8,11 +8,16 @@
 class CheckPoint : public Pitbull::Component
 {
 public:
+	/// <summary>
+	/// Create a functional CheckPoint 
+	/// </summary>
+	/// <param name="Parent"></param>
 	CheckPoint(Pitbull::Actor* Parent);
 	~CheckPoint() override = default;
 
 	void Init() override;
 
+	// Check Point is activate
 	bool IsVisited = false;
 private:
 	CapsuleCollider* MyCollider;

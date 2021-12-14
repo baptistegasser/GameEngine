@@ -13,11 +13,7 @@ public:
 
 	void Init() override;
 
-	/// <summary>
-	/// Update the death state
-	/// </summary>
-	void Tick(const float& ElapsedTime) override;
-
+	bool IsVisited = false;
 private:
 	CapsuleCollider* MyCollider;
 	RigidBody* MyRigidBody;

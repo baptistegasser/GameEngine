@@ -12,10 +12,4 @@ void CheckPoint::Init()
 {
 	MyCollider = ParentActor->GetComponent<CapsuleCollider>();
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
-	
-}
-
-void CheckPoint::Tick(const float& elapsed_time)
-{
-	
 }

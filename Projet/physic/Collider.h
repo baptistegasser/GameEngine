@@ -4,7 +4,7 @@
 
 #include "core/Component.h"
 #include "PhysicMaterial.h"
-#include "Contact.h"
+#include "physic/Contact.h"
 #include "math/Vec3f.h"
 
 #include "PxPhysicsAPI.h"
@@ -67,10 +67,4 @@ protected:
 	/// The scale should appropriatly calculated base on the geometry implementation.
 	/// </summary>
 	virtual physx::PxGeometry* GetGeometryImpl(const Math::Vec3f& Scale) const noexcept = 0;
-
-public:
-	void SetOnContactCallBack(const std::function<void(Contact)>& ContactCallBack)
-	{
-		OnContactCallBack = ContactCallBack;
-	}
 };

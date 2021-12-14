@@ -5,12 +5,12 @@
 
 void ContactHandler::ClearRegistredCollider(const physx::PxShape* Shape) noexcept
 {
-	RegisteredColliders[Shape].clear();
+	RegisteredColliders[Shape] = nullptr;
 }
 
 void ContactHandler::RegisterCollider(const physx::PxShape* Shape, const Collider* Collider) noexcept
 {
-	RegisteredColliders[Shape].push_back(Collider);
+	RegisteredColliders[Shape] = Collider;
 }
 
 void ContactHandler::onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)
@@ -25,20 +25,17 @@ void ContactHandler::onContactModify(physx::PxContactModifyPair* const pairs, ph
 
 void ContactHandler::NotifyPairCollider(physx::PxContactModifyPair& ContactPair) noexcept
 {
-	for (int i = 0; i <= 1; ++i) {
-		auto Colliders = RegisteredColliders[ContactPair.shape[i]];
-		for (auto& Collider : Colliders) {
-			Collider->OnContact({});
-		}
-	}
+	
+	const Collider* FirstCollider = RegisteredColliders[ContactPair.shape[0]];
+	const Collider* SecondCollider = RegisteredColliders[ContactPair.shape[1]];
+	FirstCollider->OnContact(Contact(FirstCollider->ParentActor, SecondCollider->ParentActor));
+	SecondCollider->OnContact(Contact(SecondCollider->ParentActor, FirstCollider->ParentActor));
 }
 
 void ContactHandler::NotifyPairColliderTrigger(physx::PxTriggerPair& ContactPair) noexcept
 {
-	for (int i = 0; i <= 1; ++i) {
-		auto Colliders = RegisteredColliders[ContactPair.triggerShape];
-		for (auto& Collider : Colliders) {
-			Collider->OnContact({});
-		}
-	}
+	const Collider* FirstCollider = RegisteredColliders[ContactPair.triggerShape];
+	const Collider* SecondCollider = RegisteredColliders[ContactPair.otherShape];
+	FirstCollider->OnContact(Contact(FirstCollider->ParentActor, SecondCollider->ParentActor));
+	SecondCollider->OnContact(Contact(SecondCollider->ParentActor, FirstCollider->ParentActor));
 }

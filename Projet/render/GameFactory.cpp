@@ -147,18 +147,19 @@ void GameFactory::CreateCheckPoint(Math::Transform Transform)
 	MyCheckPoint->AddComponent<CheckPoint>();
 
 	auto CheckPointCollider = [](const Contact& Contact) -> void {
-		const auto Actors = PM3D::CMoteurWindows::GetInstance().GetScene().GetVisibleActors();
-		for (const auto& Actor : Actors) {
-			std::cout << 1;
-			if (Actor->Name == "Player")
-			{
-				Actor->GetComponent<Player>()->SetSpawnPos(Math::Vec3f{ 0.0f, 10.5f, 10.0f });
-			}
+		if (Contact.FirstActor->Name == "CheckPoint" && Contact.SecondActor->Name == "Player")
+		{
+			Contact.SecondActor->GetComponent<Player>()->SetSpawnPos(Contact.FirstActor->Transform.Position);
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "CheckPoint")
+		{
+			Contact.FirstActor->GetComponent<Player>()->SetSpawnPos(Contact.SecondActor->Transform.Position);
 		}
 	};
 
 	auto Collider = MyCheckPoint->AddComponent<CapsuleCollider>(0.4f, 0.01f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
-	Collider->SetOnContactCallBack(CheckPointCollider);
+	Collider->OnContactCallBack = CheckPointCollider;
+
 	MyCheckPoint->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyCheckPoint));

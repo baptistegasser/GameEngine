@@ -19,7 +19,7 @@ public:
     void onContactModify(physx::PxContactModifyPair* const pairs, physx::PxU32 count) override;
 
 private:
-    std::unordered_map<const physx::PxShape*, std::vector<const Collider*>> RegisteredColliders;
+    std::unordered_map<const physx::PxShape*, const Collider*> RegisteredColliders;
 
     void NotifyPairCollider(physx::PxContactModifyPair& ContactPair) noexcept;
     void NotifyPairColliderTrigger(physx::PxTriggerPair& ContactPair) noexcept;

@@ -21,7 +21,7 @@ class PhysicManager : public Singleton<PhysicManager>
 
 public:
 	void Init();
-	void InitScene(std::shared_ptr<Scene> Scene);
+	void InitScene(physx::PxScene* Scene);
 	void Step(const float& ElapsedTime);
 	void Cleanup();
 
@@ -30,7 +30,7 @@ public:
 
 	physx::PxPhysics* Physics = nullptr;
 	physx::PxCooking* Cooking = nullptr;
-	std::shared_ptr<Scene> CurrentScene;
+	physx::PxScene* CurrentScene;
 
 private:
 	PhysicManager() = default;

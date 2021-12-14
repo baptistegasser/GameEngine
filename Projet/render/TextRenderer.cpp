@@ -16,6 +16,7 @@ TextRenderer::TextRenderer(Pitbull::Actor* Parent, Font* Font, ShaderSprite* Sha
 TextRenderer::~TextRenderer()
 {
 	DX_RELEASE(Texture2D);
+	DX_RELEASE(TextureView);
 }
 
 void TextRenderer::Write(const std::wstring& String)
@@ -31,7 +32,7 @@ void TextRenderer::Write(const std::wstring& String)
 
 	const auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
 
-	D3DDevice.ImmediateContext->UpdateSubresource(Texture2D, 0, 0, bmData.Scan0, CanvasWidth * 4, 0);
+	D3DDevice.ImmediateContext->UpdateSubresource(Texture2D, 0, nullptr, bmData.Scan0, CanvasWidth * 4, 0);
 
 	CharBitmap->UnlockBits(&bmData);
 }

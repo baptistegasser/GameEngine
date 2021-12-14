@@ -12,7 +12,6 @@ public :
 	/// <param name="Font"> The font to use </param>
 	/// <param name="Shader"> The shader to use </param>
 	TextRenderer(Pitbull::Actor* Parent, Font* Font, ShaderSprite* Shader, int CanvasHeight, int CanvasWidth);
-
 	~TextRenderer() override;
 
 	/// <summary>
@@ -23,7 +22,7 @@ public :
 
 	void UpdateCanvas(int NewHeight, int NewWidth);
 
-private :
+private:
 	std::unique_ptr<Font> FontText;
 	int CanvasHeight, CanvasWidth;
 	std::wstring Value;

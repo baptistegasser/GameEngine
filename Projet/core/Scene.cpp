@@ -44,11 +44,6 @@ void Scene::Update()
 	Tree->Update();
 }
 
-void Scene::Cleanup()
-{
-	Tree->Clear();
-}
-
 void Scene::Init() const
 {
 	for (auto& Actor : Tree->GetDatas()) {

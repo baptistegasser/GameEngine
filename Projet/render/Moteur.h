@@ -84,10 +84,10 @@ public:
 		// * Initialisation du dispositif de rendu
 		pDispositif = CreationDispositifSpecific(CDS_MODE::CDS_FENETRE);
 
-		CurrentScene = std::make_shared<Scene>();
+		CurrentScene = new Scene;
 
 		PhysicManager::GetInstance().Init();
-		PhysicManager::GetInstance().InitScene(CurrentScene);
+		PhysicManager::GetInstance().InitScene(CurrentScene->PhysxScene);
 
 		// * Initialisation de la scène
 		InitScene();
@@ -216,6 +216,8 @@ protected:
 
 	virtual void Cleanup()
 	{
+		delete CurrentScene;
+
 		ResourcesManager.Cleanup();
 		PhysicManager::GetInstance().Cleanup();
 
@@ -301,7 +303,7 @@ protected:
 	TDevice* pDispositif;
 
 	// La seule scène
-	std::shared_ptr<Scene> CurrentScene;
+	Scene* CurrentScene;
 
 	// Position of the camera
 	DirectX::XMVECTOR Position;

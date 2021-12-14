@@ -116,6 +116,7 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 	Ennemy->AddComponent<Plateform>(
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
 		, Math::Transform(Ennemy->Transform.Position + Math::Vec3f(10, 0, 0), Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+
 	const auto Hat = Ennemy->AddComponent<SpriteRenderer>(
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\hat.dds"), PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
 	Hat->Offset.Position.y = 1.9f;

@@ -116,6 +116,9 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 	D3DDevice->CreateRasterizerState(&RsDesc, &SolidNoneCullBackRS);
 
 	ImmediateContext->RSSetState(SolidCullBackRS);
+
+
+	//D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&D3DDevice));
 }
 
 DeviceD3D11::~DeviceD3D11()

@@ -110,6 +110,8 @@ ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 
 ShaderSprite::~ShaderSprite()
 {
+	DX_RELEASE(Technique);
+	DX_RELEASE(Passe);
 	DX_RELEASE(ConstantBuffer);
 	DX_RELEASE(SampleState);
 	DX_RELEASE(Effet);

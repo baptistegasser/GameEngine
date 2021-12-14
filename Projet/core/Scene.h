@@ -51,8 +51,6 @@ public:
 	/// </summary>
 	void Update();
 
-	void Cleanup();
-
 	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
 	void AddSkyBox(ActorPtr& Actor);

@@ -1,36 +1,34 @@
 #include "stdafx.h"
-#include "MeshRenderer.h"
-
+#include "Skybox.h"
 #include "MeshLoader.h"
 #include "MoteurWindows.h"
 #include "math/Math.h"
 #include "ObjectMesh.h"
 #include "Vertex.h"
-
-#include "util/ResourcesManager.h"
-
 #include "Light.h"
 
-MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh)
-	: MeshRenderer{ Parent, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
+Skybox::Skybox(Math::Transform* ToFollow, ObjectMesh* Mesh)
+	: Skybox{ ToFollow, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
 {}
 
-MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader)
-	: Component{ Parent }
-	, Mesh{ Mesh }
+Skybox::Skybox(Math::Transform* ToFollow, ObjectMesh* Mesh, Shader* MeshShader)
+	: ToFollow{ ToFollow }
+	, Mesh { Mesh }
 	, MeshShader{ MeshShader }
 	, matWorld{ DirectX::XMMatrixIdentity() }
 {}
 
-void MeshRenderer::LateTick(const float& ElapsedTime)
+void Skybox::LateTick(const float ElapsedTime)
 {
 	using namespace DirectX;
 
+	PM3D::CMoteurWindows::GetInstance().GetDispositif().DeactivateZBuffer();
 	// Update position
-	matWorld = ParentActor->Transform;
+	matWorld = XMMatrixTranslationFromVector(ToFollow->Position.ToXMVector());
 
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
+
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -97,4 +95,6 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 		}
 	}
+
+	PM3D::CMoteurWindows::GetInstance().GetDispositif().ActivateZBuffer();
 }

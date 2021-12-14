@@ -11,20 +11,6 @@
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
 
-// Math components
-#include "math/Math.h"
-// Physic components
-#include "physic/RigidBody.h"
-#include "physic/SphereCollider.h"
-#include "physic/BoxCollider.h"
-#include "physic/CapsuleCollider.h"
-// Render components
-#include "render/MeshRenderer.h"
-#include "render/Camera.h"
-#include "render/Terrain.h"
-// Gameplay components
-#include "gameplay/Plateform.h"
-#include "gameplay/Player.h"
 #include "render/GameFactory.h"
 
 #include <iostream>
@@ -157,8 +143,8 @@ public:
 
 	CDIManipulateur& GetGestionnaireDeSaisie() { return GestionnaireDeSaisie; }
 	ResourcesManager& GetResourcesManager() { return ResourcesManager; }
-	Scene& GetScene() { return *CurrentScene; }
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
+	Scene& GetScene() noexcept { return *CurrentScene; }
 	DeviceD3D11& GetDispositif() noexcept { return *pDispositif; }
 
 	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
@@ -203,6 +189,9 @@ protected:
 	virtual bool RenderScene(const float ElapsedTime)
 	{
 		BeginRenderSceneSpecific();
+
+		// Tick the skybox at first
+		CurrentScene->SkyBox->LateTick(ElapsedTime);
 
 		// Get actors in vision range
 		const auto Actors = CurrentScene->GetVisibleActors();

@@ -70,6 +70,11 @@ public:
 	/// </summary>
 	void setKinematicTarget(const Math::Transform& Target) const;
 
+	/// <summary>
+	/// Set the maximum of velocity of the Rigodbody
+	/// </summary>
+	void setMaxLinearVelocity(float Velocity);
+
 protected:
 	friend class Pitbull::Actor;
 	friend class PhysicManager;

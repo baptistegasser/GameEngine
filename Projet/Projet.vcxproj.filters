@@ -210,9 +210,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="render\LightConfig.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="math\Vec3f.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
@@ -236,6 +233,24 @@
     </ClCompile>
     <ClCompile Include="gameplay\CheckPoint.cpp">
       <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpotLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\PointLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\LightManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DirectionalLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Light.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Skybox.cpp">
+      <Filter>Source Files\render\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -380,9 +395,6 @@
     <ClInclude Include="render\Light.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\LightConfig.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -431,6 +443,21 @@
     <ClInclude Include="gameplay\CheckPoint.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="render\PointLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpotLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DirectionalLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightManager.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Skybox.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico">
@@ -464,11 +491,20 @@
     <FxCompile Include="shaders\MiniPhongTerrain.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\MiniPhongSkyBox.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
-    <None Include="shaders\Light.hlsli">
+    <None Include="Shaders\Lights.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Material.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Util.hlsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

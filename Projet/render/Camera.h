@@ -5,7 +5,7 @@
 class Camera : public Pitbull::Component {
 protected:
 	friend class Pitbull::Actor;
-	Camera(Pitbull::Actor* Parent, DirectX::XMVECTOR* Position, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection, DirectX::XMMATRIX* PMatView, DirectX::XMMATRIX* PMatProj, DirectX::XMMATRIX* PMatViewProj);
+	Camera(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Position, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection, DirectX::XMMATRIX* PMatView, DirectX::XMMATRIX* PMatProj, DirectX::XMMATRIX* PMatViewProj);
 
 public:
 	~Camera() = default;
@@ -20,7 +20,7 @@ public:
 
 private:
 	bool NeedToUpdate;
-	DirectX::XMVECTOR* Position;
+	DirectX::XMVECTOR Position;
 	DirectX::XMVECTOR Direction;
 	DirectX::XMVECTOR UpDirection;
 	DirectX::XMMATRIX* PMatView;

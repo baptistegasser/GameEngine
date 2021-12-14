@@ -401,9 +401,6 @@
     <ClInclude Include="render\Terrain.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Light.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -430,9 +427,6 @@
     </ClInclude>
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="util\Observable.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="render\Timer.h">
       <Filter>Header Files\render\components</Filter>
@@ -487,6 +481,9 @@
     </ClInclude>
     <ClInclude Include="gameplay\IntelligentEnemy.h">
       <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

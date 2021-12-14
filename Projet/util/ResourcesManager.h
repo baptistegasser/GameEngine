@@ -29,7 +29,6 @@ public:
 	Texture* GetTexture(const std::wstring& TextureName);
 	ObjectMesh* GetMesh(const wchar_t* MeshName);
 
-private :
-	// Variables statiques pour GDI+
-	static ULONG_PTR token;
+private:
+	static ULONG_PTR GDIToken;
 };

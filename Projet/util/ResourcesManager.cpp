@@ -1,7 +1,18 @@
 #include "stdafx.h"
 #include "ResourcesManager.h"
 
+#include "render/TextRenderer.h"
 #include "util/Util.h"
+
+ULONG_PTR ResourcesManager::GDIToken = 0;
+
+ResourcesManager::ResourcesManager()
+{
+	const Gdiplus::GdiplusStartupInput  startupInput(nullptr, TRUE, TRUE);
+	Gdiplus::GdiplusStartupOutput startupOutput{};
+
+	GdiplusStartup(&GDIToken, &startupInput, &startupOutput);
+}
 
 ResourcesManager::~ResourcesManager()
 {
@@ -14,6 +25,7 @@ void ResourcesManager::Cleanup() noexcept
 	Shaders.clear();
 	Textures.clear();
 	Sprites.clear();
+	Gdiplus::GdiplusShutdown(GDIToken);
 }
 
 Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)

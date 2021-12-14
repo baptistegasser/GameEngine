@@ -49,6 +49,7 @@ public:
 	bool Add(DataType Data);
 	bool Remove(const DataPtr Data);
 	void Update();
+	void Clear();
 
 	const DataList& GetDatas() const noexcept;
 	DataPtrList Find(const Math::Vec3f& Pos, float MaxDistance) const;
@@ -156,6 +157,12 @@ void Octree<T, ToPos>::Update()
 			throw "Out of bound object !";
 		}
 	}
+}
+
+template <class T, class ToPos>
+void Octree<T, ToPos>::Clear()
+{
+	Datas.clear();
 }
 
 template <class T, class ToPos>

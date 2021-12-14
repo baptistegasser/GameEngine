@@ -216,8 +216,11 @@ protected:
 
 	virtual void Cleanup()
 	{
-		ResourcesManager.Cleanup();
+		CurrentScene->Cleanup();
+
 		PhysicManager::GetInstance().Cleanup();
+
+		ResourcesManager.Cleanup();
 
 		// Détruire le dispositif
 		if (pDispositif)

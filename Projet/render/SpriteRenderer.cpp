@@ -23,8 +23,8 @@ SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* Sprite, ShaderSp
 	DX_RELEASE(Resource);
 	DX_RELEASE(TextureInterface);
 
-	Dimension.x = static_cast<float>(desc.Width) * 2.0f / D3DDevice.GetLargeur();
-	Dimension.y = static_cast<float>(desc.Height) * 2.0f / D3DDevice.GetHauteur();
+	Dimension.x = static_cast<float>(desc.Width) * 2.0f / D3DDevice.ScreenWidth;
+	Dimension.y = static_cast<float>(desc.Height) * 2.0f / D3DDevice.ScreenHeight;
 }
 
 SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, ShaderSprite* Shader, bool BillBoard)
@@ -38,7 +38,7 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	auto& Engine = PM3D::CMoteurWindows::GetInstance();
 	auto& pD3DDevice = Engine.GetDispositif();
 
-	ID3D11DeviceContext* pImmediateContext = pD3DDevice.GetImmediateContext();
+	ID3D11DeviceContext* pImmediateContext = pD3DDevice.ImmediateContext;
 
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -56,7 +56,7 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	ID3DX11EffectShaderResourceVariable* variableTexture;
 	variableTexture = Shader->Effet->GetVariableByName("textureEntree")->AsShaderResource();
 
-	pD3DDevice.ActiverMelangeAlpha();
+	pD3DDevice.ActivateAlphaBlending();
 
 	XMMATRIX Position;
 	XMMATRIX Scale;
@@ -95,5 +95,5 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 
 	pImmediateContext->Draw(6, 0);
 
-	pD3DDevice.DesactiverMelangeAlpha();
+	pD3DDevice.DeactivateAlphaBlending();
 }

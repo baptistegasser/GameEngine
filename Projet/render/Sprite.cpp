@@ -36,7 +36,7 @@ SpriteVertex ShaderSprite::Vertices[6] =
 ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 	FileName{FileName}
 {
-	ID3D11Device* pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
+	ID3D11Device* pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));

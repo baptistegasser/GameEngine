@@ -42,9 +42,9 @@ void TextRenderer::Write(const std::wstring& String)
 	const auto& Rect = Gdiplus::Rect(0, 0, CanvasWidth, CanvasHeight);
 	CharBitmap->LockBits(&Rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
 
-	auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+	const auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
 
-	D3DDevice.GetImmediateContext()->UpdateSubresource(Texture2D, 0, 0, bmData.Scan0, CanvasWidth * 4, 0);
+	D3DDevice.ImmediateContext->UpdateSubresource(Texture2D, 0, 0, bmData.Scan0, CanvasWidth * 4, 0);
 
 	CharBitmap->UnlockBits(&bmData);
 }
@@ -88,7 +88,7 @@ void TextRenderer::UpdateCanvas(int NewHeight, int NewWidth)
 	data.SysMemPitch = CanvasWidth * 4;
 	data.SysMemSlicePitch = 0;
 
-	DX_TRY(D3DDevice.GetD3DDevice()->CreateTexture2D(&texDesc, &data, &Texture2D));
+	DX_TRY(D3DDevice.D3DDevice->CreateTexture2D(&texDesc, &data, &Texture2D));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -96,10 +96,10 @@ void TextRenderer::UpdateCanvas(int NewHeight, int NewWidth)
 	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 
-	DX_TRY(D3DDevice.GetD3DDevice()->CreateShaderResourceView(Texture2D, &srvDesc, &TextureView));
+	DX_TRY(D3DDevice.D3DDevice->CreateShaderResourceView(Texture2D, &srvDesc, &TextureView));
 
 	CharBitmap->UnlockBits(&bmData);
 
-	Dimension.x = static_cast<float>(CanvasWidth) * 2.0f / D3DDevice.GetLargeur();
-	Dimension.y = static_cast<float>(CanvasHeight) * 2.0f / D3DDevice.GetHauteur();
+	Dimension.x = static_cast<float>(CanvasWidth) * 2.0f / D3DDevice.ScreenWidth;
+	Dimension.y = static_cast<float>(CanvasHeight) * 2.0f / D3DDevice.ScreenHeight;
 }

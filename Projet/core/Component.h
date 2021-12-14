@@ -45,11 +45,12 @@ namespace Pitbull
 
 		virtual void SpriteTick(const float& ElapsedTime);
 
-	protected:
 		/// <summary>
 		/// The actor that contains this component.
 		/// </summary>
 		Actor* ParentActor = nullptr;
+
+	protected:
 
 		Component(Actor* Parent) : ParentActor{ Parent }{}
 	};

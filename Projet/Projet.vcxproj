@@ -337,6 +337,7 @@
       </ExcludedFromBuild>
       <FileType>Document</FileType>
     </FxCompile>
+    <FxCompile Include="shaders\MiniPhongSkyBox.fx" />
     <FxCompile Include="shaders\MiniPhongTerrain.fx" />
     <FxCompile Include="shaders\sprite1.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>

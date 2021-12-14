@@ -13,6 +13,7 @@ namespace Math
 	/// </summary>
 	struct Quaternion : public physx::PxQuat
 	{
+		Quaternion() noexcept;
 		Quaternion(const float a, const Vec3f& Axis) noexcept;
 		Quaternion(const float x, const float y, const float z, const float w) noexcept;
 		/// <summary>

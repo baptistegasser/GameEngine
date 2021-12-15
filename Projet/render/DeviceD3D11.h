@@ -25,6 +25,7 @@ public:
 	void ActivateZBuffer() const;
 	void DeactivateZBuffer() const;
 
+	void ClearView();
 	void SetRenderTargetView(ID3D11RenderTargetView *PRenderTargetView, ID3D11DepthStencilView *PDepthStencilView);
 
 	ID3D11Device* D3DDevice{};

@@ -171,17 +171,7 @@ DeviceD3D11* CMoteurWindows::CreationDispositifSpecific(const CDS_MODE cdsMode)
 
 void CMoteurWindows::BeginRenderSceneSpecific()
 {
-	ID3D11DeviceContext* pImmediateContext = pDispositif->ImmediateContext;
-	ID3D11RenderTargetView* pRenderTargetView = pDispositif->RenderTargetView;
-
-
-	// On efface la surface de rendu
-	float Couleur[4] = { 0.0f, 0.5f, 0.0f, 1.0f };  //  RGBA - Vert pour le moment
-	pImmediateContext->ClearRenderTargetView(pRenderTargetView, Couleur);
-
-	// On ré-initialise le tampon de profondeur
-	ID3D11DepthStencilView* pDepthStencilView = pDispositif->DepthStencilView;
-	pImmediateContext->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	pDispositif->ClearView();
 }
 
 void CMoteurWindows::EndRenderSceneSpecific()

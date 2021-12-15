@@ -180,10 +180,6 @@ void Engine<T, TDevice>::Tick()
 	const double PhysicElapsedTime = GetTimeIntervalsInSec(CurrentPhysicTime, CurrentTimeStep);
 	CurrentPhysicTime = CurrentTimeStep;
 
-	// Update inputs states
-	InputManager.StatutClavier();
-	InputManager.SaisirEtatSouris();
-
 	// Update physic state
 	PhysicAccumulator += static_cast<float>(PhysicElapsedTime);
 	while (PhysicAccumulator >= PhysicDeltaStep) {
@@ -194,6 +190,9 @@ void Engine<T, TDevice>::Tick()
 
 	if (DeltaTime > MSPerFrame)
 	{
+		InputManager.StatutClavier();
+		InputManager.SaisirEtatSouris();
+
 		TickScene(static_cast<float>(DeltaTime));
 
 		if (!IsPaused()) {
@@ -239,6 +238,9 @@ template <class T, class TDevice>
 bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 {
 	BeginRenderSceneSpecific();
+
+	// Tick the skybox first
+	CurrentScene->SkyBox->LateTick(DeltaTime);
 
 	// Get actors in vision range
 	const auto Actors = CurrentScene->GetVisibleActors();

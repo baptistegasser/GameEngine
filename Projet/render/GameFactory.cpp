@@ -26,6 +26,9 @@
 #include "gameplay/Player.h"
 #include "gameplay/CheckPoint.h"
 
+#include <math.h>
+#include "math/Math.h"
+
 void GameFactory::LoadLevel()
 {
 	/***
@@ -53,18 +56,19 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 135.f });
+	CreateCheckPoint(Math::Transform{ Math::Vec3f{ 0.f, 10.5f, 135.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 	/***
 	 * First State with arena ( z C 135,210)
 	 ***/
+
 	Math::Vec3f TerrainPos = { -38.f, 3.f, 145.f };
 	float PosYEnemy = 4.3f;
-	CreateTunnel(Math::Transform{ Math::Vec3f(0.f, 11.f, 0), Math::Vec3f(0.5f, 0.05f, 0.07f ) });
 
+	// Dim : 76 / 76
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
-		L".\\modeles\\gazon.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds");
+		L".\\modeles\\gazon.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, true);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemy, TerrainPos.z + 20.f }, true);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemy, TerrainPos.z + 20.f }, true);
@@ -76,22 +80,26 @@ void GameFactory::LoadLevel()
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 42.5f }, true, 0.4f);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
-	CreateIntelligentEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 35.f }, PlayerTransform,
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 15.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, 40.0f);
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 63.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, 40.0f);
 
 	/***
 	 * Second state with plateform
 	 ***/
-
+	
 	Math::Vec3f BasePos = { 0.f, -3.f, 240.f };
 
-	CreatePlatform(Math::Transform{ BasePos, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
-	CreateCheckPoint(Math::Vec3f{ BasePos.x, BasePos.y + 0.5f, BasePos.z });
+	CreatePlatform(Math::Transform{ BasePos, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformGlace.OMB");
+	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x, BasePos.y + 0.5f, BasePos.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 	CreateMobilePlatform(Math::Vec3f(BasePos.x, BasePos.y, BasePos.z + 20.f), Math::Vec3f(-55.f, 0, 0), 
 		L".\\modeles\\plateform\\plateformSable.OMB", Collider::DefaultMaterial,  0.175f);
 	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 60.f, BasePos.y, BasePos.z + 40.f), Math::Vec3f{ 1.f, 1.f, 1.f } }, 
 		L".\\modeles\\plateform\\plateformRouge.OMB");
+
+	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x - 60.f, BasePos.y + 0.5f, BasePos.z + 40.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 60.f, BasePos.y, BasePos.z + 55.f), Math::Vec3f{ 0.75f, 1.f, 0.75f } }, 
 		Math::Vec3f(0, 0, 20), L".\\modeles\\plateform\\plateformSable.OMB", Collider::DefaultMaterial, 0.15f);
@@ -100,22 +108,38 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 95.f, BasePos.y, BasePos.z + 115.f), Math::Vec3f{ 1.75f, 1.f, 1.75f } }, 
 		L".\\modeles\\plateform\\plateformRouge.OMB");
-	CreateCheckPoint(Math::Vec3f{ BasePos.x - 95.f, BasePos.y + 0.5f, BasePos.z + 115.f });
+	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x - 95.f, BasePos.y + 0.5f, BasePos.z + 115.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 
 	/***
-	 * Second State with arena ( z C 135,210)
+	 * Second State with arena
 	 ***/
-	Math::Vec3f TerrainPos2 = { -223.f, -6.f, 355.f };
-	float PosYEnemy2 = 4.3f;
+	Math::Vec3f TerrainPos2 = { -115.f, -6.f, 375.f };
+	float PosYEnemy2 = -5.5f;
 
-	CreateTerrain(L".\\modeles\\heigtmap\\Arene_2.bmp",
-		Math::Transform{ Math::Vec3f{ 0.f, -6.f, 0.f }, Math::Vec3f{ 0.25f, 0.25f, 0.25f }, Math::Quaternion{ 0, Math::Vec3f(0, 0, 0)} },
-		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds");
+	// Dim : 128 / 128
+	CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
+		Math::Transform{ TerrainPos2, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
+		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
+	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TerrainPos2.x + 128.f, TerrainPos2.y + 22.0f, TerrainPos2.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
+	CaveTrans.RotateZ(180);
+	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
+		CaveTrans,
+		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
 
 
 	CreateGoal(Math::Transform{ Math::Vec3f(5.f, 12.f, -5.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 
+	/***
+	* Tunnel
+	***/
+
+	/*Math::Transform TunnelTrans = Math::Transform{ Math::Vec3f(-25.f, -6.f, 0.f), Math::Vec3f(0.5f, 0.05f, 0.07f) };
+
+	TunnelTrans.RotateY(90);
+	TunnelTrans.RotateZ(90);
+
+	CreateTunnel(TunnelTrans);*/
 
 	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
 
@@ -187,7 +211,7 @@ void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool I
 	auto& RessourceManager = Engine.ResourcesManager;
 
 	auto Ennemy = new Pitbull::Actor{ "Enemy" };
-	Ennemy->AddComponent<MeshRenderer>(RessourceManager.GetMesh(L".\\modeles\\cube\\cube.OMB"),
+	Ennemy->AddComponent<MeshRenderer>(RessourceManager.GetMesh(L".\\modeles\\bird\\bird.OMB"),
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 
 	Ennemy->AddComponent<Enemy>(IsKiller);
@@ -223,7 +247,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 
 	auto Ennemy = new Pitbull::Actor{};
 	Ennemy->AddComponent<MeshRenderer>(
-		RessourceManager.GetMesh(L".\\modeles\\cube\\cube.OMB"),
+		RessourceManager.GetMesh(L".\\modeles\\bear\\bear.OMB"),
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
@@ -346,11 +370,17 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	Terrain2->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain2->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
 	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
-	Terrain2->Transform = Transform;
-	Terrain2->Transform.Position.y = Terrain2->Transform.Position.y + (256.f * Transform.Scale.y)/2 + 0.55f;
-	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z) - 0.1f;
-	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
+	Terrain2->Transform.Position.x = Transform.Position.x + sin(Transform.EulerRotation().y * Math::MATH_PI / 180) * (128 * Transform.Scale.z)
+		 + sin(Transform.EulerRotation().z * Math::MATH_PI / 180) * (128 * Transform.Scale.z);
+	Terrain2->Transform.Position.y = Transform.Position.y + 128 * Transform.Scale.y ;
+	Terrain2->Transform.Position.z = Transform.Position.z + Terrain->Height * Transform.Scale.z- 
+		sin(Transform.EulerRotation().y * Math::MATH_PI / 180) * (128 * Transform.Scale.z)
+		 /*- sin(Transform.EulerRotation().z * Math::MATH_PI / 180) * (128 * Transform.Scale.z)*/;
+	Terrain2->Transform.Scale = Terrain->Transform.Scale;
+	
+	Transform.RotateX(180);
 
+	Terrain2->Transform.Rotation = Transform.Rotation;
 
 	Engine.GetScene().AddActor(Terrain, true);
 	Engine.GetScene().AddActor(Terrain2, true);
@@ -434,5 +464,5 @@ void GameFactory::CreateTimer()
 	Text->Offset.Position.x = 0.3f;
 	MyTimer->AddComponent<Timer>();
 
-	Engine.GetScene().AddActor(MyTimer);
+	Engine.GetScene().AddActor(MyTimer, true);
 }

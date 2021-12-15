@@ -200,6 +200,7 @@
     <ClCompile Include="render\ChargeurOBJ.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\DIManipulateur.cpp" />
+    <ClCompile Include="render\Effect.cpp" />
     <ClCompile Include="render\GameFactory.cpp" />
     <ClCompile Include="render\Device.cpp" />
     <ClCompile Include="render\DeviceD3D11.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="render\d3dxGlobal.h" />
     <ClInclude Include="render\DDSTextureLoader.h" />
     <ClInclude Include="render\DIManipulateur.h" />
+    <ClInclude Include="render\Effect.h" />
     <ClInclude Include="render\GameFactory.h" />
     <ClInclude Include="render\Device.h" />
     <ClInclude Include="render\DeviceD3D11.h" />
@@ -328,6 +330,9 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Domain</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="shaders\Effect_Nul.fx">
       <FileType>Document</FileType>
     </None>
     <FxCompile Include="shaders\MiniPhong.fx">

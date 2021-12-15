@@ -9,7 +9,11 @@
 class IntelligentEnemy : public Enemy
 {
 public :
-	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
+	struct ActionZone {
+		Math::Vec3f Point1, Point2;
+	};
+
+	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
 	~IntelligentEnemy() override = default;
 
 	void Init() override;
@@ -28,5 +32,7 @@ private:
 
 	float Speed = 0.1f;
 	float Distance;
+
+	ActionZone Zone;
 };
 

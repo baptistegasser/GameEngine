@@ -3,6 +3,8 @@
 #include "physic/Collider.h"
 #include "util/Singleton.h"
 
+#include "gameplay/IntelligentEnemy.h"
+
 class GameFactory : public Singleton<GameFactory>
 {
 	friend struct Singleton<GameFactory>;
@@ -40,7 +42,7 @@ private:
 	///	<param name="Transform"> : transform of the enemy  </param>
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
 	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
-	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create a fixed platform

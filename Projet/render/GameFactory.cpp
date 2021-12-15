@@ -112,7 +112,7 @@ void GameFactory::LoadLevel()
 		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds");
 
 
-	CreateGoal(Math::Vec3f(0.f, 10.f, -25), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
+	CreateGoal(Math::Transform{ Math::Vec3f(5.f, 12.f, -5.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 
 
 	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
@@ -360,8 +360,8 @@ void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)
 	auto& RessourceManager = Engine.ResourcesManager;
 
 	auto MyGoal = new Pitbull::Actor{ "Goal" };
-	MyGoal->AddComponent<MeshRenderer>(RessourceManager.GetMesh(Filename),
-		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+
+	MyGoal->AddComponent<SpriteRenderer>(RessourceManager.GetTexture(L".\\modeles\\Goal.dds"),RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
 
 	auto GoalCollider = [](const Contact& Contact) -> void {
 		if (Contact.FirstActor->Name == "Goal" && Contact.SecondActor->Name == "Player")
@@ -374,7 +374,7 @@ void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)
 		}
 	};
 
-	auto Collider = MyGoal->AddComponent<CapsuleCollider>(1.f, 2.f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
+	auto Collider = MyGoal->AddComponent<CapsuleCollider>(0.05f, 0.05f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
 	Collider->OnContactCallBack = GoalCollider;
 	MyGoal->Transform = Transform;
 

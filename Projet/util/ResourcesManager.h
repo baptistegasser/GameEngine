@@ -20,7 +20,7 @@ private:
 	std::map<const std::string, std::unique_ptr<ShaderSprite>> Sprites;
 
 public:
-	ResourcesManager();
+	ResourcesManager() = default;
 	~ResourcesManager();
 	void Cleanup() noexcept;
 
@@ -28,7 +28,4 @@ public:
 	ShaderSprite* GetShaderSprite(const wchar_t* ShaderName);
 	Texture* GetTexture(const std::wstring& TextureName);
 	ObjectMesh* GetMesh(const wchar_t* MeshName);
-
-private:
-	static ULONG_PTR GDIToken;
 };

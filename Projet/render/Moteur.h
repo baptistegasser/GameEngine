@@ -56,7 +56,6 @@ enum EngineState
 template <class T, class TDevice> class CMoteur :public Singleton<T>
 {
 public:
-
 	virtual void Run()
 	{
 		// We have passed the init phase no we are running !
@@ -75,6 +74,11 @@ public:
 
 	virtual int Initialisations()
 	{
+		const Gdiplus::GdiplusStartupInput  startupInput(nullptr, TRUE, TRUE);
+		Gdiplus::GdiplusStartupOutput startupOutput{};
+
+		GdiplusStartup(&GDIToken, &startupInput, &startupOutput);
+
 		// Set the engine state.
 		SetState(EngineState::Starting);
 
@@ -221,6 +225,8 @@ protected:
 		ResourcesManager.Cleanup();
 		PhysicManager::GetInstance().Cleanup();
 
+		Gdiplus::GdiplusShutdown(GDIToken);
+
 		// Détruire le dispositif
 		if (pDispositif)
 		{
@@ -313,6 +319,7 @@ protected:
 	DirectX::XMMATRIX m_MatProj;
 	DirectX::XMMATRIX m_MatViewProj;
 
+	static ULONG_PTR GDIToken;
 
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
@@ -342,6 +349,9 @@ private:
 		return (CurrentState & State) == State;
 	}
 };
+
+template <class T, class TDevice>
+ULONG_PTR CMoteur<T, TDevice>::GDIToken = 0;
 
 } // namespace PM3D
 

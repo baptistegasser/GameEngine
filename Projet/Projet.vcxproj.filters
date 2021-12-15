@@ -72,9 +72,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="render\ObjetMesh.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="physic\PhysicManager.cpp">
       <Filter>Source Files\physic</Filter>
     </ClCompile>
@@ -275,9 +272,6 @@
     <ClInclude Include="core\Component.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="render\ObjetMesh.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="physic\PhysicManager.h">
       <Filter>Header Files\physic</Filter>
     </ClInclude>
@@ -380,9 +374,6 @@
     <ClInclude Include="render\DIManipulateur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\objet3d.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="resources\resource.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -446,9 +437,6 @@
     <ClInclude Include="render\GameFactory.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="util\Observable.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
     <ClInclude Include="render\Device.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -481,9 +469,6 @@
     </ClInclude>
     <ClInclude Include="gameplay\IntelligentEnemy.h">
       <Filter>Header Files\gameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Light.h">
-      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

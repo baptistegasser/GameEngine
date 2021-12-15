@@ -14,6 +14,7 @@ Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
 	, SpawnPos { Pos }
+	, IsOnTerrain{false}
 {
 }
 
@@ -128,7 +129,7 @@ void Player::FixedTick(const float& DeltaTime)
 	MyCamera->SetDirection(Direction);
 }
 
-bool Player::isGrounded() const
+bool Player::isGrounded()
 {
 	static auto& Scene = EngineD3D11::GetInstance().GetScene();
 
@@ -138,7 +139,11 @@ bool Player::isGrounded() const
 		Origin,
 		{0.0f, -1.0f, 0.0f}, 
 		0.1f);
-	return Hit.hasAnyHits();
+	if (IsOnTerrain || Hit.hasAnyHits()) {
+		IsOnTerrain = false;
+		return true;
+	}
+	return false;
 }
 
 void Player::SwapCameraMode()

@@ -11,7 +11,8 @@
 using namespace DirectX;
 
 ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, ShaderTerrain* Shader, const PhysicMaterial& Material, bool BackFaceCulling)
-	: Scale{ Scale }
+	: Actor{"Terrain"}
+	, Scale{ Scale }
 	, MeshShader{ Shader }
 	, BackFaceCulling{BackFaceCulling}
 {
@@ -64,7 +65,20 @@ ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, ShaderTerrain* Shade
 	ComputeNormals();
 	GenerateMesh();
 
-	AddComponent<HeightFieldCollider>(Material, this);
+	auto Collider = AddComponent<HeightFieldCollider>(Material, this);
+
+	auto PlayerCollider = [](const Contact& Contact) -> void {
+		if (Contact.FirstActor->Name == "Terrain" && Contact.SecondActor->Name == "Player")
+		{
+			Contact.SecondActor->GetComponent<Player>()->IsOnTerrain = true;
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Terrain")
+		{
+			Contact.FirstActor->GetComponent<Player>()->IsOnTerrain = true;
+		}
+	};
+
+	Collider->OnContactCallBack = PlayerCollider;
 	AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 }
 

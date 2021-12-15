@@ -31,6 +31,7 @@
 #define ERREUR_CREATION_FORMAT_CLAVIER  122
 #define ERREUR_CREATION_SOURIS          123
 #define ERREUR_CREATION_FORMAT_SOURIS   124
+#define DXE_ERREURCREATIONSRV           125
 #define IDR_MAINFRAME                   128
 #define IDC_STATIC                      -1
 

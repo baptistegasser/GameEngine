@@ -146,6 +146,7 @@ BEGIN
     ERREUR_CREATION_SOURIS  "Erreur de création de la souris"
     ERREUR_CREATION_FORMAT_SOURIS 
                             "Erreur dans le format de données de la souris"
+    DXE_ERREURCREATIONSRV   "Erreur création d'une vue sur une ressource de shader"
 END
 
 #endif    // Français (Canada) resources

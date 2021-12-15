@@ -275,6 +275,7 @@
     <ClInclude Include="render\DDSTextureLoader.h" />
     <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\Font.h" />
+    <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\Speed.h" />
     <ClInclude Include="render\Sprite.h" />
     <ClInclude Include="render\SpriteRenderer.h" />

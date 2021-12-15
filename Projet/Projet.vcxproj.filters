@@ -485,6 +485,9 @@
     <ClInclude Include="render\EffectManager.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
+    <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico">

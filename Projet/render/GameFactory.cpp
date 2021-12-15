@@ -17,8 +17,10 @@
 #include "render/PointLight.h"
 #include "render/DirectionalLight.h"
 #include "render/Skybox.h"
+//#include "render/Font.h"
 
 // Gameplay components
+#include "Speed.h"
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
 #include "gameplay/CheckPoint.h"
@@ -99,6 +101,14 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 
 	PlayerTransform = &MyPlayer->Transform;
 
+	const auto Text = MyPlayer->AddComponent<TextRenderer>(
+		new Font{ L"Arial", Gdiplus::FontStyleBold, 32.0f, { 0, 0, 0} },
+		RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"),
+		100, 500);
+	Text->Offset.Position.y = 0.7f;
+	Text->Offset.Position.x = -0.5f;
+	MyPlayer->AddComponent<Speed>();
+	
 	Engine.GetScene().AddActor(MyPlayer);
 }
 
@@ -118,6 +128,14 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 	Ennemy->AddComponent<Plateform>(
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
 		, Math::Transform(Ennemy->Transform.Position + Math::Vec3f(10, 0, 0), Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+
+	const auto Hat = Ennemy->AddComponent<SpriteRenderer>(
+		RessourceManager.GetTexture(L".\\modeles\\hat.dds"), 
+		RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
+	Hat->Offset.Position.y = 1.9f;
+	Hat->Offset.Scale.x = 4.0f;
+	Hat->Offset.Scale.y = 4.0f;
+
 	Engine.GetScene().AddActor(Ennemy);
 }
 

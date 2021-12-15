@@ -189,6 +189,12 @@ void RigidBody::SetKinematicTarget(const Math::Transform& Target) const
 	GetAsDynamic()->setKinematicTarget(Target);
 }
 
+const Math::Vec3f RigidBody::GetVelocity() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	return GetAsDynamic()->getLinearVelocity();
+}
+
 void RigidBody::setMaxLinearVelocity(float Velocity)
 {
 	ASSERT_DYNAMIC

@@ -1,7 +1,6 @@
 #pragma once
 #include "Device.h"
 
-#include "AfficheurTexte.h"
 #include "DIManipulateur.h"
 
 #include "core/Actor.h"
@@ -22,6 +21,7 @@
 #include "render/MeshRenderer.h"
 #include "render/Camera.h"
 #include "render/Terrain.h"
+#include "render/TextRenderer.h"
 // Gameplay components
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
@@ -132,8 +132,14 @@ protected:
 	int64_t NextTimeStep = 0;
 	int64_t PreviousTimeStep = 0;
 
-	std::shared_ptr<Scene> CurrentScene;
+	Scene* CurrentScene;
+
+private:
+	static ULONG_PTR GDIToken;
 };
+
+template <class T, class TDevice>
+ULONG_PTR Engine<T, TDevice>::GDIToken = 0;
 
 template <class T, class TDevice>
 void Engine<T, TDevice>::Run()
@@ -156,14 +162,19 @@ int Engine<T, TDevice>::Init()
 {
 	SetState(States::Initialization);
 
+	const Gdiplus::GdiplusStartupInput  startupInput(nullptr, TRUE, TRUE);
+	Gdiplus::GdiplusStartupOutput startupOutput{};
+
+	GdiplusStartup(&GDIToken, &startupInput, &startupOutput);
+
 	InitSpecific();
 
 	Device = CreateDeviceSpecific(CDS_MODE::CDS_FENETRE);
 
-	CurrentScene = std::make_shared<Scene>();
+	CurrentScene = new Scene{};
 
 	PhysicManager::GetInstance().Init();
-	PhysicManager::GetInstance().InitScene(CurrentScene);
+	PhysicManager::GetInstance().InitScene(CurrentScene->PhysxScene);
 
 	InitScene();
 	InitAnimation();
@@ -244,6 +255,10 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 		Actor->LateTick(DeltaTime);
 	}
 
+	for (const auto& Actor : Actors) {
+		Actor->SpriteTick(DeltaTime);
+	}
+
 	EndRenderSceneSpecific();
 	return true;
 }
@@ -291,6 +306,10 @@ bool Engine<T, TDevice>::InitObjects()
 template <class T, class TDevice>
 void Engine<T, TDevice>::Cleanup()
 {
+	delete CurrentScene;
+
 	ResourcesManager.Cleanup();
 	PhysicManager::GetInstance().Cleanup();
+
+	Gdiplus::GdiplusShutdown(GDIToken);
 }

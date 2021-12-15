@@ -77,7 +77,7 @@ private:
 	bool RenderScene(const float DeltaTime);
 	void Cleanup();
 	int InitScene();
-	bool InitObjects();
+	static bool InitObjects();
 
 	void Tick();
 	bool TickScene(float DeltaTime) const;
@@ -128,7 +128,7 @@ protected:
 	float PhysicAccumulator = 0;
 	int64_t CurrentPhysicTime = 0;
 
-	// Variables pour le temps de l'animation
+	// Rendering variable
 	int64_t NextTimeStep = 0;
 	int64_t PreviousTimeStep = 0;
 
@@ -196,15 +196,11 @@ void Engine<T, TDevice>::Tick()
 		TickScene(static_cast<float>(DeltaTime));
 
 		if (!IsPaused()) {
-			// Affichage optimisé
+			// Optimized rendering
 			Device->Present();
-
-			// On rend l'image sur la surface de travail
-			// (tampon d'arrière plan)
 			RenderScene(static_cast<float>(DeltaTime));
 		}
-
-		// Calcul du temps du prochain affichage
+		
 		PreviousTimeStep = CurrentTimeStep;
 	}
 }
@@ -261,8 +257,6 @@ int Engine<T, TDevice>::InitScene()
 		return 1;
 	}
 
-	// Initialisation des matrices View et Proj
-	// Dans notre cas, ces matrices sont fixes
 	MatView = XMMatrixLookAtLH(
 		XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f),
 		XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
@@ -278,8 +272,7 @@ int Engine<T, TDevice>::InitScene()
 		AspectRatio,
 		NearPlane,
 		FarPlane);
-
-	// Calcul de VP a l'avance
+	
 	MatViewProj = MatView * MatProj;
 
 	CurrentScene->Init();

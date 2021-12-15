@@ -32,7 +32,7 @@ void GameFactory::LoadLevel()
 	PM3D::CMoteurWindows::GetInstance().GetEffectManager()->AddEffect(L".\\shaders\\Effect_Nul.fx");
 	PM3D::CMoteurWindows::GetInstance().GetEffectManager()->ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
 
-	//CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
+	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
 	CreateEnemy(Math::Vec3f{ 0.f, -7.f, 1.f });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);

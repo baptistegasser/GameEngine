@@ -271,8 +271,8 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	CurrentScene.LightManager.AmbientColor = { 0.7f };
 
 	auto DirLight = new ADirectionalLight;
-	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
-	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
+	DirLight->GetLight()->Direction = { 0.f, -4.f, 0.f };
+	DirLight->GetLight()->Color = { 1.f, 1.f, 1.f };
 	CurrentScene.AddActor(DirLight);
 
 	auto ALightRed = new APointLight;

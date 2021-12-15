@@ -6,21 +6,21 @@
 
 Scene::Scene()
 	: PhysxScene{ nullptr }
-	, Tree{ new ActorTree{BoundingBox{ 5000.f }} }
+	, Tree{ ActorTree{BoundingBox{ 5000.f }} }
 	, LightManager{ BoundingBox{ 5000.f } }
 	, VisionVolume{ BoundingSphere{ 0.f } }
 {}
 
 void Scene::Tick(const float ElapsedTime)
 {
-	for (auto& Actor : Tree->GetDatas()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->Tick(ElapsedTime);
 	}
 }
 
 void Scene::FixedTick(const float DeltaTime)
 {
-	for (auto& Actor : Tree->GetDatas()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->FixedTick(DeltaTime);
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -30,7 +30,7 @@ void Scene::FixedTick(const float DeltaTime)
 
 void Scene::LateTick(const float ElapsedTime)
 {
-	for (auto& Actor : Tree->GetDatas()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->LateTick(ElapsedTime);
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -41,12 +41,12 @@ void Scene::LateTick(const float ElapsedTime)
 void Scene::Update()
 {
 	// Update the Octree
-	Tree->Update();
+	Tree.Update();
 }
 
 void Scene::Init() const
 {
-	for (auto& Actor : Tree->GetDatas()) {
+	for (auto& Actor : Tree.GetDatas()) {
 		Actor->Init();
 	}
 	for (auto& Actor : AlwaysVisibleActors) {
@@ -57,16 +57,16 @@ void Scene::Init() const
 void Scene::AddActor(ActorPtr Actor, bool AlwaysVisible)
 {
 	if (AlwaysVisible) {
-		AlwaysVisibleActors.push_back(std::move(Actor));
+		AlwaysVisibleActors.push_back(Actor);
 	}
 	else {
-		Tree->Add(std::move(Actor));
+		Tree.Add(Actor);
 	}
 }
 
-void Scene::AddSkyBox(ActorPtr& Actor)
+void Scene::AddSkyBox(ActorPtr Actor)
 {
-	SkyBox = std::move(Actor);
+	SkyBox = Actor;
 }
 
 void Scene::SetCurrentCamera(const Camera* NewCamera) noexcept
@@ -82,7 +82,7 @@ const Camera& Scene::GetCurrentCamera() const noexcept
 const Scene::ActorPtrList Scene::GetVisibleActors() noexcept
 {
 	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
-	auto Actors = Tree->Find(VisionVolume);
+	auto Actors = Tree.Find(VisionVolume);
 	ConcatVisibleActors(Actors);
 	return Actors;
 }
@@ -105,6 +105,6 @@ void Scene::ConcatVisibleActors(ActorPtrList& Actors)
 {
 	for (auto& VisibleActor : AlwaysVisibleActors)
 	{
-		Actors.push_back(VisibleActor.get());
+		Actors.push_back(VisibleActor);
 	}
 }

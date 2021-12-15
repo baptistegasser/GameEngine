@@ -1,7 +1,7 @@
 #pragma once
 #include "Device.h"
 
-#include "AfficheurTexte.h"
+#include "DeviceD3D11.h"
 #include "DIManipulateur.h"
 
 #include "core/Actor.h"
@@ -12,6 +12,12 @@
 #include "util/Singleton.h"
 
 #include "render/GameFactory.h"
+
+// Sprite
+#include "render/SpriteRenderer.h"
+#include "render/TextRenderer.h"
+#include "render/Timer.h"
+#include "render/Speed.h"
 
 #include <iostream>
 #include <chrono>
@@ -50,7 +56,6 @@ enum EngineState
 template <class T, class TDevice> class CMoteur :public Singleton<T>
 {
 public:
-
 	virtual void Run()
 	{
 		// We have passed the init phase no we are running !
@@ -69,6 +74,11 @@ public:
 
 	virtual int Initialisations()
 	{
+		const Gdiplus::GdiplusStartupInput  startupInput(nullptr, TRUE, TRUE);
+		Gdiplus::GdiplusStartupOutput startupOutput{};
+
+		GdiplusStartup(&GDIToken, &startupInput, &startupOutput);
+
 		// Set the engine state.
 		SetState(EngineState::Starting);
 
@@ -78,10 +88,10 @@ public:
 		// * Initialisation du dispositif de rendu
 		pDispositif = CreationDispositifSpecific(CDS_MODE::CDS_FENETRE);
 
-		CurrentScene = std::make_shared<Scene>();
+		CurrentScene = new Scene{};
 
 		PhysicManager::GetInstance().Init();
-		PhysicManager::GetInstance().InitScene(CurrentScene);
+		PhysicManager::GetInstance().InitScene(CurrentScene->PhysxScene);
 
 		// * Initialisation de la scène
 		InitScene();
@@ -89,7 +99,7 @@ public:
 		// * Initialisation des paramètres de l'animation et 
 		//   préparation de la première image
 		InitAnimation();
-
+		
 		return 0;
 	}
 
@@ -134,6 +144,7 @@ public:
 		}
 	}
 
+	const DirectX::XMVECTOR GetPosition() const { return Position; }
 	DirectX::XMMATRIX& GetMatView() { return m_MatView; }
 	const DirectX::XMMATRIX& GetMatView() const { return m_MatView; }
 	DirectX::XMMATRIX& GetMatProj() { return m_MatProj; }
@@ -199,14 +210,22 @@ protected:
 			Actor->LateTick(ElapsedTime);
 		}
 
+		for (const auto& Actor : Actors) {
+			Actor->SpriteTick(ElapsedTime);
+		}
+
 		EndRenderSceneSpecific();
 		return true;
 	}
 
 	virtual void Cleanup()
 	{
+		delete CurrentScene;
+
 		ResourcesManager.Cleanup();
 		PhysicManager::GetInstance().Cleanup();
+
+		Gdiplus::GdiplusShutdown(GDIToken);
 
 		// Détruire le dispositif
 		if (pDispositif)
@@ -220,17 +239,9 @@ protected:
 	{
 		using namespace DirectX;
 
-		// Create actors
-		if (!InitObjets()) {
-			return 1;
-		}
-
 		//// Initialisation des matrices View et Proj
 		//// Dans notre cas, ces matrices sont fixes
-		m_MatView = XMMatrixLookAtLH(
-			XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f),
-			XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
+		m_MatView = XMMatrixLookAtLH(XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f), XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f) + XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
 		const float champDeVision = XM_PI / 2; 	// 45 degr�s
 		const float ratioDAspect = static_cast<float>(pDispositif->ScreenWidth) / static_cast<float>(pDispositif->ScreenHeight);
@@ -245,6 +256,11 @@ protected:
 
 		// Calcul de VP a l'avance
 		m_MatViewProj = m_MatView * m_MatProj;
+
+		// Create actors
+		if (!InitObjets()) {
+			return 1;
+		}
 
 		// Finally init the scene
 		CurrentScene->Init();
@@ -293,18 +309,17 @@ protected:
 	TDevice* pDispositif;
 
 	// La seule scène
-	std::shared_ptr<Scene> CurrentScene;
+	Scene* CurrentScene;
+
+	// Position of the camera
+	DirectX::XMVECTOR Position;
 
 	// Les matrices
 	DirectX::XMMATRIX m_MatView;
 	DirectX::XMMATRIX m_MatProj;
 	DirectX::XMMATRIX m_MatViewProj;
 
-	// Pour le texte
-	std::unique_ptr<CAfficheurTexte> pTexte1;
-	std::wstring str;
-
-	std::unique_ptr<Gdiplus::Font> pPolice;
+	static ULONG_PTR GDIToken;
 
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
@@ -334,6 +349,9 @@ private:
 		return (CurrentState & State) == State;
 	}
 };
+
+template <class T, class TDevice>
+ULONG_PTR CMoteur<T, TDevice>::GDIToken = 0;
 
 } // namespace PM3D
 

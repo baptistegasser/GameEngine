@@ -17,6 +17,7 @@
 #include "render/PointLight.h"
 #include "render/DirectionalLight.h"
 #include "render/Skybox.h"
+//#include "render/Font.h"
 
 // Gameplay components
 #include "gameplay/Plateform.h"
@@ -75,12 +76,13 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;
 
-	auto PlayerCam = MyPlayer->AddComponent<Camera>(DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
-	                                                DirectX::XMVectorSet(0.0f, 0.4f, 1.0f, 1.0f),
-	                                                DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
-	                                                &PM3D::CMoteurWindows::GetInstance().GetMatView(),
-	                                                &PM3D::CMoteurWindows::GetInstance().GetMatProj(),
-	                                                &PM3D::CMoteurWindows::GetInstance().GetMatViewProj());
+	auto PlayerCam = MyPlayer->AddComponent<Camera>(
+		DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
+		DirectX::XMVectorSet(0.0f, 0.4f, 1.0f, 1.0f),
+		DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
+		&PM3D::CMoteurWindows::GetInstance().GetMatView(),
+		&PM3D::CMoteurWindows::GetInstance().GetMatProj(),
+		&PM3D::CMoteurWindows::GetInstance().GetMatViewProj());
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().SetCurrentCamera(PlayerCam);
 	MyPlayer->Transform.RotateX(-90.0f);
@@ -91,9 +93,15 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 
 	PlayerTransform = &MyPlayer->Transform;
 
+	const auto Text = MyPlayer->AddComponent<TextRenderer>(
+		new Font{ L"Arial", Gdiplus::FontStyleBold, 32.0f, { 0, 0, 0} },
+		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShaderSprite(L".\\shaders\\sprite1.fx"),
+		100, 500);
+	Text->Offset.Position.y = 0.7f;
+	Text->Offset.Position.x = -0.5f;
+	MyPlayer->AddComponent<Speed>();
+	
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(MyPlayer);
-
-
 }
 
 void GameFactory::CreateEnemy(Math::Transform Transform)
@@ -108,6 +116,13 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 	Ennemy->AddComponent<Plateform>(
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
 		, Math::Transform(Ennemy->Transform.Position + Math::Vec3f(10, 0, 0), Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+
+	const auto Hat = Ennemy->AddComponent<SpriteRenderer>(
+		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\hat.dds"), PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
+	Hat->Offset.Position.y = 1.9f;
+	Hat->Offset.Scale.x = 4.0f;
+	Hat->Offset.Scale.y = 4.0f;
+
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Ennemy);
 }
 

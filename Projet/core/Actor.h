@@ -51,6 +51,10 @@ namespace Pitbull
 		/// Call all components \ref Component::LateTick method.
 		/// </summary>
 		virtual void LateTick(const float ElapsedTime);
+		/// <summary>
+		/// Call all components \ref Component::SpriteTick method.
+		/// </summary>
+		virtual void SpriteTick(const float ElapsedTime);
 
 		template <class ... Args>
 		static std::unique_ptr<Actor> New(Args&&... Arguments);

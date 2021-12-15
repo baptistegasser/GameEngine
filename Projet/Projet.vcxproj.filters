@@ -162,12 +162,6 @@
     <ClCompile Include="gameplay\Player.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="render\AfficheurSprite.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\AfficheurTexte.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\ChargeurOBJ.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
@@ -218,6 +212,24 @@
     </ClCompile>
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Timer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\TextRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Speed.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpriteRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Sprite.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Font.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\GameFactory.cpp">
       <Filter>Source Files\render</Filter>
@@ -350,12 +362,6 @@
     <ClInclude Include="gameplay\Plateform.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="render\AfficheurSprite.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurTexte.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\chargeur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -395,9 +401,6 @@
     <ClInclude Include="render\Terrain.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Light.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -425,8 +428,23 @@
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="util\Observable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="render\Timer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\TextRenderer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Speed.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Sprite.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Font.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpriteRenderer.h">
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\GameFactory.h">
       <Filter>Header Files\render</Filter>
@@ -463,6 +481,9 @@
     </ClInclude>
     <ClInclude Include="gameplay\IntelligentEnemy.h">
       <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

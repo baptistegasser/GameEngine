@@ -10,8 +10,9 @@
 
 using namespace DirectX;
 
-ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material, bool BackFaceCulling)
-	: Scale{ Scale }
+ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, ShaderTerrain* Shader, const PhysicMaterial& Material, bool BackFaceCulling)
+	: Actor{"Terrain"}
+	, Scale{ Scale }
 	, MeshShader{ Shader }
 	, BackFaceCulling{BackFaceCulling}
 {
@@ -64,7 +65,20 @@ ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, cons
 	ComputeNormals();
 	GenerateMesh();
 
-	AddComponent<HeightFieldCollider>(Material, this);
+	auto Collider = AddComponent<HeightFieldCollider>(Material, this);
+
+	auto PlayerCollider = [](const Contact& Contact) -> void {
+		if (Contact.FirstActor->Name == "Terrain" && Contact.SecondActor->Name == "Player")
+		{
+			Contact.SecondActor->GetComponent<Player>()->IsOnTerrain = true;
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Terrain")
+		{
+			Contact.FirstActor->GetComponent<Player>()->IsOnTerrain = true;
+		}
+	};
+
+	Collider->OnContactCallBack = PlayerCollider;
 	AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 }
 
@@ -97,16 +111,23 @@ void ATerrain::LateTick(const float ElapsedTime)
 	pImmediateContext->IASetIndexBuffer(PIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	pImmediateContext->IASetInputLayout(MeshShader->PInputLayout);
 
-	const XMMATRIX& viewProj = EngineD3D11::GetInstance().MatViewProj;
-	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
-	ShaderParams.matWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.vLumiere = XMVectorSet(-10.0f, 10.0f, -15.0f, 1.0f);
-	ShaderParams.vCamera = XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f);
-	ShaderParams.vAEcl = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
-	ShaderParams.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-	ShaderParams.vSEcl = XMVectorSet(0.6f, 0.6f, 0.6f, 1.0f);
+	const XMMATRIX& viewProj = Engine.MatViewProj;
+	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
+	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
+	ShaderParams.CameraPos = Engine.GetScene().GetCurrentCamera().GetPosition();
+	ShaderParams.Mat.Ambient = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Roughness = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Specular = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Intensity = 4;
 	ShaderParams.PosScale = XMVectorSet(Scale.x, Scale.z, static_cast<float>(Width), static_cast<float>(Height));
 	ShaderParams.TextureCoefficient = TextureCoefficient;
+
+	// Set lighting data
+	const auto& LightManager = Engine.GetScene().LightManager;
+	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
+	MeshShader->UpdateLightsBuffer(pImmediateContext);
+
+
 	pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer, 0, nullptr, &ShaderParams, 0, 0);
 
 	// Textures

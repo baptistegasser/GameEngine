@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include <vector>
 
-#include "Shader.h"
+#include "ShaderTerrain.h"
 #include "core/Actor.h"
 #include "Vertex.h"
 #include "ObjectMesh.h"
@@ -12,21 +12,6 @@ class PhysicMaterial;
 
 class ATerrain : public Pitbull::Actor
 {
-	struct TerrainShadersParams {
-		DirectX::XMMATRIX matWorldViewProj;
-		DirectX::XMMATRIX matWorld;
-		DirectX::XMVECTOR vLumiere;
-		DirectX::XMVECTOR vCamera;
-		DirectX::XMVECTOR vAEcl;
-		//DirectX::XMVECTOR vAMat;
-		DirectX::XMVECTOR vDEcl;
-		//DirectX::XMVECTOR vDMat;
-		DirectX::XMVECTOR vSEcl;
-		//DirectX::XMVECTOR vSMat;
-		DirectX::XMVECTOR PosScale;
-		float TextureCoefficient;
-	};
-
 public:
 	using vertex_t = Vertex;
 	using index_t = unsigned int;
@@ -44,20 +29,20 @@ public:
 
 	ID3D11Buffer* PVertexBuffer;
 	ID3D11Buffer* PIndexBuffer;
-	Shader* MeshShader;
+	ShaderTerrain* MeshShader;
 
 	Texture* Texture1;
 	Texture* Texture2;
 	Texture* Texture3;
 
-	ATerrain(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material, bool BackFaceCulling = false);
+	ATerrain(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, ShaderTerrain* Shader, const PhysicMaterial& Material, bool BackFaceCulling = false);
 	~ATerrain() override;
 	void LateTick(const float ElapsedTime) override;
 
 	[[nodiscard]] const vertex_t& GetVertex(int x, int z) const;
 private:
 	DirectX::XMMATRIX matWorld;
-	TerrainShadersParams ShaderParams;
+	ShadersParamsTerrain ShaderParams;
 
 	void ComputeNormal(int x, int z);
 	void ComputeNormals();

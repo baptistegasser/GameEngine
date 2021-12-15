@@ -155,7 +155,7 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 	const auto Terrain = new ATerrain{
 			Filename,
 			{1, 0.3f, 1},
-			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, FaceCull
 		};
@@ -296,8 +296,8 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	CurrentScene.LightManager.AmbientColor = { 0.7f };
 
 	auto DirLight = new ADirectionalLight;
-	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
-	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
+	DirLight->GetLight()->Direction = { -0.5f, -1.f, 0.f };
+	DirLight->GetLight()->Color = { 0.5f, 0.5f, 0.5f };
 	CurrentScene.AddActor(DirLight);
 
 	auto ALightRed = new APointLight;
@@ -351,7 +351,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	const auto Terrain = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
-			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
 		};
@@ -363,7 +363,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	const auto Terrain2 = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
-			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
 			};

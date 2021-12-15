@@ -201,6 +201,7 @@
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\DIManipulateur.cpp" />
     <ClCompile Include="render\Font.cpp" />
+    <ClCompile Include="render\ShaderTerrain.cpp" />
     <ClCompile Include="render\Speed.cpp" />
     <ClCompile Include="render\Sprite.cpp" />
     <ClCompile Include="render\SpriteRenderer.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="render\DDSTextureLoader.h" />
     <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\Font.h" />
+    <ClInclude Include="render\ShaderTerrain.h" />
     <ClInclude Include="render\Speed.h" />
     <ClInclude Include="render\Sprite.h" />
     <ClInclude Include="render\SpriteRenderer.h" />

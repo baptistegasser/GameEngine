@@ -78,7 +78,9 @@ private:
 	void CreateSkyBox(Math::Transform* ToFollow);
 
 	void CreateTunnel(Math::Transform Transform);
-private :
+
+	void CreateGoal(Math::Transform Transform, const wchar_t* Filename);
+
 	Math::Transform* PlayerTransform;
 	/// <summary>
 	/// Create an CheckPoint to respawn a player

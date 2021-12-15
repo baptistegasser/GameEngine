@@ -109,6 +109,9 @@ void GameFactory::LoadLevel()
 		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds");
 
 
+	CreateGoal(Math::Vec3f(0.f, 10.f, -25), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
+
+
 	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
@@ -314,6 +317,30 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain2), true);
+}
+
+void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)
+{
+	auto MyGoal = Pitbull::Actor::New("Goal");
+	MyGoal->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
+		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+
+	auto GoalCollider = [](const Contact& Contact) -> void {
+		if (Contact.FirstActor->Name == "Goal" && Contact.SecondActor->Name == "Player")
+		{
+			std::cout << "Fini la course";
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Goal")
+		{
+			std::cout << "Fini la course";
+		}
+	};
+
+	auto Collider = MyGoal->AddComponent<CapsuleCollider>(1.f, 2.f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
+	Collider->OnContactCallBack = GoalCollider;
+	MyGoal->Transform = Transform;
+
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyGoal));
 }
 
 

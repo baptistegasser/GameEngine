@@ -131,10 +131,10 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, FaceCull
-		});
-	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
-	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName2);
-	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName3);
+		};
+	Terrain->Texture1 = RessourceManager.GetTexture(TextureName1);
+	Terrain->Texture2 = RessourceManager.GetTexture(TextureName2);
+	Terrain->Texture3 = RessourceManager.GetTexture(TextureName3);
 	Terrain->Transform = Transform;
 	Engine.GetScene().AddActor(Terrain, true);
 }
@@ -145,8 +145,8 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	auto& RessourceManager = Engine.ResourcesManager;
 
 	auto MyPlayer = new Pitbull::Actor{ "Player" };
-	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball\\ball.OMB"), 
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	MyPlayer->AddComponent<MeshRenderer>(RessourceManager.GetMesh(L".\\modeles\\ball\\ball.OMB"),
+		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;
 
@@ -180,9 +180,12 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 
 void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller, float Speed)
 {
-	auto Ennemy = Pitbull::Actor::New("Enemy");
-	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), 
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& RessourceManager = Engine.ResourcesManager;
+
+	auto Ennemy = new Pitbull::Actor{ "Enemy" };
+	Ennemy->AddComponent<MeshRenderer>(RessourceManager.GetMesh(L".\\modeles\\cube\\cube.OMB"),
+		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 
 	Ennemy->AddComponent<Enemy>(IsKiller);
 
@@ -207,7 +210,7 @@ void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool I
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
 		, Math::Transform(End, Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
 	Movement->SetSpeed(Speed);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
+	Engine.GetScene().AddActor(std::move(Ennemy));
 }
 
 void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance, bool IsKiller, float Speed)
@@ -223,7 +226,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Distance, IsKiller);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
+	Engine.GetScene().AddActor(std::move(Ennemy));
 }
 
 void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filename, PhysicMaterial Material)
@@ -256,7 +259,7 @@ void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f En
 		, Math::Transform(MyPlateform->Transform.Position + End), true);
 	Movement->SetSpeed(Speed);
 
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
+	Engine.GetScene().AddActor(std::move(MyPlateform));
 }
 
 void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity, float InnerRadius, float OuterRadius)
@@ -315,43 +318,49 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 
 void GameFactory::CreateTunnel(Math::Transform Transform)
 {
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& RessourceManager = Engine.ResourcesManager;
+
 	const auto Terrain = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
-			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
 		};
-	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
-	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
+	Terrain->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
+	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra.dds");
 	Terrain->Transform = Transform;
 
 	const auto Terrain2 = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
-			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
 			};
-	Terrain2->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
-	Terrain2->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain2->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain2->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
+	Terrain2->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
+	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra.dds");
 	Terrain2->Transform = Transform;
 	Terrain2->Transform.Position.y = Terrain2->Transform.Position.y + (256.f * Transform.Scale.y)/2 + 0.55f;
 	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z);
 	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
 
 
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Terrain, true);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Terrain2, true);
+	Engine.GetScene().AddActor(Terrain, true);
+	Engine.GetScene().AddActor(Terrain2, true);
 }
 
 void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)
 {
-	auto MyGoal = Pitbull::Actor::New("Goal");
-	MyGoal->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& RessourceManager = Engine.ResourcesManager;
+
+	auto MyGoal = new Pitbull::Actor{ "Goal" };
+	MyGoal->AddComponent<MeshRenderer>(RessourceManager.GetMesh(Filename),
+		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 
 	auto GoalCollider = [](const Contact& Contact) -> void {
 		if (Contact.FirstActor->Name == "Goal" && Contact.SecondActor->Name == "Player")
@@ -368,7 +377,7 @@ void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)
 	Collider->OnContactCallBack = GoalCollider;
 	MyGoal->Transform = Transform;
 
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyGoal));
+	Engine.GetScene().AddActor(std::move(MyGoal));
 }
 
 

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "math/Transform.h"
 #include "physic/Collider.h"
 #include "util/Singleton.h"

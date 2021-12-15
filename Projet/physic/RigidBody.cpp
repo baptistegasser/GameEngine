@@ -183,7 +183,7 @@ void RigidBody::SetFollowGravity(const bool FollowGravity) const
 	RigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !FollowGravity);
 }
 
-void RigidBody::setKinematicTarget(const Math::Transform& Target) const
+void RigidBody::SetKinematicTarget(const Math::Transform& Target) const
 {
 	ASSERT_KINEMATIC;
 	GetAsDynamic()->setKinematicTarget(Target);

@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Speed.h"
-#include "render/MoteurWindows.h"
+#include "render/EngineD3D11.h"
 
 Speed::Speed(Pitbull::Actor* Parent)
 	: Component{ Parent }

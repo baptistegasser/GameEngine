@@ -3,7 +3,6 @@
 #include "render/TextRenderer.h"
 #include <chrono>
 
-
 class Timer : public Pitbull::Component {
 
 public :

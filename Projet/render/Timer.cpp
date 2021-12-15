@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Timer.h"
-#include "render/MoteurWindows.h"
+#include "core/Actor.h"
 
 Timer::Timer(Pitbull::Actor* Parent)
 	: Component{Parent}

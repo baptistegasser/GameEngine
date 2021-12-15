@@ -217,10 +217,9 @@
     <ClCompile Include="render\Material.cpp" />
     <ClCompile Include="render\MeshLoader.cpp" />
     <ClCompile Include="render\MeshRenderer.cpp" />
-    <ClCompile Include="render\Moteur.cpp" />
-    <ClCompile Include="render\MoteurWindows.cpp" />
+    <ClCompile Include="render\Engine.cpp" />
+    <ClCompile Include="render\EngineD3D11.cpp" />
     <ClCompile Include="render\ObjectMesh.cpp" />
-    <ClCompile Include="render\ObjetMesh.cpp" />
     <ClCompile Include="render\Shader.cpp" />
     <ClCompile Include="render\TextRenderer.cpp" />
     <ClCompile Include="render\Texture.cpp" />
@@ -290,11 +289,9 @@
     <ClInclude Include="render\Material.h" />
     <ClInclude Include="render\MeshLoader.h" />
     <ClInclude Include="render\MeshRenderer.h" />
-    <ClInclude Include="render\Moteur.h" />
-    <ClInclude Include="render\MoteurWindows.h" />
+    <ClInclude Include="render\Engine.h" />
+    <ClInclude Include="render\EngineD3D11.h" />
     <ClInclude Include="render\ObjectMesh.h" />
-    <ClInclude Include="render\objet3d.h" />
-    <ClInclude Include="render\ObjetMesh.h" />
     <ClInclude Include="render\Shader.h" />
     <ClInclude Include="render\TextRenderer.h" />
     <ClInclude Include="render\Texture.h" />

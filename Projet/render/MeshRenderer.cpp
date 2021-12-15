@@ -2,7 +2,7 @@
 #include "MeshRenderer.h"
 
 #include "MeshLoader.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "math/Math.h"
 #include "ObjectMesh.h"
 #include "Vertex.h"
@@ -12,25 +12,27 @@
 #include "Light.h"
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh)
-	: MeshRenderer{ Parent, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
+	: MeshRenderer{ Parent, Mesh, EngineD3D11::GetInstance().ResourcesManager.GetShader(L"Default.fx")}
 {}
 
 MeshRenderer::MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader)
 	: Component{ Parent }
-	, Mesh{ Mesh }
-	, MeshShader{ MeshShader }
-	, matWorld{ DirectX::XMMatrixIdentity() }
+	, matWorld{DirectX::XMMatrixIdentity()}
+	, Mesh{Mesh}
+	, MeshShader{MeshShader}
 {}
 
 void MeshRenderer::LateTick(const float& ElapsedTime)
 {
 	using namespace DirectX;
 
+	auto& Engine = EngineD3D11::GetInstance();
+
 	// Update position
 	matWorld = ParentActor->Transform;
 
 	// Obtenir le contexte
-	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
+	ID3D11DeviceContext* pImmediateContext = Engine.Device->ImmediateContext;
 
 	// Choisir la topologie des primitives
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -46,11 +48,11 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	pImmediateContext->IASetVertexBuffers(0, 1, &Mesh->PVertexBuffer, &stride, &offset);
 
 	// Initialiser et s�lectionner les �constantes� de l'effet
-	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
+	const XMMATRIX& viewProj = Engine.MatViewProj;
 
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.CameraPos = PM3D::CMoteurWindows::GetInstance().GetScene().GetCurrentCamera().GetPosition();
+	ShaderParams.CameraPos = Engine.GetScene().GetCurrentCamera().GetPosition();
 
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;
@@ -58,7 +60,7 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
 
 	// Set lighting data
-	const auto& LightManager = PM3D::CMoteurWindows::GetInstance().GetScene().LightManager;
+	const auto& LightManager = Engine.GetScene().LightManager;
 	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
 	MeshShader->UpdateLightsBuffer(pImmediateContext);
 

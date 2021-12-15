@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "Light.h"
 
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 
 void LightComponent::Init()
 {
 	Component::Init();
-	auto& Scene = PM3D::CMoteurWindows::GetInstance().GetScene();
+	auto& Scene = EngineD3D11::GetInstance().GetScene();
 	Scene.LightManager.RegisterLight(this);
 }
 

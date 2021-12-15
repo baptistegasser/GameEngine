@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Sprite.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "resources/resource.h"
 
 using namespace DirectX;
@@ -36,7 +36,7 @@ SpriteVertex ShaderSprite::Vertices[6] =
 ShaderSprite::ShaderSprite(const wchar_t* FileName) :
 	FileName{FileName}
 {
-	ID3D11Device* pD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
+	ID3D11Device* pD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));

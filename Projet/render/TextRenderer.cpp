@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "TextRenderer.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 
 using namespace DirectX;
 
@@ -30,16 +30,16 @@ void TextRenderer::Write(const std::wstring& String)
 	const auto& Rect = Gdiplus::Rect(0, 0, CanvasWidth, CanvasHeight);
 	CharBitmap->LockBits(&Rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bmData);
 
-	const auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+	const auto& D3DDevice = EngineD3D11::GetInstance().Device;
 
-	D3DDevice.ImmediateContext->UpdateSubresource(Texture2D, 0, nullptr, bmData.Scan0, CanvasWidth * 4, 0);
+	D3DDevice->ImmediateContext->UpdateSubresource(Texture2D, 0, nullptr, bmData.Scan0, CanvasWidth * 4, 0);
 
 	CharBitmap->UnlockBits(&bmData);
 }
 
 void TextRenderer::UpdateCanvas(int NewHeight, int NewWidth)
 {
-	auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+	auto& D3DDevice = EngineD3D11::GetInstance().Device;
 
 	CanvasHeight = NewHeight;
 	CanvasWidth = NewWidth;
@@ -76,7 +76,7 @@ void TextRenderer::UpdateCanvas(int NewHeight, int NewWidth)
 	data.SysMemPitch = CanvasWidth * 4;
 	data.SysMemSlicePitch = 0;
 
-	DX_TRY(D3DDevice.D3DDevice->CreateTexture2D(&texDesc, &data, &Texture2D));
+	DX_TRY(D3DDevice->D3DDevice->CreateTexture2D(&texDesc, &data, &Texture2D));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -84,10 +84,10 @@ void TextRenderer::UpdateCanvas(int NewHeight, int NewWidth)
 	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 
-	DX_TRY(D3DDevice.D3DDevice->CreateShaderResourceView(Texture2D, &srvDesc, &TextureView));
+	DX_TRY(D3DDevice->D3DDevice->CreateShaderResourceView(Texture2D, &srvDesc, &TextureView));
 
 	CharBitmap->UnlockBits(&bmData);
 
-	Dimension.x = static_cast<float>(CanvasWidth) * 2.0f / D3DDevice.ScreenWidth;
-	Dimension.y = static_cast<float>(CanvasHeight) * 2.0f / D3DDevice.ScreenHeight;
+	Dimension.x = static_cast<float>(CanvasWidth) * 2.0f / D3DDevice->ScreenWidth;
+	Dimension.y = static_cast<float>(CanvasHeight) * 2.0f / D3DDevice->ScreenHeight;
 }

@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "SpriteRenderer.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 
 using namespace DirectX;
 
@@ -9,7 +9,7 @@ SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* Sprite, ShaderSp
 {
 	TextureView = Sprite->TextureView;
 
-	const auto& D3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif();
+	const auto& D3DDevice = EngineD3D11::GetInstance().Device;
 
 	ID3D11Resource* Resource;
 	ID3D11Texture2D* TextureInterface;
@@ -23,8 +23,8 @@ SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, Texture* Sprite, ShaderSp
 	DX_RELEASE(Resource);
 	DX_RELEASE(TextureInterface);
 
-	Dimension.x = static_cast<float>(desc.Width) * 2.0f / D3DDevice.ScreenWidth;
-	Dimension.y = static_cast<float>(desc.Height) * 2.0f / D3DDevice.ScreenHeight;
+	Dimension.x = static_cast<float>(desc.Width) * 2.0f / D3DDevice->ScreenWidth;
+	Dimension.y = static_cast<float>(desc.Height) * 2.0f / D3DDevice->ScreenHeight;
 }
 
 SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, ShaderSprite* Shader, bool BillBoard)
@@ -35,10 +35,10 @@ SpriteRenderer::SpriteRenderer(Pitbull::Actor* Parent, ShaderSprite* Shader, boo
 
 void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 {
-	auto& Engine = PM3D::CMoteurWindows::GetInstance();
-	auto& pD3DDevice = Engine.GetDispositif();
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& pD3DDevice = Engine.Device;
 
-	ID3D11DeviceContext* pImmediateContext = pD3DDevice.ImmediateContext;
+	ID3D11DeviceContext* pImmediateContext = pD3DDevice->ImmediateContext;
 
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -56,7 +56,7 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	ID3DX11EffectShaderResourceVariable* variableTexture;
 	variableTexture = Shader->Effet->GetVariableByName("textureEntree")->AsShaderResource();
 
-	pD3DDevice.ActivateAlphaBlending();
+	pD3DDevice->ActivateAlphaBlending();
 
 	XMMATRIX Position;
 	XMMATRIX Scale;
@@ -67,8 +67,8 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 			Dimension.x * ParentActor->Transform.Scale.x * Offset.Scale.x,
 			Dimension.y * ParentActor->Transform.Scale.y * Offset.Scale.y, 1.f);
 
-		XMMATRIX ViewProj = Engine.GetMatViewProj();
-		XMVECTOR PositionCamera = Engine.GetPosition();
+		XMMATRIX ViewProj = Engine.MatViewProj;
+		XMVECTOR PositionCamera = Engine.GetScene().GetCurrentCamera().GetPosition();
 
 		float Angle = atan2f(ParentActor->Transform.Position.x - PositionCamera.vector4_f32[0], ParentActor->Transform.Position.z - PositionCamera.vector4_f32[2]);
 
@@ -95,5 +95,5 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 
 	pImmediateContext->Draw(6, 0);
 
-	pD3DDevice.DeactivateAlphaBlending();
+	pD3DDevice->DeactivateAlphaBlending();
 }

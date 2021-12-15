@@ -1,33 +1,26 @@
 #include "stdafx.h"
 #include "Pitbull.h"
-#include "render/MoteurWindows.h"
+#include "render/EngineD3D11.h"
 
 using namespace PM3D;
 
 int APIENTRY _tWinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPTSTR    lpCmdLine,
-	int       nCmdShow)
+	HINSTANCE HInstance,
+	HINSTANCE HPrevInstance,
+	LPTSTR    LPCmdLine,
+	int       NCMDShow)
 {
 	// Pour ne pas avoir d'avertissement
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
+	UNREFERENCED_PARAMETER(HPrevInstance);
+	UNREFERENCED_PARAMETER(LPCmdLine);
+	UNREFERENCED_PARAMETER(NCMDShow);
 
 	try
 	{
-		// Création de l'objet Moteur
-		CMoteurWindows& rMoteur = CMoteurWindows::GetInstance();
-
-		// Spécifiques à une application Windows
-		rMoteur.SetWindowsAppInstance(hInstance);
-
-		// Initialisation du moteur
-		rMoteur.Initialisations();
-
-		// Boucle d'application
-		rMoteur.Run();
+		EngineD3D11& Engine = EngineD3D11::GetInstance();
+		Engine.SetWindowsAppInstance(HInstance);
+		Engine.Init();
+		Engine.Run();
 
 		return (int)1;
 	}
@@ -35,23 +28,23 @@ int APIENTRY _tWinMain(
 	catch (const std::exception& E)
 	{
 		const int BufferSize = 128;
-		wchar_t message[BufferSize];
+		wchar_t Message[BufferSize];
 
-		size_t numCharacterConverted;
-		mbstowcs_s(&numCharacterConverted, message, E.what(), BufferSize - 1);
-		::MessageBox(nullptr, message, L"Erreur", MB_ICONWARNING);
+		size_t CharacterConvertedCount;
+		mbstowcs_s(&CharacterConvertedCount, Message, E.what(), BufferSize - 1);
+		::MessageBox(nullptr, Message, L"Error", MB_ICONWARNING);
 
 		return (int)99;
 	}
 
-	catch (int codeErreur)
+	catch (int ErrorCode)
 	{
-		wchar_t szErrMsg[MAX_LOADSTRING];	// Un message d'erreur selon le code
+		wchar_t ErrorMessage[MAX_LOADSTRING];
 
-		::LoadString(hInstance, codeErreur, szErrMsg, MAX_LOADSTRING);
-		::MessageBox(nullptr, szErrMsg, L"Erreur", MB_ICONWARNING);
+		::LoadString(HInstance, ErrorCode, ErrorMessage, MAX_LOADSTRING);
+		::MessageBox(nullptr, ErrorMessage, L"Error", MB_ICONWARNING);
 
-		return (int)99; // POURQUOI 99???
+		return (int)99;
 	}
 
 }

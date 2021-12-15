@@ -12,6 +12,7 @@
 #include "util/Singleton.h"
 
 #include "render/GameFactory.h"
+#include "render/EffectManager.h"
 
 #include <iostream>
 #include <chrono>
@@ -80,6 +81,8 @@ public:
 
 		CurrentScene = std::make_shared<Scene>();
 
+		EffectManager = std::make_unique<::EffectManager>();
+
 		PhysicManager::GetInstance().Init();
 		PhysicManager::GetInstance().InitScene(CurrentScene);
 
@@ -146,6 +149,7 @@ public:
 	const Scene& GetScene() const noexcept { return *CurrentScene; }
 	Scene& GetScene() noexcept { return *CurrentScene; }
 	DeviceD3D11& GetDispositif() noexcept { return *pDispositif; }
+	EffectManager* GetEffectManager() noexcept { return EffectManager.get(); }
 
 	void Stop() noexcept { CurrentState |= EngineState::Stopping; }
 	bool IsStopping() const noexcept { return IsStateSet(EngineState::Stopping); }
@@ -191,8 +195,11 @@ protected:
 
 		BeginRenderSceneSpecific();
 
-		/*auto bruh = GetResourcesManager().GetShaderWithEffects(L".\\shaders\\MiniPhong.fx", L".\\shaders\\Effect_Nul.fx")->Effects[0];
-		bruh->DebutPostEffect();*/
+		// Start applying effect if any activated
+		if (EffectManager->HasEffectActivated()) {
+			auto effect = EffectManager->GetActivatedEffect();
+			effect->DebutPostEffect();
+		}
 
 		// Tick the skybox at first
 		CurrentScene->SkyBox->LateTick(ElapsedTime);
@@ -203,10 +210,15 @@ protected:
 			Actor->LateTick(ElapsedTime);
 		}
 
+		// Finish applying effect if present
+		if (EffectManager->HasEffectActivated()) {
+			auto effect = EffectManager->GetActivatedEffect();
+			effect->FinPostEffect();
+			effect->Draw();
+		}
+
 		EndRenderSceneSpecific();
-		/*bruh->FinPostEffect();
-		bruh->Draw();
-		EndRenderSceneSpecific();*/
+
 		return true;
 	}
 
@@ -316,6 +328,8 @@ protected:
 	// Les saisies
 	CDIManipulateur GestionnaireDeSaisie;
 	ResourcesManager ResourcesManager;
+
+	std::unique_ptr<EffectManager> EffectManager;
 
 private:
 	/// <summary>

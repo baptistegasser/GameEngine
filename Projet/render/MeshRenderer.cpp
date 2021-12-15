@@ -29,9 +29,6 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	// Update position
 	matWorld = ParentActor->Transform;
 
-	// Apply shader changes before drawing
-	MeshShader->PreRender();
-
 	// Obtenir le contexte
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
 
@@ -58,6 +55,7 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	// Set ambient
 	const auto& LightManager = PM3D::CMoteurWindows::GetInstance().GetScene().LightManager;
 	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
+	MeshShader->UpdateLightsBuffer();
 
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;
@@ -99,7 +97,4 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 		}
 	}
-
-	// Apply shader changes after drawing
-	MeshShader->PostRender();
 }

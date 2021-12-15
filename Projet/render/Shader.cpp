@@ -7,8 +7,7 @@
 #include "Light.h"
 #include "Vertex.h"
 
-Shader::Shader(const wchar_t* FileName, const std::vector<Effect*>& Effects)
-	: Effects{ Effects }
+Shader::Shader(const wchar_t* FileName)
 {
 	/* Creation of constant buffer : cbuffer */
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
@@ -98,25 +97,6 @@ Shader::~Shader()
 	DX_RELEASE(PPointLightsBufferView);
 	DX_RELEASE(PPointLightsBuffer);
 	DX_RELEASE(PEffect);
-}
-
-void Shader::PreRender()
-{
-	UpdateLightsBuffer();
-
-	// Start effects
-	for (auto& Effect : Effects) {
-		Effect->DebutPostEffect();
-	}
-}
-
-void Shader::PostRender()
-{
-	// Draw effects
-	for (auto& Effect : Effects) {
-		Effect->FinPostEffect();
-		Effect->Draw();
-	}
 }
 
 void Shader::UpdateLightsBuffer() const

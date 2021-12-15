@@ -21,6 +21,8 @@ struct EffectVertex {
 
 class Effect {
 public:
+	const wchar_t* FileName;
+
 	explicit Effect(const wchar_t* FileName);
 	~Effect() noexcept;
 	virtual void Draw();
@@ -28,7 +30,6 @@ public:
 	void FinPostEffect();
 
 private:
-	const wchar_t* FileName;
 	static const EffectVertex Vertices[6];
 	ID3D11Buffer* PVertexBuffer;
 	DeviceD3D11* PDevice;

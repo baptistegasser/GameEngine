@@ -27,7 +27,10 @@ void GameFactory::LoadLevel()
 {
 	ResourcesManager = &PM3D::CMoteurWindows::GetInstance().GetResourcesManager();
 	// Load the default shader !
-	DefaultShader = /*ResourcesManager->GetShader(L".\\shaders\\MiniPhong.fx"); */ ResourcesManager->GetShaderWithEffects(L".\\shaders\\MiniPhong.fx", L".\\shaders\\Effect_Nul.fx");
+	DefaultShader = ResourcesManager->GetShader(L".\\shaders\\MiniPhong.fx");
+
+	PM3D::CMoteurWindows::GetInstance().GetEffectManager()->AddEffect(L".\\shaders\\Effect_Nul.fx");
+	PM3D::CMoteurWindows::GetInstance().GetEffectManager()->ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
 
 	//CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
 	CreateEnemy(Math::Vec3f{ 0.f, -7.f, 1.f });

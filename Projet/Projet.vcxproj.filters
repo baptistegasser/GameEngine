@@ -258,6 +258,9 @@
     <ClCompile Include="render\Effect.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="render\EffectManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -465,6 +468,9 @@
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="render\Effect.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\EffectManager.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>

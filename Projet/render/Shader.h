@@ -46,22 +46,12 @@ struct Shader {
 	// Light buffers
 	ID3D11Buffer* PPointLightsBuffer;
 	ID3D11ShaderResourceView* PPointLightsBufferView;
-	
-	std::vector<Effect*> Effects;
 
-	Shader(const wchar_t* FileName, const std::vector<Effect*>& Effects = {});
+	Shader(const wchar_t* FileName);
 	~Shader();
 
 	/// <summary>
-	/// Method called before a draw instruction to update the shader/apply effects
+	/// Update the lights buffer of the shader.
 	/// </summary>
-	void PreRender();
-
-	/// <summary>
-	/// Method called after a draw instruction to clean state
-	/// </summary>
-	void PostRender();
-
-private:
 	void UpdateLightsBuffer() const;
 };

@@ -138,7 +138,8 @@ bool Player::isGrounded() const
 		Origin,
 		{0.0f, -1.0f, 0.0f}, 
 		0.1f);
-	return Hit.hasAnyHits();
+	//return Hit.hasAnyHits();
+	return true;
 }
 
 void Player::SwapCameraMode()

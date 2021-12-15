@@ -21,6 +21,7 @@
 
 // Gameplay components
 #include "Speed.h"
+#include "Timer.h"
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
 #include "gameplay/CheckPoint.h"
@@ -33,6 +34,7 @@ void GameFactory::LoadLevel()
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
 	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, 4.f);
+	CreateTimer();
 
 	/***
 	 * First state with platform ( z C 0,135)
@@ -331,7 +333,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 		};
 	Terrain->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
 	Terrain->Transform = Transform;
 
 	const auto Terrain2 = new ATerrain{
@@ -343,10 +345,10 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 			};
 	Terrain2->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain2->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
 	Terrain2->Transform = Transform;
 	Terrain2->Transform.Position.y = Terrain2->Transform.Position.y + (256.f * Transform.Scale.y)/2 + 0.55f;
-	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z);
+	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z) - 0.1f;
 	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
 
 
@@ -416,4 +418,21 @@ void GameFactory::CreateCheckPoint(Math::Transform Transform)
 	MyCheckPoint->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
 
 	Engine.GetScene().AddActor(MyCheckPoint);
+}
+
+void GameFactory::CreateTimer()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& RessourceManager = Engine.ResourcesManager;
+
+	auto MyTimer = new Pitbull::Actor{};
+	const auto Text = MyTimer->AddComponent<TextRenderer>(
+		new Font{ L"Arial", Gdiplus::FontStyleBold, 32.0f, { 0, 0, 0} },
+		RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"),
+		100, 500);
+	Text->Offset.Position.y = 0.7f;
+	Text->Offset.Position.x = 0.3f;
+	MyTimer->AddComponent<Timer>();
+
+	Engine.GetScene().AddActor(MyTimer);
 }

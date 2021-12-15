@@ -85,8 +85,8 @@ void ATerrain::LateTick(const float ElapsedTime)
 
 	ID3D11DeviceContext* pImmediateContext = EngineD3D11::GetInstance().Device->ImmediateContext;
 
-	/*if (BackFaceCulling)
-		PM3D::CMoteurWindows::GetInstance().GetDispositif().DeactivateCullBack();*/
+	if (BackFaceCulling)
+		Engine.Device->DeactivateCullBack();
 
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -129,8 +129,8 @@ void ATerrain::LateTick(const float ElapsedTime)
 	MeshShader->PEffectPass->Apply(0, pImmediateContext);
 	pImmediateContext->DrawIndexed(static_cast<UINT>(PolyCount * 3), 0, 0);
 
-	/*if (BackFaceCulling)
-		PM3D::CMoteurWindows::GetInstance().GetDispositif().ActivateCullBack();*/
+	if (BackFaceCulling)
+		Engine.Device->ActivateCullBack();
 }
 
 void ATerrain::ComputeNormal(int x, int z)

@@ -22,7 +22,7 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 #endif
 
 	DXGI_SWAP_CHAIN_DESC SwapDesc;
-	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre l’échange plein écran
+	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre lï¿½ï¿½change plein ï¿½cran
 	ZeroMemory(&SwapDesc, sizeof(SwapDesc));
 
 	switch (CDSMode)
@@ -116,9 +116,6 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 	D3DDevice->CreateRasterizerState(&RsDesc, &SolidNoneCullBackRS);
 
 	ImmediateContext->RSSetState(SolidCullBackRS);
-
-
-	//D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&D3DDevice));
 }
 
 DeviceD3D11::~DeviceD3D11()

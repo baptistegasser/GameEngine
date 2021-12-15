@@ -55,23 +55,23 @@ void GameFactory::LoadLevel()
 
 void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, bool FaceCull)
 {
-	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
+	const auto Terrain = new ATerrain{
 			Filename,
-			{1, 1, 1},
+			{1, 0.3f, 1},
 			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, FaceCull
-		});
+		};
 	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\gazon.dds");
 	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\roche.dds");
 	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\chemin.dds");
 	Terrain->Transform = Transform;
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Terrain, true);
 }
 
 void GameFactory::CreatePlayer(Math::Transform Transform)
 {
-	auto MyPlayer = Pitbull::Actor::New("Player");
+	auto MyPlayer = new Pitbull::Actor{ "Player" };
 	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball\\ball.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(Transform.Position);
@@ -93,15 +93,15 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 
 	PlayerTransform = &MyPlayer->Transform;
 
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlayer));
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(MyPlayer);
 
 
 }
 
 void GameFactory::CreateEnemy(Math::Transform Transform)
 {
-	auto Ennemy = Pitbull::Actor::New();
-	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\bear\\bear.OMB"), 
+	auto Ennemy = new Pitbull::Actor{};
+	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
@@ -110,34 +110,34 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 	Ennemy->AddComponent<Plateform>(
 		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
 		, Math::Transform(Ennemy->Transform.Position + Math::Vec3f(10, 0, 0), Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Ennemy);
 }
 
 void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance)
 {
-	auto Ennemy = Pitbull::Actor::New();
+	auto Ennemy = new Pitbull::Actor{};
 	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"),
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Distance);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Ennemy));
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Ennemy);
 }
 
 void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filename, PhysicMaterial Material)
 {
-	auto MyPlateform = Pitbull::Actor::New();
+	auto MyPlateform = new Pitbull::Actor{};
 	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
 	MyPlateform->Transform = Transform;
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(MyPlateform);
 }
 
 void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material)
 {
-	auto MyPlateform = Pitbull::Actor::New();
+	auto MyPlateform = new Pitbull::Actor{};
 	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
@@ -146,7 +146,7 @@ void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f En
 	MyPlateform->AddComponent<Plateform>(
 		Math::Transform(MyPlateform->Transform.Position)
 		, Math::Transform(MyPlateform->Transform.Position + End), true);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(MyPlateform);
 }
 
 void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity, float InnerRadius, float OuterRadius)
@@ -156,30 +156,30 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	CurrentScene.LightManager.AmbientColor = { 0.7f };
 
 	auto DirLight = new ADirectionalLight;
-	DirLight->GetLight()->Direction = { 4.f, 4.f, 0.f };
-	DirLight->GetLight()->Color = { 1.f, 1.f, 1.f };
-	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
+	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
+	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
+	CurrentScene.AddActor(DirLight);
 
 	auto ALightRed = new APointLight;
 	auto LightRed = ALightRed->GetLight();
 	LightRed->Position = { 0.f, 5.f, 0.f };
 	LightRed->Color = { 1.0f, 1.0f, 1.0f };
 	LightRed->Range = 20.f;
-	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
+	CurrentScene.AddActor(ALightRed);
 
 	auto ALightBlue = new APointLight;
 	auto LightBlue = ALightBlue->GetLight();
 	LightBlue->Position = { -40.f, 5.f, 0.f };
 	LightBlue->Color = { 1.0f, 1.0f, 1.0f };
 	LightBlue->Range = 20.f;
-	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
+	CurrentScene.AddActor(ALightBlue);
 
 	auto ALightGreen = new APointLight;
 	auto LightGreen = ALightGreen->GetLight();
 	LightGreen->Position = { 40.f, 5.f, 0.f };
 	LightGreen->Color = { 1.0f, 1.0f, 1.0f };
 	LightGreen->Range = 20.f;
-	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
+	CurrentScene.AddActor(ALightGreen);
 
 	auto ASpotRed = new ASpotLight;
 	auto SpotRed = ASpotRed->GetLight();
@@ -187,41 +187,40 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	SpotRed->Direction = { -30.f, 0.f, -40.f };
 	SpotRed->Color = { 1.0f, 1.0f, 1.0f };
 	SpotRed->Range = 20.f;
-	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
+	CurrentScene.AddActor(ASpotRed);
 }
 
 void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 {
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(
-		std::unique_ptr<Pitbull::Actor>(std::move(new Skybox{
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddSkyBox(new Skybox{
 			ToFollow
 			, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\sky\\sky.OMB")
 			, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongSkyBox.fx")
-		}))
+		}
 	);
 }
 
 void GameFactory::CreateTunnel(Math::Transform Transform)
 {
-	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
+	const auto Terrain = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
 			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
-		});
+		};
 	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
 	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
 	Terrain->Transform = Transform;
 
-	auto Terrain2 = std::unique_ptr<ATerrain>(new ATerrain{
+	const auto Terrain2 = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
 			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
-			});
+			};
 	Terrain2->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain2->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
 	Terrain2->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
@@ -231,14 +230,14 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
 
 
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain2), true);
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Terrain, true);
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(Terrain2, true);
 }
 
 
 void GameFactory::CreateCheckPoint(Math::Transform Transform)
 {
-	auto MyCheckPoint = Pitbull::Actor::New("CheckPoint");
+	auto MyCheckPoint = new Pitbull::Actor{ "CheckPoint" };
 	MyCheckPoint->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\checkPoint\\star.OMB"),
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 
@@ -265,5 +264,5 @@ void GameFactory::CreateCheckPoint(Math::Transform Transform)
 
 	MyCheckPoint->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
 
-	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyCheckPoint));
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(MyCheckPoint);
 }

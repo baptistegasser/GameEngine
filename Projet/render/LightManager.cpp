@@ -13,7 +13,7 @@ void LightManager::RegisterLight(LightComponent *Light)
 		return;
 	}
 
-	this->Add(std::move(DataType{ Light }));
+	this->Add(Light);
 }
 
 std::vector<Light> LightManager::GetLights() const noexcept

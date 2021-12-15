@@ -11,7 +11,7 @@
 
 struct ActorToPos
 {
-	Math::Vec3f operator()(const std::unique_ptr<Pitbull::Actor>& Actor) const noexcept
+	Math::Vec3f operator()(Pitbull::Actor* Actor) const noexcept
 	{
 		return Actor->Transform.Position;
 	}
@@ -20,7 +20,7 @@ struct ActorToPos
 class Scene {
 public:
 	using ActorTree = Octree<Pitbull::Actor, ActorToPos>;
-	using ActorPtr = ActorTree::DataType;
+	using ActorPtr = ActorTree::DataPtr;
 	using ActorPtrList = ActorTree::DataPtrList;
 
 	Scene();
@@ -53,7 +53,7 @@ public:
 
 	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
-	void AddSkyBox(ActorPtr& Actor);
+	void AddSkyBox(ActorPtr Actor);
 
 	/// <summary>
 	/// Update the camera used to get visible actors.
@@ -86,8 +86,8 @@ public:
 private:
 	const Camera* CurrentCamera;
 	BoundingVolume VisionVolume;
-	ActorTree* Tree;
-	ActorTree::DataList AlwaysVisibleActors;
+	ActorTree Tree;
+	ActorPtrList AlwaysVisibleActors;
 
 	void ConcatVisibleActors(ActorPtrList& Actors);
 };

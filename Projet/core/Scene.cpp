@@ -87,13 +87,6 @@ const Scene::ActorPtrList Scene::GetVisibleActors() noexcept
 	return Actors;
 }
 
-physx::PxRaycastBuffer Scene::Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const
-{
-	physx::PxRaycastBuffer Hit;
-	PhysxScene->raycast(Origin, Direction, Distance, Hit);
-	return Hit;
-}
-
 const LightManager::LightList Scene::GetVisibleLights() noexcept
 {
 	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };

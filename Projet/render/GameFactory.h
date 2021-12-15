@@ -86,4 +86,6 @@ private:
 	/// </summary>
 	///	<param name="Transform"> : the transform of the checkPoint  </param>
 	void CreateCheckPoint(Math::Transform Transform);
+
+	void CreateTimer();
 };

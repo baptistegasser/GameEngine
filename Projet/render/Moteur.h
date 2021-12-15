@@ -188,7 +188,11 @@ protected:
 	// Fonctions de rendu et de présentation de la scène
 	virtual bool RenderScene(const float ElapsedTime)
 	{
+
 		BeginRenderSceneSpecific();
+
+		/*auto bruh = GetResourcesManager().GetShaderWithEffects(L".\\shaders\\MiniPhong.fx", L".\\shaders\\Effect_Nul.fx")->Effects[0];
+		bruh->DebutPostEffect();*/
 
 		// Tick the skybox at first
 		CurrentScene->SkyBox->LateTick(ElapsedTime);
@@ -200,6 +204,9 @@ protected:
 		}
 
 		EndRenderSceneSpecific();
+		/*bruh->FinPostEffect();
+		bruh->Draw();
+		EndRenderSceneSpecific();*/
 		return true;
 	}
 

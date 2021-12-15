@@ -3,6 +3,7 @@
 #include "math/Transform.h"
 #include "physic/Collider.h"
 #include "util/Singleton.h"
+#include "util/ResourcesManager.h"
 
 class GameFactory : public Singleton<GameFactory>
 {
@@ -78,6 +79,10 @@ private:
 	/// </summary>
 	/// <param name="ToFollow"> The actor's transform the skybox will follow </param>
 	void CreateSkyBox(Math::Transform* ToFollow);
-private :
+
+private:
+	ResourcesManager* ResourcesManager;
+	Shader* DefaultShader;
+
 	Math::Transform* PlayerTransform;
 };

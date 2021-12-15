@@ -25,7 +25,11 @@
 
 void GameFactory::LoadLevel()
 {
-	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
+	ResourcesManager = &PM3D::CMoteurWindows::GetInstance().GetResourcesManager();
+	// Load the default shader !
+	DefaultShader = /*ResourcesManager->GetShader(L".\\shaders\\MiniPhong.fx"); */ ResourcesManager->GetShaderWithEffects(L".\\shaders\\MiniPhong.fx", L".\\shaders\\Effect_Nul.fx");
+
+	//CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
 	CreateEnemy(Math::Vec3f{ 0.f, -7.f, 1.f });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
@@ -66,8 +70,7 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 void GameFactory::CreatePlayer(Math::Transform Transform)
 {
 	auto MyPlayer = Pitbull::Actor::New();
-	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball3\\ball.OMB"), 
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball3\\ball.OMB"), DefaultShader);
 	MyPlayer->AddComponent<Player>();
 	MyPlayer->Transform = Transform;
 
@@ -95,8 +98,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 void GameFactory::CreateEnemy(Math::Transform Transform)
 {
 	auto Ennemy = Pitbull::Actor::New();
-	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), 
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), DefaultShader);
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 
@@ -110,8 +112,7 @@ void GameFactory::CreateEnemy(Math::Transform Transform)
 void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance)
 {
 	auto Ennemy = Pitbull::Actor::New();
-	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"),
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\cube\\cube.OMB"), DefaultShader);
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
@@ -122,8 +123,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filename, PhysicMaterial Material)
 {
 	auto MyPlateform = Pitbull::Actor::New();
-	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename), DefaultShader);
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
 	MyPlateform->Transform = Transform;
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(MyPlateform));
@@ -132,8 +132,7 @@ void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filen
 void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material)
 {
 	auto MyPlateform = Pitbull::Actor::New();
-	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename),
-		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
+	MyPlateform->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(Filename), DefaultShader);
 	MyPlateform->AddComponent<BoxCollider>(Math::Vec3f{ 7.f, 0.20f, 7.f }, Material);
 	MyPlateform->Transform = Transform;
 	MyPlateform->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);

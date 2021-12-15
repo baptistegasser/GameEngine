@@ -7,7 +7,8 @@
 #include "Light.h"
 #include "Vertex.h"
 
-Shader::Shader(const wchar_t* FileName)
+Shader::Shader(const wchar_t* FileName, const std::vector<Effect*>& Effects)
+	: Effects{ Effects }
 {
 	/* Creation of constant buffer : cbuffer */
 	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
@@ -99,8 +100,28 @@ Shader::~Shader()
 	DX_RELEASE(PEffect);
 }
 
-void Shader::UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext) const
+void Shader::PreRender()
 {
+	UpdateLightsBuffer();
+
+	// Start effects
+	for (auto& Effect : Effects) {
+		Effect->DebutPostEffect();
+	}
+}
+
+void Shader::PostRender()
+{
+	// Draw effects
+	for (auto& Effect : Effects) {
+		Effect->FinPostEffect();
+		Effect->Draw();
+	}
+}
+
+void Shader::UpdateLightsBuffer() const
+{
+	auto PDeviceContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
 	const auto& Lights = PM3D::CMoteurWindows::GetInstance().GetScene().GetVisibleLights();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

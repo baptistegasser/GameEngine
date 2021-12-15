@@ -44,6 +44,11 @@ namespace Math
 		return Vec3f{ x * Scaler.x, y * Scaler.y, z * Scaler.z };
 	}
 
+	float Vec3f::Norm() const noexcept
+	{
+		return sqrtf(powf(this->x, 2) + powf(this->y, 2) + powf(this->z, 2));
+	}
+
 	bool Vec3f::operator<=(const Vec3f& Vec) const noexcept
 	{
 		return this->x <= Vec.x

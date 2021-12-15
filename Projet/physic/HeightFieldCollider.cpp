@@ -8,7 +8,7 @@ using namespace physx;
 PxGeometry* HeightFieldCollider::GetGeometryImpl(const Math::Vec3f& Scale) const noexcept
 {
 	return new PxHeightFieldGeometry(HeightField, PxMeshGeometryFlags(),
-		Scale.x, Scale.y, Scale.z
+		Scale.y, Scale.x, Scale.z
 	);
 }
 

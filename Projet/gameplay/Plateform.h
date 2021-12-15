@@ -24,7 +24,7 @@ public :
 	/// Update the position of the kinematic
 	/// </summary>
 	/// <param name="DeltaTime"></param>
-	void Tick(const float& DeltaTime) override;
+	void FixedTick(const float& DeltaTime) override;
 
 	void SetSpeed(const float& Speed);
 

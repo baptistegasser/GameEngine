@@ -17,7 +17,7 @@ void Plateform::Init()
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 }
 
-void Plateform::Tick(const float& DeltaTime)
+void Plateform::FixedTick(const float& DeltaTime)
 {
 	if (Loop) {
 

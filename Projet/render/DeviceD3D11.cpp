@@ -112,6 +112,9 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 	RsDesc.FrontCounterClockwise = false;
 	D3DDevice->CreateRasterizerState(&RsDesc, &SolidCullBackRS);
 
+	RsDesc.CullMode = D3D11_CULL_NONE;
+	D3DDevice->CreateRasterizerState(&RsDesc, &SolidNoneCullBackRS);
+
 	ImmediateContext->RSSetState(SolidCullBackRS);
 }
 
@@ -123,7 +126,10 @@ DeviceD3D11::~DeviceD3D11()
 	DX_RELEASE(AlphaBlendEnable);
 	DX_RELEASE(AlphaBlendDisable);
 	DX_RELEASE(SolidCullBackRS);
+	DX_RELEASE(SolidNoneCullBackRS);
 	DX_RELEASE(DepthTexture);
+	DX_RELEASE(pDepthStencilDephtEnable);
+	DX_RELEASE(pDepthStencilDephtDisable);
 	DX_RELEASE(DepthStencilView);
 	DX_RELEASE(RenderTargetView);
 	DX_RELEASE(SwapChain);
@@ -170,6 +176,35 @@ void DeviceD3D11::InitDepthBuffer()
 
 	DX_TRY(D3DDevice->CreateDepthStencilView(
 		       DepthTexture, &DescDSView, &DepthStencilView),DXE_ERREURCREATIONDEPTHSTENCILTARGET);
+
+	D3D11_DEPTH_STENCIL_DESC dsDesc;
+
+	// Depth test parameters
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	// Stencil test parameters
+	dsDesc.StencilEnable = true;
+	dsDesc.StencilReadMask = 0xFF;
+	dsDesc.StencilWriteMask = 0xFF;
+
+	// Stencil operations if pixel is front-facing
+	dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Stencil operations if pixel is back-facing
+	dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Create depth stencil state
+	DX_TRY(D3DDevice->CreateDepthStencilState(&dsDesc, &pDepthStencilDephtEnable), DXE_ERREURCREATIONDEPTHSTENCILTARGET);
+	dsDesc.DepthEnable = false;
+	DX_TRY(D3DDevice->CreateDepthStencilState(&dsDesc, &pDepthStencilDephtDisable), DXE_ERREURCREATIONDEPTHSTENCILTARGET);
 }
 
 void DeviceD3D11::InitBlendStates()
@@ -206,4 +241,24 @@ void DeviceD3D11::DeactivateAlphaBlending() const
 {
 	constexpr float Factor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	ImmediateContext->OMSetBlendState(AlphaBlendDisable, Factor, 0xffffffff);
+}
+
+void DeviceD3D11::ActivateCullBack() const
+{
+	ImmediateContext->RSSetState(SolidCullBackRS);
+}
+
+void DeviceD3D11::DeactivateCullBack() const
+{
+	ImmediateContext->RSSetState(SolidNoneCullBackRS);
+}
+
+void DeviceD3D11::ActivateZBuffer() const
+{
+	ImmediateContext->OMSetDepthStencilState(pDepthStencilDephtEnable, 0);
+}
+
+void DeviceD3D11::DeactivateZBuffer() const
+{
+	ImmediateContext->OMSetDepthStencilState(pDepthStencilDephtDisable, 0);
 }

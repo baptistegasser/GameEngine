@@ -16,10 +16,11 @@
 
 using namespace physx;
 
-RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
+RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType, bool IsTrigger)
 	: Component{ Parent }
 	, ActorType{ ActorType }
 	, RigidActor{ nullptr }
+	, IsTrigger{ IsTrigger }
 {
 	const auto Physics = PhysicManager::GetInstance().Physics;
 
@@ -42,6 +43,7 @@ RigidBody::RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType)
 void RigidBody::PrePhysicSimulation() noexcept
 {
 	// Update the transform with the actor's own to match change made by other components
+	auto a = ParentActor->Transform.operator physx::PxTransform();
 	RigidActor->setGlobalPose(ParentActor->Transform);
 	// Change scale only if it changed
 	if (PreviousScale != ParentActor->Transform.Scale) {
@@ -87,9 +89,17 @@ void RigidBody::UpdateActorShapes() noexcept
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for (const auto Collider : Colliders) {
 		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(ParentActor->Transform.Scale), *Collider->GetPxMaterial(), true);
-		
+
+		if (IsTrigger)
+		{
+			Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+		}
+
 		// Create Shape transform based on the actor's transform and the collider offset
 		auto LocalTransform = ParentActor->Transform;
+		// Default rotation to not duplicate parent's rot
+		LocalTransform.Rotation = Math::Quaternion();
 		LocalTransform.Position = Collider->Offset;
 		Shape->setLocalPose(LocalTransform);
 
@@ -133,10 +143,33 @@ void RigidBody::AddTorque(const Math::Vec3f& Torque, const ForceMode& ForceMode)
 	GetAsDynamic()->addTorque(Torque, PhysxForce(ForceMode));
 }
 
+void RigidBody::ClearForce() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->clearForce();
+}
+
+void RigidBody::ClearTorque() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->clearTorque();
+}
+
 void RigidBody::SetVelocity(const Math::Vec3f& Velocity) const
 {
 	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
 	GetAsDynamic()->setLinearVelocity(Velocity);
+}
+void RigidBody::ClearVelocity() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->setLinearVelocity(PxVec3(0.0f, 0.0f, 0.0f));
+}
+
+void RigidBody::ClearAngularVelocity() const
+{
+	ASSERT_DYNAMIC ASSERT_NOT_KINEMATIC
+	GetAsDynamic()->setAngularVelocity(PxVec3(0.0f, 0.0f, 0.0f));
 }
 
 void RigidBody::SetMass(const float Mass) const
@@ -154,4 +187,10 @@ void RigidBody::SetKinematicTarget(const Math::Transform& Target) const
 {
 	ASSERT_KINEMATIC;
 	GetAsDynamic()->setKinematicTarget(Target);
+}
+
+void RigidBody::setMaxLinearVelocity(float Velocity)
+{
+	ASSERT_DYNAMIC
+	GetAsDynamic()->setMaxLinearVelocity(Velocity);
 }

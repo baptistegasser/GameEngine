@@ -2,7 +2,7 @@
 
 #include "d3dx11effect.h"
 
-#include "LightConfig.h"
+#include "util/Util.h"
 
 struct ShaderMaterial
 {
@@ -10,20 +10,24 @@ struct ShaderMaterial
 	DirectX::XMVECTOR Roughness;
 	DirectX::XMVECTOR Specular;
 	float Intensity;
-	DirectX::XMFLOAT3 _FILL_;
+
+private:
+	DX_HLSL_FILL(3);
 };
 
 struct ShadersParams {
 	DirectX::XMMATRIX MatWorldViewProj;
 	DirectX::XMMATRIX MatWorld;
 	DirectX::XMVECTOR CameraPos;
-	AmbientLight Ambient;
-	DirectionalLight Directional;
+	DirectX::XMVECTOR AmbientColor;
 	ShaderMaterial Mat;
 	bool HasTexture;
-	DirectX::XMFLOAT3 _FILL_;
+
+private:
+	DX_HLSL_FILL(3);
 };
-static_assert(sizeof(ShadersParams) % 16 == 0);
+
+DX_HLSL_ASSERT_ALLIGN(ShadersParams);
 
 struct Shader {
 	const wchar_t* FileName;
@@ -41,11 +45,9 @@ struct Shader {
 	// Light buffers
 	ID3D11Buffer* PPointLightsBuffer;
 	ID3D11ShaderResourceView* PPointLightsBufferView;
-	ID3D11Buffer* PSpotLightsBuffer;
-	ID3D11ShaderResourceView* PSpotLightsBufferView;
 
 	Shader(const wchar_t* FileName);
 	~Shader();
 
-	void UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext, const LightConfig& LightConfig) const;
+	void UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext) const;
 };

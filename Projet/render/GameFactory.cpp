@@ -332,7 +332,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 		};
 	Terrain->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
 	Terrain->Transform = Transform;
 
 	const auto Terrain2 = new ATerrain{
@@ -344,10 +344,10 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 			};
 	Terrain2->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
 	Terrain2->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
 	Terrain2->Transform = Transform;
 	Terrain2->Transform.Position.y = Terrain2->Transform.Position.y + (256.f * Transform.Scale.y)/2 + 0.55f;
-	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z);
+	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z) - 0.1f;
 	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
 
 

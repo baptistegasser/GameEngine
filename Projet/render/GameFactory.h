@@ -76,6 +76,10 @@ private:
 	/// <param name="ToFollow"> The actor's transform the skybox will follow </param>
 	void CreateSkyBox(Math::Transform* ToFollow);
 
+	/// <summary>
+	/// Create a tunnel
+	/// </summary>
+	/// <param name="Transform"> The transform of the tunnel </param>
 	void CreateTunnel(Math::Transform Transform);
 
 	void CreateGoal(Math::Transform Transform, const wchar_t* Filename);
@@ -87,5 +91,8 @@ private:
 	///	<param name="Transform"> : the transform of the checkPoint  </param>
 	void CreateCheckPoint(Math::Transform Transform);
 
+	/// <summary>
+	/// Create the sprite timer on the screen
+	/// </summary>
 	void CreateTimer();
 };

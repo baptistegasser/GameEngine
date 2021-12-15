@@ -39,6 +39,7 @@ void GameFactory::LoadLevel()
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
 	
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
@@ -56,6 +57,7 @@ void GameFactory::LoadLevel()
 	 ***/
 	Math::Vec3f TerrainPos = { -38.f, 3.f, 145.f };
 	float PosYEnemy = 4.3f;
+	CreateTunnel(Math::Transform{ Math::Vec3f(0.f, 11.f, 0), Math::Vec3f(0.5f, 0.05f, 0.07f ) });
 
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
@@ -117,9 +119,10 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 {
 	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
 			Filename,
-			{1, 0.3f, 1},
+			{1, 1, 1},
 			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			, FaceCull
 		});
 	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
 	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
@@ -231,31 +234,31 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 {
 	auto& CurrentScene = PM3D::CMoteurWindows::GetInstance().GetScene();
 
-	CurrentScene.LightManager.AmbientColor = { 0.5f };
+	CurrentScene.LightManager.AmbientColor = { 0.7f };
 
 	auto DirLight = new ADirectionalLight;
-	DirLight->GetLight()->Direction = { 0.f, 4.f, 0.f };
-	DirLight->GetLight()->Color = { 0.f, 1.f, 1.f };
+	DirLight->GetLight()->Direction = { 4.f, 4.f, 0.f };
+	DirLight->GetLight()->Color = { 1.f, 1.f, 1.f };
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(DirLight));
 
 	auto ALightRed = new APointLight;
 	auto LightRed = ALightRed->GetLight();
 	LightRed->Position = { 0.f, 5.f, 0.f };
-	LightRed->Color = { 1.0f, 0.0f, 0.0f };
+	LightRed->Color = { 1.0f, 1.0f, 1.0f };
 	LightRed->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightRed));
 
 	auto ALightBlue = new APointLight;
 	auto LightBlue = ALightBlue->GetLight();
 	LightBlue->Position = { -40.f, 5.f, 0.f };
-	LightBlue->Color = { 0.f, 0.0f, 1.0f };
+	LightBlue->Color = { 1.0f, 1.0f, 1.0f };
 	LightBlue->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightBlue));
 
 	auto ALightGreen = new APointLight;
 	auto LightGreen = ALightGreen->GetLight();
 	LightGreen->Position = { 40.f, 5.f, 0.f };
-	LightGreen->Color = { 0.0f, 1.0f, 0.0f };
+	LightGreen->Color = { 1.0f, 1.0f, 1.0f };
 	LightGreen->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ALightGreen));
 
@@ -263,7 +266,7 @@ void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular
 	auto SpotRed = ASpotRed->GetLight();
 	SpotRed->Position = { 0.f, 5.f, -40.f };
 	SpotRed->Direction = { -30.f, 0.f, -40.f };
-	SpotRed->Color = { 1.0f, 0.0f, 0.0f };
+	SpotRed->Color = { 1.0f, 1.0f, 1.0f };
 	SpotRed->Range = 20.f;
 	CurrentScene.AddActor(std::unique_ptr<Pitbull::Actor>(ASpotRed));
 }
@@ -277,6 +280,40 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 			, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongSkyBox.fx")
 		}))
 	);
+}
+
+void GameFactory::CreateTunnel(Math::Transform Transform)
+{
+	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
+			L".\\modeles\\heigtmap\\tunnel.bmp",
+			{1, 0.3f, 1},
+			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			, true
+		});
+	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
+	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
+	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain->Transform = Transform;
+
+	auto Terrain2 = std::unique_ptr<ATerrain>(new ATerrain{
+			L".\\modeles\\heigtmap\\tunnel.bmp",
+			{1, 0.3f, 1},
+			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			, true
+			});
+	Terrain2->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
+	Terrain2->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
+	Terrain2->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain2->Transform = Transform;
+	Terrain2->Transform.Position.y = Terrain2->Transform.Position.y + (256.f * Transform.Scale.y)/2 + 0.55f;
+	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z);
+	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
+
+
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain2), true);
 }
 
 

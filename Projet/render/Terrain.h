@@ -18,11 +18,11 @@ class ATerrain : public Pitbull::Actor
 		DirectX::XMVECTOR vLumiere;
 		DirectX::XMVECTOR vCamera;
 		DirectX::XMVECTOR vAEcl;
-		DirectX::XMVECTOR vAMat;
+		//DirectX::XMVECTOR vAMat;
 		DirectX::XMVECTOR vDEcl;
-		DirectX::XMVECTOR vDMat;
+		//DirectX::XMVECTOR vDMat;
 		DirectX::XMVECTOR vSEcl;
-		DirectX::XMVECTOR vSMat;
+		//DirectX::XMVECTOR vSMat;
 		DirectX::XMVECTOR PosScale;
 		float TextureCoefficient;
 	};
@@ -50,7 +50,7 @@ public:
 	Texture* Texture2;
 	Texture* Texture3;
 
-	ATerrain(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material);
+	ATerrain(const wchar_t* FileName, DirectX::XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material, bool BackFaceCulling = false);
 	~ATerrain() override;
 	void LateTick(const float ElapsedTime) override;
 
@@ -65,4 +65,6 @@ private:
 	void ComputeIndexes();
 	[[nodiscard]] DirectX::XMVECTOR GetVertexPositionVector(int x, int z);
 	[[nodiscard]] vertex_t& GetVertex(int x, int z);
+
+	bool BackFaceCulling;
 };

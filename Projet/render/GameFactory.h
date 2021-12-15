@@ -76,6 +76,8 @@ private:
 	/// </summary>
 	/// <param name="ToFollow"> The actor's transform the skybox will follow </param>
 	void CreateSkyBox(Math::Transform* ToFollow);
+
+	void CreateTunnel(Math::Transform Transform);
 private :
 	Math::Transform* PlayerTransform;
 	/// <summary>

@@ -10,9 +10,10 @@
 
 using namespace DirectX;
 
-ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material)
+ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material, bool BackFaceCulling)
 	: Scale{ Scale }
 	, MeshShader{ Shader }
+	, BackFaceCulling{BackFaceCulling}
 {
 	BITMAPFILEHEADER bitmapFileHeader;
 	BITMAPINFOHEADER bitmapInfoHeader;
@@ -82,6 +83,9 @@ void ATerrain::LateTick(const float ElapsedTime)
 
 	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
 
+	if (BackFaceCulling)
+		PM3D::CMoteurWindows::GetInstance().GetDispositif().DeactivateCullBack();
+
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	const UINT stride = sizeof(vertex_t);
@@ -99,7 +103,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 	ShaderParams.vAEcl = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
 	ShaderParams.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 	ShaderParams.vSEcl = XMVectorSet(0.6f, 0.6f, 0.6f, 1.0f);
-	ShaderParams.PosScale = XMVectorSet(Scale.x, static_cast<float>(Height), Scale.z, static_cast<float>(Width));
+	ShaderParams.PosScale = XMVectorSet(Scale.x, Scale.z, static_cast<float>(Width), static_cast<float>(Height));
 	ShaderParams.TextureCoefficient = TextureCoefficient;
 	pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer, 0, nullptr, &ShaderParams, 0, 0);
 
@@ -122,6 +126,9 @@ void ATerrain::LateTick(const float ElapsedTime)
 	// Render
 	MeshShader->PEffectPass->Apply(0, pImmediateContext);
 	pImmediateContext->DrawIndexed(static_cast<UINT>(PolyCount * 3), 0, 0);
+
+	if (BackFaceCulling)
+		PM3D::CMoteurWindows::GetInstance().GetDispositif().ActivateCullBack();
 }
 
 void ATerrain::ComputeNormal(int x, int z)

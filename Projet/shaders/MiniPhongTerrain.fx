@@ -5,11 +5,13 @@ cbuffer param
 	float4 vLumiere; 		// la position de la source d'éclairage (Point)
 	float4 vCamera; 			// la position de la caméra
 	float4 vAEcl; 			// la valeur ambiante de l'éclairage
-	float4 vAMat; 			// la valeur ambiante du matériau
+	//float4 vAMat; 			// la valeur ambiante du matériau
 	float4 vDEcl; 			// la valeur diffuse de l'éclairage 
-	float4 vDMat; 			// la valeur diffuse du matériau 
+	//float4 vDMat; 			// la valeur diffuse du matériau 
+	float4 vSEcl;
+	//float4 vSMat;
 	float4 PosScale;
-	float4 TextureCoefficient;
+	float TextureCoefficient;
 }
 
 struct VS_Sortie
@@ -49,10 +51,11 @@ float4 MiniPhongTerrainPS(VS_Sortie vs) : SV_Target
 	float3 couleur;
 	float3 couleurGazon;
 	float3 couleurRoche;
+	float3 couleurChemin;
 
 	float2 coordTexChemin;
-    coordTexChemin.x = (vs.coordTex.x / PosScale.w * TextureCoefficient.x + (PosScale.x / 2)) / PosScale.x;
-    coordTexChemin.y = (vs.coordTex.y / PosScale.y * TextureCoefficient.x + (PosScale.z / 2)) / PosScale.z;
+	coordTexChemin.x = vs.coordTex.x * TextureCoefficient / PosScale.x / PosScale.z;
+	coordTexChemin.y = vs.coordTex.y * TextureCoefficient / PosScale.y / PosScale.w;
 
 	// Normaliser les paramètres
 	float3 N = normalize(vs.Norm);
@@ -76,6 +79,7 @@ float4 MiniPhongTerrainPS(VS_Sortie vs) : SV_Target
 	// I = A + D * N.L + (R.V)n
 	couleurGazon = colorTex1 * vAEcl.rgb + colorTex1 * vDEcl.rgb * diff;
 	couleurRoche = colorTex2 * vAEcl.rgb + colorTex2 * vDEcl.rgb * diff;
+	couleurChemin = colorTex3 * vAEcl.rgb + colorTex3 * vDEcl.rgb * diff;
 
 	couleur = colorTex3 * couleurGazon + (1 - colorTex3) * couleurRoche;
 

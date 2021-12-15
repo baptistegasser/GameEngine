@@ -72,7 +72,7 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 void GameFactory::CreatePlayer(Math::Transform Transform)
 {
 	auto MyPlayer = Pitbull::Actor::New("Player");
-	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball3\\ball.OMB"), 
+	MyPlayer->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\ball\\ball.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;

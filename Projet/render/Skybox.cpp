@@ -52,15 +52,14 @@ void Skybox::LateTick(const float ElapsedTime)
 	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
 	ShaderParams.CameraPos = Engine.GetScene().GetCurrentCamera().GetPosition();
 
+	// Set ambient
+	const auto& LightManager = EngineD3D11::GetInstance().GetScene().LightManager;
+	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
+
 	// Le sampler state
 	ID3DX11EffectSamplerVariable* variableSampler;
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
-
-	// Set lighting data
-	const auto& LightManager = Engine.GetScene().LightManager;
-	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
-	MeshShader->UpdateLightsBuffer(pImmediateContext);
 
 	// Dessiner les subsets non-transparents
 	for (int32_t i = 0; i < Mesh->SubsetCount; ++i)

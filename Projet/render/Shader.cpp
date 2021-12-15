@@ -99,8 +99,9 @@ Shader::~Shader()
 	DX_RELEASE(PEffect);
 }
 
-void Shader::UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext) const
+void Shader::UpdateLightsBuffer() const
 {
+	auto PDeviceContext = EngineD3D11::GetInstance().Device->ImmediateContext;
 	const auto& Lights = EngineD3D11::GetInstance().GetScene().GetVisibleLights();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

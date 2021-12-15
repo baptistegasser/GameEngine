@@ -22,7 +22,7 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 #endif
 
 	DXGI_SWAP_CHAIN_DESC SwapDesc;
-	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre l’échange plein écran
+	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre lï¿½ï¿½change plein ï¿½cran
 	ZeroMemory(&SwapDesc, sizeof(SwapDesc));
 
 	switch (CDSMode)
@@ -45,7 +45,7 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 	Desc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	DeviceInfoD3D11 Device(Desc);
-	Desc = Device.Mode;
+	//Desc = Device.Mode;
 	ScreenWidth = Desc.Width;
 	ScreenHeight = Desc.Height;
 

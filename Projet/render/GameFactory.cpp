@@ -26,31 +26,31 @@
 
 void GameFactory::LoadLevel()
 {
-	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }/*, Math::Vec3f{ 2.f, 1.f, 2.f }*/ });
-	CreateEnemy(Math::Transform{ Math::Vec3f{ 0.f, 13.f, -2.f }, Math::Vec3f{ 0.1f, 0.1f, 0.1f } });
+	CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp", Math::Transform{ Math::Vec3f{ -100.f, -30.f, 0.f }/*, Math::Vec3f{ 2.f, 1.f, 2.f }*/ });
+	//CreateEnemy(Math::Transform{ Math::Vec3f{ 0.f, 13.f, -2.f }, Math::Vec3f{ 0.1f, 0.1f, 0.1f } });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
-	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
-	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
+	//CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	//CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
+	//CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
 	
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	//CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateMobilePlatform(Math::Vec3f(-20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
-	CreateMobilePlatform(Math::Vec3f(0.f, 10.f, 105), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
-	CreateMobilePlatform(Math::Vec3f(20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+	//CreateMobilePlatform(Math::Vec3f(-20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
+	//CreateMobilePlatform(Math::Vec3f(0.f, 10.f, 105), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\plateformSable.OMB");
+	//CreateMobilePlatform(Math::Vec3f(20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
 
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	//CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
 	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
-	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 5.f });
-	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 65.f });
-	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 135.f });
+	//CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 5.f });
+	//CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 65.f });
+	//CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 135.f });
 
-	CreateTunnel(Math::Transform{ Math::Vec3f(0.f, 11.f, 0), Math::Vec3f(0.5f, 0.05f, 0.07f ) });
+	//CreateTunnel(Math::Transform{ Math::Vec3f(0.f, 11.f, 0), Math::Vec3f(0.5f, 0.05f, 0.07f ) });
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
-	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f },  4.f);
+	//CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f },  4.f);
 }
 
 void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, bool FaceCull)

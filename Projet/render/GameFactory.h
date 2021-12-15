@@ -79,11 +79,16 @@ private:
 	void CreateSkyBox(Math::Transform* ToFollow);
 
 	/// <summary>
-	/// Create a tunnel
+	/// Create a slide
 	/// </summary>
-	/// <param name="Transform"> The transform of the tunnel </param>
-	void CreateTunnel(Math::Transform Transform);
+	/// <param name="Transform"> The transform of the slide </param>
+	void CreateSlide(Math::Transform Transform);
 
+	/// <summary>
+	/// Create a goal of the road on billboard
+	/// </summary>
+	/// <param name="Transform"> The transform of the road </param>
+	///	<param name="Filename"> : name of texture file </param>
 	void CreateGoal(Math::Transform Transform, const wchar_t* Filename);
 
 	Math::Transform* PlayerTransform;

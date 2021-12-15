@@ -127,24 +127,49 @@ void GameFactory::LoadLevel()
 		CaveTrans,
 		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
 
+	/***
+	 * Third state with plateform
+	 ***/
 
-	CreateGoal(Math::Transform{ Math::Vec3f(5.f, 12.f, -5.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
+	Math::Vec3f BasePos2 = { -10.f, -6.f, 515.f };
+
+	CreatePlatform(Math::Transform{ BasePos2, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 0.5f, BasePos2.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
+
+	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos2.x, BasePos2.y, BasePos2.z + 20.f), Math::Vec3f{ 0.75f, 0.75f, 0.75f } }, Math::Vec3f(0.f, 20.f, 0),
+		L".\\modeles\\plateform\\plateformSable.OMB", Collider::DefaultMaterial);
+	CreateEnemy(Math::Vec3f{ BasePos2.x - 15.f, BasePos2.y + 7.f, BasePos2.z + 20.f }, Math::Vec3f{ BasePos2.x + 15.f, BasePos2.y + 7.f, BasePos2.z + 20.f }, true);
+	CreateEnemy(Math::Vec3f{ BasePos2.x - 15.f, BasePos2.y + 13.f, BasePos2.z + 20.f }, Math::Vec3f{ BasePos2.x + 15.f, BasePos2.y + 13.f, BasePos2.z + 20.f }, true);
+
+	CreatePlatform(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 20.f, BasePos2.z + 40.f }, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 20.5f, BasePos2.z +40.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
+
+
 
 	/***
-	* Tunnel
-	***/
+	 * Third State with arena
+	 ***/
+	Math::Vec3f TerrainPos3 = { -96.f, 0.f, 570.f };
+	//float PosYEnemy2 = -5.5f;
 
-	/*Math::Transform TunnelTrans = Math::Transform{ Math::Vec3f(-25.f, -6.f, 0.f), Math::Vec3f(0.5f, 0.05f, 0.07f) };
-
-	TunnelTrans.RotateY(90);
-	TunnelTrans.RotateZ(90);
-
-	CreateTunnel(TunnelTrans);*/
-
-	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
-
-	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
+	// Dim : 128 / 128
+	CreateTerrain(L".\\modeles\\heigtmap\\fall.bmp",
+		Math::Transform{ TerrainPos3, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
+		L".\\modeles\\ice2.dds", L".\\modeles\\sand.dds", L".\\modeles\\ways.dds", true);
 	
+	/***
+	* Finish
+	***/
+	Math::Transform TunnelTrans = Math::Transform{ Math::Vec3f(TerrainPos3.x + 20.f, TerrainPos3.y + 9.f, TerrainPos3.z + 130.f), Math::Vec3f(0.5f, 0.05f, 0.07f) };
+
+	TunnelTrans.RotateY(270);
+	TunnelTrans.RotateZ(335);
+
+	CreateSlide(TunnelTrans);
+	
+	CreatePlatform(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 16.f, TerrainPos3.y - 20.f, TerrainPos3.z + 220.f }, Math::Vec3f{ 2.f, 1.f, 5.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+
+	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 250.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
 void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
@@ -343,7 +368,7 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 	);
 }
 
-void GameFactory::CreateTunnel(Math::Transform Transform)
+void GameFactory::CreateSlide(Math::Transform Transform)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -360,30 +385,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
 	Terrain->Transform = Transform;
 
-	const auto Terrain2 = new ATerrain{
-			L".\\modeles\\heigtmap\\tunnel.bmp",
-			{1, 0.3f, 1},
-			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
-			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
-			, true
-			};
-	Terrain2->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
-	Terrain2->Texture2 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\rouge.dds");
-	Terrain2->Texture3 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\zebra3.dds");
-	Terrain2->Transform.Position.x = Transform.Position.x + sin(Transform.EulerRotation().y * Math::MATH_PI / 180) * (128 * Transform.Scale.z)
-		 + sin(Transform.EulerRotation().z * Math::MATH_PI / 180) * (128 * Transform.Scale.z);
-	Terrain2->Transform.Position.y = Transform.Position.y + 128 * Transform.Scale.y ;
-	Terrain2->Transform.Position.z = Transform.Position.z + Terrain->Height * Transform.Scale.z- 
-		sin(Transform.EulerRotation().y * Math::MATH_PI / 180) * (128 * Transform.Scale.z)
-		 /*- sin(Transform.EulerRotation().z * Math::MATH_PI / 180) * (128 * Transform.Scale.z)*/;
-	Terrain2->Transform.Scale = Terrain->Transform.Scale;
-	
-	Transform.RotateX(180);
-
-	Terrain2->Transform.Rotation = Transform.Rotation;
-
 	Engine.GetScene().AddActor(Terrain, true);
-	Engine.GetScene().AddActor(Terrain2, true);
 }
 
 void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)

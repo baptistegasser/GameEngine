@@ -158,7 +158,11 @@ void Player::SwapCameraMode()
 
 bool Player::IsDead() const
 {
-	if (ParentActor->Transform.Position.y < -10) return true;
+	if (ParentActor->Transform.Position.z < 135 && ParentActor->Transform.Position.y < 0) return true;
+	else if (ParentActor->Transform.Position.z >= 135 && ParentActor->Transform.Position.z < 545 && ParentActor->Transform.Position.y < -10) return true;
+	else if (ParentActor->Transform.Position.z >= 545 && ParentActor->Transform.Position.z < 700 && ParentActor->Transform.Position.y < 4) return true;
+	else if (ParentActor->Transform.Position.z >= 700 && ParentActor->Transform.Position.y < -25) return true;
+	else if (ParentActor->Transform.Position.y < -30) return true;
 	return false;
 }
 

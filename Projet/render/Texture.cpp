@@ -2,7 +2,7 @@
 #include "Texture.h"
 #include "DDSTextureLoader.h"
 #include "DeviceD3D11.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "resources/resource.h"
 #include "util/Util.h"
 
@@ -18,7 +18,7 @@ Texture::Texture(const std::wstring& filename)
 	: Filename(filename)
 	, TextureView(nullptr)
 {
-	ID3D11Device* Device = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
+	ID3D11Device* Device = EngineD3D11::GetInstance().Device->D3DDevice;
 
 	// Charger la texture en ressource
 	DX_TRY(CreateDDSTextureFromFile(Device,

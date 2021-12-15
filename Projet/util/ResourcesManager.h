@@ -11,6 +11,7 @@
 #include "render/Texture.h"
 #include "render/ObjectMesh.h"
 #include "render/Effect.h"
+#include "render/Sprite.h"
 
 class ResourcesManager {
 private:
@@ -18,12 +19,15 @@ private:
 	std::map<const std::string, std::unique_ptr<Effect>> Effects;
 	std::map<const std::string, std::unique_ptr<Texture>> Textures;
 	std::map<const std::string, std::unique_ptr<ObjectMesh>> Meshes;
+	std::map<const std::string, std::unique_ptr<ShaderSprite>> Sprites;
 
 public:
+	ResourcesManager() = default;
 	~ResourcesManager();
 	void Cleanup() noexcept;
 
 	Shader* GetShader(const wchar_t* ShaderName);
+	ShaderSprite* GetShaderSprite(const wchar_t* ShaderName);
 	Texture* GetTexture(const std::wstring& TextureName);
 	ObjectMesh* GetMesh(const wchar_t* MeshName);
 	Effect* GetEffect(const wchar_t* EffectName);

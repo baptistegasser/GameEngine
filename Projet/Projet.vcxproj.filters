@@ -75,9 +75,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="render\ObjetMesh.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="physic\PhysicManager.cpp">
       <Filter>Source Files\physic</Filter>
     </ClCompile>
@@ -165,12 +162,6 @@
     <ClCompile Include="gameplay\Player.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="render\AfficheurSprite.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\AfficheurTexte.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\ChargeurOBJ.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
@@ -178,12 +169,6 @@
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
     <ClCompile Include="render\DIManipulateur.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\MoteurWindows.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Moteur.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
     <ClCompile Include="render\Terrain.cpp">
@@ -222,6 +207,24 @@
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="render\Timer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\TextRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Speed.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpriteRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Sprite.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Font.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
     <ClCompile Include="render\GameFactory.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -233,6 +236,15 @@
     </ClCompile>
     <ClCompile Include="render\Device.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Engine.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\EngineD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\CheckPoint.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="render\SpotLight.cpp">
       <Filter>Source Files\render\components</Filter>
@@ -268,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="core\Component.h">
       <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="render\ObjetMesh.h">
-      <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="physic\PhysicManager.h">
       <Filter>Header Files\physic</Filter>
@@ -356,12 +365,6 @@
     <ClInclude Include="gameplay\Plateform.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="render\AfficheurSprite.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurTexte.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\chargeur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -380,12 +383,6 @@
     <ClInclude Include="render\DIManipulateur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\MoteurWindows.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\objet3d.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="resources\resource.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -399,9 +396,6 @@
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\Terrain.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\Light.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\Material.h">
@@ -419,7 +413,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="render\Moteur.h">
+    <ClInclude Include="render\Engine.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="math\Vec3f.h">
@@ -431,14 +425,26 @@
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="util\Observable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="render\Timer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\TextRenderer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Speed.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Sprite.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Font.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpriteRenderer.h">
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="render\GameFactory.h">
       <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="util\Observable.h">
-      <Filter>Header Files\util</Filter>
     </ClInclude>
     <ClInclude Include="render\Device.h">
       <Filter>Header Files\render</Filter>
@@ -448,6 +454,12 @@
     </ClInclude>
     <ClInclude Include="render\DeviceInfoD3D11.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\EngineD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\CheckPoint.h">
+      <Filter>Header Files\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="render\PointLight.h">
       <Filter>Header Files\render\components</Filter>

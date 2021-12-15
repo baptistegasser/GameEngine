@@ -29,13 +29,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -48,7 +48,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -170,6 +170,7 @@
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
+    <ClCompile Include="gameplay\CheckPoint.cpp" />
     <ClCompile Include="gameplay\IntelligentEnemy.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
@@ -194,12 +195,14 @@
     <ClCompile Include="physic\RigidBody.cpp" />
     <ClCompile Include="physic\SphereCollider.cpp" />
     <ClCompile Include="Pitbull.cpp" />
-    <ClCompile Include="render\AfficheurSprite.cpp" />
-    <ClCompile Include="render\AfficheurTexte.cpp" />
     <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\ChargeurOBJ.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\DIManipulateur.cpp" />
+    <ClCompile Include="render\Font.cpp" />
+    <ClCompile Include="render\Speed.cpp" />
+    <ClCompile Include="render\Sprite.cpp" />
+    <ClCompile Include="render\SpriteRenderer.cpp" />
     <ClCompile Include="render\Effect.cpp" />
     <ClCompile Include="render\EffectManager.cpp" />
     <ClCompile Include="render\GameFactory.cpp" />
@@ -216,12 +219,13 @@
     <ClCompile Include="render\Material.cpp" />
     <ClCompile Include="render\MeshLoader.cpp" />
     <ClCompile Include="render\MeshRenderer.cpp" />
-    <ClCompile Include="render\Moteur.cpp" />
-    <ClCompile Include="render\MoteurWindows.cpp" />
+    <ClCompile Include="render\Engine.cpp" />
+    <ClCompile Include="render\EngineD3D11.cpp" />
     <ClCompile Include="render\ObjectMesh.cpp" />
-    <ClCompile Include="render\ObjetMesh.cpp" />
     <ClCompile Include="render\Shader.cpp" />
+    <ClCompile Include="render\TextRenderer.cpp" />
     <ClCompile Include="render\Texture.cpp" />
+    <ClCompile Include="render\Timer.cpp" />
     <ClCompile Include="render\Vertex.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -237,6 +241,7 @@
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
+    <ClInclude Include="gameplay\CheckPoint.h" />
     <ClInclude Include="gameplay\IntelligentEnemy.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />
@@ -262,8 +267,6 @@
     <ClInclude Include="physic\RigidBody.h" />
     <ClInclude Include="physic\SphereCollider.h" />
     <ClInclude Include="Pitbull.h" />
-    <ClInclude Include="render\AfficheurSprite.h" />
-    <ClInclude Include="render\AfficheurTexte.h" />
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\chargeur.h" />
     <ClInclude Include="render\ChargeurOBJ.h" />
@@ -271,6 +274,10 @@
     <ClInclude Include="render\d3dxGlobal.h" />
     <ClInclude Include="render\DDSTextureLoader.h" />
     <ClInclude Include="render\DIManipulateur.h" />
+    <ClInclude Include="render\Font.h" />
+    <ClInclude Include="render\Speed.h" />
+    <ClInclude Include="render\Sprite.h" />
+    <ClInclude Include="render\SpriteRenderer.h" />
     <ClInclude Include="render\Effect.h" />
     <ClInclude Include="render\EffectManager.h" />
     <ClInclude Include="render\GameFactory.h" />
@@ -278,7 +285,6 @@
     <ClInclude Include="render\DeviceD3D11.h" />
     <ClInclude Include="render\DeviceInfoD3D11.h" />
     <ClInclude Include="render\DirectionalLight.h" />
-    <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\LightManager.h" />
     <ClInclude Include="render\PointLight.h" />
     <ClInclude Include="render\SpotLight.h" />
@@ -287,19 +293,18 @@
     <ClInclude Include="render\Material.h" />
     <ClInclude Include="render\MeshLoader.h" />
     <ClInclude Include="render\MeshRenderer.h" />
-    <ClInclude Include="render\Moteur.h" />
-    <ClInclude Include="render\MoteurWindows.h" />
+    <ClInclude Include="render\Engine.h" />
+    <ClInclude Include="render\EngineD3D11.h" />
     <ClInclude Include="render\ObjectMesh.h" />
-    <ClInclude Include="render\objet3d.h" />
-    <ClInclude Include="render\ObjetMesh.h" />
     <ClInclude Include="render\Shader.h" />
+    <ClInclude Include="render\TextRenderer.h" />
     <ClInclude Include="render\Texture.h" />
+    <ClInclude Include="render\Timer.h" />
     <ClInclude Include="render\Vertex.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util\Horloge.h" />
     <ClInclude Include="util\NonCopyable.h" />
-    <ClInclude Include="util\Observable.h" />
     <ClInclude Include="util\ResourcesManager.h" />
     <ClInclude Include="util\Singleton.h" />
     <ClInclude Include="util\Util.h" />

@@ -1,17 +1,21 @@
 #include "stdafx.h"
 #include "Player.h"
 
-#include "render/MoteurWindows.h"
+#include "render/EngineD3D11.h"
 #include "math/Math.h"
 #include "math/Vec3f.h"
 
+#include "physic/ContactFilter.h"
+
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent)
+Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
-{}
+	, SpawnPos { Pos }
+{
+}
 
 void Player::Init()
 {
@@ -25,49 +29,53 @@ void Player::Init()
 	MyRigidBody->setMaxLinearVelocity(MaxSpeed);
 }
 
+void Player::Tick(const float& ElapsedTime)
+{
+	if (IsDead())
+	{
+		ResetPlayer();
+	}
+}
+
 void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
 
-	auto& Engine = PM3D::CMoteurWindows::GetInstance();
-	PM3D::CDIManipulateur& rGestionnaireDeSaisie = Engine.GetGestionnaireDeSaisie();
+	auto& Engine = EngineD3D11::GetInstance();
+	PM3D::CDIManipulateur& InputManager = Engine.InputManager;
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
-	/****
-	 *  KEYBOARD CONTROL
-	 ****/
-
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_A)) {
+	if (InputManager.ToucheAppuyee(DIK_A)) {
 		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_D)) {
+	if (InputManager.ToucheAppuyee(DIK_D)) {
 		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_W)) {
+	if (InputManager.ToucheAppuyee(DIK_W)) {
 		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_S)) {
+	if (InputManager.ToucheAppuyee(DIK_S)) {
 		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
- 	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_SPACE)) {
+ 	if (InputManager.ToucheAppuyee(DIK_SPACE)) {
 	    if (isGrounded())
 			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_P)) {
+	if (InputManager.ToucheAppuyee(DIK_P)) {
 		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_ESCAPE)) {
+	if (InputManager.ToucheAppuyee(DIK_ESCAPE)) {
 		Engine.Stop();
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_M)) {
+	if (InputManager.ToucheAppuyee(DIK_M)) {
 		WaitForSwap = true;
 	}
 	else {
@@ -81,32 +89,32 @@ void Player::FixedTick(const float& DeltaTime)
 	// Calculate sensibility of the camera
 	auto CalculateSpeed = [](int speed) { return 1000.f * static_cast<float>(speed) + 2000.f; };
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_LEFT)) {
+	if (InputManager.ToucheAppuyee(DIK_LEFT)) {
 		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
-	if (rGestionnaireDeSaisie.ToucheAppuyee(DIK_RIGHT)) {
+	if (InputManager.ToucheAppuyee(DIK_RIGHT)) {
 		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
-	//Vérifier si déplacement vers la gauche
-	if (rGestionnaireDeSaisie.EtatSouris().lX < 0) {
+	//Vï¿½rifier si dï¿½placement vers la gauche
+	if (InputManager.EtatSouris().lX < 0) {
 		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
-	// Vérifier si déplacement vers la droite
-	if (rGestionnaireDeSaisie.EtatSouris().lX > 0) {
+	// Vï¿½rifier si dï¿½placement vers la droite
+	if (InputManager.EtatSouris().lX > 0) {
 		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
-	//Vérifier si déplacement vers le haut
-	if (rGestionnaireDeSaisie.EtatSouris().lY < 0 && AngleRotationVertical > MIN_ANGLE_VERTICAL) {
+	//Vï¿½rifier si dï¿½placement vers le haut
+	if (InputManager.EtatSouris().lY < 0 && AngleRotationVertical > MIN_ANGLE_VERTICAL) {
 		AngleRotationVertical -= AngleRotationSpeedVertical;
 		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
 	}
 
-	// Vérifier si déplacement vers le bas
-	if (rGestionnaireDeSaisie.EtatSouris().lY > 0 && AngleRotationVertical < MAX_ANGLE_VERTICAL) {
+	// Vï¿½rifier si dï¿½placement vers le bas
+	if (InputManager.EtatSouris().lY > 0 && AngleRotationVertical < MAX_ANGLE_VERTICAL) {
 		AngleRotationVertical += AngleRotationSpeedVertical;
 		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, -XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
 	}
@@ -122,7 +130,7 @@ void Player::FixedTick(const float& DeltaTime)
 
 bool Player::isGrounded() const
 {
-	static auto& Scene = PM3D::CMoteurWindows::GetInstance().GetScene();
+	static auto& Scene = EngineD3D11::GetInstance().GetScene();
 
 	auto Origin = ParentActor->Transform.Position;
 	Origin.y -= MyCollider->Radius + 0.1f; // Little more than radius
@@ -141,4 +149,19 @@ void Player::SwapCameraMode()
 		ViewType = CameraViewType::First;
 
 	WaitForSwap = false;
+}
+
+bool Player::IsDead() const
+{
+	if (ParentActor->Transform.Position.y < -10) return true;
+	return false;
+}
+
+void Player::ResetPlayer() const
+{
+	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
+	MyRigidBody->ClearForce();
+	MyRigidBody->ClearTorque();
+	MyRigidBody->ClearVelocity();
+	MyRigidBody->ClearAngularVelocity();
 }

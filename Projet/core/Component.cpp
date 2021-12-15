@@ -27,4 +27,8 @@ namespace Pitbull
 	{
 		// Default late component logic is to do nothing
 	}
+	void Component::SpriteTick(const float& ElapsedTime)
+	{
+		// Default late component logic is to do nothing
+	}
 }  // namespace Pitbull

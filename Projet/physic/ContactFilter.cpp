@@ -7,6 +7,13 @@ PxFilterFlags ContactFilter::filterShader(PxFilterObjectAttributes attributes0,
 	PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1,
 	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
 {
+	// let triggers through
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+		return PxFilterFlag::eDEFAULT;
+	}
+
 	// Default behaviour : notify components
 	pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eMODIFY_CONTACTS;
 

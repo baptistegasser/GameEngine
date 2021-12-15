@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "Skybox.h"
 #include "MeshLoader.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "math/Math.h"
 #include "ObjectMesh.h"
 #include "Vertex.h"
 #include "Light.h"
 
 Skybox::Skybox(Math::Transform* ToFollow, ObjectMesh* Mesh)
-	: Skybox{ ToFollow, Mesh, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L"Default.fx")}
+	: Skybox{ ToFollow, Mesh, EngineD3D11::GetInstance().ResourcesManager.GetShader(L"Default.fx")}
 {}
 
 Skybox::Skybox(Math::Transform* ToFollow, ObjectMesh* Mesh, Shader* MeshShader)
@@ -22,12 +22,14 @@ void Skybox::LateTick(const float ElapsedTime)
 {
 	using namespace DirectX;
 
-	PM3D::CMoteurWindows::GetInstance().GetDispositif().DeactivateZBuffer();
+	auto& Engine = EngineD3D11::GetInstance();
+
+	Engine.Device->DeactivateZBuffer();
 	// Update position
 	matWorld = XMMatrixTranslationFromVector(ToFollow->Position.ToXMVector());
 
 	// Obtenir le contexte
-	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
+	ID3D11DeviceContext* pImmediateContext = Engine.Device->ImmediateContext;
 
 
 	// Choisir la topologie des primitives
@@ -44,14 +46,14 @@ void Skybox::LateTick(const float ElapsedTime)
 	pImmediateContext->IASetVertexBuffers(0, 1, &Mesh->PVertexBuffer, &stride, &offset);
 
 	// Initialiser et s�lectionner les �constantes� de l'effet
-	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
+	const XMMATRIX& viewProj = Engine.MatViewProj;
 
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.CameraPos = PM3D::CMoteurWindows::GetInstance().GetScene().GetCurrentCamera().GetPosition();
+	ShaderParams.CameraPos = Engine.GetScene().GetCurrentCamera().GetPosition();
 
 	// Set ambient
-	const auto& LightManager = PM3D::CMoteurWindows::GetInstance().GetScene().LightManager;
+	const auto& LightManager = EngineD3D11::GetInstance().GetScene().LightManager;
 	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
 
 	// Le sampler state
@@ -95,5 +97,5 @@ void Skybox::LateTick(const float ElapsedTime)
 		}
 	}
 
-	PM3D::CMoteurWindows::GetInstance().GetDispositif().ActivateZBuffer();
+	Engine.Device->ActivateZBuffer();
 }

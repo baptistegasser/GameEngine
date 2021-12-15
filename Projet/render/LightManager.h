@@ -9,7 +9,7 @@
 /// </summary>
 struct LightToPos
 {
-	Math::Vec3f operator()(const std::unique_ptr<LightComponent>& Light) const noexcept
+	Math::Vec3f operator()(LightComponent* Light) const noexcept
 	{
 		return Light->Position;
 	}
@@ -18,7 +18,7 @@ struct LightToPos
 /// <summary>
 /// Manager charged to keep track of lights.
 /// </summary>
-class LightManager : Octree<LightComponent, LightToPos>
+class LightManager : Octree <LightComponent, LightToPos, false>
 {
 public:
 	using LightList = std::vector<Light>;

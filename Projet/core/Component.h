@@ -43,11 +43,14 @@ namespace Pitbull
 		/// <param name="ElapsedTime">The elapsed time since last call, same as the one passed to \ref Tick.</param>
 		virtual void LateTick(const float& ElapsedTime);
 
-	protected:
+		virtual void SpriteTick(const float& ElapsedTime);
+
 		/// <summary>
 		/// The actor that contains this component.
 		/// </summary>
 		Actor* ParentActor = nullptr;
+
+	protected:
 
 		Component(Actor* Parent) : ParentActor{ Parent }{}
 	};

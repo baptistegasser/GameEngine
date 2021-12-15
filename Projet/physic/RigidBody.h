@@ -37,10 +37,26 @@ public:
 	/// </summary>
 	void AddTorque(const Math::Vec3f& Torque, const ForceMode& ForceMode = ForceMode::Force) const;
 	/// <summary>
+	/// Clear a force to the Rigidbody.
+	/// </summary>
+	void ClearForce() const;
+	/// <summary>
+	/// Clear a torque to the Rigidbody.
+	/// </summary>
+	void ClearTorque() const;
+	/// <summary>
 	/// Set the Rigidbody's velocity.
 	///	Not recommended, please use \ref AddForce.
 	/// </summary>
 	void SetVelocity(const Math::Vec3f& Velocity) const;
+	/// <summary>
+	/// Clear the Rigidbody's velocity.
+	/// </summary>
+	void ClearVelocity() const;
+	/// <summary>
+	/// Clear the Rigidbody's velocity.
+	/// </summary>
+	void ClearAngularVelocity() const;
 	/// <summary>
 	/// Set the Rigidbody's mass, assuming constant density.
 	/// </summary>
@@ -52,9 +68,13 @@ public:
 	/// <summary>
 	/// Set the target so the actor follow a path to it.
 	/// </summary>
-	void setKinematicTarget(const Math::Transform& Target) const;
+	void SetKinematicTarget(const Math::Transform& Target) const;
 
 	/// <summary>
+	/// Get the Rigidbody's velocity.
+	/// </summary>
+	const Math::Vec3f GetVelocity() const;
+	
 	/// Set the maximum of velocity of the Rigodbody
 	/// </summary>
 	void setMaxLinearVelocity(float Velocity);
@@ -62,7 +82,7 @@ public:
 protected:
 	friend class Pitbull::Actor;
 	friend class PhysicManager;
-	RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType);
+	RigidBody(Pitbull::Actor* Parent, RigidActorType ActorType, bool IsTrigger = false);
 
 private:
 	RigidActorType ActorType;
@@ -84,4 +104,6 @@ private:
 	/// This is needed as changing/recreating shapes is costly.
 	/// </summary>
 	Math::Vec3f PreviousScale;
+
+	bool IsTrigger;
 };

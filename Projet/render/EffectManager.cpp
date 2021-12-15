@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EffectManager.h"
 
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 
 bool EffectManager::HasEffectActivated() const noexcept
 {
@@ -25,7 +25,7 @@ Effect* EffectManager::GetActivatedEffect() noexcept
 
 void EffectManager::AddEffect(const wchar_t* Name)
 {
-	auto& ResourcesManager = PM3D::CMoteurWindows::GetInstance().GetResourcesManager();
+	auto& ResourcesManager = EngineD3D11::GetInstance().ResourcesManager;
 	AddEffect(ResourcesManager.GetEffect(Name));
 }
 

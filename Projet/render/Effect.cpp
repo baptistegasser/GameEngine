@@ -3,7 +3,7 @@
 
 #include "util/Util.h"
 #include "resources/resource.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 
 // Specify vertex layout for DirectX
 D3D11_INPUT_ELEMENT_DESC EffectVertex::Layout[] = {
@@ -49,7 +49,7 @@ Effect::Effect(const wchar_t* FileName)
 	, POldRenderTargetView{ nullptr }
 	, POldDepthStencilView{ nullptr }
 {
-	PDevice = &PM3D::CMoteurWindows::GetInstance().GetDispositif();
+	PDevice = EngineD3D11::GetInstance().Device.get();
 	ID3D11Device* PD3DDevice = PDevice->D3DDevice;
 
 	D3D11_BUFFER_DESC BuffDesc;

@@ -3,12 +3,12 @@
 #include <gameplay/Player.h>
 #include <core/Actor.h>
 #include "math/Math.h"
-//#include "MoteurWindows.h"
+//#include "EngineD3D11.h"
 
 
 using namespace DirectX;
 
-Camera::Camera(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Position, const DirectX::XMVECTOR& Direction, const DirectX::XMVECTOR& UpDirection, DirectX::XMMATRIX* PMatView, DirectX::XMMATRIX* PMatProj, DirectX::XMMATRIX* PMatViewProj)
+Camera::Camera(Pitbull::Actor* Parent, const XMVECTOR& Position, const XMVECTOR& Direction, const XMVECTOR& UpDirection, XMMATRIX* PMatView, XMMATRIX* PMatProj, XMMATRIX* PMatViewProj)
 	: Component{ Parent }
 	, NeedToUpdate{ true }
 	, Position{ Position }
@@ -49,7 +49,7 @@ void Camera::SetUpDirection(const DirectX::XMVECTOR& UpDirection) noexcept
 	NeedToUpdate = true;
 }
 
-const DirectX::XMVECTOR& Camera::GetPosition() const noexcept
+const XMVECTOR& Camera::GetPosition() const noexcept
 {
 	return Position;
 }

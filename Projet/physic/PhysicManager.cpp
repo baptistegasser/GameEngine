@@ -24,10 +24,8 @@ void PhysicManager::Init()
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
 }
 
-void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
+void PhysicManager::InitScene(physx::PxScene*& Scene)
 {
-	CurrentScene = Scene;
-
 	PxSceneDesc sceneDesc(Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 	Dispatcher = PxDefaultCpuDispatcherCreate(2);
@@ -38,16 +36,18 @@ void PhysicManager::InitScene(std::shared_ptr<Scene> Scene)
 	sceneDesc.contactModifyCallback = &ContactHandler;
 	sceneDesc.simulationEventCallback = &ContactHandler;
 
-	CurrentScene->PhysxScene = Physics->createScene(sceneDesc);
+	CurrentScene = Physics->createScene(sceneDesc);
 
 	// Finally init the scene for the Physx visual debugger
-	PxPvdSceneClient* pvdClient = CurrentScene->PhysxScene->getScenePvdClient();
+	PxPvdSceneClient* pvdClient = CurrentScene->getScenePvdClient();
 	if (pvdClient)
 	{
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
+
+	Scene = CurrentScene;
 }
 
 void PhysicManager::Step(const float& ElapsedTime)
@@ -57,15 +57,15 @@ void PhysicManager::Step(const float& ElapsedTime)
 	
 	std::for_each(RigidBodies.begin(), RigidBodies.end(), CallPreUpdate);
 
-	CurrentScene->PhysxScene->simulate(ElapsedTime);
-	CurrentScene->PhysxScene->fetchResults(true);
+	CurrentScene->simulate(ElapsedTime);
+	CurrentScene->fetchResults(true);
 
 	std::for_each(RigidBodies.begin(), RigidBodies.end(), CallPostUpdate);
 }
 
 void PhysicManager::Cleanup()
 {
-	PX_RELEASE(CurrentScene->PhysxScene);
+	PX_RELEASE(CurrentScene);
 	PX_RELEASE(Dispatcher);
 	PX_RELEASE(Physics);
 	PX_RELEASE(Cooking);
@@ -80,7 +80,7 @@ void PhysicManager::Cleanup()
 
 void PhysicManager::RegisterRigidBody(RigidBody* RigidBody)
 {
-	CurrentScene->PhysxScene->addActor(*RigidBody->RigidActor);
+	CurrentScene->addActor(*RigidBody->RigidActor);
 	RigidBodies.push_back(RigidBody);
 }
 

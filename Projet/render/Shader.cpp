@@ -2,15 +2,15 @@
 #include "Shader.h"
 
 #include "resources/resource.h"
-#include "util/util.h"
-#include "MoteurWindows.h"
+#include "util/Util.h"
+#include "EngineD3D11.h"
 #include "Light.h"
 #include "Vertex.h"
 
 Shader::Shader(const wchar_t* FileName)
 {
 	/* Creation of constant buffer : cbuffer */
-	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
+	ID3D11Device* PD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
 
 	// Cr�ation d'un tampon pour les constantes du VS
 	D3D11_BUFFER_DESC BuffDesc;
@@ -101,8 +101,8 @@ Shader::~Shader()
 
 void Shader::UpdateLightsBuffer() const
 {
-	auto PDeviceContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
-	const auto& Lights = PM3D::CMoteurWindows::GetInstance().GetScene().GetVisibleLights();
+	auto PDeviceContext = EngineD3D11::GetInstance().Device->ImmediateContext;
+	const auto& Lights = EngineD3D11::GetInstance().GetScene().GetVisibleLights();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));

@@ -20,6 +20,5 @@ ShaderTerrain::ShaderTerrain(const wchar_t* FileName)
 	BuffDesc.ByteWidth = sizeof(ShadersParamsTerrain);
 	BuffDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	BuffDesc.CPUAccessFlags = 0;
-	auto a = PD3DDevice->CreateBuffer(&BuffDesc, nullptr, &PConstantBuffer);
-	int i = 0;
+	PD3DDevice->CreateBuffer(&BuffDesc, nullptr, &PConstantBuffer);
 }

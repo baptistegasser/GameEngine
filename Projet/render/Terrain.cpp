@@ -101,8 +101,10 @@ void ATerrain::LateTick(const float ElapsedTime)
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
 	ShaderParams.CameraPos = Engine.GetScene().GetCurrentCamera().GetPosition();
-
-
+	ShaderParams.Mat.Ambient = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Roughness = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Specular = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Intensity = 4;
 	ShaderParams.PosScale = XMVectorSet(Scale.x, Scale.z, static_cast<float>(Width), static_cast<float>(Height));
 	ShaderParams.TextureCoefficient = TextureCoefficient;
 

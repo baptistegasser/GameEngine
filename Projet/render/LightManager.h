@@ -18,7 +18,7 @@ struct LightToPos
 /// <summary>
 /// Manager charged to keep track of lights.
 /// </summary>
-class LightManager : Octree<LightComponent, LightToPos>
+class LightManager : Octree <LightComponent, LightToPos, false>
 {
 public:
 	using LightList = std::vector<Light>;

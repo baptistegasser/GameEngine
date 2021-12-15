@@ -58,6 +58,7 @@ class LightComponent : public Light, public Pitbull::Component
 public:
     LightComponent(Pitbull::Actor* Parent, LightType Type)
 		: Light{Type}, Component{Parent} {}
+    ~LightComponent() override = default;
 
     /// <summary>
     /// Allow light component to register themself.

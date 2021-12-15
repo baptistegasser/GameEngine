@@ -267,6 +267,9 @@
     <ClCompile Include="gameplay\Enemy.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="render\ShaderTerrain.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -475,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="gameplay\Enemy.h">
       <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ShaderTerrain.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

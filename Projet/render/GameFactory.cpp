@@ -130,7 +130,7 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 	const auto Terrain = new ATerrain{
 			Filename,
 			{1, 0.3f, 1},
-			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, FaceCull
 		};
@@ -326,7 +326,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	const auto Terrain = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
-			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
 		};
@@ -338,7 +338,7 @@ void GameFactory::CreateTunnel(Math::Transform Transform)
 	const auto Terrain2 = new ATerrain{
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
-			RessourceManager.GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, true
 			};

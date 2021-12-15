@@ -69,3 +69,16 @@ ObjectMesh* ResourcesManager::GetMesh(const wchar_t* MeshName)
 
 	return PMesh;
 }
+
+ShaderTerrain* ResourcesManager::GetShaderTerrain(const wchar_t* MeshName)
+{
+	const std::string Name = wchar2str(MeshName);
+	auto PShaderTerrain = ShadersTerrain[Name].get();
+
+	if (!PShaderTerrain) {
+		PShaderTerrain = new ShaderTerrain{ MeshName };
+		ShadersTerrain[Name].reset(PShaderTerrain);
+	}
+
+	return PShaderTerrain;
+}

@@ -2,7 +2,7 @@
 
 #include "Terrain.h"
 #include "Vertex.h"
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "math/Math.h"
 #include "physic/HeightFieldCollider.h"
 #include "resources/resource.h"
@@ -81,7 +81,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 
 	matWorld = Transform;
 
-	ID3D11DeviceContext* pImmediateContext = PM3D::CMoteurWindows::GetInstance().GetDispositif().ImmediateContext;
+	ID3D11DeviceContext* pImmediateContext = EngineD3D11::GetInstance().Device->ImmediateContext;
 
 	if (BackFaceCulling)
 		PM3D::CMoteurWindows::GetInstance().GetDispositif().DeactivateCullBack();
@@ -95,7 +95,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 	pImmediateContext->IASetIndexBuffer(PIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	pImmediateContext->IASetInputLayout(MeshShader->PInputLayout);
 
-	const XMMATRIX& viewProj = PM3D::CMoteurWindows::GetInstance().GetMatViewProj();
+	const XMMATRIX& viewProj = EngineD3D11::GetInstance().MatViewProj;
 	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
 	ShaderParams.matWorld = XMMatrixTranspose(matWorld);
 	ShaderParams.vLumiere = XMVectorSet(-10.0f, 10.0f, -15.0f, 1.0f);
@@ -167,7 +167,7 @@ void ATerrain::ComputeNormals()
 
 void ATerrain::GenerateMesh()
 {
-	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().D3DDevice;
+	ID3D11Device* PD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
 
 	// Vertices
 	{

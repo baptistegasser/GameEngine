@@ -51,6 +51,7 @@ public:
 	bool Add(DataPtr Data);
 	bool Remove(const DataPtr Data);
 	void Update();
+	void Clear();
 
 	const DataList& GetDatas() const noexcept;
 	DataPtrList Find(const Math::Vec3f& Pos, float MaxDistance) const;

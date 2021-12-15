@@ -51,6 +51,13 @@ namespace Pitbull
 		}
 	}
 
+	void Actor::SpriteTick(const float ElapsedTime)
+	{
+		for (const auto& Comp : Components) {
+			Comp->SpriteTick(ElapsedTime);
+		}
+	}
+
 	Actor::ComponentList Actor::GetComponents() const
 	{
 		ComponentList All;

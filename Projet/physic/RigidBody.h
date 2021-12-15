@@ -68,9 +68,13 @@ public:
 	/// <summary>
 	/// Set the target so the actor follow a path to it.
 	/// </summary>
-	void setKinematicTarget(const Math::Transform& Target) const;
+	void SetKinematicTarget(const Math::Transform& Target) const;
 
 	/// <summary>
+	/// Get the Rigidbody's velocity.
+	/// </summary>
+	const Math::Vec3f GetVelocity() const;
+	
 	/// Set the maximum of velocity of the Rigodbody
 	/// </summary>
 	void setMaxLinearVelocity(float Velocity);

@@ -8,7 +8,7 @@ class MeshRenderer : public Pitbull::Component {
 public:
 	MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh);
 	MeshRenderer(Pitbull::Actor* Parent, ObjectMesh* Mesh, Shader* MeshShader);
-	~MeshRenderer() = default;
+	~MeshRenderer() override = default;
 
 	void LateTick(const float& ElapsedTime) override;
 

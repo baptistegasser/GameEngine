@@ -26,8 +26,8 @@
 
 void GameFactory::LoadLevel()
 {
-	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
-	CreateEnemy(Math::Vec3f{ 0.f, 12.f, 1.f });
+	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }/*, Math::Vec3f{ 2.f, 1.f, 2.f }*/ });
+	CreateEnemy(Math::Transform{ Math::Vec3f{ 0.f, 13.f, -2.f }, Math::Vec3f{ 0.1f, 0.1f, 0.1f } });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
@@ -42,23 +42,25 @@ void GameFactory::LoadLevel()
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 
-	CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
+	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
 	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 5.f });
 	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 65.f });
 	CreateCheckPoint(Math::Vec3f{ 0.f, 10.5f, 135.f });
 
+	CreateTunnel(Math::Transform{ Math::Vec3f(0.f, 11.f, 0), Math::Vec3f(0.5f, 0.05f, 0.07f ) });
 
 	//CreateMobilePlatform(Math::Vec3f(10.f, 10.f, 20.f), Math::Vec3f(1.f, 1.f, 1.f), Math::Vec3f(-10, 0, 0), L".\\modeles\\plateform\\plateformGlace.OMB");
 	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f },  4.f);
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform)
+void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, bool FaceCull)
 {
 	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
 			Filename,
-			{1, 0.3f, 1},
+			{1, 1, 1},
 			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			, FaceCull
 		});
 	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\gazon.dds");
 	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\roche.dds");
@@ -99,7 +101,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 void GameFactory::CreateEnemy(Math::Transform Transform)
 {
 	auto Ennemy = Pitbull::Actor::New();
-	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\tree_cloud\\tree_cloud.OMB"), 
+	Ennemy->AddComponent<MeshRenderer>(PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetMesh(L".\\modeles\\bear\\bear.OMB"), 
 		PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhong.fx"));
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
@@ -197,6 +199,40 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 			, PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongSkyBox.fx")
 		}))
 	);
+}
+
+void GameFactory::CreateTunnel(Math::Transform Transform)
+{
+	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
+			L".\\modeles\\heigtmap\\tunnel.bmp",
+			{1, 0.3f, 1},
+			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			, true
+		});
+	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
+	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
+	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain->Transform = Transform;
+
+	auto Terrain2 = std::unique_ptr<ATerrain>(new ATerrain{
+			L".\\modeles\\heigtmap\\tunnel.bmp",
+			{1, 0.3f, 1},
+			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
+			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			, true
+			});
+	Terrain2->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
+	Terrain2->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\rouge.dds");
+	Terrain2->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\tunnel\\zebra.dds");
+	Terrain2->Transform = Transform;
+	Terrain2->Transform.Position.y = Terrain2->Transform.Position.y + (256.f * Transform.Scale.y)/2 + 0.55f;
+	Terrain2->Transform.Position.z = Terrain2->Transform.Position.z + ((float) Terrain->Height * Transform.Scale.z);
+	Terrain2->Transform.Rotation = Math::Quaternion(physx::PxPi, Math::Vec3f(1.f, 0.f, 0.f));
+
+
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
+	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain2), true);
 }
 
 

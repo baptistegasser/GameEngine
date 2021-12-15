@@ -26,6 +26,7 @@ namespace Math
 		Transform(const Math::Vec3f& Position) noexcept;
 		Transform(const Math::Vec3f& Position, const Math::Vec3f& Scale) noexcept;
 		Transform(const Math::Vec3f& Position, const Math::Quaternion& Rotation) noexcept;
+		Transform(const Math::Vec3f& Position, const Math::Quaternion& Rotation, const Math::Vec3f& Scale) noexcept;
 
 		/// <summary>
 		/// Rotate around the X axis;

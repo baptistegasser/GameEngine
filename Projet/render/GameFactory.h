@@ -19,7 +19,7 @@ private:
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
 	///	<param name="Transform"> : transform of the map  </param>
-	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform);
+	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, bool FaceCull = false);
 
 	/// <summary>
 	/// Create the player
@@ -75,6 +75,8 @@ private:
 	/// </summary>
 	/// <param name="ToFollow"> The actor's transform the skybox will follow </param>
 	void CreateSkyBox(Math::Transform* ToFollow);
+
+	void CreateTunnel(Math::Transform Transform);
 private :
 	Math::Transform* PlayerTransform;
 	/// <summary>

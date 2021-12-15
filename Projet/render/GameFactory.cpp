@@ -55,28 +55,57 @@ void GameFactory::LoadLevel()
 	 * First State with arena ( z C 135,210)
 	 ***/
 	Math::Vec3f TerrainPos = { -38.f, 3.f, 145.f };
-	float PosYEnemie = 4.3f;
+	float PosYEnemy = 4.3f;
 
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
-		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} });
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemie, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemie, TerrainPos.z + 10.f }, true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemie, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemie, TerrainPos.z + 20.f }, true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemie, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemie, TerrainPos.z + 20.f }, true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 25.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 25.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemie, TerrainPos.z + 45.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemie, TerrainPos.z + 45.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemie, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemie, TerrainPos.z + 42.5f }, true, 0.4f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemie, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemie, TerrainPos.z + 42.5f }, true, 0.4f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemie, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemie, TerrainPos.z + 62.5f }, true, 0.4f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemie, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemie, TerrainPos.z + 62.5f }, true, 0.4f);
+		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
+		L".\\modeles\\gazon.dds", L".\\modeles\\terre.dds", L".\\modeles\\terre.dds");
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, true);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemy, TerrainPos.z + 20.f }, true);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemy, TerrainPos.z + 20.f }, true);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 25.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 25.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 45.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 45.f }, true, 0.2f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 42.5f }, true, 0.4f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 42.5f }, true, 0.4f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
+	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
 
 	/***
 	 * Second state with plateform
 	 ***/
 
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, -3.f, 240), Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
-	CreateCheckPoint(Math::Vec3f{ 0.f, -2.5f, 240.f });
+	Math::Vec3f BasePos = { 0.f, -3.f, 240.f };
+
+	CreatePlatform(Math::Transform{ BasePos, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
+	CreateCheckPoint(Math::Vec3f{ BasePos.x, BasePos.y + 0.5f, BasePos.z });
+
+	CreateMobilePlatform(Math::Vec3f(BasePos.x, BasePos.y, BasePos.z + 20.f), Math::Vec3f(-55.f, 0, 0), 
+		L".\\modeles\\plateform\\plateformSable.OMB", Collider::DefaultMaterial,  0.175f);
+	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 60.f, BasePos.y, BasePos.z + 40.f), Math::Vec3f{ 1.f, 1.f, 1.f } }, 
+		L".\\modeles\\plateform\\plateformRouge.OMB");
+
+	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 60.f, BasePos.y, BasePos.z + 55.f), Math::Vec3f{ 0.75f, 1.f, 0.75f } }, 
+		Math::Vec3f(0, 0, 20), L".\\modeles\\plateform\\plateformSable.OMB", Collider::DefaultMaterial, 0.15f);
+	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 95.f, BasePos.y, BasePos.z + 90.f), Math::Vec3f{ 0.75f, 1.f, 0.75f } },
+		Math::Vec3f(20, 0, -20), L".\\modeles\\plateform\\plateformSable.OMB", Collider::DefaultMaterial, 0.20f);
+
+	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 95.f, BasePos.y, BasePos.z + 115.f), Math::Vec3f{ 1.75f, 1.f, 1.75f } }, 
+		L".\\modeles\\plateform\\plateformRouge.OMB");
+	CreateCheckPoint(Math::Vec3f{ BasePos.x - 95.f, BasePos.y + 0.5f, BasePos.z + 115.f });
+
+
+	/***
+	 * Second State with arena ( z C 135,210)
+	 ***/
+	Math::Vec3f TerrainPos2 = { -223.f, -6.f, 355.f };
+	float PosYEnemy2 = 4.3f;
+
+	CreateTerrain(L".\\modeles\\heigtmap\\Arene_2.bmp",
+		Math::Transform{ Math::Vec3f{ 0.f, -6.f, 0.f }, Math::Vec3f{ 0.25f, 0.25f, 0.25f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
+		L".\\modeles\\terre.dds",  L".\\modeles\\mur_pierre.dds", L".\\modeles\\Arene_Texture_2.dds");
+
 
 	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
 
@@ -84,7 +113,7 @@ void GameFactory::LoadLevel()
 	
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform)
+void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3)
 {
 	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
 			Filename,
@@ -92,9 +121,9 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 			PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetShader(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 		});
-	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\gazon.dds");
-	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\roche.dds");
-	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(L".\\modeles\\chemin.dds");
+	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
+	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
+	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
 	Terrain->Transform = Transform;
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
 }

@@ -61,7 +61,7 @@ void GameFactory::LoadLevel()
 
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
-		L".\\modeles\\gazon.dds", L".\\modeles\\terre.dds", L".\\modeles\\terre.dds");
+		L".\\modeles\\gazon.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds");
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, true);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemy, TerrainPos.z + 20.f }, true);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemy, TerrainPos.z + 20.f }, true);
@@ -105,8 +105,8 @@ void GameFactory::LoadLevel()
 	float PosYEnemy2 = 4.3f;
 
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene_2.bmp",
-		Math::Transform{ Math::Vec3f{ 0.f, -6.f, 0.f }, Math::Vec3f{ 0.25f, 0.25f, 0.25f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
-		L".\\modeles\\terre.dds",  L".\\modeles\\mur_pierre.dds", L".\\modeles\\Arene_Texture_2.dds");
+		Math::Transform{ Math::Vec3f{ 0.f, -6.f, 0.f }, Math::Vec3f{ 0.25f, 0.25f, 0.25f }, Math::Quaternion{ 0, Math::Vec3f(0, 0, 0)} },
+		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds");
 
 
 	//CreateIntelligentEnemy(Math::Vec3f{ 0.f, 40.f, 1.f }, PlayerTransform, 40.0f);
@@ -115,7 +115,7 @@ void GameFactory::LoadLevel()
 	
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3)
+void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
 {
 	auto Terrain = std::unique_ptr<ATerrain>(new ATerrain{
 			Filename,
@@ -125,8 +125,8 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 			, FaceCull
 		});
 	Terrain->Texture1 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
-	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
-	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName1);
+	Terrain->Texture2 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName2);
+	Terrain->Texture3 = PM3D::CMoteurWindows::GetInstance().GetResourcesManager().GetTexture(TextureName3);
 	Terrain->Transform = Transform;
 	PM3D::CMoteurWindows::GetInstance().GetScene().AddActor(std::move(Terrain), true);
 }

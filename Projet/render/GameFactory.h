@@ -19,7 +19,7 @@ private:
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
 	///	<param name="Transform"> : transform of the map  </param>
-	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3);
+	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false);
 
 	/// <summary>
 	/// Create the player

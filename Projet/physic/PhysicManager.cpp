@@ -89,3 +89,10 @@ ContactHandler& PhysicManager::GetContactHandler() noexcept
 	return ContactHandler;
 }
 
+physx::PxRaycastBuffer PhysicManager::Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const
+{
+	physx::PxRaycastBuffer Hit;
+	CurrentScene->raycast(Origin, Direction, Distance, Hit);
+	return Hit;
+}
+

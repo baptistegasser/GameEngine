@@ -121,7 +121,7 @@ protected:
 	int64_t NextTimeStep = 0;
 	int64_t PreviousTimeStep = 0;
 
-	Scene* CurrentScene;
+	Scene* CurrentScene = nullptr;
 
 private:
 	static ULONG_PTR GDIToken;

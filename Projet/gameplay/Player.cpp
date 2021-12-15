@@ -31,10 +31,10 @@ void Player::Init()
 
 void Player::Tick(const float& ElapsedTime)
 {
-	if (IsDead())
+	/*if (IsDead())
 	{
 		ResetPlayer();
-	}
+	}*/
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -130,13 +130,13 @@ void Player::FixedTick(const float& DeltaTime)
 
 bool Player::isGrounded() const
 {
-	static auto& Scene = EngineD3D11::GetInstance().GetScene();
+	auto& PhysicManager = PhysicManager::GetInstance();
 
 	auto Origin = ParentActor->Transform.Position;
-	Origin.y -= MyCollider->Radius + 0.1f; // Little more than radius
-	auto Hit = Scene.Raycast(
+	Origin.y -= MyCollider->Radius + 0.00001f; // Little more than radius
+	auto Hit = PhysicManager.Raycast(
 		Origin,
-		{0.0f, -1.0f, 0.0f}, 
+		{ 0.0f, -1.0f, 0.0f },
 		0.1f);
 	return Hit.hasAnyHits();
 }

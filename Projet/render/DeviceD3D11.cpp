@@ -22,7 +22,7 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 #endif
 
 	DXGI_SWAP_CHAIN_DESC SwapDesc;
-	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre lï¿½ï¿½change plein ï¿½cran
+	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre l’échange plein écran
 	ZeroMemory(&SwapDesc, sizeof(SwapDesc));
 
 	switch (CDSMode)
@@ -261,4 +261,16 @@ void DeviceD3D11::ActivateZBuffer() const
 void DeviceD3D11::DeactivateZBuffer() const
 {
 	ImmediateContext->OMSetDepthStencilState(pDepthStencilDephtDisable, 0);
+}
+
+void DeviceD3D11::SetRenderTargetView(ID3D11RenderTargetView* PRenderTargetView, ID3D11DepthStencilView* PDepthStencilView)
+{
+	// Set values
+	RenderTargetView = PRenderTargetView;
+	DepthStencilView = PDepthStencilView;
+	
+	// Update context
+	ID3D11ShaderResourceView* const pSRV[1] = { NULL };
+	ImmediateContext->PSSetShaderResources(0, 1, pSRV);
+	ImmediateContext->OMSetRenderTargets(1, &PRenderTargetView, DepthStencilView);
 }

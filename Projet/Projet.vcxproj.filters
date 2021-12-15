@@ -70,6 +70,9 @@
     <Filter Include="Header Files\render\pm3d">
       <UniqueIdentifier>{f5e4d62c-8492-4ef2-8b28-dca664b4dd9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\effects">
+      <UniqueIdentifier>{d49361b6-13f7-4931-92eb-11daf55325e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="render\ObjetMesh.cpp">
@@ -251,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="gameplay\IntelligentEnemy.cpp">
       <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Effect.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +464,9 @@
     <ClInclude Include="gameplay\IntelligentEnemy.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="render\Effect.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico">
@@ -506,6 +515,9 @@
     </None>
     <None Include="Shaders\Util.hlsl">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\Effect_Nul.fx">
+      <Filter>Shaders\effects</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -25,6 +25,8 @@ public:
 	void ActivateZBuffer() const;
 	void DeactivateZBuffer() const;
 
+	void SetRenderTargetView(ID3D11RenderTargetView *PRenderTargetView, ID3D11DepthStencilView *PDepthStencilView);
+
 	ID3D11Device* D3DDevice{};
 	ID3D11DeviceContext* ImmediateContext{};
 	IDXGISwapChain* SwapChain{};

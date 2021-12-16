@@ -12,10 +12,11 @@ public:
 
 	void LateTick(const float& ElapsedTime) override;
 
-	ShadersParams ShaderParams;
 	ObjectMesh* Mesh;
 
 private:
 	DirectX::XMMATRIX matWorld;
 	Shader* MeshShader;
+
+	void RenderShadowMap();
 };

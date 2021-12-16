@@ -42,6 +42,11 @@ std::vector<Light> LightManager::GetLights(const BoundingVolume& Boundary) const
 	return Lights;
 }
 
+DirectionalLight* LightManager::GetDirectionalLight() noexcept
+{
+	return static_cast<::DirectionalLight*>(DirectionalLight);
+}
+
 bool LightManager::HasDirectionalLight() const noexcept
 {
 	return DirectionalLight != nullptr;

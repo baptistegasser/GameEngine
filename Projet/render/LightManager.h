@@ -3,6 +3,7 @@
 #include "math/Octree.h"
 #include "math/Vec3f.h"
 #include "Light.h"
+#include "DirectionalLight.h"
 
 /// <summary>
 /// Functor to convert retrieve a position from a ptr to a Light.
@@ -47,6 +48,11 @@ public:
 	/// Get all managed lights that are inside a bounding volume.
 	/// </summary>
 	LightList GetLights(const BoundingVolume& Boundary) const noexcept;
+	/// <summary>
+	/// Return the pointer to the current directional light.
+	/// </summary>
+	/// <returns></returns>
+	DirectionalLight* GetDirectionalLight() noexcept;
 
 private:
 	/// <summary>

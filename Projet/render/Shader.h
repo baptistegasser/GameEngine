@@ -18,6 +18,7 @@ private:
 
 struct ShadersParams {
 	DirectX::XMMATRIX MatWorldViewProj;
+	DirectX::XMMATRIX LightMatWorldViewProj;
 	DirectX::XMMATRIX MatWorld;
 	DirectX::XMVECTOR CameraPos;
 	DirectX::XMVECTOR AmbientColor;
@@ -54,4 +55,14 @@ struct Shader {
 	/// Update the lights buffer of the shader.
 	/// </summary>
 	void UpdateLightsBuffer() const;
+
+	static const int SHADOWMAP_DIM = 512;
+	/* Depth texture */
+	ID3D11InputLayout* PVertexLayoutShadow;
+	ID3D11Texture2D* PDepthTexture;
+	ID3D11DepthStencilView* PDepthStencilView;
+	ID3D11ShaderResourceView* PDepthShaderResourceView;
+
+private:
+	void InitDepthBuffer();
 };

@@ -8,9 +8,11 @@
 #include "Vertex.h"
 
 Shader::Shader(const wchar_t* FileName)
+	: FileName{ FileName }
 {
-	/* Creation of constant buffer : cbuffer */
 	ID3D11Device* PD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
+
+	InitDepthBuffer();
 
 	// Cr�ation d'un tampon pour les constantes du VS
 	D3D11_BUFFER_DESC BuffDesc;
@@ -31,13 +33,25 @@ Shader::Shader(const wchar_t* FileName)
 
 	PFXBlob->Release();
 
-	PEffectTechnique = PEffect->GetTechniqueByIndex(0);
-	PEffectPass = PEffectTechnique->GetPassByIndex(0);
-
 	D3DX11_PASS_SHADER_DESC PassDesc;
-	PEffectPass->GetVertexShaderDesc(&PassDesc);
-
 	D3DX11_EFFECT_SHADER_DESC EffectDesc;
+
+	PEffectTechnique = PEffect->GetTechniqueByName("ShadowMap");
+	PEffectPass = PEffectTechnique->GetPassByIndex(0);
+	PEffectPass->GetVertexShaderDesc(&PassDesc);
+	PassDesc.pShaderVariable->GetShaderDesc(PassDesc.ShaderIndex, &EffectDesc);
+
+	DX_TRY(PD3DDevice->CreateInputLayout(Vertex::Layout,
+										 Vertex::LayoutCount,
+										 EffectDesc.pBytecode,
+										 EffectDesc.BytecodeLength,
+										 &PVertexLayoutShadow),
+			  DXE_CREATIONLAYOUT);
+
+
+	PEffectTechnique = PEffect->GetTechniqueByName("MiniPhong");
+	PEffectPass = PEffectTechnique->GetPassByIndex(0);
+	PEffectPass->GetVertexShaderDesc(&PassDesc);
 	PassDesc.pShaderVariable->GetShaderDesc(PassDesc.ShaderIndex, &EffectDesc);
 
 	DX_TRY(PD3DDevice->CreateInputLayout(Vertex::Layout,
@@ -96,6 +110,10 @@ Shader::~Shader()
 	DX_RELEASE(PSampleState);
 	DX_RELEASE(PPointLightsBufferView);
 	DX_RELEASE(PPointLightsBuffer);
+	DX_RELEASE(PDepthStencilView);
+	DX_RELEASE(PDepthShaderResourceView);
+	DX_RELEASE(PDepthTexture);
+	DX_RELEASE(PVertexLayoutShadow);
 	DX_RELEASE(PEffect);
 }
 
@@ -115,4 +133,41 @@ void Shader::UpdateLightsBuffer() const
 
 	const auto PointLightsRess = PEffect->GetVariableByName("LightsBuffer")->AsShaderResource();
 	PointLightsRess->SetResource(PPointLightsBufferView);
+}
+
+
+void Shader::InitDepthBuffer()
+{
+	ID3D11Device* PD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
+
+	D3D11_TEXTURE2D_DESC depthTextureDesc;
+	ZeroMemory(&depthTextureDesc, sizeof(depthTextureDesc));
+	depthTextureDesc.Width = 512;
+	depthTextureDesc.Height = 512;
+	depthTextureDesc.MipLevels = 1;
+	depthTextureDesc.ArraySize = 1;
+	depthTextureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	depthTextureDesc.SampleDesc.Count = 1;
+	depthTextureDesc.SampleDesc.Quality = 0;
+	depthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthTextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+	depthTextureDesc.CPUAccessFlags = 0;
+	depthTextureDesc.MiscFlags = 0;
+	DX_TRY(PD3DDevice->CreateTexture2D(&depthTextureDesc, nullptr, &PDepthTexture), DXE_ERREURCREATIONTEXTURE);
+
+	// Création de la vue du tampon de profondeur (ou de stencil)
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSView;
+	ZeroMemory(&descDSView, sizeof(descDSView));
+	descDSView.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDSView.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSView.Texture2D.MipSlice = 0;
+	DX_TRY(PD3DDevice->CreateDepthStencilView(PDepthTexture, &descDSView, &PDepthStencilView), DXE_ERREURCREATIONDEPTHSTENCILTARGET);
+
+	// Création d’une shader resource ciew pour lire le tampond de profondeur dans le shader.
+	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResDesc;
+	ShaderResDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+	ShaderResDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	ShaderResDesc.Texture2D.MostDetailedMip = 0;
+	ShaderResDesc.Texture2D.MipLevels = 1;
+	DX_TRY(PD3DDevice->CreateShaderResourceView(PDepthTexture, &ShaderResDesc, &PDepthShaderResourceView), DXE_ERREURCREATIONSRV);
 }

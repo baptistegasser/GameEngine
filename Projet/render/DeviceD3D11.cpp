@@ -287,3 +287,32 @@ void DeviceD3D11::SetRenderTargetView(ID3D11RenderTargetView* PRenderTargetView,
 	// Finally clear the new view
 	ClearView();
 }
+
+void DeviceD3D11::SetViewPortDimension(float Width, float Height)
+{
+	D3D11_VIEWPORT vp;
+	vp.Width = Width;
+	vp.Height = Height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	ImmediateContext->RSSetViewports(1, &vp);
+}
+
+void DeviceD3D11::ResetViewPortDimension()
+{
+	D3D11_VIEWPORT vp;
+	vp.Width = static_cast<float>(ScreenWidth);
+	vp.Height = static_cast<float>(ScreenHeight);
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	ImmediateContext->RSSetViewports(1, &vp);
+}
+
+void DeviceD3D11::SetNormalRSState()
+{
+	ImmediateContext->RSSetState(SolidCullBackRS);
+}

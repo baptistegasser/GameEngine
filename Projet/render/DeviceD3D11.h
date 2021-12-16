@@ -28,6 +28,10 @@ public:
 	void ClearView();
 	void SetRenderTargetView(ID3D11RenderTargetView *PRenderTargetView, ID3D11DepthStencilView *PDepthStencilView);
 
+	void SetViewPortDimension(float Width, float Height);
+	void ResetViewPortDimension();
+	void SetNormalRSState();
+
 	ID3D11Device* D3DDevice{};
 	ID3D11DeviceContext* ImmediateContext{};
 	IDXGISwapChain* SwapChain{};

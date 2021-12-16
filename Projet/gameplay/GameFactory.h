@@ -102,4 +102,6 @@ private:
 	/// Create the sprite timer on the screen
 	/// </summary>
 	void CreateTimer();
+
+	void CreateDirectionalSign(Math::Transform Transform);
 };

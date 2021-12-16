@@ -57,6 +57,7 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	variableTexture = Shader->Effet->GetVariableByName("textureEntree")->AsShaderResource();
 
 	pD3DDevice->ActivateAlphaBlending();
+	pD3DDevice->DeactivateZBuffer();
 
 	XMMATRIX Position;
 	XMMATRIX Scale;
@@ -96,4 +97,5 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	pImmediateContext->Draw(6, 0);
 
 	pD3DDevice->DeactivateAlphaBlending();
+	pD3DDevice->ActivateZBuffer();
 }

@@ -17,6 +17,7 @@
 #include "render/PointLight.h"
 #include "render/DirectionalLight.h"
 #include "render/Skybox.h"
+#include "render/Menu.h"
 //#include "render/Font.h"
 
 // Gameplay components
@@ -70,6 +71,8 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 	Terrain->Texture3 = RessourceManager.GetTexture(L".\\modeles\\chemin.dds");
 	Terrain->Transform = Transform;
 	Engine.GetScene().AddActor(Terrain, true);
+
+	Engine.GetScene().AddActor(new Menu{false}, true);
 }
 
 void GameFactory::CreatePlayer(Math::Transform Transform)

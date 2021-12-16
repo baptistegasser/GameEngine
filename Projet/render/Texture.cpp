@@ -14,9 +14,8 @@ Texture::~Texture()
 	DX_RELEASE(TextureView);
 }
 
-Texture::Texture(const std::wstring& filename)
-	: Filename(filename)
-	, TextureView(nullptr)
+Texture::Texture(const std::wstring& Filename)
+	: Filename(Filename)
 {
 	ID3D11Device* Device = EngineD3D11::GetInstance().Device->D3DDevice;
 

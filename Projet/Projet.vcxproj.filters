@@ -264,6 +264,9 @@
     <ClCompile Include="gameplay\IntelligentEnemy.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="render\Menu.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -469,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="gameplay\IntelligentEnemy.h">
       <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Menu.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

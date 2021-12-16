@@ -36,7 +36,6 @@ void IntelligentEnemy::FixedTick(const float& DeltaTime)
 	// Return to base
 	else 
 	{
-		// TODO +- 0.1
 		if (ParentActor->Transform.Position.MinusByXZ(BasePosition - 0.1f) || ParentActor->Transform.Position.PlusByXZ(BasePosition + 0.1f)) {
 			Direction = BasePosition - ParentActor->Transform.Position;
 			Direction.normalize();

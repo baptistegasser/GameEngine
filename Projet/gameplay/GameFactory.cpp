@@ -66,7 +66,7 @@ void GameFactory::LoadLevel()
 	float PosYEnemy = 4.3f;
 
 	// Dim : 76 / 76
-	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
+	auto GrassTerrain = CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
 		L".\\modeles\\gazon.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, true);
@@ -81,9 +81,11 @@ void GameFactory::LoadLevel()
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 15.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
-		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, 40.0f);
+		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, GrassTerrain, 
+		Math::Vec3f{ 15.f, PosYEnemy, 35.f }, 40.0f);
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 63.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
-		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, 40.0f);
+		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, GrassTerrain, 
+		Math::Vec3f{ 63.f, PosYEnemy, 35.f }, 40.0f);
 
 	/***
 	 * Second state with plateform
@@ -172,7 +174,7 @@ void GameFactory::LoadLevel()
 	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 250.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
+ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -189,6 +191,7 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 	Terrain->Texture3 = RessourceManager.GetTexture(TextureName3);
 	Terrain->Transform = Transform;
 	Engine.GetScene().AddActor(Terrain, true);
+	return Terrain;
 }
 
 void GameFactory::CreatePlayer(Math::Transform Transform)
@@ -265,7 +268,8 @@ void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool I
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }
 
-void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, float Distance, bool IsKiller, float Speed)
+void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, ATerrain* RelativeTerrain,
+	Math::Vec3f RelativeTerrainPosition, float Distance, bool IsKiller, float Speed)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -277,7 +281,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position,Distance, IsKiller);
+	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position, RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller);
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }
 

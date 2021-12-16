@@ -20,7 +20,7 @@ private:
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
 	///	<param name="Transform"> : transform of the map  </param>
-	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false);
+	ATerrain* CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false);
 
 	/// <summary>
 	/// Create the player
@@ -42,7 +42,8 @@ private:
 	///	<param name="Transform"> : transform of the enemy  </param>
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
 	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
-	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, ATerrain* RelativeTerrain,
+		Math::Vec3f RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create a fixed platform

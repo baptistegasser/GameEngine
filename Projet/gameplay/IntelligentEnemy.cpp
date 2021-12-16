@@ -33,9 +33,10 @@ void IntelligentEnemy::FixedTick(const float& DeltaTime)
 		&& ToFollow->Position > Zone.Point1
 		&& ToFollow->Position < Zone.Point2) {
 		Direction.normalize();
-		float NextPosX = ParentActor->Transform.Position.x + Direction.x * Speed;
-		float NextPosZ = ParentActor->Transform.Position.z + Direction.z * Speed;
-		const float NextPosY = RelativeTerrain->GetVertex(static_cast<int>(RelativeTerrainPosition.x), static_cast<int>(RelativeTerrainPosition.z)).Position.y + 3.3f;
+		const float NextPosX = ParentActor->Transform.Position.x + Direction.x * Speed;
+		const float NextPosZ = ParentActor->Transform.Position.z + Direction.z * Speed;
+		const float NextPosY = RelativeTerrain->GetVertex(static_cast<int>(RelativeTerrainPosition.x / RelativeTerrain->Transform.Scale.x), 
+			static_cast<int>(RelativeTerrainPosition.z / RelativeTerrain->Transform.Scale.z)).Position.y * (RelativeTerrain->Transform.Scale.y) + BasePosition.y;
 
 		MyRigidBody->SetKinematicTarget(Transform(Vec3f(NextPosX, NextPosY, NextPosZ),
 			Quaternion(atan2f(Direction.x, Direction.z) + physx::PxPi, Vec3f(0, 1, 0))));
@@ -46,9 +47,10 @@ void IntelligentEnemy::FixedTick(const float& DeltaTime)
 		if (ParentActor->Transform.Position.MinusByXZ(BasePosition - 0.1f) || ParentActor->Transform.Position.PlusByXZ(BasePosition + 0.1f)) {
 			Direction = BasePosition - ParentActor->Transform.Position;
 			Direction.normalize();
-			float NextPosX = ParentActor->Transform.Position.x + Direction.x * Speed;
-			float NextPosZ = ParentActor->Transform.Position.z + Direction.z * Speed;
-			const float NextPosY = RelativeTerrain->GetVertex(static_cast<int>(RelativeTerrainPosition.x), static_cast<int>(RelativeTerrainPosition.z)).Position.y + 3.3f;
+			const float NextPosX = ParentActor->Transform.Position.x + Direction.x * Speed;
+			const float NextPosZ = ParentActor->Transform.Position.z + Direction.z * Speed;
+			const float NextPosY = RelativeTerrain->GetVertex(static_cast<int>(RelativeTerrainPosition.x / RelativeTerrain->Transform.Scale.x),
+				static_cast<int>(RelativeTerrainPosition.z / RelativeTerrain->Transform.Scale.z)).Position.y * (RelativeTerrain->Transform.Scale.y) + BasePosition.y;
 			MyRigidBody->SetKinematicTarget(Transform(Vec3f(NextPosX, NextPosY, NextPosZ),
 				Quaternion(atan2f(Direction.x, Direction.z) + physx::PxPi, Vec3f(0, 1, 0))));
 		}

@@ -80,12 +80,12 @@ void GameFactory::LoadLevel()
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 42.5f }, true, 0.4f);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
 	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
-	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 15.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 15.f, PosYEnemy + 0.8f, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, GrassTerrain, 
-		Math::Vec3f{ 15.f, PosYEnemy, 35.f }, 40.0f);
-	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 63.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		Math::Vec3f{ 15.f, PosYEnemy + 2.0f, 35.f }, 40.0f);
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 63.f, PosYEnemy + 0.8f, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, GrassTerrain, 
-		Math::Vec3f{ 63.f, PosYEnemy, 35.f }, 40.0f);
+		Math::Vec3f{ 63.f, PosYEnemy + 2.0f, 35.f }, 40.0f);
 
 	/***
 	 * Second state with plateform
@@ -120,7 +120,7 @@ void GameFactory::LoadLevel()
 	float PosYEnemy2 = -5.5f;
 
 	// Dim : 128 / 128
-	CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
+	auto CaveTerrain = CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
 		Math::Transform{ TerrainPos2, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
 		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
 	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TerrainPos2.x + 128.f, TerrainPos2.y + 22.0f, TerrainPos2.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
@@ -128,6 +128,40 @@ void GameFactory::LoadLevel()
 	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
 		CaveTrans,
 		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
+
+	float Speed = 0.15f;
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 15.f, PosYEnemy2 + 2.f, TerrainPos2.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ TerrainPos2, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 45.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 75.f, PosYEnemy2 + 2.f, TerrainPos2.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ TerrainPos2, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 45.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 95.f, PosYEnemy2 + 2.f, TerrainPos2.z + 55.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ Math::Vec3f{ TerrainPos2.x + 90.f, PosYEnemy2, TerrainPos2.z }, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 90.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 75.f, PosYEnemy2 + 2.f, TerrainPos2.z + 85.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ Math::Vec3f{ TerrainPos2.x, PosYEnemy2, TerrainPos2.z + 45.f}, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 95.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 35.f, PosYEnemy2 + 2.f, TerrainPos2.z + 70.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ Math::Vec3f{ TerrainPos2.x, PosYEnemy2, TerrainPos2.z + 45.f }, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 95.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 20.f, PosYEnemy2 + 2.f, TerrainPos2.z + 95.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ Math::Vec3f{ TerrainPos2.x, PosYEnemy2, TerrainPos2.z + 45.f }, Math::Vec3f{ TerrainPos2.x + 45.f, PosYEnemy2 + 30.f, TerrainPos2.z + 128.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 40.f, PosYEnemy2 + 2.f, TerrainPos2.z + 115.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ Math::Vec3f{ TerrainPos2.x, PosYEnemy2, TerrainPos2.z + 90.f }, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 128.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos2.x + 105.f, PosYEnemy2 + 2.f, TerrainPos2.z + 120.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ Math::Vec3f{ TerrainPos2.x, PosYEnemy2, TerrainPos2.z + 90.f }, Math::Vec3f{ TerrainPos2.x + 128.f, PosYEnemy2 + 30.f, TerrainPos2.z + 128.f } }, CaveTerrain,
+		Math::Vec3f{ 15.f, PosYEnemy2 + 2.f, 35.f }, 40.0f, true, Speed);
 
 	/***
 	 * Third state with plateform
@@ -181,7 +215,7 @@ ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Tr
 
 	const auto Terrain = new ATerrain{
 			Filename,
-			{1, 0.3f, 1},
+			{1,0.3f,1},
 			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
 			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
 			, FaceCull
@@ -274,14 +308,29 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
 
-	auto Ennemy = new Pitbull::Actor{};
+	auto Ennemy = new Pitbull::Actor{ "Enemy" };
 	Ennemy->AddComponent<MeshRenderer>(
 		RessourceManager.GetMesh(L".\\modeles\\bear\\bear.OMB"),
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+
+	auto EnemyCollider = [](const Contact& Contact) -> void {
+		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player" && Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
+		{
+			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy" && Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
+		{
+			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+		}
+	};
+
+	auto Collider = Ennemy->AddComponent<CapsuleCollider>(6.f, 25.f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+	Collider->OnContactCallBack = EnemyCollider;
+
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position, RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller);
+	auto InteligentEnemy = Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position, RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller);
+	InteligentEnemy->SetSpeed(Speed);
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }
 

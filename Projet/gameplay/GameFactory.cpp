@@ -42,10 +42,9 @@ void GameFactory::LoadLevel()
 	/***
 	 * First state with platform ( z C 0,135)
 	 ***/
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformOrange.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformRed.OMB");
 
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
-	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\PlateformYellow.OMB");
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformDarkBlue.OMB");
@@ -57,6 +56,9 @@ void GameFactory::LoadLevel()
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformRed.OMB");
 
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ 0.f, 10.5f, 135.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
+	CreateTree(Math::Transform{ Math::Vec3f{ 75.f, 10.5f, 50.f }, Math::Quaternion{physx::PxHalfPi/2, Math::Vec3f{0,1,0}} });
+	CreateTree(Math::Transform{ Math::Vec3f{ -50.f, 20.f, 50.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} });
+	CreateTree(Math::Transform{ Math::Vec3f{ 0.f, 30.f, 100.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} });
 
 	/***
 	 * First State with arena ( z C 135,210)
@@ -127,6 +129,7 @@ void GameFactory::LoadLevel()
 	 ***/
 	
 	Math::Vec3f BasePos = { 0.f, -3.f, 240.f };
+	//Math::Vec3f BasePos = { 0.f, 10.f, 0.f };
 
 	CreatePlatform(Math::Transform{ BasePos, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformLightBlue.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x, BasePos.y + 0.5f, BasePos.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
@@ -146,6 +149,9 @@ void GameFactory::LoadLevel()
 	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 95.f, BasePos.y, BasePos.z + 115.f), Math::Vec3f{ 1.75f, 1.f, 1.75f } }, 
 		L".\\modeles\\plateform\\plateformLightBlue.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x - 95.f, BasePos.y + 0.5f, BasePos.z + 115.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
+
+	CreateTree(Math::Transform{ Math::Vec3f{ BasePos.x - 15.f, BasePos.y+15.0f, BasePos.z + 35.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} });
+	CreateTree(Math::Transform{ Math::Vec3f{ BasePos.x - 100.f, BasePos.y + 1.0f, BasePos.z + 20.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} });
 
 
 	/***
@@ -188,9 +194,8 @@ void GameFactory::LoadLevel()
 	/***
 	 * Third State with arena
 	 ***/
-	//Math::Vec3f TerrainPos3 = { -96.f, 0.f, 570.f };
+	Math::Vec3f TerrainPos3 = { -96.f, 0.f, 570.f };
 	//float PosYEnemy2 = -5.5f;
-	Math::Vec3f TerrainPos3 = { -96.f, 5.f, 0.f };
 
 	// Dim : 128 / 128
 	CreateTerrain(L".\\modeles\\heigtmap\\fall.bmp",
@@ -550,4 +555,18 @@ void GameFactory::CreateDirectionalSign(Math::Transform Transform)
 	MyDirectionalSign->AddComponent<BoxCollider>(Math::Vec3f(0.2f, 5.f, 0.2f), PhysicMaterial{ 0.5f, 0.5f, 0.2f }, Math::Vec3f(0, 2.5f, 0));
 	MyDirectionalSign->Transform = Transform;
 	Engine.GetScene().AddActor(std::move(MyDirectionalSign));
+}
+
+void GameFactory::CreateTree(Math::Transform Transform)
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& RessourceManager = Engine.ResourcesManager;
+
+	auto myTree = new Pitbull::Actor{};
+	myTree->AddComponent<MeshRenderer>(
+		RessourceManager.GetMesh(L".\\modeles\\tree_cloud\\tree_cloud.OMB"),
+		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
+	//myTree->AddComponent<BoxCollider>(Math::Vec3f(0.2f, 5.f, 0.2f), PhysicMaterial{ 0.5f, 0.5f, 0.4f }, Math::Vec3f(0, 2.5f, 0));
+	myTree->Transform = Transform;
+	Engine.GetScene().AddActor(std::move(myTree));
 }

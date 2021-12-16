@@ -106,6 +106,12 @@ private:
 	/// <summary>
 	/// Create a directional sign
 	/// </summary>
-	/// <param name="Transform"></param>
+	/// <param name="Transform"> transform of the sign </param>
 	void CreateDirectionalSign(Math::Transform Transform);
+
+	/// <summary>
+	/// Create a tree
+	/// </summary>
+	/// <param name="Transform"> transform of the tree </param>
+	void CreateTree(Math::Transform Transform);
 };

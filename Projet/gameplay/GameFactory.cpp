@@ -277,7 +277,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Distance, IsKiller);
+	Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position,Distance, IsKiller);
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }
 

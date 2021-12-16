@@ -13,7 +13,7 @@ public :
 		Math::Vec3f Point1, Point2;
 	};
 
-	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
+	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
 	~IntelligentEnemy() override = default;
 
 	void Init() override;
@@ -26,9 +26,11 @@ public :
 
 	void SetSpeed(const float& SpeedNew);
 
+	
 private:
 	Math::Transform* ToFollow;
 	Math::Vec3f Direction;
+	Math::Vec3f BasePosition;
 
 	float Speed = 0.1f;
 	float Distance;

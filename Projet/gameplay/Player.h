@@ -106,11 +106,6 @@ private:
 	/// </summary>
 	[[nodiscard]] bool IsDead() const;
 
-	/// <summary>
-	/// Reset player value
-	/// </summary>
-	void ResetPlayer() const;
-
 	bool Live = true;
 };
 

@@ -47,5 +47,13 @@ namespace Math
 		bool operator>=(const Vec3f& Vec) const noexcept;
 		bool operator<(const Vec3f& Vec) const noexcept;
 		bool operator>(const Vec3f& Vec) const noexcept;
+
+		bool PlusByXZ(const Vec3f& Vec) const noexcept;
+		bool MinusByXZ(const Vec3f& Vec) const noexcept;
+
+		Vec3f operator+(const float& Val) const noexcept;
+		Vec3f operator+(const Vec3f& Val) const noexcept;
+		Vec3f operator-(const float& Val) const noexcept;
+		Vec3f operator-(const Vec3f& Val) const noexcept;
 	};
 }

@@ -12,8 +12,9 @@ cbuffer param
 	float4 CameraPos;
     float4 AmbientColor;
     Material Mat;
-	bool HasTexture;
-	float3 _FILL_;
+    int HasTexture;
+    int EnableDirLight;
+	float2 _FILL_;
 }
 
 Texture2D textureEntree;
@@ -72,6 +73,9 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
     // Calc all Point lights
     for (uint i = 0; i < LightCount; i += 1)
     {
+        if (LightsBuffer[i].Type == LightType_Directional && !EnableDirLight)
+            continue;
+        
         phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
     }
 

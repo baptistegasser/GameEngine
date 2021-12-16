@@ -71,6 +71,11 @@ inline void DX_RELEASE_INPUT(Type& Pointer)
 	}
 }
 
+inline float frand()
+{
+	return static_cast<float>(rand()) / RAND_MAX;
+}
+
 const wchar_t* str2wchar(const std::string& str) noexcept;
 const std::string wchar2str(const wchar_t* wchars) noexcept;
 

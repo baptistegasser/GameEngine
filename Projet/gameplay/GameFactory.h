@@ -45,6 +45,11 @@ private:
 	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
+	/// Create our tunnel.
+	/// </summary>
+	void CreateTunnel();
+
+	/// <summary>
 	/// Create a fixed platform
 	/// </summary>
 	/// <param name="Transform"> : init transform of platform </param>
@@ -60,17 +65,6 @@ private:
 	///	<param name="Filename"> : name of texture file </param>
 	/// <param name="Material"> : material for platform </param>
 	void CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial, float Speed = 0.1f);
-
-	/// <summary>
-	/// Create a light
-	/// </summary>
-	///	<param name="Pos"> : init position of the light </param>
-	///	<param name="Specular"> : specular value of the light </param>
-	///	<param name="Roughness"> : roughness value of the light </param>
-	///	<param name="Intensity"> : intensity of the light </param>
-	/// <param name="InnerRadius"> : innerRadius of the light </param>
-	///	<param name="OuterRadius"> : outerRadius of the light </param>
-	void CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity = 0.f, float InnerRadius = 0.f, float OuterRadius = 0.f);
 
 	/// <summary>
 	/// Create a skybox

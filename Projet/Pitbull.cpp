@@ -15,6 +15,8 @@ int APIENTRY _tWinMain(
 	UNREFERENCED_PARAMETER(LPCmdLine);
 	UNREFERENCED_PARAMETER(NCMDShow);
 
+	srand((unsigned int)time(NULL));
+
 	try
 	{
 		EngineD3D11& Engine = EngineD3D11::GetInstance();

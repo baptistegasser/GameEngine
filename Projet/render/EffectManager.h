@@ -36,7 +36,7 @@ public:
 	void AddEffect(Effect* Effect);
 
 	/// <summary>
-	/// Actiavte an effect identified by its name.
+	/// Activate an effect identified by its name.
 	/// </summary>
 	void ActivateEffect(const std::string &Name);
 

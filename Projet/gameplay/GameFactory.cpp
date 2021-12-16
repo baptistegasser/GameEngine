@@ -31,6 +31,11 @@
 
 void GameFactory::LoadLevel()
 {
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_RadialBlur.fx");
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Nul.fx");
+	EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_RadialBlur.fx"));
+	//EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
+
 	/***
 	 * Util Object
 	 ***/

@@ -9,6 +9,7 @@ class GameFactory : public Singleton<GameFactory>
 {
 	friend struct Singleton<GameFactory>;
 public:
+	void LoadMainMenu();
 	void LoadLevel();
 
 private:

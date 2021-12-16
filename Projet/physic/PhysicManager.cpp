@@ -76,6 +76,7 @@ void PhysicManager::Cleanup()
 		PX_RELEASE(transport);
 	}
 	PX_RELEASE(Foundation);
+	RigidBodies.clear();
 }
 
 void PhysicManager::RegisterRigidBody(RigidBody* RigidBody)

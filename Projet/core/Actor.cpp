@@ -32,6 +32,7 @@ namespace Pitbull
 
 	void Actor::Tick(const float ElapsedTime)
 	{
+		if (!Active) return;
 		for (const auto& Comp : Components) {
 			Comp->Tick(ElapsedTime);
 		}
@@ -39,6 +40,7 @@ namespace Pitbull
 
 	void Actor::FixedTick(const float DeltaTime)
 	{
+		if (!Active) return;
 		for (const auto& Comp : Components) {
 			Comp->FixedTick(DeltaTime);
 		}
@@ -46,13 +48,23 @@ namespace Pitbull
 
 	void Actor::LateTick(const float ElapsedTime)
 	{
+		if (!Active) return;
 		for (const auto& Comp : Components) {
 			Comp->LateTick(ElapsedTime);
 		}
 	}
 
+	void Actor::UITick(const float ElapsedTime)
+	{
+		if (!Active) return;
+		for (const auto& Comp : Components) {
+			Comp->UITick(ElapsedTime);
+		}
+	}
+
 	void Actor::SpriteTick(const float ElapsedTime)
 	{
+		if (!Active) return;
 		for (const auto& Comp : Components) {
 			Comp->SpriteTick(ElapsedTime);
 		}

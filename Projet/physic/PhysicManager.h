@@ -7,13 +7,10 @@
 #endif
 
 #include "util/Singleton.h"
-#include "core/Scene.h"
 #include "ContactHandler.h"
 #include "RigidBody.h"
 
 #include "PxPhysicsAPI.h"
-
-#include <memory>
 
 class PhysicManager : public Singleton<PhysicManager>
 {
@@ -21,16 +18,17 @@ class PhysicManager : public Singleton<PhysicManager>
 
 public:
 	void Init();
-	void InitScene(std::shared_ptr<Scene> Scene);
+	void InitScene(physx::PxScene*& Scene);
 	void Step(const float& ElapsedTime);
 	void Cleanup();
 
 	void RegisterRigidBody(RigidBody* RigidBody);
 	ContactHandler& GetContactHandler() noexcept;
+	physx::PxRaycastBuffer Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const;
 
 	physx::PxPhysics* Physics = nullptr;
 	physx::PxCooking* Cooking = nullptr;
-	std::shared_ptr<Scene> CurrentScene;
+	physx::PxScene* CurrentScene;
 
 private:
 	PhysicManager() = default;

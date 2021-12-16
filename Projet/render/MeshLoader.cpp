@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "MeshLoader.h"
 
-#include "MoteurWindows.h"
+#include "EngineD3D11.h"
 #include "Vertex.h"
 #include "util/Util.h"
 #include "resources/resource.h"
 
 void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 {
-	ID3D11Device* PD3DDevice = PM3D::CMoteurWindows::GetInstance().GetDispositif().GetD3DDevice();
+	ID3D11Device* PD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
 
 	std::ifstream File;
 	File.open(FileName, std::ios::in | std::ios_base::binary);
@@ -100,7 +100,7 @@ void OMBMeshLoader::Load(const wchar_t* FileName, ObjectMesh& Mesh)
 	}
 
 	// 4d) Chargement des textures
-	ResourcesManager& ResourcesManager = PM3D::CMoteurWindows::GetInstance().GetResourcesManager();
+	ResourcesManager& ResourcesManager = EngineD3D11::GetInstance().ResourcesManager;
 
 	for (uint32_t i = 0; i < Mesh.Materials.size(); ++i)
 	{

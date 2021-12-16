@@ -1,68 +1,24 @@
-struct Material
-{
-    float4 Ambient;
-    float4 Roughness;
-    float4 Specular;
-    float Intensity;
-    float3 _FILL_;
-};
+#include "Util.hlsl"
+#include "Lights.hlsl"
+#include "Material.hlsl"
 
-struct AmbientLight {
-    float4 Value;
-};
-
-struct DirectionalLight
-{
-    float4 Direction;
-    float4 Specular;
-    float4 Roughness;
-};
-
-struct PointLight
-{
-    float3 Position;
-    float3 Specular;
-    float3 Roughness;
-    float InnerRadius, OuterRadius, Intensity;
-
-    float3 CalcPhong(float3 N, float3 V, float3 WorldPosition)
-    {
-        float3 color = (float3) 1.0;
-
-        float3 L = normalize(Position - WorldPosition);
-        
-        // Valeur de la composante diffuse 
-        float3 diff = saturate(dot(N, L));
- 
-         // R = 2 * (N.L) * N – L 
-        float3 R = normalize(2 * diff * N - L);
- 
-         // Puissance de 4 - pour l’exemple 
-        float S = pow(saturate(dot(R, V)), 4.0f);
- 
-         // Échantillonner la couleur du pixel à partir de la texture 
-        //float3 couleurTexture = textureEntree.Sample(SampleState, vs.coordTex).rgb;
- 
-         // I = A + D * N.L + (R.V)n 
-        color = color * Roughness.rgb * diff;
- 
-        color += S;
-  
-        return color;
-    }
-};
-
+/****************************************************************************
+ *                          Input data and buffers                          *
+ ****************************************************************************/
 cbuffer param
 { 
 	float4x4 MatWorldViewProj;
 	float4x4 MatWorld;
 	float4 CameraPos;
-    AmbientLight Ambient;
-    DirectionalLight Directional;
+    float4 AmbientColor;
     Material Mat;
 	bool HasTexture;
 	float3 _FILL_;
 }
+
+Texture2D textureEntree;
+SamplerState SampleState;
+StructuredBuffer<Light> LightsBuffer;
 
 struct VS_Sortie
 {
@@ -73,6 +29,10 @@ struct VS_Sortie
 	float2 coordTex : TEXCOORD3;
 };
 
+
+/****************************************************************************
+ *                               S H A D E R S !                            *
+ ****************************************************************************/
 VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coordTex : TEXCOORD)
 {
 	VS_Sortie sortie = (VS_Sortie)0;
@@ -89,11 +49,6 @@ VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coo
 	return sortie;
 }
 
-Texture2D textureEntree;
-SamplerState SampleState;
-StructuredBuffer<PointLight> PointLights;
-//StructuredBuffer<BetterSpotLight> SpotLights;
-
 float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 {
    // Default color : missing magenta
@@ -108,17 +63,16 @@ float4 MiniPhongPS( VS_Sortie vs ) : SV_Target
 	float3 N = normalize(vs.Norm);
 	float3 V = normalize(vs.vDirCam);
 	
-    // Default add ambiant light
-    float3 phong = Ambient.Value.rgb;
+    // Default add ambient light
+    float3 phong = AmbientColor.rgb;
     
-    // TODO directionnal lighting
-    
+    // Retrieve lights
     uint LightCount = 0, Stride;
-
+    LightsBuffer.GetDimensions(LightCount, Stride);
     // Calc all Point lights
-    PointLights.GetDimensions(LightCount, Stride);
-    for (uint i = 0; i < LightCount; i += Stride) {
-        phong += PointLights[i].CalcPhong(N, V, vs.PosWorld);
+    for (uint i = 0; i < LightCount; i += 1)
+    {
+        phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
     }
 
     return color * saturate(float4(phong, 0.0f));

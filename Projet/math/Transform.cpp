@@ -7,6 +7,11 @@ namespace Math
 		: Position{ Position }
 	{}
 
+	Transform::Transform(const Math::Vec3f& Position, const Math::Vec3f& Scale) noexcept
+		: Position{ Position }
+		, Scale{ Scale }
+	{}
+
 	Transform::Transform(const Math::Vec3f& Position, const Math::Quaternion& Rotation) noexcept
 		: Position{ Position }
 		, Rotation{ Rotation }

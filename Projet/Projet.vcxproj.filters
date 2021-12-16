@@ -70,11 +70,11 @@
     <Filter Include="Header Files\render\pm3d">
       <UniqueIdentifier>{f5e4d62c-8492-4ef2-8b28-dca664b4dd9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\effects">
+      <UniqueIdentifier>{d49361b6-13f7-4931-92eb-11daf55325e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="render\ObjetMesh.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="physic\PhysicManager.cpp">
       <Filter>Source Files\physic</Filter>
     </ClCompile>
@@ -162,31 +162,10 @@
     <ClCompile Include="gameplay\Player.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="render\AfficheurSprite.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\AfficheurTexte.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\ChargeurOBJ.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
     <ClCompile Include="render\DDSTextureLoader.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\dispositif.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\dispositifD3D11.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\MoteurWindows.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\InfoDispositif.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
-    <ClCompile Include="render\Moteur.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
     <ClCompile Include="render\Terrain.cpp">
@@ -216,9 +195,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="render\LightConfig.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="math\Vec3f.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
@@ -231,6 +207,72 @@
     <ClCompile Include="core\InputManager.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="render\Timer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\TextRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Speed.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpriteRenderer.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Sprite.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Font.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\GameFactory.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DeviceD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DeviceInfoD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Device.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Engine.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\EngineD3D11.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\CheckPoint.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\SpotLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\PointLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\LightManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\DirectionalLight.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Light.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Skybox.cpp">
+      <Filter>Source Files\render\components</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\IntelligentEnemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Effect.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\EffectManager.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Actor.h">
@@ -238,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="core\Component.h">
       <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="render\ObjetMesh.h">
-      <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="physic\PhysicManager.h">
       <Filter>Header Files\physic</Filter>
@@ -326,12 +365,6 @@
     <ClInclude Include="gameplay\Plateform.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="render\AfficheurSprite.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\AfficheurTexte.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="render\chargeur.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -345,21 +378,6 @@
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
     <ClInclude Include="render\DDSTextureLoader.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\dispositif.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\dispositifD3D11.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\InfoDispositif.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\MoteurWindows.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
-    <ClInclude Include="render\objet3d.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
     <ClInclude Include="resources\resource.h">
@@ -377,12 +395,6 @@
     <ClInclude Include="render\Terrain.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="render\Light.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="render\LightConfig.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Material.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -398,7 +410,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="render\Moteur.h">
+    <ClInclude Include="render\Engine.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="math\Vec3f.h">
@@ -410,11 +422,68 @@
     <ClInclude Include="math\Transform.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="util\Observable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="render\Timer.h">
+      <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="core\InputManager.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="render\TextRenderer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Speed.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Sprite.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Font.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpriteRenderer.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\GameFactory.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Device.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DeviceD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DeviceInfoD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\EngineD3D11.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\CheckPoint.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\PointLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\SpotLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\DirectionalLight.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="render\LightManager.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Skybox.h">
+      <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\IntelligentEnemy.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Effect.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\EffectManager.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -449,12 +518,24 @@
     <FxCompile Include="shaders\MiniPhongTerrain.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\MiniPhongSkyBox.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />
     <None Include="..\.gitignore" />
-    <None Include="shaders\Light.hlsli">
+    <None Include="Shaders\Lights.hlsl">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Material.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Util.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\Effect_Nul.fx">
+      <Filter>Shaders\effects</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "ResourcesManager.h"
 
+#include "render/TextRenderer.h"
 #include "util/Util.h"
-#include "render/Shader.h"
-#include "render/Texture.h"
-#include "render/ObjectMesh.h"
 
 ResourcesManager::~ResourcesManager()
 {
@@ -16,6 +14,8 @@ void ResourcesManager::Cleanup() noexcept
 	// Remove all ressources -> call respective destructor
 	Shaders.clear();
 	Textures.clear();
+	Sprites.clear();
+	Meshes.clear();
 }
 
 Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)
@@ -26,6 +26,19 @@ Shader* ResourcesManager::GetShader(const wchar_t* ShaderName)
 	if (!PShader) {
 		PShader = new Shader{ ShaderName };
 		Shaders[Name].reset(PShader);
+	}
+
+	return PShader;
+}
+
+ShaderSprite* ResourcesManager::GetShaderSprite(const wchar_t* ShaderName)
+{
+	const std::string Name = wchar2str(ShaderName);
+	auto PShader = Sprites[Name].get();
+
+	if (!PShader) {
+		PShader = new ShaderSprite{ ShaderName };
+		Sprites[Name].reset(PShader);
 	}
 
 	return PShader;
@@ -55,4 +68,17 @@ ObjectMesh* ResourcesManager::GetMesh(const wchar_t* MeshName)
 	}
 
 	return PMesh;
+}
+
+Effect* ResourcesManager::GetEffect(const wchar_t* EffectName)
+{
+	const std::string Name = wchar2str(EffectName);
+	auto PEffect = Effects[Name].get();
+
+	if (!PEffect) {
+		PEffect = new Effect{ EffectName };
+		Effects[Name].reset(PEffect);
+	}
+
+	return PEffect;
 }

@@ -2,32 +2,48 @@
 #include "Player.h"
 
 #include "core/InputManager.h"
-#include "render/MoteurWindows.h"
+#include "render/EngineD3D11.h"
 #include "math/Math.h"
 #include "math/Vec3f.h"
 
+#include "physic/ContactFilter.h"
+
 using namespace Math;
 
-Player::Player(Pitbull::Actor* Parent, const DirectX::XMVECTOR& Direction)
+Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
-	, Direction{ XMVector3Normalize(Direction) }
 	, ViewType{ CameraViewType::Third }
-	, WaitForSwap{false}
-{}
+	, Direction{}
+	, SpawnPos { Pos }
+{
+}
 
 void Player::Init()
 {
 	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
+	MyCollider = ParentActor->GetComponent<SphereCollider>();
+
+	Direction = ParentActor->Transform.Forward().ToXMVector();
+
+	MyRigidBody->setMaxLinearVelocity(MaxSpeed);
+}
+
+void Player::Tick(const float& ElapsedTime)
+{
+	/*if (IsDead())
+	{
+		ResetPlayer();
+	}*/
 }
 
 void Player::FixedTick(const float& DeltaTime)
 {
 	using namespace DirectX;
 
-	auto& Engine = PM3D::CMoteurWindows::GetInstance();
-	auto& InputManager = InputManager::GetInstance();
+	auto& Engine = EngineD3D11::GetInstance();
+	InputManager& InputManager = InputManager::GetInstance();
 
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
@@ -48,7 +64,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
 	if (InputManager.IsKeyPressed(DIK_SPACE)) {
-		MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
+		if (isGrounded())
+			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyDown(DIK_P)) {
@@ -59,29 +76,45 @@ void Player::FixedTick(const float& DeltaTime)
 		Engine.Stop();
 	}
 
-	if (InputManager.IsKeyPressed(DIK_M)) {
-		WaitForSwap = true;
+	if (InputManager.IsKeyUp(DIK_M)) {
+		SwapCameraMode();
 	}
-	else {
-		if (WaitForSwap) SwapCameraMode();
-	}
+
+	/****
+	 *  MOUSE CONTROL
+	 ****/
+
+	// Calculate sensibility of the camera
+	auto CalculateSpeed = [](int speed) { return 1000.f * static_cast<float>(speed) + 2000.f; };
 
 	if (InputManager.IsKeyPressed(DIK_LEFT)) {
-		using namespace physx;
-
-		AngleRotation -= RotationSpeed;
-		PxQuat qx = PxQuat(-RotationSpeed, PxVec3(0, 1, 0));
-		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
-		Direction = XMVector4Normalize( Direction);
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
 	}
 
 	if (InputManager.IsKeyPressed(DIK_RIGHT)) {
-		using namespace physx;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
 
-		AngleRotation += RotationSpeed;
-		PxQuat qx = PxQuat(RotationSpeed, PxVec3(0, 1, 0));
-		Direction = Math::PX2XMVector(qx.rotate(Math::XMVector2PX(Direction)));
-		Direction = XMVector4Normalize(Direction);
+	//V�rifier si d�placement vers la gauche
+	if (InputManager.GetMouseState().lX < 0) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(-XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
+
+	// V�rifier si d�placement vers la droite
+	if (InputManager.GetMouseState().lX > 0) {
+		Direction = XMVector3Transform(Direction, XMMatrixRotationY(XM_PI / (CalculateSpeed(SensibilityHorizontal) * DeltaTime)));
+	}
+
+	//V�rifier si d�placement vers le haut
+	if (InputManager.GetMouseState().lY < 0 && AngleRotationVertical > MIN_ANGLE_VERTICAL) {
+		AngleRotationVertical -= AngleRotationSpeedVertical;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
+	}
+
+	// V�rifier si d�placement vers le bas
+	if (InputManager.GetMouseState().lY > 0 && AngleRotationVertical < MAX_ANGLE_VERTICAL) {
+		AngleRotationVertical += AngleRotationSpeedVertical;
+		Direction = XMVector3Transform(Direction, XMMatrixRotationAxis(RelativeZ, -XM_PI / (CalculateSpeed(SensibilityVertical) * DeltaTime)));
 	}
 
 	if (ViewType == CameraViewType::Third) {
@@ -93,13 +126,38 @@ void Player::FixedTick(const float& DeltaTime)
 	MyCamera->SetDirection(Direction);
 }
 
+bool Player::isGrounded() const
+{
+	auto& PhysicManager = PhysicManager::GetInstance();
+
+	auto Origin = ParentActor->Transform.Position;
+	Origin.y -= MyCollider->Radius + 0.00001f; // Little more than radius
+	auto Hit = PhysicManager.Raycast(
+		Origin,
+		{ 0.0f, -1.0f, 0.0f },
+		0.1f);
+	return Hit.hasAnyHits();
+}
+
 void Player::SwapCameraMode()
 {
 	if (ViewType == CameraViewType::First)
 		ViewType = CameraViewType::Third;
 	else
 		ViewType = CameraViewType::First;
-
-	WaitForSwap = false;
 }
 
+bool Player::IsDead() const
+{
+	if (ParentActor->Transform.Position.y < -10) return true;
+	return false;
+}
+
+void Player::ResetPlayer() const
+{
+	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
+	MyRigidBody->ClearForce();
+	MyRigidBody->ClearTorque();
+	MyRigidBody->ClearVelocity();
+	MyRigidBody->ClearAngularVelocity();
+}

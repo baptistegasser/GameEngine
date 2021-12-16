@@ -33,6 +33,7 @@ namespace Pitbull
 		/// </summary>
 		const std::string Name;
 		Math::Transform Transform;
+		bool Active = true;
 
 		explicit Actor();
 		explicit Actor(std::string name);
@@ -51,6 +52,10 @@ namespace Pitbull
 		/// Call all components \ref Component::LateTick method.
 		/// </summary>
 		virtual void LateTick(const float ElapsedTime);
+		/// <summary>
+		/// Call all components \ref Component::UITick method.
+		/// </summary>
+		virtual void UITick(const float ElapsedTime);
 		/// <summary>
 		/// Call all components \ref Component::SpriteTick method.
 		/// </summary>

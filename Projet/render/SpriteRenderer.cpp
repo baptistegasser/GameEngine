@@ -82,7 +82,9 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 		Position = XMMatrixTranslationFromVector(XMVECTOR{ Offset.Position.x, Offset.Position.y, 0.0f });
 		Scale = XMMatrixScaling(Dimension.x * Offset.Scale.x, Dimension.y * Offset.Scale.y, 1.f);
 
-		Position = Scale * Position;
+		XMMATRIX Rotation = XMMatrixRotationZ(Offset.Rotation.ToEuler().z * XM_PI / 180);
+
+		Position = Rotation * Scale * Position;
 	}
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(Position);
 

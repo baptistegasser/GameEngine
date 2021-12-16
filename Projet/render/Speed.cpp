@@ -15,7 +15,7 @@ void Speed::Init()
 
 void Speed::FixedTick(const float& DeltaTime)
 {
-	MySprite->Write(L"Speed : " + std::to_wstring(MyRigidBody->GetVelocity().Norm()) + L" m/s");
+	MySprite->Write(L"Speed : " + std::to_wstring(static_cast<int>(MyRigidBody->GetVelocity().Norm())) + L" m/s");
 }
 
 

@@ -9,6 +9,7 @@ struct Font {
 	[[nodiscard]] static Gdiplus::Font* CreateFont(const wchar_t* FontName, Gdiplus::FontStyle FontStyle, float FontSize);
 
 	Font(const wchar_t* FontName, Gdiplus::FontStyle FontStyle, float FontSize, Gdiplus::Color Color);
+	Font(float FontSize, Gdiplus::Color Color);
 	Font(Gdiplus::Font* Font, Gdiplus::Brush* Brush);
 	~Font() = default;
 };

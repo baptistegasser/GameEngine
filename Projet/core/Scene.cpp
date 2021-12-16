@@ -38,6 +38,16 @@ void Scene::LateTick(const float ElapsedTime)
 	}
 }
 
+void Scene::UITick(const float ElapsedTime)
+{
+	for (auto& Actor : Tree.GetDatas()) {
+		Actor->UITick(ElapsedTime);
+	}
+	for (auto& Actor : AlwaysVisibleActors) {
+		Actor->UITick(ElapsedTime);
+	}
+}
+
 void Scene::Update()
 {
 	// Update the Octree

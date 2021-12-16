@@ -12,11 +12,14 @@ using namespace Math;
 
 Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
+	, IsOnTerrain{false}
+	, MyMenu(new PauseMenu)
+	, SpawnPos { std::move(Pos) }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
-	, SpawnPos { Pos }
-	, IsOnTerrain{false}
 {
+	EngineD3D11::GetInstance().GetScene().AddActor(MyMenu);
+	MyMenu->Active = false;
 }
 
 void Player::Init()
@@ -78,7 +81,8 @@ void Player::FixedTick(const float& DeltaTime)
 	}
 
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
-		Engine.Stop();
+		Engine.Pause();
+		MyMenu->Active = true;
 	}
 
 	if (InputManager.IsKeyUp(DIK_M)) {

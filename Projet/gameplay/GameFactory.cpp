@@ -481,20 +481,20 @@ void GameFactory::CreateTimer()
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
 
-	auto AMyTimer = new Pitbull::Actor{};
+	auto MyTimer = new Pitbull::Actor{};
 
-	const auto Sprite = AMyTimer->AddComponent<SpriteRenderer>(
+	const auto Sprite = MyTimer->AddComponent<SpriteRenderer>(
 		RessourceManager.GetTexture(L".\\modeles\\ui\\container.dds"), RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
 	Sprite->Offset.Position.y = 0.8f;
 	Sprite->Offset.Position.x = 0.7f;
 
-	const auto Text = AMyTimer->AddComponent<TextRenderer>(
+	const auto Text = MyTimer->AddComponent<TextRenderer>(
 		new Font{ 32.0f, {207, 130, 48} },
 		RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"),
 		100, 400);
 	Text->Offset.Position.y = 0.745f;
 	Text->Offset.Position.x = 0.78f;
-	const auto MyTimer = AMyTimer->AddComponent<Timer>();
+	MyTimer->AddComponent<Timer>();
 
-	Engine.GetScene().AddActor(AMyTimer, true);
+	Engine.GetScene().AddActor(MyTimer, true);
 }

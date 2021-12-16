@@ -149,7 +149,6 @@ void GameFactory::LoadLevel()
 	 ***/
 	
 	Math::Vec3f BasePos = { 0.f, -3.f, 240.f };
-	//Math::Vec3f BasePos = { 0.f, 10.f, 0.f };
 
 	CreatePlatform(Math::Transform{ BasePos, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformLightBlue.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x, BasePos.y + 0.5f, BasePos.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
@@ -173,7 +172,7 @@ void GameFactory::LoadLevel()
 	CreateTree(Math::Transform{ Math::Vec3f{ BasePos.x - 15.f, BasePos.y+15.0f, BasePos.z + 35.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} });
 	CreateTree(Math::Transform{ Math::Vec3f{ BasePos.x - 100.f, BasePos.y + 1.0f, BasePos.z + 20.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} });
 	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 105.f, BasePos.y, BasePos.z + 140.f), Math::Vec3f{ 0.15f, 1.f, 2.5f } },
-		L".\\modeles\\plateform\\plateformRouge.OMB");
+		L".\\modeles\\plateform\\plateformOrange.OMB");
 
 
 	/***
@@ -253,15 +252,12 @@ void GameFactory::LoadLevel()
 
 	// Dim : 128 / 128
 	auto IceTerrain = CreateTerrain(L".\\modeles\\heigtmap\\fall.bmp",
-		Math::Transform{ TerrainPos3, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
-		L".\\modeles\\ice2.dds", L".\\modeles\\sand.dds", L".\\modeles\\ways.dds", true);
+		Math::Transform{ TerrainPos3, Math::Vec3f{ 0.25f, 0.15f, 0.25f } }, PhysicMaterial{ 0.35f, 0.35f, 0.2f },
+		L".\\modeles\\ice2.dds", L".\\modeles\\pathice2.dds", L".\\modeles\\ways.dds", true);
 
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 60.f, 20.f, TerrainPos3.z + 66.f }, Math::Vec3f(0.7f, 0.7f, 0.7f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos3, Math::Vec3f{ TerrainPos3.x + 128.f, PosYEnemy2 + 50.f, TerrainPos3.z + 128.f } }, IceTerrain,
 		Math::Vec3f{ 15.f, 20.f, 35.f }, 128.0f, false, 0.175f, true);
-	
-		PhysicMaterial{ 0.1f, 0.05f, 0.0f },
-		L".\\modeles\\ice2.dds", L".\\modeles\\pathice2.dds", L".\\modeles\\ways.dds", true);
 	CreateDirectionalSign(
 		Math::Transform{ Math::Vec3f{TerrainPos3.x+100.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 5.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
@@ -307,7 +303,7 @@ void GameFactory::LoadLevel()
 	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 250.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
+ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;

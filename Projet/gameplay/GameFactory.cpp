@@ -42,19 +42,19 @@ void GameFactory::LoadLevel()
 	/***
 	 * First state with platform ( z C 0,135)
 	 ***/
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformOrange.OMB");
 
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\PlateformYellow.OMB");
 
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformDarkBlue.OMB");
 
 	CreateMobilePlatform(Math::Vec3f(-20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
-	CreateMobilePlatform(Math::Vec3f(0.f, 10.f, 105), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\PlateformYellow.OMB");
+	CreateMobilePlatform(Math::Vec3f(0.f, 10.f, 105), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\PlateformOrange.OMB");
 	CreateMobilePlatform(Math::Vec3f(20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
 
-	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 130), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformRed.OMB");
 
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ 0.f, 10.5f, 135.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
@@ -68,6 +68,7 @@ void GameFactory::LoadLevel()
 	// Dim : 76 / 76
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
+		PhysicMaterial{ 0.35f, 0.35f, 0.2f },
 		L".\\modeles\\grass.dds", L".\\modeles\\soil3.dds", L".\\modeles\\Arene_Texture_2_1.dds", true);
 	CreateEnemy(
 		Math::Transform{ Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
@@ -131,16 +132,16 @@ void GameFactory::LoadLevel()
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x, BasePos.y + 0.5f, BasePos.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 	CreateMobilePlatform(Math::Vec3f(BasePos.x, BasePos.y, BasePos.z + 20.f), Math::Vec3f(-55.f, 0, 0), 
-		L".\\modeles\\plateform\\PlateformYellow.OMB", Collider::DefaultMaterial,  0.175f);
+		L".\\modeles\\plateform\\plateformOrange.OMB", Collider::DefaultMaterial,  0.175f);
 	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 60.f, BasePos.y, BasePos.z + 40.f), Math::Vec3f{ 1.f, 1.f, 1.f } }, 
-		L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+		L".\\modeles\\plateform\\plateformLightBlue.OMB");
 
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x - 60.f, BasePos.y + 0.5f, BasePos.z + 40.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 60.f, BasePos.y, BasePos.z + 55.f), Math::Vec3f{ 0.75f, 1.f, 0.75f } }, 
-		Math::Vec3f(0, 0, 20), L".\\modeles\\plateform\\PlateformYellow.OMB", Collider::DefaultMaterial, 0.15f);
+		Math::Vec3f(0, 0, 20), L".\\modeles\\plateform\\plateformOrange.OMB", Collider::DefaultMaterial, 0.15f);
 	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 95.f, BasePos.y, BasePos.z + 90.f), Math::Vec3f{ 0.75f, 1.f, 0.75f } },
-		Math::Vec3f(20, 0, -20), L".\\modeles\\plateform\\PlateformYellow.OMB", Collider::DefaultMaterial, 0.20f);
+		Math::Vec3f(20, 0, -20), L".\\modeles\\plateform\\plateformOrange.OMB", Collider::DefaultMaterial, 0.20f);
 
 	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 95.f, BasePos.y, BasePos.z + 115.f), Math::Vec3f{ 1.75f, 1.f, 1.75f } }, 
 		L".\\modeles\\plateform\\plateformLightBlue.OMB");
@@ -156,11 +157,13 @@ void GameFactory::LoadLevel()
 	// Dim : 128 / 128
 	CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
 		Math::Transform{ TerrainPos2, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
+		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
 		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\waytunnel.dds", true);
 	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TerrainPos2.x + 128.f, TerrainPos2.y + 22.0f, TerrainPos2.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
 	CaveTrans.RotateZ(180);
 	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
 		CaveTrans,
+		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
 		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\waytunnel_reverse.dds", true);
 
 	/***
@@ -169,15 +172,15 @@ void GameFactory::LoadLevel()
 
 	Math::Vec3f BasePos2 = { -10.f, -6.f, 515.f };
 
-	CreatePlatform(Math::Transform{ BasePos2, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+	CreatePlatform(Math::Transform{ BasePos2, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRed.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 0.5f, BasePos2.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 	CreateMobilePlatform(Math::Transform{ Math::Vec3f(BasePos2.x, BasePos2.y, BasePos2.z + 20.f), Math::Vec3f{ 0.75f, 0.75f, 0.75f } }, Math::Vec3f(0.f, 20.f, 0),
-		L".\\modeles\\plateform\\PlateformYellow.OMB", Collider::DefaultMaterial);
+		L".\\modeles\\plateform\\plateformOrange.OMB", Collider::DefaultMaterial);
 	CreateEnemy(Math::Vec3f{ BasePos2.x - 15.f, BasePos2.y + 7.f, BasePos2.z + 20.f }, Math::Vec3f{ BasePos2.x + 15.f, BasePos2.y + 7.f, BasePos2.z + 20.f }, true);
 	CreateEnemy(Math::Vec3f{ BasePos2.x - 15.f, BasePos2.y + 13.f, BasePos2.z + 20.f }, Math::Vec3f{ BasePos2.x + 15.f, BasePos2.y + 13.f, BasePos2.z + 20.f }, true);
 
-	CreatePlatform(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 20.f, BasePos2.z + 40.f }, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 20.f, BasePos2.z + 40.f }, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRed.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 20.5f, BasePos2.z +40.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 
@@ -185,40 +188,42 @@ void GameFactory::LoadLevel()
 	/***
 	 * Third State with arena
 	 ***/
-	Math::Vec3f TerrainPos3 = { -96.f, 0.f, 570.f };
+	//Math::Vec3f TerrainPos3 = { -96.f, 0.f, 570.f };
 	//float PosYEnemy2 = -5.5f;
+	Math::Vec3f TerrainPos3 = { -96.f, 5.f, 0.f };
 
 	// Dim : 128 / 128
 	CreateTerrain(L".\\modeles\\heigtmap\\fall.bmp",
 		Math::Transform{ TerrainPos3, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
+		PhysicMaterial{ 0.1f, 0.05f, 0.0f },
 		L".\\modeles\\ice2.dds", L".\\modeles\\pathice2.dds", L".\\modeles\\ways.dds", true);
 	CreateDirectionalSign(
-		Math::Transform{ Math::Vec3f{TerrainPos3.x+100.f, TerrainPos3.y + 10.f, TerrainPos3.z + 5.f  },
+		Math::Transform{ Math::Vec3f{TerrainPos3.x+100.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 5.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
 		Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}}
 	});
 	CreateDirectionalSign(
-		Math::Transform{ Math::Vec3f{TerrainPos3.x + 75.f, TerrainPos3.y + 10.f, TerrainPos3.z + 25.f  },
+		Math::Transform{ Math::Vec3f{TerrainPos3.x + 75.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 25.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
 		Math::Quaternion{physx::PxPi + physx::PxHalfPi/2, Math::Vec3f{0,1,0}}
 		});
 	CreateDirectionalSign(
-		Math::Transform{ Math::Vec3f{TerrainPos3.x + 78.f, TerrainPos3.y + 10.f, TerrainPos3.z + 60.f  },
+		Math::Transform{ Math::Vec3f{TerrainPos3.x + 78.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 60.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
 		Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}}
 		});
 	CreateDirectionalSign(
-		Math::Transform{ Math::Vec3f{TerrainPos3.x + 50.f, TerrainPos3.y + 10.f, TerrainPos3.z + 60.f  },
+		Math::Transform{ Math::Vec3f{TerrainPos3.x + 50.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 60.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
 		Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}}
 		});
 	CreateDirectionalSign(
-		Math::Transform{ Math::Vec3f{TerrainPos3.x + 50.f, TerrainPos3.y + 10.f, TerrainPos3.z + 100.f  },
+		Math::Transform{ Math::Vec3f{TerrainPos3.x + 50.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 100.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
 		Math::Quaternion{physx::PxHalfPi*3/2, Math::Vec3f{0,1,0}}
 		});
 	CreateDirectionalSign(
-		Math::Transform{ Math::Vec3f{TerrainPos3.x + 35.f, TerrainPos3.y + 10.f, TerrainPos3.z + 125.f  },
+		Math::Transform{ Math::Vec3f{TerrainPos3.x + 35.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 125.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
 		Math::Quaternion{physx::PxPi - physx::PxHalfPi/ 2, Math::Vec3f{0,1,0}}
 		});
@@ -232,12 +237,12 @@ void GameFactory::LoadLevel()
 
 	CreateSlide(TunnelTrans);
 	
-	CreatePlatform(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 16.f, TerrainPos3.y - 20.f, TerrainPos3.z + 220.f }, Math::Vec3f{ 2.f, 1.f, 5.f } }, L".\\modeles\\plateform\\PlateformLightBlue.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 16.f, TerrainPos3.y - 20.f, TerrainPos3.z + 220.f }, Math::Vec3f{ 2.f, 1.f, 5.f } }, L".\\modeles\\plateform\\plateformDarkBlue.OMB");
 
 	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 250.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
+void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -246,7 +251,7 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 			Filename,
 			{1, 0.3f, 1},
 			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
-			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			Material
 			, FaceCull
 		};
 	Terrain->Texture1 = RessourceManager.GetTexture(TextureName1);
@@ -441,7 +446,7 @@ void GameFactory::CreateSlide(Math::Transform Transform)
 			L".\\modeles\\heigtmap\\tunnel.bmp",
 			{1, 0.3f, 1},
 			RessourceManager.GetShaderTerrain(L".\\shaders\\MiniPhongTerrain.fx"),
-			PhysicMaterial{ 0.5f, 0.5f, 0.2f}
+			PhysicMaterial{ 0.f, 0.f, 0.f}
 			, true
 		};
 	Terrain->Texture1 = RessourceManager.GetTexture(L".\\modeles\\tunnel\\dark_blue.dds");
@@ -539,10 +544,10 @@ void GameFactory::CreateDirectionalSign(Math::Transform Transform)
 	auto& RessourceManager = Engine.ResourcesManager;
 
 	auto MyDirectionalSign = new Pitbull::Actor{};
-	MyDirectionalSign->Transform = Transform;
 	MyDirectionalSign->AddComponent<MeshRenderer>(
 		RessourceManager.GetMesh(L".\\modeles\\signs\\directionalSign.OMB"),
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-	MyDirectionalSign->AddComponent<CapsuleCollider>(0.4f, 0.01f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
-	Engine.GetScene().AddActor(MyDirectionalSign);
+	MyDirectionalSign->AddComponent<BoxCollider>(Math::Vec3f(0.2f, 5.f, 0.2f), PhysicMaterial{ 0.5f, 0.5f, 0.2f }, Math::Vec3f(0, 2.5f, 0));
+	MyDirectionalSign->Transform = Transform;
+	Engine.GetScene().AddActor(std::move(MyDirectionalSign));
 }

@@ -112,11 +112,13 @@ void GameFactory::LoadLevel()
 		L".\\modeles\\plateform\\plateformRouge.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos.x - 95.f, BasePos.y + 0.5f, BasePos.z + 115.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
+	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 105.f, BasePos.y, BasePos.z + 140.f), Math::Vec3f{ 0.15f, 1.f, 2.5f } },
+		L".\\modeles\\plateform\\plateformRouge.OMB");
 
 	/***
 	 * Second State with arena
 	 ***/
-	Math::Vec3f TerrainPos2 = { -115.f, -6.f, 375.f };
+	Math::Vec3f TerrainPos2 = { -115.f, -6.f, 400.f };
 	float PosYEnemy2 = -5.5f;
 
 	// Dim : 128 / 128
@@ -167,7 +169,7 @@ void GameFactory::LoadLevel()
 	 * Third state with plateform
 	 ***/
 
-	Math::Vec3f BasePos2 = { -10.f, -6.f, 515.f };
+	Math::Vec3f BasePos2 = { -10.f, -6.f, 540.f };
 
 	CreatePlatform(Math::Transform{ BasePos2, Math::Vec3f{ 2.f, 1.f, 1.5f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 0.5f, BasePos2.z }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
@@ -181,11 +183,10 @@ void GameFactory::LoadLevel()
 	CreateCheckPoint(Math::Transform{ Math::Vec3f{ BasePos2.x, BasePos2.y + 20.5f, BasePos2.z +40.f }, Math::Vec3f{ 1.5f, 1.5f, 1.5f } });
 
 
-
 	/***
 	 * Third State with arena
 	 ***/
-	Math::Vec3f TerrainPos3 = { -96.f, 0.f, 570.f };
+	Math::Vec3f TerrainPos3 = { -96.f, 0.f, 595.f };
 	//float PosYEnemy2 = -5.5f;
 
 	// Dim : 128 / 128

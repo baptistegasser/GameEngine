@@ -19,4 +19,5 @@ private :
 	TextRenderer* MySprite;
 	std::chrono::steady_clock::time_point Start;
 	std::chrono::steady_clock::time_point End;
+	__int64 Duration;
 };

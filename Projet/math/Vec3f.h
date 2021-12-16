@@ -44,5 +44,8 @@ namespace Math
 		float Norm() const noexcept;
 
 		bool operator<=(const Vec3f& Vec) const noexcept;
+		bool operator>=(const Vec3f& Vec) const noexcept;
+		bool operator<(const Vec3f& Vec) const noexcept;
+		bool operator>(const Vec3f& Vec) const noexcept;
 	};
 }

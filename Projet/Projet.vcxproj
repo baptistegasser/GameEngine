@@ -171,6 +171,8 @@
     <ClCompile Include="core\Component.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="gameplay\CheckPoint.cpp" />
+    <ClCompile Include="gameplay\Enemy.cpp" />
+    <ClCompile Include="gameplay\GameFactory.cpp" />
     <ClCompile Include="gameplay\IntelligentEnemy.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
@@ -200,12 +202,12 @@
     <ClCompile Include="render\DDSTextureLoader.cpp" />
     <ClCompile Include="render\DIManipulateur.cpp" />
     <ClCompile Include="render\Font.cpp" />
+    <ClCompile Include="render\ShaderTerrain.cpp" />
     <ClCompile Include="render\Speed.cpp" />
     <ClCompile Include="render\Sprite.cpp" />
     <ClCompile Include="render\SpriteRenderer.cpp" />
     <ClCompile Include="render\Effect.cpp" />
     <ClCompile Include="render\EffectManager.cpp" />
-    <ClCompile Include="render\GameFactory.cpp" />
     <ClCompile Include="render\Device.cpp" />
     <ClCompile Include="render\DeviceD3D11.cpp" />
     <ClCompile Include="render\DeviceInfoD3D11.cpp" />
@@ -242,6 +244,8 @@
     <ClInclude Include="core\Component.h" />
     <ClInclude Include="core\Scene.h" />
     <ClInclude Include="gameplay\CheckPoint.h" />
+    <ClInclude Include="gameplay\Enemy.h" />
+    <ClInclude Include="gameplay\GameFactory.h" />
     <ClInclude Include="gameplay\IntelligentEnemy.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />
@@ -275,12 +279,12 @@
     <ClInclude Include="render\DDSTextureLoader.h" />
     <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\Font.h" />
+    <ClInclude Include="render\ShaderTerrain.h" />
     <ClInclude Include="render\Speed.h" />
     <ClInclude Include="render\Sprite.h" />
     <ClInclude Include="render\SpriteRenderer.h" />
     <ClInclude Include="render\Effect.h" />
     <ClInclude Include="render\EffectManager.h" />
-    <ClInclude Include="render\GameFactory.h" />
     <ClInclude Include="render\Device.h" />
     <ClInclude Include="render\DeviceD3D11.h" />
     <ClInclude Include="render\DeviceInfoD3D11.h" />

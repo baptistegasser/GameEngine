@@ -172,6 +172,7 @@
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="gameplay\CheckPoint.cpp" />
     <ClCompile Include="gameplay\Enemy.cpp" />
+    <ClCompile Include="gameplay\GameFactory.cpp" />
     <ClCompile Include="gameplay\IntelligentEnemy.cpp" />
     <ClCompile Include="gameplay\Plateform.cpp" />
     <ClCompile Include="gameplay\Player.cpp" />
@@ -205,7 +206,6 @@
     <ClCompile Include="render\Speed.cpp" />
     <ClCompile Include="render\Sprite.cpp" />
     <ClCompile Include="render\SpriteRenderer.cpp" />
-    <ClCompile Include="render\GameFactory.cpp" />
     <ClCompile Include="render\Device.cpp" />
     <ClCompile Include="render\DeviceD3D11.cpp" />
     <ClCompile Include="render\DeviceInfoD3D11.cpp" />
@@ -243,6 +243,7 @@
     <ClInclude Include="core\Scene.h" />
     <ClInclude Include="gameplay\CheckPoint.h" />
     <ClInclude Include="gameplay\Enemy.h" />
+    <ClInclude Include="gameplay\GameFactory.h" />
     <ClInclude Include="gameplay\IntelligentEnemy.h" />
     <ClInclude Include="gameplay\Plateform.h" />
     <ClInclude Include="gameplay\Player.h" />
@@ -280,7 +281,6 @@
     <ClInclude Include="render\Speed.h" />
     <ClInclude Include="render\Sprite.h" />
     <ClInclude Include="render\SpriteRenderer.h" />
-    <ClInclude Include="render\GameFactory.h" />
     <ClInclude Include="render\Device.h" />
     <ClInclude Include="render\DeviceD3D11.h" />
     <ClInclude Include="render\DeviceInfoD3D11.h" />

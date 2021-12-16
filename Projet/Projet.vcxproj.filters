@@ -222,9 +222,6 @@
     <ClCompile Include="render\Font.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="render\GameFactory.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\DeviceD3D11.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -269,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="render\ShaderTerrain.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\GameFactory.cpp">
+      <Filter>Source Files\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,9 +440,6 @@
     <ClInclude Include="render\SpriteRenderer.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
-    <ClInclude Include="render\GameFactory.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Device.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -481,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="render\ShaderTerrain.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\GameFactory.h">
+      <Filter>Header Files\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

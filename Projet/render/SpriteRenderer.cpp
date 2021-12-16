@@ -40,8 +40,6 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 
 	ID3D11DeviceContext* pImmediateContext = pD3DDevice->ImmediateContext;
 
-	pD3DDevice->DeactivateZBuffer();
-
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	const UINT stride = sizeof(SpriteVertex);
@@ -59,6 +57,7 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	variableTexture = Shader->Effet->GetVariableByName("textureEntree")->AsShaderResource();
 
 	pD3DDevice->ActivateAlphaBlending();
+	pD3DDevice->DeactivateZBuffer();
 
 	XMMATRIX Position;
 	XMMATRIX Scale;
@@ -83,7 +82,9 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 		Position = XMMatrixTranslationFromVector(XMVECTOR{ Offset.Position.x, Offset.Position.y, 0.0f });
 		Scale = XMMatrixScaling(Dimension.x * Offset.Scale.x, Dimension.y * Offset.Scale.y, 1.f);
 
-		Position = Scale * Position;
+		XMMATRIX Rotation = XMMatrixRotationZ(Offset.Rotation.ToEuler().z * XM_PI / 180);
+
+		Position = Rotation * Scale * Position;
 	}
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(Position);
 
@@ -98,6 +99,5 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	pImmediateContext->Draw(6, 0);
 
 	pD3DDevice->DeactivateAlphaBlending();
-
 	pD3DDevice->ActivateZBuffer();
 }

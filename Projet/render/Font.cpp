@@ -15,6 +15,12 @@ Font::Font(const wchar_t* FontName, Gdiplus::FontStyle FontStyle, float FontSize
 		new Gdiplus::SolidBrush(Color))
 {}
 
+Font::Font(float FontSize, Gdiplus::Color Color)
+	: Font(
+		CreateFont(L"Arial Rounded MT Bold", Gdiplus::FontStyleBold, FontSize),
+		new Gdiplus::SolidBrush(Color))
+{}
+
 Font::Font(Gdiplus::Font* Font, Gdiplus::Brush* Brush)
 	: Brush{ Brush }
 	, FontType{ Font }

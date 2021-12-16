@@ -22,12 +22,30 @@
 // Gameplay components
 #include "render/Speed.h"
 #include "render/Timer.h"
+#include "render/Menu.h"
 #include "gameplay/Plateform.h"
 #include "gameplay/Player.h"
 #include "gameplay/CheckPoint.h"
 
 #include <math.h>
 #include "math/Math.h"
+
+void GameFactory::LoadMainMenu()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+
+	auto const MyMenu = new Menu{ true };
+	const auto Cam = MyMenu->AddComponent<Camera>(
+		DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
+		DirectX::XMVectorSet(0.0f, 0.4f, 1.0f, 1.0f),
+		DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f),
+		&Engine.MatView,
+		&Engine.MatProj,
+		&Engine.MatViewProj);
+	Engine.GetScene().SetCurrentCamera(Cam);
+	CreateSkyBox(&MyMenu->Transform);
+	Engine.GetScene().AddActor(MyMenu);
+}
 
 void GameFactory::LoadLevel()
 {
@@ -219,14 +237,20 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 
 	PlayerTransform = &MyPlayer->Transform;
 
+	const auto Sprite = MyPlayer->AddComponent<SpriteRenderer>(
+		RessourceManager.GetTexture(L".\\modeles\\ui\\container.dds"), RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+	Sprite->Offset.Position.y = 0.8f;
+	Sprite->Offset.Position.x = -0.7f;
+
 	const auto Text = MyPlayer->AddComponent<TextRenderer>(
-		new Font{ L"Arial", Gdiplus::FontStyleBold, 32.0f, { 0, 0, 0} },
+		new Font{ 32.0f, { 207, 130, 48} },
 		RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"),
-		100, 500);
-	Text->Offset.Position.y = 0.7f;
-	Text->Offset.Position.x = -0.5f;
+		100, 400);
+	Text->Offset.Position.y = 0.745f;
+	Text->Offset.Position.x = -0.6f;
+
 	MyPlayer->AddComponent<Speed>();
-	
+
 	Engine.GetScene().AddActor(MyPlayer);
 }
 
@@ -458,12 +482,18 @@ void GameFactory::CreateTimer()
 	auto& RessourceManager = Engine.ResourcesManager;
 
 	auto MyTimer = new Pitbull::Actor{};
+
+	const auto Sprite = MyTimer->AddComponent<SpriteRenderer>(
+		RessourceManager.GetTexture(L".\\modeles\\ui\\container.dds"), RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
+	Sprite->Offset.Position.y = 0.8f;
+	Sprite->Offset.Position.x = 0.7f;
+
 	const auto Text = MyTimer->AddComponent<TextRenderer>(
-		new Font{ L"Arial", Gdiplus::FontStyleBold, 32.0f, { 0, 0, 0} },
+		new Font{ 32.0f, {207, 130, 48} },
 		RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"),
-		100, 500);
-	Text->Offset.Position.y = 0.7f;
-	Text->Offset.Position.x = 0.3f;
+		100, 400);
+	Text->Offset.Position.y = 0.745f;
+	Text->Offset.Position.x = 0.78f;
 	MyTimer->AddComponent<Timer>();
 
 	Engine.GetScene().AddActor(MyTimer, true);

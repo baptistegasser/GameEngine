@@ -21,7 +21,7 @@ private:
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
 	///	<param name="Transform"> : transform of the map  </param>
-	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false);
+	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false);
 
 	/// <summary>
 	/// Create the player
@@ -34,7 +34,7 @@ private:
 	/// </summary>
 	///	<param name="Transform"> : transform of the enemy  </param>
 	///	<param name="End"> : deplacement of the enemy  </param>
-	void CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller = false, float Speed = 0.1f);
+	void CreateEnemy(Math::Transform Departure, Math::Transform End, bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create an intelligent enemy
@@ -108,4 +108,16 @@ private:
 	/// Create the effects
 	/// </summary>
 	void CreateEffects();
+
+	/// <summary>
+	/// Create a directional sign
+	/// </summary>
+	/// <param name="Transform"> transform of the sign </param>
+	void CreateDirectionalSign(Math::Transform Transform);
+
+	/// <summary>
+	/// Create a tree
+	/// </summary>
+	/// <param name="Transform"> transform of the tree </param>
+	void CreateTree(Math::Transform Transform);
 };

@@ -58,104 +58,14 @@ void Button::SpriteTick(const float& ElapsedTime)
 	BallSprite->Offset.RotateZ(-500.0f * ElapsedTime);
 }
 
-Menu::Menu(bool IsMainMenu)
+Menu::Menu()
 {
-	auto& Engine = EngineD3D11::GetInstance();
-	auto& RessourceManager = Engine.ResourcesManager;
+	auto& ResourcesManager = EngineD3D11::GetInstance().ResourcesManager;
 
-	auto SpriteShader = RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx");
-	auto Font1 = new Font{ 48.0f, { 255, 246, 141 } };
-	auto Font2 = new Font{ 64.0f, { 169, 255, 246 } };
-
-	auto RaisedTexture = RessourceManager.GetTexture(L".\\modeles\\ui\\button.dds");
-	auto PressedTexture = RessourceManager.GetTexture(L".\\modeles\\ui\\button-pressed.dds");
-
-	auto Ball = RessourceManager.GetTexture(L".\\modeles\\ui\\ball.dds");
-
-	const auto RaisedSprite = new SpriteRenderer{
-		this, RaisedTexture, SpriteShader, false };
-	const auto PressedSprite = new SpriteRenderer{
-		this, PressedTexture, SpriteShader, false };
-
-	const auto RaisedSprite2 = new SpriteRenderer{
-		this, RaisedTexture, SpriteShader, false };
-	const auto PressedSprite2 = new SpriteRenderer{
-		this, PressedTexture, SpriteShader, false };
-
-	const auto BallSprite = AddComponent<SpriteRenderer>(
-		Ball, SpriteShader, false);
-	const auto BallSprite2 = AddComponent<SpriteRenderer>(
-		Ball, SpriteShader, false);
-
-	if (IsMainMenu)
-	{
-		const auto BackDrop = AddComponent<SpriteRenderer>(
-			RessourceManager.GetTexture(L".\\modeles\\ui\\mainmenu.dds"), SpriteShader, false);
-	}
-	else
-	{
-		const auto BackDrop = AddComponent<SpriteRenderer>(
-			RessourceManager.GetTexture(L".\\modeles\\ui\\background50.dds"), SpriteShader, false);
-	}
-
-	const auto Background = AddComponent<SpriteRenderer>(
-		RessourceManager.GetTexture(L".\\modeles\\ui\\back.dds"), SpriteShader, false);
-
-	TextRenderer* MenuText;
-	if (IsMainMenu)
-	{
-		MenuText = AddComponent<TextRenderer>(Font2, SpriteShader, 100, 550);
-		MenuText->Write(L"M A I N    M E N U");
-	}
-	else
-	{
-		MenuText = AddComponent<TextRenderer>(Font2, SpriteShader, 100, 300);
-		MenuText->Write(L"P A U S E");
-	}
-	MenuText->Offset.Position.y = 0.39f;
-
-	TextRenderer* PlayText;
-	std::function<void()> PlayFunction;
-	if (IsMainMenu)
-	{
-		PlayText = new TextRenderer(this, Font1, SpriteShader, 100, 175);
-		PlayText->Write(L"P L A Y");
-		PlayFunction = [&Engine]()
-		{
-			Engine.RequestLoadLevel();
-		};
-	}
-	else
-	{
-		PlayText = new TextRenderer(this, Font1, SpriteShader, 100, 220);
-		PlayText->Write(L"RESUME");
-		PlayFunction = [&Engine, this]()
-		{
-			Engine.UnPause();
-			Active = false;
-		};
-	}
-
-	const auto ExitText = new TextRenderer(this, Font1, SpriteShader, 100, 140);
-	ExitText->Write(L"E x i t");
-
-	const auto PlayButton = AddComponent<Button>(
-		PlayText, RaisedSprite, PressedSprite, BallSprite, PlayFunction
-	);
-	PlayButton->SetOffset(-0.04f, -0.015f, 0.0f, 0.015f);
-
-	const auto ExitButton = AddComponent<Button>(
-		ExitText, RaisedSprite2, PressedSprite2, BallSprite2, [&Engine]()
-		{
-			Engine.Stop();
-		}
-	);
-	ExitButton->SetOffset(-0.315f, -0.015f, -0.28f, -0.26f);
-
-	Buttons.push_back(PlayButton);
-	Buttons.push_back(ExitButton);
-
-	Select(CurrentlySelected);
+	SpriteShader = ResourcesManager.GetShaderSprite(L".\\shaders\\sprite1.fx");
+	RaisedTexture = ResourcesManager.GetTexture(L".\\modeles\\ui\\button.dds");
+	PressedTexture = ResourcesManager.GetTexture(L".\\modeles\\ui\\button-pressed.dds");
+	Ball = ResourcesManager.GetTexture(L".\\modeles\\ui\\ball.dds");
 }
 
 void Menu::UITick(const float ElapsedTime)
@@ -164,10 +74,28 @@ void Menu::UITick(const float ElapsedTime)
 
 	Accumulator += ElapsedTime;
 
-	if (Accumulator > 0.3f)
+	if (Accumulator > 0.2f)
 	{
 		if (ProcessInputs()) Accumulator = 0;
 	}
+}
+
+void Menu::Init()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	auto& ResourcesManager = Engine.ResourcesManager;
+
+	CreateBackdrop();
+
+	AddComponent<SpriteRenderer>(
+		ResourcesManager.GetTexture(L".\\modeles\\ui\\back.dds"), SpriteShader, false);
+
+	CreateTitle();
+
+	Buttons.push_back(CreateTopButton());
+	Buttons.push_back(CreateBottomButton());
+
+	Select(CurrentlySelected);
 }
 
 bool Menu::ProcessInputs()
@@ -191,12 +119,12 @@ bool Menu::ProcessInputs()
 	return false;
 }
 
-void Menu::Deselect(size_t Index)
+void Menu::Deselect(size_t Index) const
 {
 	Buttons[Index]->Deselect();
 }
 
-void Menu::Select(size_t Index)
+void Menu::Select(size_t Index) const
 {
 	Buttons[Index]->Select();
 }
@@ -213,4 +141,170 @@ void Menu::SelectNext()
 	Deselect(CurrentlySelected);
 	if (CurrentlySelected < Buttons.size() - 1) CurrentlySelected++;
 	Select(CurrentlySelected);
+}
+
+Button* MainMenu::CreateTopButton()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	const auto RaisedSprite = new SpriteRenderer{
+		this, RaisedTexture, SpriteShader, false };
+	const auto PressedSprite = new SpriteRenderer{
+		this, PressedTexture, SpriteShader, false };
+	const auto BallSprite = AddComponent<SpriteRenderer>(
+		Ball, SpriteShader, false);
+	const auto PlayText = new TextRenderer(this, Font1, SpriteShader, 100, 175);
+	PlayText->Write(L"P L A Y");
+	const auto PlayButton = AddComponent<Button>(
+		PlayText, RaisedSprite, PressedSprite, BallSprite, [&Engine]()
+		{
+			Engine.RequestLoadLevel();
+		});
+	PlayButton->SetOffset(-0.04f, -0.015f, 0.0f, 0.015f);
+	return PlayButton;
+}
+
+Button* MainMenu::CreateBottomButton()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	const auto RaisedSprite = new SpriteRenderer{
+		this, RaisedTexture, SpriteShader, false };
+	const auto PressedSprite = new SpriteRenderer{
+		this, PressedTexture, SpriteShader, false };
+	const auto BallSprite = AddComponent<SpriteRenderer>(
+		Ball, SpriteShader, false);
+	const auto ExitText = new TextRenderer(this, Font1, SpriteShader, 100, 140);
+	ExitText->Write(L"E x i t");
+	const auto ExitButton = AddComponent<Button>(
+		ExitText, RaisedSprite, PressedSprite, BallSprite, [&Engine]()
+		{
+			Engine.Stop();
+		}
+	);
+	ExitButton->SetOffset(-0.315f, -0.015f, -0.28f, -0.26f);
+	return ExitButton;
+}
+
+void MainMenu::CreateBackdrop()
+{
+	auto& RessourceManager = EngineD3D11::GetInstance().ResourcesManager;
+	AddComponent<SpriteRenderer>(
+		RessourceManager.GetTexture(L".\\modeles\\ui\\mainmenu.dds"), SpriteShader, false);
+}
+
+void MainMenu::CreateTitle()
+{
+	const auto MenuText = AddComponent<TextRenderer>(Font2, SpriteShader, 100, 550);
+	MenuText->Write(L"M A I N    M E N U");
+	MenuText->Offset.Position.y = 0.39f;
+}
+
+Button* PauseMenu::CreateTopButton()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	const auto RaisedSprite = new SpriteRenderer{
+		this, RaisedTexture, SpriteShader, false };
+	const auto PressedSprite = new SpriteRenderer{
+		this, PressedTexture, SpriteShader, false };
+	const auto BallSprite = AddComponent<SpriteRenderer>(
+		Ball, SpriteShader, false);
+	const auto ResumeText = new TextRenderer(this, Font1, SpriteShader, 100, 220);
+	ResumeText->Write(L"RESUME");
+	const auto PlayButton = AddComponent<Button>(
+		ResumeText, RaisedSprite, PressedSprite, BallSprite, [&Engine, this]()
+		{
+			Engine.UnPause();
+			Active = false;
+		});
+	PlayButton->SetOffset(-0.04f, -0.015f, 0.0f, 0.015f);
+	return PlayButton;
+}
+
+Button* PauseMenu::CreateBottomButton()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	const auto RaisedSprite = new SpriteRenderer{
+		this, RaisedTexture, SpriteShader, false };
+	const auto PressedSprite = new SpriteRenderer{
+		this, PressedTexture, SpriteShader, false };
+	const auto BallSprite = AddComponent<SpriteRenderer>(
+		Ball, SpriteShader, false);
+	const auto ExitText = new TextRenderer(this, Font1, SpriteShader, 100, 140);
+	ExitText->Write(L"E x i t");
+	const auto ExitButton = AddComponent<Button>(
+		ExitText, RaisedSprite, PressedSprite, BallSprite, [&Engine]()
+		{
+			Engine.Stop();
+		}
+	);
+	ExitButton->SetOffset(-0.315f, -0.015f, -0.28f, -0.26f);
+	return ExitButton;
+}
+
+void PauseMenu::CreateBackdrop()
+{
+	auto& ResourcesManager = EngineD3D11::GetInstance().ResourcesManager;
+	AddComponent<SpriteRenderer>(
+		ResourcesManager.GetTexture(L".\\modeles\\ui\\background50.dds"), SpriteShader, false);
+}
+
+void PauseMenu::CreateTitle()
+{
+	const auto MenuText = AddComponent<TextRenderer>(Font2, SpriteShader, 100, 300);
+	MenuText->Write(L"P A U S E");
+	MenuText->Offset.Position.y = 0.39f;
+}
+
+Button* EndGameMenu::CreateTopButton()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	const auto RaisedSprite = new SpriteRenderer{
+		this, RaisedTexture, SpriteShader, false };
+	const auto PressedSprite = new SpriteRenderer{
+		this, PressedTexture, SpriteShader, false };
+	const auto BallSprite = AddComponent<SpriteRenderer>(
+		Ball, SpriteShader, false);
+	const auto ResumeText = new TextRenderer(this, Font1, SpriteShader, 100, 240);
+	ResumeText->Write(L"RESTART");
+	const auto PlayButton = AddComponent<Button>(
+		ResumeText, RaisedSprite, PressedSprite, BallSprite, [&Engine, this]()
+		{
+			Engine.RequestLoadLevel();
+		});
+	PlayButton->SetOffset(-0.04f, -0.015f, 0.0f, 0.015f);
+	return PlayButton;
+}
+
+Button* EndGameMenu::CreateBottomButton()
+{
+	auto& Engine = EngineD3D11::GetInstance();
+	const auto RaisedSprite = new SpriteRenderer{
+		this, RaisedTexture, SpriteShader, false };
+	const auto PressedSprite = new SpriteRenderer{
+		this, PressedTexture, SpriteShader, false };
+	const auto BallSprite = AddComponent<SpriteRenderer>(
+		Ball, SpriteShader, false);
+	const auto ExitText = new TextRenderer(this, Font1, SpriteShader, 100, 140);
+	ExitText->Write(L"E x i t");
+	const auto ExitButton = AddComponent<Button>(
+		ExitText, RaisedSprite, PressedSprite, BallSprite, [&Engine]()
+		{
+			Engine.Stop();
+		}
+	);
+	ExitButton->SetOffset(-0.315f, -0.015f, -0.28f, -0.26f);
+	return ExitButton;
+}
+
+void EndGameMenu::CreateBackdrop()
+{
+	auto& RessourceManager = EngineD3D11::GetInstance().ResourcesManager;
+	AddComponent<SpriteRenderer>(
+		RessourceManager.GetTexture(L".\\modeles\\ui\\mainmenu.dds"), SpriteShader, false);
+}
+
+void EndGameMenu::CreateTitle()
+{
+	const auto MenuText = AddComponent<TextRenderer>(Font2, SpriteShader, 100, 600);
+	MenuText->Write(MyTimer->GetValue());
+	MenuText->Offset.Position.y = 0.39f;
 }

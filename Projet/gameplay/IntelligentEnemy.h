@@ -13,8 +13,8 @@ public :
 		Math::Vec3f Point1, Point2;
 	};
 
-	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* RelativeTerrain, 
-		Math::Vec3f RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
+	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* _RelativeTerrain, 
+		Math::Vec3f _RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
 	~IntelligentEnemy() override = default;
 
 	void Init() override;

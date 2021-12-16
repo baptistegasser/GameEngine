@@ -7,16 +7,21 @@
 
 using namespace Math;
 
-IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* RelativeTerrain,
-	Math::Vec3f RelativeTerrainPosition, float Distance, bool IsKiller)
+IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* _RelativeTerrain,
+	Math::Vec3f _RelativeTerrainPosition, float Distance, bool IsKiller)
 	: Enemy(Parent, IsKiller)
 	, ToFollow{ ToFollow }
 	, Zone{ Zone }
 	, Distance{ Distance }
 	, BasePosition{ BasePosition }
-	, RelativeTerrain(RelativeTerrain)
-	, RelativeTerrainPosition(RelativeTerrainPosition)
-{}
+	, RelativeTerrain(_RelativeTerrain)
+	, RelativeTerrainPosition(_RelativeTerrainPosition)
+{
+	const float PosY = RelativeTerrain->GetVertex(static_cast<int>(RelativeTerrainPosition.x / RelativeTerrain->Transform.Scale.x),
+		static_cast<int>(RelativeTerrainPosition.z / RelativeTerrain->Transform.Scale.z)).Position.y * (RelativeTerrain->Transform.Scale.y) + BasePosition.y;
+
+	Parent->Transform.Position.y = PosY;
+}
 
 void IntelligentEnemy::Init()
 {

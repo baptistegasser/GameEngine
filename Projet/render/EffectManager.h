@@ -40,6 +40,11 @@ public:
 	/// </summary>
 	void ActivateEffect(const std::string &Name);
 
+	/// <summary>
+	/// Actiavte an effect identified by its name.
+	/// </summary>
+	void DeactivateEffect();
+
 private:
 	/// <summary>
 	/// Structure to store the effects status

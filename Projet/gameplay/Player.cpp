@@ -170,9 +170,11 @@ void Player::HitPlayer()
 {
 	if (Live) {
 		Live = false;
+		EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
 	}
 	else {
 		Live = true;
+		EngineD3D11::GetInstance().EffectManager.DeactivateEffect();
 		RespawnPlayer();
 	}
 }

@@ -53,6 +53,13 @@ void EffectManager::ActivateEffect(const std::string& Name)
 	}
 }
 
+void EffectManager::DeactivateEffect()
+{
+	for (auto& pair : Effects) {
+		pair.second.Activated = false;
+	}
+}
+
 bool EffectManager::HasEffect(const std::string& Name) const noexcept
 {
 	return Effects.find(Name) != Effects.end();

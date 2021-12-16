@@ -33,7 +33,7 @@ private:
 	/// </summary>
 	///	<param name="Transform"> : transform of the enemy  </param>
 	///	<param name="End"> : deplacement of the enemy  </param>
-	void CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller = false, float Speed = 0.1f);
+	void CreateEnemy(Math::Transform Departure, Math::Transform End, bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create an intelligent enemy

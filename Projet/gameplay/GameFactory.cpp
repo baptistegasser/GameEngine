@@ -44,11 +44,11 @@ void GameFactory::LoadLevel()
 	 ***/
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\PlateformDarkBlue.OMB");
 
-	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
-	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud2\\tree_cloud.OMB");
+	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
+	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25), Math::Vec3f(0, 0, 10), L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\plateform\\PlateformYellow.OMB");
 	CreateMobilePlatform(Math::Vec3f(15.f, 10.f, 35), Math::Vec3f(0, 0, -10), L".\\modeles\\signs\\directionalSign.OMB");
-	
+
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 60.f), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformDarkBlue.OMB");
 
 	CreateMobilePlatform(Math::Vec3f(-20.f, 10.f, 85), Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\PlateformYellow.OMB");
@@ -70,17 +70,53 @@ void GameFactory::LoadLevel()
 	CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
 		L".\\modeles\\grass.dds", L".\\modeles\\soil3.dds", L".\\modeles\\Arene_Texture_2_1.dds", true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemy, TerrainPos.z + 20.f }, true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 20.f }, Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemy, TerrainPos.z + 20.f }, true);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 25.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 40.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 25.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 45.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 60.f }, Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 45.f }, true, 0.2f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 42.5f }, true, 0.4f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 42.5f }, true, 0.4f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
-	CreateEnemy(Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 62.5f }, true, 0.4f);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		true);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 34.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		true);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 20.f }, Math::Quaternion{ physx::PxHalfPi, Math::Vec3f{0,1,0} } },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 44.f, PosYEnemy, TerrainPos.z + 20.f }, Math::Quaternion{ -physx::PxHalfPi, Math::Vec3f{0,1,0} } },
+		true);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 40.f }},
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 25.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} },
+		true, 0.2f);
+
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 40.f } },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 25.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} },
+		true, 0.2f);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 60.f } },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 45.f, PosYEnemy, TerrainPos.z + 45.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} },
+		true, 0.2f);
+
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 60.f } },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 35.f,PosYEnemy, TerrainPos.z + 45.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} },
+		true, 0.2f);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		true, 0.4f);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 42.5f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		true, 0.4f);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 44.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 5.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		true, 0.4f);
+	CreateEnemy(
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 73.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },
+		Math::Transform{ Math::Vec3f{ TerrainPos.x + 34.f,PosYEnemy, TerrainPos.z + 62.5f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },	
+		true, 0.4f);
+
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 15.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos, Math::Vec3f{ TerrainPos.x + 76.f, PosYEnemy + 30.f, TerrainPos.z + 76.f } }, 40.0f);
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos.x + 63.f, PosYEnemy, TerrainPos.z + 35.f }, Math::Vec3f(0.1f, 0.1f, 0.1f) }, PlayerTransform,
@@ -231,7 +267,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	Engine.GetScene().AddActor(MyPlayer);
 }
 
-void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller, float Speed)
+void GameFactory::CreateEnemy(Math::Transform Departure, Math::Transform End, bool IsKiller, float Speed)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -256,12 +292,11 @@ void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool I
 	auto Collider = Ennemy->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Collider->OnContactCallBack = EnemyCollider;
 
-	Ennemy->Transform = Transform;
+	Ennemy->Transform = Departure;
 
 	auto body = Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	auto Movement = Ennemy->AddComponent<Plateform>(
-		Math::Transform(Ennemy->Transform.Position, Math::Quaternion(-physx::PxHalfPi, Math::Vec3f(0, 1, 0)))
-		, Math::Transform(End, Math::Quaternion(physx::PxHalfPi, Math::Vec3f(0, 1, 0))), true);
+	auto Movement = Ennemy->AddComponent<Plateform>(Ennemy->Transform
+		, End, true);
 	Movement->SetSpeed(Speed);
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }

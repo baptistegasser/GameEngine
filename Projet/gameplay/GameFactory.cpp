@@ -120,12 +120,12 @@ void GameFactory::LoadLevel()
 	// Dim : 128 / 128
 	CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
 		Math::Transform{ TerrainPos2, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
-		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
+		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true, true);
 	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TerrainPos2.x + 128.f, TerrainPos2.y + 22.0f, TerrainPos2.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
 	CaveTrans.RotateZ(180);
 	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
 		CaveTrans,
-		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true);
+		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true, true);
 
 	/***
 	 * Third state with plateform
@@ -172,7 +172,7 @@ void GameFactory::LoadLevel()
 	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 250.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
-void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
+void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull, bool IsTunnel)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -188,6 +188,8 @@ void GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transfo
 	Terrain->Texture2 = RessourceManager.GetTexture(TextureName2);
 	Terrain->Texture3 = RessourceManager.GetTexture(TextureName3);
 	Terrain->Transform = Transform;
+	Terrain->IsTunnel = IsTunnel;
+
 	Engine.GetScene().AddActor(Terrain, true);
 }
 

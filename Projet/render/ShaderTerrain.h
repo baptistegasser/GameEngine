@@ -10,8 +10,9 @@
 struct ShadersParamsTerrain : ShadersParams {
 	DirectX::XMVECTOR PosScale;
 	float TextureCoefficient;
+	bool IsTunnel = false;
 private:
-	DX_HLSL_FILL(3);
+	DX_HLSL_FILL(2);
 };
 
 DX_HLSL_ASSERT_ALLIGN(ShadersParamsTerrain);

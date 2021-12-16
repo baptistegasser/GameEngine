@@ -13,9 +13,10 @@ cbuffer param
 	float4 AmbientColor;
 	Material Mat;
 	bool HasTexture;
-	float3 _FILL_;
+	float2 _FILL_;
 	float4 PosScale;
 	float TextureCoefficient;
+    bool IsTunnel;
 }
 
 Texture2D texture1;
@@ -77,8 +78,11 @@ float4 MiniPhongTerrainPS(VS_Sortie vs) : SV_Target
 	// Calc all Point lights
 	for (uint i = 0; i < LightCount; i += 1)
 	{
-		phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
-	}
+        if (IsTunnel && LightsBuffer[i].Type == LightType_Directional)
+            continue;
+		else
+            phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
+    }
 
 	// Échantillonner la couleur du pixel à partir de la texture
 	float3 colorTex1 = texture1.Sample(SampleState, vs.coordTex).rgb;

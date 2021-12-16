@@ -18,14 +18,13 @@ public:
 	/// Return true if one of the managed effect is activated.
 	/// </summary>
 	/// <returns></returns>
-	bool HasEffectActivated() const noexcept;
+	bool HasOneEffectActivated() const noexcept;
 	/// <summary>
 	/// Return the currently activated effect.
 	/// \warning \ref HasEffectActivated should be called before to assert there is an active effect.
 	/// </summary>
 	/// <returns></returns>
-	Effect* GetActivatedEffect() noexcept;
-
+	std::vector<Effect*> GetActivatedEffects() noexcept;
 	/// <summary>
 	/// Load an effect by name and add it to the manager.
 	/// </summary>

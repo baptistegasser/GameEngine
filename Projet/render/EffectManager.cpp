@@ -3,7 +3,7 @@
 
 #include "EngineD3D11.h"
 
-bool EffectManager::HasEffectActivated() const noexcept
+bool EffectManager::HasOneEffectActivated() const noexcept
 {
 	for (auto& pair : Effects) {
 		if (pair.second.Activated)
@@ -13,14 +13,15 @@ bool EffectManager::HasEffectActivated() const noexcept
 	return false;
 }
 
-Effect* EffectManager::GetActivatedEffect() noexcept
+std::vector<Effect*> EffectManager::GetActivatedEffects() noexcept
 {
+	std::vector<Effect*> v;
 	for (auto& pair : Effects) {
 		if (pair.second.Activated)
-			return pair.second.Effect;
+			v.push_back(pair.second.Effect);
 	}
 
-	return nullptr;
+	return v;
 }
 
 void EffectManager::AddEffect(const wchar_t* Name)
@@ -49,7 +50,8 @@ void EffectManager::ActivateEffect(const std::string& Name)
 
 	// Activate if name match
 	for (auto& pair : Effects) {
-		pair.second.Activated = pair.first == Name;
+		if (pair.first == Name)
+			pair.second.Activated = true;
 	}
 }
 

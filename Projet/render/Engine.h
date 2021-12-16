@@ -233,9 +233,12 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 	BeginRenderSceneSpecific();
 
 	// Start applying effect if any activated
-	if (EffectManager.HasEffectActivated()) {
-		auto effect = EffectManager.GetActivatedEffect();
-		effect->DebutPostEffect();
+	if (EffectManager.HasOneEffectActivated()) {
+		auto Effects = EffectManager.GetActivatedEffects();
+		//for (auto EffectToApply : Effects)
+			Effects[0]->DebutPostEffect();
+			//Effects[1]->DebutPostEffect();
+			//Effects[1]->DebutPostEffect();
 	}
 
 	// Tick the skybox first
@@ -252,10 +255,21 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 	}
 
 	// Finish applying effect if present
-	if (EffectManager.HasEffectActivated()) {
-		auto effect = EffectManager.GetActivatedEffect();
-		effect->FinPostEffect();
-		effect->Draw();
+	if (EffectManager.HasOneEffectActivated()) {
+		auto Effects = EffectManager.GetActivatedEffects();
+		//for (auto EffectToApply : Effects) {
+		//Effects[1]->FinPostEffect();
+		Effects[0]->FinPostEffect();
+		Effects[0]->Draw();
+
+		//Effects[1]->FinPostEffect();
+
+			//EffectToApply->FinPostEffect();
+			//EffectToApply->Draw();
+		//Effects[1]->DebutPostEffect();
+		
+		//Effects[1]->Draw();
+		//}
 	}
 
 	EndRenderSceneSpecific();

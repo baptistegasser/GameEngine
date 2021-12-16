@@ -22,13 +22,19 @@ void Timer::FixedTick(const float& DeltaTime)
 	Now = std::chrono::steady_clock::now();
 	if (!EngineD3D11::GetInstance().IsPaused())
 	{
-		Duration = std::chrono::duration_cast<std::chrono::seconds>(Now - Start - IgnoreDuration);
-		const auto Seconds = Duration.count();
-		MySprite->Write(L"Time : " + std::to_wstring(Seconds /60) + L" min " + std::to_wstring(Seconds % 60) + L" s");
+		MySprite->Write(GetValue());
 	}
 	else
 	{
 		IgnoreDuration += std::chrono::duration_cast<std::chrono::nanoseconds>(Now - Last);
 	}
 	Last = Now;
+}
+
+std::wstring Timer::GetValue()
+{
+	Now = std::chrono::steady_clock::now();
+	Duration = std::chrono::duration_cast<std::chrono::seconds>(Now - Start - IgnoreDuration);
+	const auto Seconds = Duration.count();
+	return L"Time : " + std::to_wstring(Seconds / 60) + L" min " + std::to_wstring(Seconds % 60) + L" s";
 }

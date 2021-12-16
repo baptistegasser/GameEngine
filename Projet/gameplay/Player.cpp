@@ -13,7 +13,7 @@ using namespace Math;
 Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
 	, IsOnTerrain{false}
-	, MyMenu(new Menu{false})
+	, MyMenu(new PauseMenu)
 	, SpawnPos { std::move(Pos) }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}

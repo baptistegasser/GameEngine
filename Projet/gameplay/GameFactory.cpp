@@ -34,7 +34,7 @@ void GameFactory::LoadMainMenu()
 {
 	auto& Engine = EngineD3D11::GetInstance();
 
-	auto const MyMenu = new Menu{ true };
+	auto const MyMenu = new MainMenu;
 	const auto Cam = MyMenu->AddComponent<Camera>(
 		DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
 		DirectX::XMVectorSet(0.0f, 0.4f, 1.0f, 1.0f),

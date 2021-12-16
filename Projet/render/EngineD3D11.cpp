@@ -112,15 +112,7 @@ std::unique_ptr<DeviceD3D11> EngineD3D11::CreateDeviceSpecific(const CDS_MODE cd
 
 void EngineD3D11::BeginRenderSceneSpecific()
 {
-	ID3D11DeviceContext* pImmediateContext = Device->ImmediateContext;
-	ID3D11RenderTargetView* pRenderTargetView = Device->RenderTargetView;
-
-	constexpr float Couleur[4] = { 0.7f, 1.0f, 1.0f, 1.0f };
-	pImmediateContext->ClearRenderTargetView(pRenderTargetView, Couleur);
-
-	// On ré-initialise le tampon de profondeur
-	ID3D11DepthStencilView* pDepthStencilView = Device->DepthStencilView;
-	pImmediateContext->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	Device->ClearView();
 }
 
 void EngineD3D11::EndRenderSceneSpecific()

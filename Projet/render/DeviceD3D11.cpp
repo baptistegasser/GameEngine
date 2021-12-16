@@ -45,7 +45,7 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 	Desc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	DeviceInfoD3D11 Device(Desc);
-	Desc = Device.Mode;
+	//Desc = Device.Mode;
 	ScreenWidth = Desc.Width;
 	ScreenHeight = Desc.Height;
 
@@ -261,4 +261,29 @@ void DeviceD3D11::ActivateZBuffer() const
 void DeviceD3D11::DeactivateZBuffer() const
 {
 	ImmediateContext->OMSetDepthStencilState(pDepthStencilDephtDisable, 0);
+}
+
+void DeviceD3D11::ClearView()
+{
+	// Clear render surface
+	const static float Color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	ImmediateContext->ClearRenderTargetView(RenderTargetView, Color);
+
+	// Reset depth stencil
+	ImmediateContext->ClearDepthStencilView(DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void DeviceD3D11::SetRenderTargetView(ID3D11RenderTargetView* PRenderTargetView, ID3D11DepthStencilView* PDepthStencilView)
+{
+	// Set values
+	RenderTargetView = PRenderTargetView;
+	DepthStencilView = PDepthStencilView;
+	
+	// Unbind shader resources
+	ID3D11ShaderResourceView* const pSRV[1] = { NULL };
+	ImmediateContext->PSSetShaderResources(0, 1, pSRV);
+	// Change render target
+	ImmediateContext->OMSetRenderTargets(1, &PRenderTargetView, DepthStencilView);
+	// Finally clear the new view
+	ClearView();
 }

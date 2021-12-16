@@ -10,23 +10,11 @@
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
 
-// Math components
-#include "math/Math.h"
-// Physic components
-#include "physic/RigidBody.h"
-#include "physic/SphereCollider.h"
-#include "physic/BoxCollider.h"
-#include "physic/CapsuleCollider.h"
-// Render components
-#include "render/MeshRenderer.h"
-#include "render/Camera.h"
-#include "render/Terrain.h"
-#include "render/TextRenderer.h"
-// Gameplay components
-#include "gameplay/Plateform.h"
-#include "gameplay/Player.h"
-
+#include "render/EffectManager.h"
 #include "GameFactory.h"
+
+#include <gdiplus.h>
+#pragma comment(lib, "gdiplus.lib")
 
 #include <iostream>
 #include <chrono>
@@ -121,6 +109,7 @@ public:
 
 	PM3D::CDIManipulateur InputManager;
 	ResourcesManager ResourcesManager;
+	EffectManager EffectManager;
 
 protected:
 	// Physic variable
@@ -132,7 +121,7 @@ protected:
 	int64_t NextTimeStep = 0;
 	int64_t PreviousTimeStep = 0;
 
-	Scene* CurrentScene;
+	Scene* CurrentScene = nullptr;
 
 private:
 	static ULONG_PTR GDIToken;
@@ -246,6 +235,12 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 {
 	BeginRenderSceneSpecific();
 
+	// Start applying effect if any activated
+	if (EffectManager.HasEffectActivated()) {
+		auto effect = EffectManager.GetActivatedEffect();
+		effect->DebutPostEffect();
+	}
+
 	// Tick the skybox first
 	CurrentScene->SkyBox->LateTick(DeltaTime);
 
@@ -257,6 +252,13 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 
 	for (const auto& Actor : Actors) {
 		Actor->SpriteTick(DeltaTime);
+	}
+
+	// Finish applying effect if present
+	if (EffectManager.HasEffectActivated()) {
+		auto effect = EffectManager.GetActivatedEffect();
+		effect->FinPostEffect();
+		effect->Draw();
 	}
 
 	EndRenderSceneSpecific();

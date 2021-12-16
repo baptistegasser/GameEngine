@@ -7,13 +7,10 @@
 #endif
 
 #include "util/Singleton.h"
-#include "core/Scene.h"
 #include "ContactHandler.h"
 #include "RigidBody.h"
 
 #include "PxPhysicsAPI.h"
-
-#include <memory>
 
 class PhysicManager : public Singleton<PhysicManager>
 {
@@ -27,6 +24,7 @@ public:
 
 	void RegisterRigidBody(RigidBody* RigidBody);
 	ContactHandler& GetContactHandler() noexcept;
+	physx::PxRaycastBuffer Raycast(const Math::Vec3f Origin, const Math::Vec3f Direction, float Distance) const;
 
 	physx::PxPhysics* Physics = nullptr;
 	physx::PxCooking* Cooking = nullptr;

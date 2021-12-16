@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include "render/DeviceD3D11.h"
+#include "render/d3dx11effect.h"
 
 // Physx resources cleaning
 #define PX_RELEASE(res) if(res) { res->release(); res = nullptr; }
@@ -42,6 +44,15 @@ inline void DX_RELEASE(Type & UnPointeur)
 		UnPointeur = nullptr;
 	}
 }
+
+/// <summary>
+/// Compile a shader from file.
+/// The function take care of version, and handling includes.
+/// </summary>
+/// <param name="FileName">The path to the shader to compile</param>
+/// <param name="PDevice">The device used to load the shader.</param>
+/// <returns>The pointer to the created shader.</returns>
+ID3DX11Effect* DX_CompileShaderFromFile(const wchar_t* FileName, ID3D11Device* PDevice);
 
 // Assert that a type used for hlsl is correctly alligned
 #define DX_HLSL_ASSERT_ALLIGN(type) \

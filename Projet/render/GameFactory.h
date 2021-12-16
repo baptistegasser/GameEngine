@@ -2,6 +2,7 @@
 #include "math/Transform.h"
 #include "physic/Collider.h"
 #include "util/Singleton.h"
+#include "util/ResourcesManager.h"
 
 #include "gameplay/IntelligentEnemy.h"
 
@@ -90,6 +91,9 @@ private:
 	/// <param name="Transform"> The transform of the road </param>
 	///	<param name="Filename"> : name of texture file </param>
 	void CreateGoal(Math::Transform Transform, const wchar_t* Filename);
+
+	ResourcesManager* ResourcesManager;
+	Shader* DefaultShader;
 
 	Math::Transform* PlayerTransform;
 	/// <summary>

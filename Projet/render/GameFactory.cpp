@@ -34,6 +34,10 @@ void GameFactory::LoadLevel()
 	/***
 	 * Util Object
 	 ***/
+	ResourcesManager = &EngineD3D11::GetInstance().ResourcesManager;
+	DefaultShader = ResourcesManager->GetShader(L".\\shaders\\MiniPhong.fx");
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Nul.fx");
+	EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
 	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, 4.f);

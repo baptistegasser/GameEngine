@@ -2,6 +2,7 @@
 
 #include "d3dx11effect.h"
 
+#include "Effect.h"
 #include "util/Util.h"
 
 struct ShaderMaterial
@@ -52,5 +53,8 @@ struct Shader {
 
 	~Shader();
 
-	void UpdateLightsBuffer(ID3D11DeviceContext* PDeviceContext) const;
+	/// <summary>
+	/// Update the lights buffer of the shader.
+	/// </summary>
+	void UpdateLightsBuffer() const;
 };

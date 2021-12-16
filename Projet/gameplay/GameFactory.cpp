@@ -56,6 +56,7 @@ void GameFactory::LoadLevel()
 	CreateSkyBox(PlayerTransform);
 	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, 4.f);
 	CreateTimer();
+	CreateEffects();
 
 	/***
 	 * First state with platform ( z C 0,135)
@@ -268,11 +269,11 @@ void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool I
 	auto EnemyCollider = [](const Contact& Contact) -> void {
 		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player" && Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
 		{
-			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+			Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 		}
 		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy" && Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
 		{
-			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+			Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 		}
 	};
 
@@ -497,4 +498,9 @@ void GameFactory::CreateTimer()
 	MyTimer->AddComponent<Timer>();
 
 	Engine.GetScene().AddActor(MyTimer, true);
+}
+
+void GameFactory::CreateEffects()
+{
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Nul.fx");
 }

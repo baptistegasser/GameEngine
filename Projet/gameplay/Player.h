@@ -42,6 +42,11 @@ public :
 	}
 
 	/// <summary>
+	/// Take off a player's live or kill him
+	/// </summary>
+	void HitPlayer();
+
+	/// <summary>
 	/// Reset player value
 	/// </summary>
 	void RespawnPlayer() const;
@@ -105,5 +110,7 @@ private:
 	/// Reset player value
 	/// </summary>
 	void ResetPlayer() const;
+
+	bool Live = true;
 };
 

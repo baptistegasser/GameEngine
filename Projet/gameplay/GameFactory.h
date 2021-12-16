@@ -103,4 +103,9 @@ private:
 	/// Create the sprite timer on the screen
 	/// </summary>
 	void CreateTimer();
+
+	/// <summary>
+	/// Create the effects
+	/// </summary>
+	void CreateEffects();
 };

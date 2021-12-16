@@ -145,7 +145,7 @@ bool Player::isGrounded()
 		IsOnTerrain = false;
 		return true;
 	}
-	return false;
+	return true;
 }
 
 void Player::SwapCameraMode()
@@ -164,6 +164,17 @@ bool Player::IsDead() const
 	else if (ParentActor->Transform.Position.z >= 700 && ParentActor->Transform.Position.y < -25) return true;
 	else if (ParentActor->Transform.Position.y < -30) return true;
 	return false;
+}
+
+void Player::HitPlayer()
+{
+	if (Live) {
+		Live = false;
+	}
+	else {
+		Live = true;
+		RespawnPlayer();
+	}
 }
 
 void Player::RespawnPlayer() const

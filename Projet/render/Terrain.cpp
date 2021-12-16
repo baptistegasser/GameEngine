@@ -7,12 +7,15 @@
 #include "physic/HeightFieldCollider.h"
 #include "resources/resource.h"
 #include "physic/RigidBody.h"
+#include "gameplay/Player.h"
 
 using namespace DirectX;
 
-ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, const PhysicMaterial& Material)
-	: Scale{ Scale }
+ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, ShaderTerrain* Shader, const PhysicMaterial& Material, bool BackFaceCulling)
+	: Actor{"Terrain"}
+	, Scale{ Scale }
 	, MeshShader{ Shader }
+	, BackFaceCulling{BackFaceCulling}
 {
 	BITMAPFILEHEADER bitmapFileHeader;
 	BITMAPINFOHEADER bitmapInfoHeader;
@@ -63,7 +66,20 @@ ATerrain::ATerrain(const wchar_t* FileName, XMFLOAT3 Scale, Shader* Shader, cons
 	ComputeNormals();
 	GenerateMesh();
 
-	AddComponent<HeightFieldCollider>(Material, this);
+	auto Collider = AddComponent<HeightFieldCollider>(Material, this);
+
+	auto PlayerCollider = [](const Contact& Contact) -> void {
+		if (Contact.FirstActor->Name == "Terrain" && Contact.SecondActor->Name == "Player")
+		{
+			Contact.SecondActor->GetComponent<Player>()->IsOnTerrain = true;
+		}
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Terrain")
+		{
+			Contact.FirstActor->GetComponent<Player>()->IsOnTerrain = true;
+		}
+	};
+
+	Collider->OnContactCallBack = PlayerCollider;
 	AddComponent<RigidBody>(RigidBody::RigidActorType::Static);
 }
 
@@ -78,9 +94,14 @@ void ATerrain::LateTick(const float ElapsedTime)
 {
 	Actor::LateTick(ElapsedTime);
 
+	auto& Engine = EngineD3D11::GetInstance();
+
 	matWorld = Transform;
 
 	ID3D11DeviceContext* pImmediateContext = EngineD3D11::GetInstance().Device->ImmediateContext;
+
+	if (BackFaceCulling)
+		Engine.Device->DeactivateCullBack();
 
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -91,16 +112,23 @@ void ATerrain::LateTick(const float ElapsedTime)
 	pImmediateContext->IASetIndexBuffer(PIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	pImmediateContext->IASetInputLayout(MeshShader->PInputLayout);
 
-	const XMMATRIX& viewProj = EngineD3D11::GetInstance().MatViewProj;
-	ShaderParams.matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
-	ShaderParams.matWorld = XMMatrixTranspose(matWorld);
-	ShaderParams.vLumiere = XMVectorSet(-10.0f, 10.0f, -15.0f, 1.0f);
-	ShaderParams.vCamera = XMVectorSet(0.0f, 3.0f, -5.0f, 1.0f);
-	ShaderParams.vAEcl = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
-	ShaderParams.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-	ShaderParams.vSEcl = XMVectorSet(0.6f, 0.6f, 0.6f, 1.0f);
-	ShaderParams.PosScale = XMVectorSet(Scale.x, static_cast<float>(Height), Scale.z, static_cast<float>(Width));
+	const XMMATRIX& viewProj = Engine.MatViewProj;
+	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
+	ShaderParams.MatWorld = XMMatrixTranspose(matWorld);
+	ShaderParams.CameraPos = Engine.GetScene().GetCurrentCamera().GetPosition();
+	ShaderParams.Mat.Ambient = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Roughness = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Specular = XMVECTOR{ 0.5f, 0.5f, 0.5f, 0.5f };
+	ShaderParams.Mat.Intensity = 4;
+	ShaderParams.PosScale = XMVectorSet(Scale.x, Scale.z, static_cast<float>(Width), static_cast<float>(Height));
 	ShaderParams.TextureCoefficient = TextureCoefficient;
+
+	// Set lighting data
+	const auto& LightManager = Engine.GetScene().LightManager;
+	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
+	MeshShader->UpdateLightsBuffer();
+
+
 	pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer, 0, nullptr, &ShaderParams, 0, 0);
 
 	// Textures
@@ -122,6 +150,9 @@ void ATerrain::LateTick(const float ElapsedTime)
 	// Render
 	MeshShader->PEffectPass->Apply(0, pImmediateContext);
 	pImmediateContext->DrawIndexed(static_cast<UINT>(PolyCount * 3), 0, 0);
+
+	if (BackFaceCulling)
+		Engine.Device->ActivateCullBack();
 }
 
 void ATerrain::ComputeNormal(int x, int z)

@@ -225,9 +225,6 @@
     <ClCompile Include="render\Font.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="render\GameFactory.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
     <ClCompile Include="render\DeviceD3D11.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -265,6 +262,15 @@
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
     <ClCompile Include="gameplay\IntelligentEnemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\Enemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ShaderTerrain.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\GameFactory.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="render\Effect.cpp">
@@ -443,9 +449,6 @@
     <ClInclude Include="render\SpriteRenderer.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
-    <ClInclude Include="render\GameFactory.h">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
     <ClInclude Include="render\Device.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
@@ -477,6 +480,15 @@
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
     <ClInclude Include="gameplay\IntelligentEnemy.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\Enemy.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ShaderTerrain.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\GameFactory.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="render\Effect.h">

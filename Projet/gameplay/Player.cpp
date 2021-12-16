@@ -15,6 +15,7 @@ Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
 	, SpawnPos { Pos }
+	, IsOnTerrain{false}
 {
 }
 
@@ -32,10 +33,10 @@ void Player::Init()
 
 void Player::Tick(const float& ElapsedTime)
 {
-	/*if (IsDead())
+	if (IsDead())
 	{
-		ResetPlayer();
-	}*/
+		RespawnPlayer();
+	}
 }
 
 void Player::FixedTick(const float& DeltaTime)
@@ -126,7 +127,7 @@ void Player::FixedTick(const float& DeltaTime)
 	MyCamera->SetDirection(Direction);
 }
 
-bool Player::isGrounded() const
+bool Player::isGrounded()
 {
 	auto& PhysicManager = PhysicManager::GetInstance();
 
@@ -136,7 +137,11 @@ bool Player::isGrounded() const
 		Origin,
 		{ 0.0f, -1.0f, 0.0f },
 		0.1f);
-	return Hit.hasAnyHits();
+	if (IsOnTerrain || Hit.hasAnyHits()) {
+		IsOnTerrain = false;
+		return true;
+	}
+	return false;
 }
 
 void Player::SwapCameraMode()
@@ -149,11 +154,15 @@ void Player::SwapCameraMode()
 
 bool Player::IsDead() const
 {
-	if (ParentActor->Transform.Position.y < -10) return true;
+	if (ParentActor->Transform.Position.z < 135 && ParentActor->Transform.Position.y < 0) return true;
+	else if (ParentActor->Transform.Position.z >= 135 && ParentActor->Transform.Position.z < 545 && ParentActor->Transform.Position.y < -10) return true;
+	else if (ParentActor->Transform.Position.z >= 545 && ParentActor->Transform.Position.z < 700 && ParentActor->Transform.Position.y < 4) return true;
+	else if (ParentActor->Transform.Position.z >= 700 && ParentActor->Transform.Position.y < -25) return true;
+	else if (ParentActor->Transform.Position.y < -30) return true;
 	return false;
 }
 
-void Player::ResetPlayer() const
+void Player::RespawnPlayer() const
 {
 	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
 	MyRigidBody->ClearForce();

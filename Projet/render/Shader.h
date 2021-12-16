@@ -48,6 +48,7 @@ struct Shader {
 	ID3D11ShaderResourceView* PPointLightsBufferView;
 
 	Shader(const wchar_t* FileName);
+
 	~Shader();
 
 	/// <summary>

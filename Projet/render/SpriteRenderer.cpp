@@ -40,6 +40,8 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 
 	ID3D11DeviceContext* pImmediateContext = pD3DDevice->ImmediateContext;
 
+	pD3DDevice->DeactivateZBuffer();
+
 	pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	const UINT stride = sizeof(SpriteVertex);
@@ -96,4 +98,6 @@ void SpriteRenderer::SpriteTick(const float& ElapsedTime)
 	pImmediateContext->Draw(6, 0);
 
 	pD3DDevice->DeactivateAlphaBlending();
+
+	pD3DDevice->ActivateZBuffer();
 }

@@ -24,7 +24,8 @@ public :
 	/// </summary>
 	void FixedTick(const float& DeltaTime) override;
 
-	bool isGrounded() const;
+	bool IsOnTerrain;
+	bool isGrounded();
 
 	/// <summary>
 	/// Type of camera, first or third person
@@ -38,6 +39,11 @@ public :
 	{
 		SpawnPos = Pos;
 	}
+
+	/// <summary>
+	/// Reset player value
+	/// </summary>
+	void RespawnPlayer() const;
 
 private:
 	RigidBody* MyRigidBody;

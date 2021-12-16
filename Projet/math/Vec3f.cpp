@@ -76,4 +76,36 @@ namespace Math
 			&& this->y > Vec.y
 			&& this->z > Vec.z;
 	}
+
+	bool Vec3f::PlusByXZ(const Vec3f& Vec) const noexcept
+	{
+		return this->x > Vec.x
+			|| this->z > Vec.z;
+	}
+
+	bool Vec3f::MinusByXZ(const Vec3f& Vec) const noexcept
+	{
+		return this->x < Vec.x
+			|| this->z < Vec.z;
+	}
+
+	Vec3f Vec3f::operator+(const float& Val) const noexcept
+	{
+		return Vec3f{ this->x + Val, this->y + Val , this->z + Val };
+	}
+	
+	Vec3f Vec3f::operator+(const Vec3f& Val) const noexcept
+	{
+		return Vec3f{ this->x + Val.x, this->y + Val.y , this->z + Val.z };
+	}
+
+	Vec3f Vec3f::operator-(const float& Val) const noexcept
+	{
+		return Vec3f{ this->x - Val, this->y - Val , this->z - Val };
+	}
+
+	Vec3f Vec3f::operator-(const Vec3f& Val) const noexcept
+	{
+		return Vec3f{ this->x - Val.x, this->y - Val.y , this->z - Val.z };
+	}
 }

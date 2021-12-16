@@ -91,6 +91,7 @@ private:
 	bool IsStateSet(const States& State) const noexcept { return (CurrentState & State) == State; }
 
 public:
+	bool GodMod = false;
 
 	[[nodiscard]] bool IsStopping() const noexcept { return IsStateSet(States::Stopping); }
 	[[nodiscard]] bool IsPaused() const noexcept { return IsStateSet(States::Paused); }

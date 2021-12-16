@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/Component.h"
-#include "physic/RigidBody.h"
+#include "render/Terrain.h"
 #include <limits>
 
 #include "Enemy.h"
@@ -13,7 +13,8 @@ public :
 		Math::Vec3f Point1, Point2;
 	};
 
-	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
+	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* _RelativeTerrain, 
+		Math::Vec3f _RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, bool FixedY = false);
 	~IntelligentEnemy() override = default;
 
 	void Init() override;
@@ -26,12 +27,17 @@ public :
 
 	void SetSpeed(const float& SpeedNew);
 
+	
 private:
 	Math::Transform* ToFollow;
 	Math::Vec3f Direction;
+	Math::Vec3f BasePosition;
+	const ATerrain* RelativeTerrain;
+	Math::Vec3f RelativeTerrainPosition;
 
 	float Speed = 0.1f;
 	float Distance;
+	bool FixedY = false;
 
 	ActionZone Zone;
 };

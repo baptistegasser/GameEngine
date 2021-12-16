@@ -98,10 +98,5 @@ private:
 	/// Check if player is dead
 	/// </summary>
 	[[nodiscard]] bool IsDead() const;
-
-	/// <summary>
-	/// Reset player value
-	/// </summary>
-	void ResetPlayer() const;
 };
 

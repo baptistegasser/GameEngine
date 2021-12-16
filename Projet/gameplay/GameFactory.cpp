@@ -187,12 +187,15 @@ void GameFactory::LoadLevel()
 	 * Third State with arena
 	 ***/
 	Math::Vec3f TerrainPos3 = { -96.f, 0.f, 595.f };
-	//float PosYEnemy2 = -5.5f;
 
 	// Dim : 128 / 128
-	CreateTerrain(L".\\modeles\\heigtmap\\fall.bmp",
+	auto IceTerrain = CreateTerrain(L".\\modeles\\heigtmap\\fall.bmp",
 		Math::Transform{ TerrainPos3, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
 		L".\\modeles\\ice2.dds", L".\\modeles\\sand.dds", L".\\modeles\\ways.dds", true);
+
+	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 60.f, 20.f, TerrainPos3.z + 66.f }, Math::Vec3f(0.7f, 0.7f, 0.7f) }, PlayerTransform,
+		IntelligentEnemy::ActionZone{ TerrainPos3, Math::Vec3f{ TerrainPos3.x + 128.f, PosYEnemy2 + 50.f, TerrainPos3.z + 128.f } }, IceTerrain,
+		Math::Vec3f{ 15.f, 20.f, 35.f }, 128.0f, false, 0.175f, true);
 	
 	/***
 	* Finish
@@ -304,7 +307,7 @@ void GameFactory::CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool I
 }
 
 void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, ATerrain* RelativeTerrain,
-	Math::Vec3f RelativeTerrainPosition, float Distance, bool IsKiller, float Speed)
+	Math::Vec3f RelativeTerrainPosition, float Distance, bool IsKiller, float Speed, bool FixedY)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -325,12 +328,13 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 		}
 	};
 
-	auto Collider = Ennemy->AddComponent<CapsuleCollider>(6.f, 25.f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+	auto Collider = Ennemy->AddComponent<CapsuleCollider>(8.f, 40.f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Collider->OnContactCallBack = EnemyCollider;
 
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
-	auto InteligentEnemy = Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position, RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller);
+	auto InteligentEnemy = Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position,
+		RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller, FixedY);
 	InteligentEnemy->SetSpeed(Speed);
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }

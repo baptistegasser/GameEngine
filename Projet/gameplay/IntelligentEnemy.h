@@ -14,7 +14,7 @@ public :
 	};
 
 	IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* _RelativeTerrain, 
-		Math::Vec3f _RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false);
+		Math::Vec3f _RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, bool FixedY = false);
 	~IntelligentEnemy() override = default;
 
 	void Init() override;
@@ -37,6 +37,7 @@ private:
 
 	float Speed = 0.1f;
 	float Distance;
+	bool FixedY = false;
 
 	ActionZone Zone;
 };

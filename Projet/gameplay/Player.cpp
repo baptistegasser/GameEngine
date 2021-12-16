@@ -73,6 +73,10 @@ void Player::FixedTick(const float& DeltaTime)
 		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
 	}
 
+	if (InputManager.IsKeyDown(DIK_G)) {
+		Engine.GodMod ? Engine.GodMod = false : Engine.GodMod = true;
+	}
+
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
 		Engine.Stop();
 	}
@@ -141,7 +145,7 @@ bool Player::isGrounded()
 		IsOnTerrain = false;
 		return true;
 	}
-	return false;
+	return EngineD3D11::GetInstance().GodMod;
 }
 
 void Player::SwapCameraMode()
@@ -156,8 +160,8 @@ bool Player::IsDead() const
 {
 	if (ParentActor->Transform.Position.z < 135 && ParentActor->Transform.Position.y < 0) return true;
 	else if (ParentActor->Transform.Position.z >= 135 && ParentActor->Transform.Position.z < 545 && ParentActor->Transform.Position.y < -10) return true;
-	else if (ParentActor->Transform.Position.z >= 545 && ParentActor->Transform.Position.z < 700 && ParentActor->Transform.Position.y < 4) return true;
-	else if (ParentActor->Transform.Position.z >= 700 && ParentActor->Transform.Position.y < -25) return true;
+	else if (ParentActor->Transform.Position.z >= 570 && ParentActor->Transform.Position.z < 725 && ParentActor->Transform.Position.y < 4) return true;
+	else if (ParentActor->Transform.Position.z >= 725 && ParentActor->Transform.Position.y < -25) return true;
 	else if (ParentActor->Transform.Position.y < -30) return true;
 	return false;
 }

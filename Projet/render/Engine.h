@@ -1,8 +1,7 @@
 #pragma once
 #include "Device.h"
 
-#include "DIManipulateur.h"
-
+#include "core/InputManager.h"
 #include "core/Actor.h"
 #include "core/Scene.h"
 #include "physic/PhysicManager.h"
@@ -107,7 +106,6 @@ public:
 
 	std::unique_ptr<TDevice> Device;
 
-	PM3D::CDIManipulateur InputManager;
 	ResourcesManager ResourcesManager;
 	EffectManager EffectManager;
 
@@ -190,8 +188,7 @@ void Engine<T, TDevice>::Tick()
 
 	if (DeltaTime > MSPerFrame)
 	{
-		InputManager.StatutClavier();
-		InputManager.SaisirEtatSouris();
+		InputManager::GetInstance().Tick();
 
 		TickScene(static_cast<float>(DeltaTime));
 

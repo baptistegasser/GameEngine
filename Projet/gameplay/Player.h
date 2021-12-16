@@ -99,6 +99,9 @@ private:
 	/// </summary>
 	[[nodiscard]] bool IsDead() const;
 
-	bool WaitForSwap = false;
+	/// <summary>
+	/// Reset player value
+	/// </summary>
+	void ResetPlayer() const;
 };
 

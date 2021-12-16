@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="core\Actor.cpp" />
     <ClCompile Include="core\Component.cpp" />
+    <ClCompile Include="core\InputManager.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="gameplay\CheckPoint.cpp" />
     <ClCompile Include="gameplay\Enemy.cpp" />
@@ -200,7 +201,6 @@
     <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\ChargeurOBJ.cpp" />
     <ClCompile Include="render\DDSTextureLoader.cpp" />
-    <ClCompile Include="render\DIManipulateur.cpp" />
     <ClCompile Include="render\Font.cpp" />
     <ClCompile Include="render\ShaderTerrain.cpp" />
     <ClCompile Include="render\Speed.cpp" />
@@ -242,6 +242,7 @@
   <ItemGroup>
     <ClInclude Include="core\Actor.h" />
     <ClInclude Include="core\Component.h" />
+    <ClInclude Include="core\InputManager.h" />
     <ClInclude Include="core\Scene.h" />
     <ClInclude Include="gameplay\CheckPoint.h" />
     <ClInclude Include="gameplay\Enemy.h" />
@@ -277,7 +278,6 @@
     <ClInclude Include="render\d3dx11effect.h" />
     <ClInclude Include="render\d3dxGlobal.h" />
     <ClInclude Include="render\DDSTextureLoader.h" />
-    <ClInclude Include="render\DIManipulateur.h" />
     <ClInclude Include="render\Font.h" />
     <ClInclude Include="render\ShaderTerrain.h" />
     <ClInclude Include="render\Speed.h" />

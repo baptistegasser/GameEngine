@@ -67,7 +67,7 @@ int EngineD3D11::InitSpecific()
 {
 	InitAppInstance();
 	Show();
-	InputManager.Init(AppInstanceHandle, MainWindowHandle);
+	InputManager::GetInstance().Init(AppInstanceHandle, MainWindowHandle);
 	return 0;
 }
 
@@ -76,7 +76,7 @@ void EngineD3D11::TickSpecific()
 	MSG msg;
 
 	if (Focused != PreviousFocused) {
-		InputManager.HandleFocusChange(Focused, MainWindowHandle);
+		InputManager::GetInstance().HandleFocusChange(Focused);
 		PreviousFocused = Focused;
 	}
 

@@ -168,9 +168,6 @@
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
-    <ClCompile Include="render\DIManipulateur.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\Terrain.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -206,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="core\InputManager.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="render\Timer.cpp">
       <Filter>Source Files\render\components</Filter>
@@ -386,9 +386,6 @@
     <ClInclude Include="render\DDSTextureLoader.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\DIManipulateur.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="resources\resource.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -433,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="render\Timer.h">
       <Filter>Header Files\render\components</Filter>
+    </ClInclude>
+    <ClInclude Include="core\InputManager.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
     <ClInclude Include="render\TextRenderer.h">
       <Filter>Header Files\render\components</Filter>

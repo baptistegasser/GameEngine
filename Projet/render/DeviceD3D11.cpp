@@ -281,7 +281,7 @@ void DeviceD3D11::SetRenderTargetView(ID3D11RenderTargetView* PRenderTargetView,
 	
 	// Unbind shader resources
 	ID3D11ShaderResourceView* const pSRV[1] = { NULL };
-	ImmediateContext->PSSetShaderResources(0, 1, pSRV);
+	ImmediateContext->PSSetShaderResources(0, 10, pSRV);
 	// Change render target
 	ImmediateContext->OMSetRenderTargets(1, &PRenderTargetView, DepthStencilView);
 	// Finally clear the new view

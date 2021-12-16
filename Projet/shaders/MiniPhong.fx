@@ -159,9 +159,9 @@ ShadowMapVS_SORTIE ShadowMapVS(float4 Pos : POSITION)
 {
     ShadowMapVS_SORTIE Out = (ShadowMapVS_SORTIE) 0;
     // Calcul des coordonnées
-    Out.Pos = mul(Pos, LightMatWorldViewProj); // WVP de la lumiere
+    //Out.Pos = mul(Pos, LightMatWorldViewProj); // WVP de la lumiere
     // Obtenir la profondeur et normaliser avec w
-    Out.Profondeur.x = Out.Pos.z / Out.Pos.w;
+    //Out.Profondeur.x = Out.Pos.z / Out.Pos.w;
     return Out;
 }
 

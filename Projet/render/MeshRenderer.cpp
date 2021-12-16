@@ -44,6 +44,9 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	UINT offset = 0;
 	pImmediateContext->IASetVertexBuffers(0, 1, &Mesh->PVertexBuffer, &stride, &offset);
 
+	MeshShader->PEffect->GetVariableByName("ShadowTexture")->Release();
+	MeshShader->PEffectPass->Apply(0, pImmediateContext);
+
 	RenderShadowMap();
 
 	// Cleanup after shadow depth render
@@ -54,7 +57,6 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	Engine.Device->ResetViewPortDimension();
 	MeshShader->PEffectTechnique = MeshShader->PEffect->GetTechniqueByName("MiniPhong");
 	MeshShader->PEffectPass = MeshShader->PEffectTechnique->GetPassByIndex(0);
-	pImmediateContext->IASetInputLayout(MeshShader->PInputLayout);
 
 	ShadersParams ShaderParams;
 	ShaderParams.MatWorldViewProj = XMMatrixTranspose(matWorld * Engine.MatViewProj);
@@ -71,11 +73,14 @@ void MeshRenderer::LateTick(const float& ElapsedTime)
 	variableSampler = MeshShader->PEffect->GetVariableByName("SampleState")->AsSampler();
 	variableSampler->SetSampler(0, MeshShader->PSampleState);
 
+	pImmediateContext->IASetInputLayout(MeshShader->PInputLayout);
+
 	ID3DX11EffectShaderResourceVariable* PShadowMap;
 	PShadowMap = MeshShader->PEffect->GetVariableByName("ShadowTexture")->AsShaderResource();
 	PShadowMap->SetResource(MeshShader->PDepthShaderResourceView);
 
 	Engine.Device->SetNormalRSState();
+
 	ID3DX11EffectConstantBuffer* pCB = MeshShader->PEffect->GetConstantBufferByName("param");
 
 	// Dessiner les subsets non-transparents
@@ -119,10 +124,11 @@ void MeshRenderer::RenderShadowMap()
 	auto& PDevice = EngineD3D11::GetInstance().Device;
 	ID3D11DeviceContext* pImmediateContext = PDevice->ImmediateContext;
 	// Set texture as render surface and clear it
-	ID3D11ShaderResourceView* const pSRV[1] = { NULL };
-	pImmediateContext->PSSetShaderResources(2, 1, pSRV);
-	pImmediateContext->OMSetRenderTargets(0, nullptr, MeshShader->PDepthStencilView);
-	pImmediateContext->ClearDepthStencilView(MeshShader->PDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	//ID3D11ShaderResourceView* const pSRV[1] = { NULL };
+	//pImmediateContext->PSSetShaderResources(2, 1, pSRV);
+	PDevice->SetRenderTargetView(nullptr, MeshShader->PDepthStencilView);
+	//pImmediateContext->OMSetRenderTargets(0, nullptr, MeshShader->PDepthStencilView);
+	//pImmediateContext->ClearDepthStencilView(MeshShader->PDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	// Depth texture as different viewport size
 	PDevice->SetViewPortDimension(512, 512);
@@ -136,9 +142,9 @@ void MeshRenderer::RenderShadowMap()
 	using namespace DirectX;
 	const auto& DirectionalLight = EngineD3D11::GetInstance().GetScene().LightManager.GetDirectionalLight();
 	// Matrice de la vision vu par la lumière - Le point TO est encore 0,0,0
-	auto ViewMat = XMMatrixLookAtLH(XMVectorSet(0.f, 10.0f, 0.0f, 1.0f),
+	auto ViewMat = XMMatrixLookAtLH(XMVectorSet(0.f, 11.0f, 0.0f, 1.0f),
 					XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
-					XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
+					XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f));
 	
 	const static float FOV = XM_PI / 4;
 	const static float AspectRatio = 1.f;
@@ -150,7 +156,7 @@ void MeshRenderer::RenderShadowMap()
 
 	// Only care about light view matrix
 	ShadersParams sp;
-	sp.LightMatWorldViewProj = DirectX::XMMatrixTranspose(matWorld * MVPLight);
+	sp.LightMatWorldViewProj = DirectX::XMMatrixTranspose(matWorld * EngineD3D11::GetInstance().MatViewProj);
 	// Only one buffer cared
 	ID3DX11EffectConstantBuffer* pCB = MeshShader->PEffect->GetConstantBufferByName("param");
 	pCB->SetConstantBuffer(MeshShader->PConstantBuffer);
@@ -164,6 +170,14 @@ void MeshRenderer::RenderShadowMap()
 		if (indexDrawAmount)
 		{
 			MeshShader->PEffectPass->Apply(0, pImmediateContext);
+			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
+
+			// IMPORTANT pour ajuster les param.
+			MeshShader->PEffectPass->Apply(0, pImmediateContext);
+
+			pCB->SetConstantBuffer(MeshShader->PConstantBuffer);
+			pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer, 0, nullptr, &sp, 0, 0);
+
 			pImmediateContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 		}
 	}

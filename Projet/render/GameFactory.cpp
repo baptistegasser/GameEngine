@@ -38,6 +38,7 @@ void GameFactory::LoadLevel()
 	//CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp", Math::Transform{ Math::Vec3f{ 0.f, -50.f, 0.f }, Math::Vec3f{ 2.f, 1.f, 2.f } });
 	CreateEnemy(Math::Vec3f{ 0.f, -7.f, 1.f });
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
+	if (1)return;
 	//CreateSkyBox(PlayerTransform);
 	CreatePlatform(Math::Transform{ Math::Vec3f(0, 10.f, 0), Math::Vec3f{ 5.f, 1.f, 2.f } }, L".\\modeles\\plateform\\plateformRouge.OMB");
 	CreateMobilePlatform(Math::Vec3f(-15.f, 10.f, 25),  Math::Vec3f(0, 0, 10), L".\\modeles\\plateform\\plateformSable.OMB");
@@ -105,6 +106,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 	MyPlayer->AddComponent<SphereCollider>(1.0f, PhysicMaterial{ 0.5f, 0.5f, 0.2f });
 	const auto PlayerBody = MyPlayer->AddComponent<RigidBody>(RigidBody::RigidActorType::Dynamic);
 	PlayerBody->SetMass(10.f);
+	PlayerBody->SetFollowGravity(false);
 
 	PlayerTransform = &MyPlayer->Transform;
 

@@ -55,4 +55,25 @@ namespace Math
 			|| this->y <= Vec.y
 			|| this->z <= Vec.z;
 	}
+
+	bool Vec3f::operator>=(const Vec3f& Vec) const noexcept
+	{
+		return this->x >= Vec.x
+			|| this->y >= Vec.y
+			|| this->z >= Vec.z;
+	}
+
+	bool Vec3f::operator<(const Vec3f& Vec) const noexcept
+	{
+		return this->x < Vec.x
+			&& this->y < Vec.y
+			&& this->z < Vec.z;
+	}
+
+	bool Vec3f::operator>(const Vec3f& Vec) const noexcept
+	{
+		return this->x > Vec.x
+			&& this->y > Vec.y
+			&& this->z > Vec.z;
+	}
 }

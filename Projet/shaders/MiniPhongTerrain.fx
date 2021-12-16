@@ -1,72 +1,84 @@
+#include "Util.hlsl"
+#include "Lights.hlsl"
+#include "Material.hlsl"
+
+/****************************************************************************
+ *                          Input data and buffers                          *
+ ****************************************************************************/
 cbuffer param
 {
-	float4x4 matWorldViewProj;   // la matrice totale 
-	float4x4 matWorld;		// matrice de transformation dans le monde 
-	float4 vLumiere; 		// la position de la source d'éclairage (Point)
-	float4 vCamera; 			// la position de la caméra
-	float4 vAEcl; 			// la valeur ambiante de l'éclairage
-	float4 vAMat; 			// la valeur ambiante du matériau
-	float4 vDEcl; 			// la valeur diffuse de l'éclairage 
-	float4 vDMat; 			// la valeur diffuse du matériau 
+	float4x4 MatWorldViewProj;
+	float4x4 MatWorld;
+	float4 CameraPos;
+	float4 AmbientColor;
+	Material Mat;
+	bool HasTexture;
+	float3 _FILL_;
 	float4 PosScale;
-	float4 TextureCoefficient;
+	float TextureCoefficient;
 }
+
+Texture2D texture1;
+Texture2D texture2;
+Texture2D texture3;
+SamplerState SampleState;
+StructuredBuffer<Light> LightsBuffer;
 
 struct VS_Sortie
 {
 	float4 Pos : SV_Position;
-	float3 Norm :    TEXCOORD0;
-	float3 vDirLum : TEXCOORD1;
+	float3 Norm : TEXCOORD0;
+	float3 PosWorld : TEXCOORD1;
 	float3 vDirCam : TEXCOORD2;
 	float2 coordTex : TEXCOORD3;
 };
 
+/****************************************************************************
+ *                               S H A D E R S !                            *
+ ****************************************************************************/
 VS_Sortie MiniPhongTerrainVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 coordTex : TEXCOORD)
 {
 	VS_Sortie sortie = (VS_Sortie)0;
 
-	sortie.Pos = mul(Pos, matWorldViewProj);
-	sortie.Norm = mul(float4(Normale, 0.0f), matWorld).xyz;
+	sortie.Pos = mul(Pos, MatWorldViewProj);
+	sortie.Norm = mul(float4(Normale, 0.0f), MatWorld).xyz;
 
-	float3 PosWorld = mul(Pos, matWorld).xyz;
+	sortie.PosWorld = mul(Pos, MatWorld).xyz;
 
-	sortie.vDirLum = vLumiere.xyz - PosWorld;
-	sortie.vDirCam = vCamera.xyz - PosWorld;
+	sortie.vDirCam = CameraPos.xyz - sortie.PosWorld;
 
-	// Coordonnées d'application de texture
 	sortie.coordTex = coordTex;
 
 	return sortie;
 }
 
-Texture2D texture1;  // la texture Gazon
-Texture2D texture2;  // la texture Roche
-Texture2D texture3;  // la texture Chemin
-SamplerState SampleState;  // l'état de sampling
 
 float4 MiniPhongTerrainPS(VS_Sortie vs) : SV_Target
 {
 	float3 couleur;
 	float3 couleurGazon;
 	float3 couleurRoche;
+	float3 couleurChemin;
 
 	float2 coordTexChemin;
-    coordTexChemin.x = (vs.coordTex.x / PosScale.w * TextureCoefficient.x + (PosScale.x / 2)) / PosScale.x;
-    coordTexChemin.y = (vs.coordTex.y / PosScale.y * TextureCoefficient.x + (PosScale.z / 2)) / PosScale.z;
+	coordTexChemin.x = vs.coordTex.x * TextureCoefficient / PosScale.x / PosScale.z;
+	coordTexChemin.y = vs.coordTex.y * TextureCoefficient / PosScale.y / PosScale.w;
 
-	// Normaliser les paramètres
+	// Normalise inputs
 	float3 N = normalize(vs.Norm);
-	float3 L = normalize(vs.vDirLum);
 	float3 V = normalize(vs.vDirCam);
 
-	// Valeur de la composante diffuse
-	float3 diff = saturate(dot(N, L));
+	// Default add ambient light
+	float3 phong = AmbientColor.rgb;
 
-	// R = 2 * (N.L) * N – L
-	float3 R = normalize(2 * diff * N - L);
-
-	// Puissance de 4 - pour l'exemple
-	float S = pow(saturate(dot(R, V)), 4.0f);
+	// Retrieve lights
+	uint LightCount = 0, Stride;
+	LightsBuffer.GetDimensions(LightCount, Stride);
+	// Calc all Point lights
+	for (uint i = 0; i < LightCount; i += 1)
+	{
+		phong += CalcPhong(N, V, vs.PosWorld, Mat, LightsBuffer[i]);
+	}
 
 	// Échantillonner la couleur du pixel à partir de la texture
 	float3 colorTex1 = texture1.Sample(SampleState, vs.coordTex).rgb;
@@ -74,12 +86,11 @@ float4 MiniPhongTerrainPS(VS_Sortie vs) : SV_Target
 	float3 colorTex3 = texture3.Sample(SampleState, coordTexChemin).rgb;
 
 	// I = A + D * N.L + (R.V)n
-	couleurGazon = colorTex1 * vAEcl.rgb + colorTex1 * vDEcl.rgb * diff;
-	couleurRoche = colorTex2 * vAEcl.rgb + colorTex2 * vDEcl.rgb * diff;
+	couleurGazon = colorTex1 * saturate(float4(phong, 0.0f));
+	couleurRoche = colorTex2 * saturate(float4(phong, 0.0f));
+	couleurChemin = colorTex3 * saturate(float4(phong, 0.0f));
 
 	couleur = colorTex3 * couleurGazon + (1 - colorTex3) * couleurRoche;
-
-	couleur += S;
 
 	return float4(couleur, 1.0f);
 }

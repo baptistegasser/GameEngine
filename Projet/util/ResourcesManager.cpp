@@ -69,3 +69,29 @@ ObjectMesh* ResourcesManager::GetMesh(const wchar_t* MeshName)
 
 	return PMesh;
 }
+
+ShaderTerrain* ResourcesManager::GetShaderTerrain(const wchar_t* MeshName)
+{
+	const std::string Name = wchar2str(MeshName);
+	auto PShaderTerrain = ShadersTerrain[Name].get();
+
+	if (!PShaderTerrain) {
+		PShaderTerrain = new ShaderTerrain{ MeshName };
+		ShadersTerrain[Name].reset(PShaderTerrain);
+	}
+
+	return PShaderTerrain;
+}
+
+Effect* ResourcesManager::GetEffect(const wchar_t* EffectName)
+{
+	const std::string Name = wchar2str(EffectName);
+	auto PEffect = Effects[Name].get();
+
+	if (!PEffect) {
+		PEffect = new Effect{ EffectName };
+		Effects[Name].reset(PEffect);
+	}
+
+	return PEffect;
+}

@@ -17,6 +17,14 @@ namespace Math
 		, Rotation{ Rotation }
 	{}
 
+	Transform::Transform(const Math::Vec3f& Position, const Math::Vec3f& Scale,
+		const Math::Quaternion& Rotation) noexcept
+		: Position{ Position }
+		, Scale{ Scale }
+		, Rotation{ Rotation }
+	{
+	}
+
 	void Transform::RotateX(const float x) noexcept
 	{
 		Rotate(x, 0.f, 0.f);

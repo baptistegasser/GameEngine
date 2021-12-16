@@ -70,6 +70,9 @@
     <Filter Include="Header Files\render\pm3d">
       <UniqueIdentifier>{f5e4d62c-8492-4ef2-8b28-dca664b4dd9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\effects">
+      <UniqueIdentifier>{d49361b6-13f7-4931-92eb-11daf55325e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="physic\PhysicManager.cpp">
@@ -165,9 +168,6 @@
     <ClCompile Include="render\DDSTextureLoader.cpp">
       <Filter>Source Files\render\pm3d</Filter>
     </ClCompile>
-    <ClCompile Include="render\DIManipulateur.cpp">
-      <Filter>Source Files\render\pm3d</Filter>
-    </ClCompile>
     <ClCompile Include="render\Terrain.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
@@ -204,6 +204,9 @@
     <ClCompile Include="math\Transform.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="core\InputManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
     <ClCompile Include="render\Timer.cpp">
       <Filter>Source Files\render\components</Filter>
     </ClCompile>
@@ -220,9 +223,6 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\Font.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="render\GameFactory.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\DeviceD3D11.cpp">
@@ -264,7 +264,19 @@
     <ClCompile Include="gameplay\IntelligentEnemy.cpp">
       <Filter>Source Files\gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="render\Menu.cpp">
+    <ClCompile Include="gameplay\Enemy.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ShaderTerrain.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="gameplay\GameFactory.cpp">
+      <Filter>Source Files\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Effect.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\EffectManager.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
@@ -374,9 +386,6 @@
     <ClInclude Include="render\DDSTextureLoader.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
-    <ClInclude Include="render\DIManipulateur.h">
-      <Filter>Header Files\render\pm3d</Filter>
-    </ClInclude>
     <ClInclude Include="resources\resource.h">
       <Filter>Header Files\render\pm3d</Filter>
     </ClInclude>
@@ -422,6 +431,9 @@
     <ClInclude Include="render\Timer.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
+    <ClInclude Include="core\InputManager.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
     <ClInclude Include="render\TextRenderer.h">
       <Filter>Header Files\render\components</Filter>
     </ClInclude>
@@ -436,9 +448,6 @@
     </ClInclude>
     <ClInclude Include="render\SpriteRenderer.h">
       <Filter>Header Files\render\components</Filter>
-    </ClInclude>
-    <ClInclude Include="render\GameFactory.h">
-      <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\Device.h">
       <Filter>Header Files\render</Filter>
@@ -473,7 +482,19 @@
     <ClInclude Include="gameplay\IntelligentEnemy.h">
       <Filter>Header Files\gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="render\Menu.h">
+    <ClInclude Include="gameplay\Enemy.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ShaderTerrain.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\GameFactory.h">
+      <Filter>Header Files\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Effect.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\EffectManager.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
@@ -524,6 +545,9 @@
     </None>
     <None Include="Shaders\Util.hlsl">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\Effect_Nul.fx">
+      <Filter>Shaders\effects</Filter>
     </None>
   </ItemGroup>
 </Project>

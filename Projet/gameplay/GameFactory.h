@@ -3,6 +3,8 @@
 #include "physic/Collider.h"
 #include "util/Singleton.h"
 
+#include "gameplay/IntelligentEnemy.h"
+
 class GameFactory : public Singleton<GameFactory>
 {
 	friend struct Singleton<GameFactory>;
@@ -18,7 +20,7 @@ private:
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
 	///	<param name="Transform"> : transform of the map  </param>
-	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform);
+	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false);
 
 	/// <summary>
 	/// Create the player
@@ -30,7 +32,8 @@ private:
 	/// Create an enemy
 	/// </summary>
 	///	<param name="Transform"> : transform of the enemy  </param>
-	void CreateEnemy(Math::Transform Transform);
+	///	<param name="End"> : deplacement of the enemy  </param>
+	void CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create an intelligent enemy
@@ -39,7 +42,7 @@ private:
 	///	<param name="Transform"> : transform of the enemy  </param>
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
 	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
-	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, float Distance = std::numeric_limits<float>::infinity());
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create a fixed platform
@@ -56,7 +59,7 @@ private:
 	///	<param name="End"> : vector direction of for platform movement </param>
 	///	<param name="Filename"> : name of texture file </param>
 	/// <param name="Material"> : material for platform </param>
-	void CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial);
+	void CreateMobilePlatform(Math::Transform Transform, Math::Vec3f End, const wchar_t* Filename, PhysicMaterial Material = Collider::DefaultMaterial, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create a light
@@ -74,11 +77,29 @@ private:
 	/// </summary>
 	/// <param name="ToFollow"> The actor's transform the skybox will follow </param>
 	void CreateSkyBox(Math::Transform* ToFollow);
-private :
+
+	/// <summary>
+	/// Create a slide
+	/// </summary>
+	/// <param name="Transform"> The transform of the slide </param>
+	void CreateSlide(Math::Transform Transform);
+
+	/// <summary>
+	/// Create a goal of the road on billboard
+	/// </summary>
+	/// <param name="Transform"> The transform of the road </param>
+	///	<param name="Filename"> : name of texture file </param>
+	void CreateGoal(Math::Transform Transform, const wchar_t* Filename);
+
 	Math::Transform* PlayerTransform;
 	/// <summary>
 	/// Create an CheckPoint to respawn a player
 	/// </summary>
 	///	<param name="Transform"> : the transform of the checkPoint  </param>
 	void CreateCheckPoint(Math::Transform Transform);
+
+	/// <summary>
+	/// Create the sprite timer on the screen
+	/// </summary>
+	void CreateTimer();
 };

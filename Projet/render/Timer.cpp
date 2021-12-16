@@ -17,5 +17,6 @@ void Timer::Init()
 void Timer::FixedTick(const float& DeltaTime)
 {
 	End = std::chrono::steady_clock::now();
-	MySprite->Write(L"Time : " + std::to_wstring(std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count()) + L" ms");
+	Duration = std::chrono::duration_cast<std::chrono::seconds>(End - Start).count();
+	MySprite->Write(L"Time : " + std::to_wstring(Duration /60) + L" min " + std::to_wstring(Duration % 60) + L" s");
 }

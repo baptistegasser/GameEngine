@@ -7,9 +7,10 @@
 
 using namespace Math;
 
-IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, float Distance)
-	: Component{ Parent }
+IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, float Distance, bool IsKiller)
+	: Enemy( Parent , IsKiller)
 	, ToFollow{ ToFollow }
+	, Zone{ Zone }
 	, Distance{Distance}
 {}
 
@@ -17,12 +18,15 @@ void IntelligentEnemy::Init()
 {
 	// Get the needed components only once at init
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
+	MyCollider = ParentActor->GetComponent<SphereCollider>();
 }
 
 void IntelligentEnemy::FixedTick(const float& DeltaTime)
 {
 	Direction = ToFollow->Position - ParentActor->Transform.Position;
-	if (Direction.Norm() < Distance) {
+	if (Direction.Norm() < Distance 
+		&& Vec3f(ParentActor->Transform.Position + Direction * Speed) > Zone.Point1 
+		&& Vec3f(ParentActor->Transform.Position + Direction * Speed) < Zone.Point2) {
 		Direction.normalize();
 		MyRigidBody->SetKinematicTarget(Transform(Vec3f(ParentActor->Transform.Position + Direction * Speed), Quaternion(atan2f(Direction.x, Direction.z) + physx::PxPi, Vec3f(0, 1, 0))));
 	}

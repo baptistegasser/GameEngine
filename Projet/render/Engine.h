@@ -1,8 +1,7 @@
 #pragma once
 #include "Device.h"
 
-#include "DIManipulateur.h"
-
+#include "core/InputManager.h"
 #include "core/Actor.h"
 #include "core/Scene.h"
 #include "physic/PhysicManager.h"
@@ -10,23 +9,11 @@
 #include "util/ResourcesManager.h"
 #include "util/Singleton.h"
 
-// Math components
-#include "math/Math.h"
-// Physic components
-#include "physic/RigidBody.h"
-#include "physic/SphereCollider.h"
-#include "physic/BoxCollider.h"
-#include "physic/CapsuleCollider.h"
-// Render components
-#include "render/MeshRenderer.h"
-#include "render/Camera.h"
-#include "render/Terrain.h"
-#include "render/TextRenderer.h"
-// Gameplay components
-#include "gameplay/Plateform.h"
-#include "gameplay/Player.h"
+#include "render/EffectManager.h"
+#include "gameplay/GameFactory.h"
 
-#include "GameFactory.h"
+#include <gdiplus.h>
+#pragma comment(lib, "gdiplus.lib")
 
 #include <iostream>
 #include <chrono>
@@ -119,8 +106,8 @@ public:
 
 	std::unique_ptr<TDevice> Device;
 
-	PM3D::CDIManipulateur InputManager;
 	ResourcesManager ResourcesManager;
+	EffectManager EffectManager;
 
 protected:
 	// Physic variable
@@ -132,7 +119,7 @@ protected:
 	int64_t NextTimeStep = 0;
 	int64_t PreviousTimeStep = 0;
 
-	Scene* CurrentScene;
+	Scene* CurrentScene = nullptr;
 
 private:
 	static ULONG_PTR GDIToken;
@@ -201,8 +188,7 @@ void Engine<T, TDevice>::Tick()
 
 	if (DeltaTime > MSPerFrame)
 	{
-		InputManager.StatutClavier();
-		InputManager.SaisirEtatSouris();
+		InputManager::GetInstance().Tick();
 
 		TickScene(static_cast<float>(DeltaTime));
 
@@ -246,6 +232,12 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 {
 	BeginRenderSceneSpecific();
 
+	// Start applying effect if any activated
+	if (EffectManager.HasEffectActivated()) {
+		auto effect = EffectManager.GetActivatedEffect();
+		effect->DebutPostEffect();
+	}
+
 	// Tick the skybox first
 	CurrentScene->SkyBox->LateTick(DeltaTime);
 
@@ -257,6 +249,13 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 
 	for (const auto& Actor : Actors) {
 		Actor->SpriteTick(DeltaTime);
+	}
+
+	// Finish applying effect if present
+	if (EffectManager.HasEffectActivated()) {
+		auto effect = EffectManager.GetActivatedEffect();
+		effect->FinPostEffect();
+		effect->Draw();
 	}
 
 	EndRenderSceneSpecific();

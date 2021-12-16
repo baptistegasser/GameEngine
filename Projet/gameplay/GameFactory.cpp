@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "render/GameFactory.h"
+#include "gameplay/GameFactory.h"
 #include "render/EngineD3D11.h"
 
 // Physic components

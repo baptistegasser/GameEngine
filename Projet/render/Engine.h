@@ -10,7 +10,7 @@
 #include "util/Singleton.h"
 
 #include "render/EffectManager.h"
-#include "GameFactory.h"
+#include "gameplay/GameFactory.h"
 
 #include <gdiplus.h>
 #pragma comment(lib, "gdiplus.lib")

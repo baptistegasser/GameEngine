@@ -32,10 +32,10 @@ void Player::Init()
 
 void Player::Tick(const float& ElapsedTime)
 {
-	/*if (IsDead())
+	if (IsDead())
 	{
-		ResetPlayer();
-	}*/
+		RespawnPlayer();
+	}
 }
 
 void Player::FixedTick(const float& DeltaTime)

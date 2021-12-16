@@ -7,6 +7,7 @@
 #include "physic/HeightFieldCollider.h"
 #include "resources/resource.h"
 #include "physic/RigidBody.h"
+#include "gameplay/Player.h"
 
 using namespace DirectX;
 
@@ -125,7 +126,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 	// Set lighting data
 	const auto& LightManager = Engine.GetScene().LightManager;
 	ShaderParams.AmbientColor = LightManager.AmbientColor.ToXMVector();
-	MeshShader->UpdateLightsBuffer(pImmediateContext);
+	MeshShader->UpdateLightsBuffer();
 
 
 	pImmediateContext->UpdateSubresource(MeshShader->PConstantBuffer, 0, nullptr, &ShaderParams, 0, 0);

@@ -107,5 +107,6 @@ private:
 	[[nodiscard]] bool IsDead() const;
 
 	bool Live = true;
+	int InvulnarabilityTime = 0;
 };
 

@@ -44,6 +44,9 @@ void Player::Tick(const float& ElapsedTime)
 
 void Player::FixedTick(const float& DeltaTime)
 {
+	if (InvulnarabilityTime != 0)
+		InvulnarabilityTime--;
+
 	using namespace DirectX;
 
 	auto& Engine = EngineD3D11::GetInstance();
@@ -172,13 +175,16 @@ bool Player::IsDead() const
 
 void Player::HitPlayer()
 {
-	if (Live) {
-		Live = false;
-		EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
-	}
-	else {
-		Live = true;
-		RespawnPlayer();
+	if (InvulnarabilityTime == 0) {
+		if (Live) {
+			Live = false;
+			EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
+			InvulnarabilityTime = 100;
+		}
+		else {
+			Live = true;
+			RespawnPlayer();
+		}
 	}
 }
 

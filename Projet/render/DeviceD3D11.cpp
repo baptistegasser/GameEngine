@@ -22,7 +22,7 @@ DeviceD3D11::DeviceD3D11(const CDS_MODE CDSMode, const HWND HWND)
 #endif
 
 	DXGI_SWAP_CHAIN_DESC SwapDesc;
-	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; // Permettre l��change plein �cran
+	SwapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	ZeroMemory(&SwapDesc, sizeof(SwapDesc));
 
 	switch (CDSMode)
@@ -261,6 +261,16 @@ void DeviceD3D11::ActivateZBuffer() const
 void DeviceD3D11::DeactivateZBuffer() const
 {
 	ImmediateContext->OMSetDepthStencilState(pDepthStencilDephtDisable, 0);
+}
+
+void DeviceD3D11::SetFullScreen() noexcept
+{
+	SwapChain->SetFullscreenState(TRUE, nullptr);
+}
+
+void DeviceD3D11::SetWindowed() noexcept
+{
+	SwapChain->SetFullscreenState(FALSE, nullptr);
 }
 
 void DeviceD3D11::ClearView()

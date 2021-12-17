@@ -85,6 +85,10 @@ void Player::FixedTick(const float& DeltaTime)
 		Engine.GodMod ? Engine.GodMod = false : Engine.GodMod = true;
 	}
 
+	if (InputManager.IsKeyDown(DIK_F)) {
+		Engine.Device->SetFullScreen();
+	}
+
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
 		Engine.Pause();
 		MyMenu->Active = true;

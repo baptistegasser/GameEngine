@@ -88,7 +88,7 @@ private:
 	DirectX::XMVECTOR RelativeZ;
 
 	float Speed = 110.0f;
-	float JumpSpeed = 30.f;
+	float JumpSpeed = 45.f;
 	float MaxSpeed = 20.0f;
 
 	/// <summary>

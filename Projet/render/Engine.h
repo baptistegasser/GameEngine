@@ -158,7 +158,8 @@ int Engine<T, TDevice>::Init()
 
 	InitSpecific();
 
-	Device = CreateDeviceSpecific(CDS_MODE::CDS_FENETRE);
+	Device = CreateDeviceSpecific(CDS_MODE::CDS_PLEIN_ECRAN);
+
 
 	LoadLevel(true);
 

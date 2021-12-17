@@ -252,7 +252,9 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 	}
 
 	// Tick the skybox first
-	CurrentScene->SkyBox->LateTick(DeltaTime);
+	if (CurrentScene->SkyBox) {
+		CurrentScene->SkyBox->LateTick(DeltaTime);
+	}
 
 	// Get actors in vision range
 	const auto Actors = CurrentScene->GetVisibleActors();

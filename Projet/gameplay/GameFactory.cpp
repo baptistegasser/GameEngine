@@ -44,7 +44,6 @@ void GameFactory::LoadMainMenu()
 		&Engine.MatProj,
 		&Engine.MatViewProj);
 	Engine.GetScene().SetCurrentCamera(Cam);
-	CreateSkyBox(&MyMenu->Transform);
 	Engine.GetScene().AddActor(MyMenu);
 }
 

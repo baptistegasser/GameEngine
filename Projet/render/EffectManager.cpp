@@ -60,6 +60,28 @@ void EffectManager::DeactivateEffect()
 	}
 }
 
+void EffectManager::ActivateRandomEffect()
+{
+	int Launch = De(prng);
+	switch (Launch)
+	{
+	case 1 :
+		ActivateEffect(wchar2str(L".\\shaders\\Effect_RadialBlur.fx"));
+		break;
+	case 2 :
+		ActivateEffect(wchar2str(L".\\shaders\\Effect_Blur.fx"));
+		break;
+	case 3 :
+		ActivateEffect(wchar2str(L".\\shaders\\Effect_Waves.fx"));
+		break;
+	case 4 :
+		ActivateEffect(wchar2str(L".\\shaders\\Effect_Sharpen.fx"));
+		break;
+	default:
+		break;
+	}
+}
+
 bool EffectManager::HasEffect(const std::string& Name) const noexcept
 {
 	return Effects.find(Name) != Effects.end();

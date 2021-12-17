@@ -383,13 +383,11 @@ void GameFactory::CreateEnemy(Math::Transform Departure, Math::Transform End, bo
 	auto EnemyCollider = [](const Contact& Contact) -> void {
 		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player" && Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
 		{
-			//Contact.SecondActor->GetComponent<Player>()->HitPlayer();
-			EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Scale.fx"));
+			Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 		}
 		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy" && Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
 		{
-			//Contact.SecondActor->GetComponent<Player>()->HitPlayer();
-			EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Scale.fx"));
+			Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 		}
 	};
 
@@ -422,14 +420,14 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 			if (Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
 				Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 			else if (Contact.FirstActor->GetComponent<Enemy>()->BlurEffect)
-				EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_RadialBlur.fx"));
+				EngineD3D11::GetInstance().EffectManager.ActivateRandomEffect();
 		}
 		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy")
 		{
 			if (Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
 				Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 			else if (Contact.SecondActor->GetComponent<Enemy>()->BlurEffect)
-				EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_RadialBlur.fx"));
+				EngineD3D11::GetInstance().EffectManager.ActivateRandomEffect();
 		}
 	};
 

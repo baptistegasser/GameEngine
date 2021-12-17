@@ -44,7 +44,7 @@ private:
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
 	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
 	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, ATerrain* RelativeTerrain,
-		Math::Vec3f RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f, bool FixedY = false);
+		Math::Vec3f RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f, bool FixedY = false, bool BlurEffect = false);
 
 	/// <summary>
 	/// Create a fixed platform

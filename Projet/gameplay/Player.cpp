@@ -178,13 +178,13 @@ void Player::HitPlayer()
 	}
 	else {
 		Live = true;
-		EngineD3D11::GetInstance().EffectManager.DeactivateEffect();
 		RespawnPlayer();
 	}
 }
 
 void Player::RespawnPlayer() const
 {
+	EngineD3D11::GetInstance().EffectManager.DeactivateEffect();
 	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
 	MyRigidBody->ClearForce();
 	MyRigidBody->ClearTorque();

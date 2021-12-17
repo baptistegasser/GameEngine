@@ -44,6 +44,9 @@ void Player::Tick(const float& ElapsedTime)
 
 void Player::FixedTick(const float& DeltaTime)
 {
+	if (InvulnarabilityTime != 0)
+		InvulnarabilityTime--;
+
 	using namespace DirectX;
 
 	auto& Engine = EngineD3D11::GetInstance();
@@ -52,32 +55,41 @@ void Player::FixedTick(const float& DeltaTime)
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
 	if (InputManager.IsKeyPressed(DIK_A)) {
-		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = Math::XMVector2PX(RelativeZ) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyPressed(DIK_D)) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = -Math::XMVector2PX(RelativeZ) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyPressed(DIK_W)) {
-		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = Math::XMVector2PX(Direction) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyPressed(DIK_S)) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = -Math::XMVector2PX(Direction) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyDown(DIK_SPACE)) {
-		if (isGrounded())
+		if (isGrounded()) {
 			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
-	}
-
-	if (InputManager.IsKeyDown(DIK_P)) {
-		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
+		}
 	}
 
 	if (InputManager.IsKeyDown(DIK_G)) {
 		Engine.GodMod ? Engine.GodMod = false : Engine.GodMod = true;
+	}
+
+	if (InputManager.IsKeyDown(DIK_F)) {
+		Engine.Device->SetFullScreen();
 	}
 
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
@@ -170,8 +182,24 @@ bool Player::IsDead() const
 	return false;
 }
 
+void Player::HitPlayer()
+{
+	if (InvulnarabilityTime == 0) {
+		if (Live) {
+			Live = false;
+			EngineD3D11::GetInstance().EffectManager.ActivateEffect(wchar2str(L".\\shaders\\Effect_Nul.fx"));
+			InvulnarabilityTime = 100;
+		}
+		else {
+			Live = true;
+			RespawnPlayer();
+		}
+	}
+}
+
 void Player::RespawnPlayer() const
 {
+	EngineD3D11::GetInstance().EffectManager.DeactivateEffect();
 	ParentActor->Transform = Transform(SpawnPos,Math::Quaternion(0.0f,0.0f,0.0f));
 	MyRigidBody->ClearForce();
 	MyRigidBody->ClearTorque();

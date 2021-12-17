@@ -23,7 +23,7 @@ public :
 	void UpdateCanvas(int NewHeight, int NewWidth);
 
 private:
-	std::unique_ptr<Font> FontText;
+	Font* FontText;
 	int CanvasHeight, CanvasWidth;
 	std::wstring Value;
 

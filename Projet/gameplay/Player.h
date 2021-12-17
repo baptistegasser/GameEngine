@@ -10,7 +10,7 @@ class Player : public Pitbull::Component
 {
 public :
 	Player(Pitbull::Actor* Parent, Math::Vec3f Pos);
-	~Player() override = default;
+	~Player() = default;
 
 	void Init() override;
 
@@ -40,6 +40,11 @@ public :
 	{
 		SpawnPos = Pos;
 	}
+
+	/// <summary>
+	/// Take off a player's live or kill him
+	/// </summary>
+	void HitPlayer();
 
 	/// <summary>
 	/// Reset player value
@@ -88,8 +93,8 @@ private:
 	DirectX::XMVECTOR RelativeZ;
 
 	float Speed = 110.0f;
-	float JumpSpeed = 30.f;
-	float MaxSpeed = 15.0f;
+	float JumpSpeed = 45.f;
+	float MaxSpeed = 20.0f;
 
 	/// <summary>
 	/// Swap the camera's type
@@ -100,5 +105,8 @@ private:
 	/// Check if player is dead
 	/// </summary>
 	[[nodiscard]] bool IsDead() const;
+
+	bool Live = true;
+	int InvulnarabilityTime = 0;
 };
 

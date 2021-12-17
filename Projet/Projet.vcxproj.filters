@@ -280,7 +280,7 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\Menu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -503,6 +503,9 @@
     <ClInclude Include="render\Menu.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
+    <ClInclude Include="render\Light.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\PetitMoteur3D.ico">
@@ -538,6 +541,18 @@
     </FxCompile>
     <FxCompile Include="shaders\MiniPhongSkyBox.fx">
       <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_RadialBlur.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_Blur.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_Waves.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_Sharpen.fx">
+      <Filter>Shaders\effects</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

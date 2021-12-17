@@ -8,8 +8,8 @@
 using namespace Math;
 
 IntelligentEnemy::IntelligentEnemy(Pitbull::Actor* Parent, Math::Transform* ToFollow, ActionZone Zone, Math::Vec3f BasePosition, ATerrain* _RelativeTerrain,
-	Math::Vec3f _RelativeTerrainPosition, float Distance, bool IsKiller, bool FixedY)
-	: Enemy(Parent, IsKiller)
+	Math::Vec3f _RelativeTerrainPosition, float Distance, bool IsKiller, bool FixedY, bool BlurEffect)
+	: Enemy(Parent, IsKiller, BlurEffect)
 	, ToFollow{ ToFollow }
 	, Zone{ Zone }
 	, Distance{ Distance }

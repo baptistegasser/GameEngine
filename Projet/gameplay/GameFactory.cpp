@@ -44,7 +44,6 @@ void GameFactory::LoadMainMenu()
 		&Engine.MatProj,
 		&Engine.MatViewProj);
 	Engine.GetScene().SetCurrentCamera(Cam);
-	CreateSkyBox(&MyMenu->Transform);
 	Engine.GetScene().AddActor(MyMenu);
 }
 
@@ -56,6 +55,7 @@ void GameFactory::LoadLevel()
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
 	CreateTimer();
+	CreateEffects();
 
 	// Setup lighting
 	auto& CurrentScene = EngineD3D11::GetInstance().GetScene();
@@ -63,7 +63,7 @@ void GameFactory::LoadLevel()
 	
 	auto DirLight = new ADirectionalLight;
 	DirLight->GetLight()->Direction = { -0.5f, -1.f, 0.f };
-	DirLight->GetLight()->Color = { 1.0f, 0.f, 0.f };
+	DirLight->GetLight()->Color = { 1.0f, 1.f, 1.f };
 	CurrentScene.AddActor(DirLight);
 
 	/***
@@ -255,7 +255,7 @@ void GameFactory::LoadLevel()
 
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 60.f, 20.f, TerrainPos3.z + 66.f }, Math::Vec3f(0.7f, 0.7f, 0.7f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos3, Math::Vec3f{ TerrainPos3.x + 128.f, PosYEnemy2 + 50.f, TerrainPos3.z + 128.f } }, IceTerrain,
-		Math::Vec3f{ 15.f, 20.f, 35.f }, 128.0f, false, 0.25f, true);
+		Math::Vec3f{ 15.f, 20.f, 35.f }, 128.0f, false, 0.25f, true, true);
 	CreateDirectionalSign(
 		Math::Transform{ Math::Vec3f{TerrainPos3.x+100.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 5.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },
@@ -333,6 +333,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;
+	MyPlayer->Transform.RotateY(-90.f);
 
 	const auto PlayerCam = MyPlayer->AddComponent<Camera>(
 		DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
@@ -382,11 +383,11 @@ void GameFactory::CreateEnemy(Math::Transform Departure, Math::Transform End, bo
 	auto EnemyCollider = [](const Contact& Contact) -> void {
 		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player" && Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
 		{
-			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+			Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 		}
 		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy" && Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
 		{
-			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+			Contact.SecondActor->GetComponent<Player>()->HitPlayer();
 		}
 	};
 
@@ -403,7 +404,7 @@ void GameFactory::CreateEnemy(Math::Transform Departure, Math::Transform End, bo
 }
 
 void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, ATerrain* RelativeTerrain,
-	Math::Vec3f RelativeTerrainPosition, float Distance, bool IsKiller, float Speed, bool FixedY)
+	Math::Vec3f RelativeTerrainPosition, float Distance, bool IsKiller, float Speed, bool FixedY, bool BlurEffect)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -414,13 +415,19 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 
 	auto EnemyCollider = [](const Contact& Contact) -> void {
-		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player" && Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
+		if (Contact.FirstActor->Name == "Enemy" && Contact.SecondActor->Name == "Player")
 		{
-			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+			if (Contact.FirstActor->GetComponent<Enemy>()->IsKiller)
+				Contact.SecondActor->GetComponent<Player>()->HitPlayer();
+			else if (Contact.FirstActor->GetComponent<Enemy>()->BlurEffect)
+				EngineD3D11::GetInstance().EffectManager.ActivateRandomEffect();
 		}
-		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy" && Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
+		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Enemy")
 		{
-			Contact.SecondActor->GetComponent<Player>()->RespawnPlayer();
+			if (Contact.SecondActor->GetComponent<Enemy>()->IsKiller)
+				Contact.SecondActor->GetComponent<Player>()->HitPlayer();
+			else if (Contact.SecondActor->GetComponent<Enemy>()->BlurEffect)
+				EngineD3D11::GetInstance().EffectManager.ActivateRandomEffect();
 		}
 	};
 
@@ -430,7 +437,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 	Ennemy->Transform = Transform;
 	Ennemy->AddComponent<RigidBody>(RigidBody::RigidActorType::Kinematic);
 	auto InteligentEnemy = Ennemy->AddComponent<IntelligentEnemy>(ToFollow, Zone, Transform.Position,
-		RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller, FixedY);
+		RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller, FixedY, BlurEffect);
 	InteligentEnemy->SetSpeed(Speed);
 	Engine.GetScene().AddActor(std::move(Ennemy));
 }
@@ -552,7 +559,7 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
 
-	Engine.GetScene().AddSkyBox(new Skybox{
+	Engine.GetScene().SetSkyBox(new Skybox{
 			ToFollow
 			, RessourceManager.GetMesh(L".\\modeles\\sky\\sky.OMB")
 			, RessourceManager.GetShader(L".\\shaders\\MiniPhongSkyBox.fx")
@@ -698,4 +705,13 @@ void GameFactory::CreateTree(Math::Transform Transform)
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 	myTree->Transform = Transform;
 	Engine.GetScene().AddActor(std::move(myTree));
+}
+
+void GameFactory::CreateEffects()
+{
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Nul.fx");
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_RadialBlur.fx");
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Blur.fx");
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Waves.fx");
+	EngineD3D11::GetInstance().EffectManager.AddEffect(L".\\shaders\\Effect_Sharpen.fx");
 }

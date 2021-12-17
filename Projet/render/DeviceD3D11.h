@@ -25,6 +25,9 @@ public:
 	void ActivateZBuffer() const;
 	void DeactivateZBuffer() const;
 
+	void SetFullScreen() noexcept;
+	void SetWindowed() noexcept;
+
 	void ClearView();
 	void SetRenderTargetView(ID3D11RenderTargetView *PRenderTargetView, ID3D11DepthStencilView *PDepthStencilView);
 

@@ -17,6 +17,8 @@
 
 #include <iostream>
 #include <chrono>
+#include <windows.h>
+#include <mmsystem.h>
 
 constexpr int FramesPerSecond = 60;
 constexpr double MSPerFrame = 1.0 / static_cast<double>(FramesPerSecond);
@@ -158,7 +160,8 @@ int Engine<T, TDevice>::Init()
 
 	InitSpecific();
 
-	Device = CreateDeviceSpecific(CDS_MODE::CDS_FENETRE);
+	Device = CreateDeviceSpecific(CDS_MODE::CDS_PLEIN_ECRAN);
+
 
 	LoadLevel(true);
 
@@ -251,7 +254,9 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 	}
 
 	// Tick the skybox first
-	CurrentScene->SkyBox->LateTick(DeltaTime);
+	if (CurrentScene->SkyBox) {
+		CurrentScene->SkyBox->LateTick(DeltaTime);
+	}
 
 	// Get actors in vision range
 	const auto Actors = CurrentScene->GetVisibleActors();
@@ -320,15 +325,25 @@ int Engine<T, TDevice>::LoadLevel(bool MainMenu)
 
 	InitAnimation();
 
+	if (!MainMenu) {
+		// Start sound
+		PlaySound(L".\\resources\\sound\\MainLoop.wav", nullptr, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	}
+
 	return 0;
 }
 
 template <class T, class TDevice>
 void Engine<T, TDevice>::UnloadLevel()
 {
-	delete CurrentScene;
+	// Stop sound
+	PlaySound(nullptr, nullptr, 0);
 
 	ResourcesManager.Cleanup();
+	EffectManager.Cleanup();
+
+	delete CurrentScene;
+
 	PhysicManager::GetInstance().Cleanup();
 }
 

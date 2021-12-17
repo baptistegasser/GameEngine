@@ -11,7 +11,7 @@
 Button::Button(Pitbull::Actor* Parent, TextRenderer* Text, SpriteRenderer* RaisedSprite, SpriteRenderer* PressedSprite, SpriteRenderer* BallSprite, std::function<void()> Cb)
 	: Component{ Parent }
 	, Current{ PressedSprite }
-	, Text{ Text }
+	, Text{ std::unique_ptr<TextRenderer>(Text) }
 	, RaisedSprite{ RaisedSprite }
 	, PressedSprite{ PressedSprite }
 	, BallSprite{ BallSprite }
@@ -102,11 +102,11 @@ bool Menu::ProcessInputs()
 {
 	const InputManager& InputManager = InputManager::GetInstance();
 
-	if (InputManager.IsKeyPressed(DIK_W)) {
+	if (InputManager.IsKeyPressed(DIK_W) || InputManager.IsKeyPressed(DIK_UP)) {
 		SelectPrevious();
 		return true;
 	}
-	if (InputManager.IsKeyPressed(DIK_S)) {
+	if (InputManager.IsKeyPressed(DIK_S) || InputManager.IsKeyPressed(DIK_DOWN)) {
 		SelectNext();
 		return true;
 	}

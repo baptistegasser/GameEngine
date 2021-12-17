@@ -24,15 +24,17 @@ const EffectVertex Effect::Vertices[6] = {
 
 Effect::~Effect() noexcept
 {
-	DX_RELEASE(PSampleState);
-	DX_RELEASE(PEffet);
-	DX_RELEASE(PVertexLayout);
 	DX_RELEASE(PVertexBuffer);
-	DX_RELEASE(PResourceView);
-	DX_RELEASE(PRenderTargetView);
+	DX_RELEASE(PTechnique);
+	DX_RELEASE(PPass);
+	DX_RELEASE(PVertexLayout);
+	DX_RELEASE(PSampleState);
 	DX_RELEASE(PTextureScene);
-	DX_RELEASE(PDepthStencilView);
+	DX_RELEASE(PRenderTargetView);
+	DX_RELEASE(PResourceView);
 	DX_RELEASE(PDepthTexture);
+	DX_RELEASE(PDepthStencilView);
+	DX_RELEASE(PEffet);
 }
 
 Effect::Effect(const wchar_t* FileName)

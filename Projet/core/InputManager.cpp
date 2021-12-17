@@ -15,6 +15,9 @@ const int InputManager::KeyCount = 256;
 void InputManager::Init(HINSTANCE hInstance, HWND hWnd)
 {
 	if (IsInit) return;
+
+	// We hide the cursor !
+	HideCursor();
 	
 	DX_TRY(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&PDirectInput, nullptr), ERREUR_CREATION_DIRECTINPUT);
 
@@ -88,6 +91,16 @@ void InputManager::Release() noexcept
 const DIMOUSESTATE& InputManager::GetMouseState() const noexcept
 {
 	return MouseState;
+}
+
+void InputManager::ShowCursor() const noexcept
+{
+	while (::ShowCursor(true) < 0);
+}
+
+void InputManager::HideCursor() const noexcept
+{
+	while (::ShowCursor(false) >= 0);
 }
 
 bool InputManager::IsKeyDown(const KeyCode& Key) const noexcept

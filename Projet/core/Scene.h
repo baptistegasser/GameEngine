@@ -24,7 +24,7 @@ public:
 	using ActorPtrList = ActorTree::DataPtrList;
 
 	Scene();
-	~Scene() = default;
+	~Scene() noexcept;
 
 	/// <summary>
 	/// Init all actors in the scene.
@@ -58,7 +58,7 @@ public:
 
 	void AddActor(ActorPtr Actor, bool AlwaysVisible = false);
 
-	void AddSkyBox(ActorPtr Actor);
+	void SetSkyBox(ActorPtr Actor);
 
 	/// <summary>
 	/// Update the camera used to get visible actors.

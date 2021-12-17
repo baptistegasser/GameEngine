@@ -10,7 +10,7 @@ class Player : public Pitbull::Component
 {
 public :
 	Player(Pitbull::Actor* Parent, Math::Vec3f Pos);
-	~Player() override = default;
+	~Player() = default;
 
 	void Init() override;
 
@@ -93,8 +93,8 @@ private:
 	DirectX::XMVECTOR RelativeZ;
 
 	float Speed = 110.0f;
-	float JumpSpeed = 30.f;
-	float MaxSpeed = 15.0f;
+	float JumpSpeed = 45.f;
+	float MaxSpeed = 20.0f;
 
 	/// <summary>
 	/// Swap the camera's type

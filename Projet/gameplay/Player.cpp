@@ -55,32 +55,41 @@ void Player::FixedTick(const float& DeltaTime)
 	RelativeZ = XMVector3Normalize(XMVector3Cross(Direction, XMVECTOR{0, 1, 0}));
 
 	if (InputManager.IsKeyPressed(DIK_A)) {
-		MyRigidBody->AddForce(Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = Math::XMVector2PX(RelativeZ) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyPressed(DIK_D)) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(RelativeZ) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = -Math::XMVector2PX(RelativeZ) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyPressed(DIK_W)) {
-		MyRigidBody->AddForce(Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = Math::XMVector2PX(Direction) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyPressed(DIK_S)) {
-		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
+		auto Force = -Math::XMVector2PX(Direction) * Speed * DeltaTime;
+		Force.y = 0.f;
+		MyRigidBody->AddForce(Force, ForceMode::Impulse);
 	}
 
 	if (InputManager.IsKeyDown(DIK_SPACE)) {
-		if (isGrounded())
+		if (isGrounded()) {
 			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
-	}
-
-	if (InputManager.IsKeyDown(DIK_P)) {
-		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
+		}
 	}
 
 	if (InputManager.IsKeyDown(DIK_G)) {
 		Engine.GodMod ? Engine.GodMod = false : Engine.GodMod = true;
+	}
+
+	if (InputManager.IsKeyDown(DIK_F)) {
+		Engine.Device->SetFullScreen();
 	}
 
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {

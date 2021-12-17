@@ -44,7 +44,6 @@ void GameFactory::LoadMainMenu()
 		&Engine.MatProj,
 		&Engine.MatViewProj);
 	Engine.GetScene().SetCurrentCamera(Cam);
-	CreateSkyBox(&MyMenu->Transform);
 	Engine.GetScene().AddActor(MyMenu);
 }
 
@@ -64,7 +63,7 @@ void GameFactory::LoadLevel()
 	
 	auto DirLight = new ADirectionalLight;
 	DirLight->GetLight()->Direction = { -0.5f, -1.f, 0.f };
-	DirLight->GetLight()->Color = { 1.0f, 0.f, 0.f };
+	DirLight->GetLight()->Color = { 1.0f, 1.f, 1.f };
 	CurrentScene.AddActor(DirLight);
 
 	/***
@@ -334,6 +333,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;
+	MyPlayer->Transform.RotateY(-90.f);
 
 	const auto PlayerCam = MyPlayer->AddComponent<Camera>(
 		DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),
@@ -558,7 +558,7 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
 
-	Engine.GetScene().AddSkyBox(new Skybox{
+	Engine.GetScene().SetSkyBox(new Skybox{
 			ToFollow
 			, RessourceManager.GetMesh(L".\\modeles\\sky\\sky.OMB")
 			, RessourceManager.GetShader(L".\\shaders\\MiniPhongSkyBox.fx")

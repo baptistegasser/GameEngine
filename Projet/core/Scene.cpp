@@ -11,6 +11,16 @@ Scene::Scene()
 	, VisionVolume{ BoundingSphere{ 0.f } }
 {}
 
+Scene::~Scene() noexcept
+{
+	SetSkyBox(nullptr);
+
+	for (auto& actor : AlwaysVisibleActors) {
+		delete actor;
+		actor = nullptr;
+	}
+}
+
 void Scene::Tick(const float ElapsedTime)
 {
 	for (auto& Actor : Tree.GetDatas()) {
@@ -74,8 +84,11 @@ void Scene::AddActor(ActorPtr Actor, bool AlwaysVisible)
 	}
 }
 
-void Scene::AddSkyBox(ActorPtr Actor)
+void Scene::SetSkyBox(ActorPtr Actor)
 {
+	if (SkyBox) { 
+		delete SkyBox;
+	}
 	SkyBox = Actor;
 }
 
@@ -91,6 +104,8 @@ const Camera& Scene::GetCurrentCamera() const noexcept
 
 const Scene::ActorPtrList Scene::GetVisibleActors() noexcept
 {
+	if (Tree.GetDatas().empty() || !CurrentCamera) return ActorPtrList{};
+
 	VisionVolume = BoundingSphere{ 100.f, Math::XMVector2PX(CurrentCamera->GetPosition()) };
 	auto Actors = Tree.Find(VisionVolume);
 	ConcatVisibleActors(Actors);

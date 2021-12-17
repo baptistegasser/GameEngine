@@ -332,6 +332,7 @@ void GameFactory::CreatePlayer(Math::Transform Transform)
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
 	MyPlayer->AddComponent<Player>(Transform.Position);
 	MyPlayer->Transform = Transform;
+	MyPlayer->Transform.RotateY(-90.f);
 
 	const auto PlayerCam = MyPlayer->AddComponent<Camera>(
 		DirectX::XMVectorSet(0.0f, 2.0f, 10.0f, 1.0f),

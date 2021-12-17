@@ -20,6 +20,7 @@ public:
 	int Width;
 	DirectX::XMFLOAT3 Scale;
 	float TextureCoefficient = 20.f;
+	bool IsTunnel = false;
 
 	size_t VertexCount;
 	size_t PolyCount;

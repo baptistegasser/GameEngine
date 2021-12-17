@@ -122,6 +122,7 @@ void ATerrain::LateTick(const float ElapsedTime)
 	ShaderParams.Mat.Intensity = 4;
 	ShaderParams.PosScale = XMVectorSet(Scale.x, Scale.z, static_cast<float>(Width), static_cast<float>(Height));
 	ShaderParams.TextureCoefficient = TextureCoefficient;
+	ShaderParams.IsTunnel = IsTunnel;
 
 	// Set lighting data
 	const auto& LightManager = Engine.GetScene().LightManager;

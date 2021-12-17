@@ -18,7 +18,7 @@ Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
 {
-	EngineD3D11::GetInstance().GetScene().AddActor(MyMenu);
+	EngineD3D11::GetInstance().GetScene().AddActor(MyMenu, true);
 	MyMenu->Active = false;
 }
 
@@ -70,7 +70,7 @@ void Player::FixedTick(const float& DeltaTime)
 		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (InputManager.IsKeyPressed(DIK_SPACE)) {
+	if (InputManager.IsKeyDown(DIK_SPACE)) {
 		if (isGrounded())
 			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}

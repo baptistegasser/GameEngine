@@ -5,6 +5,7 @@
 #include "physic/SphereCollider.h"
 #include "render/Camera.h"
 #include "render/Menu.h"
+#include "render/MeshRenderer.h"
 
 class Player : public Pitbull::Component
 {
@@ -55,6 +56,7 @@ private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;
 	SphereCollider* MyCollider;
+	MeshRenderer* MyMeshRenderer;
 	PauseMenu* MyPauseMenu;
 
 	Math::Vec3f SpawnPos = Math::Vec3f{ 0.0f, 0.0f, 0.0f };

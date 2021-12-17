@@ -28,6 +28,7 @@ void Player::Init()
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
 	MyCollider = ParentActor->GetComponent<SphereCollider>();
+	MyMeshRenderer = ParentActor->GetComponent<MeshRenderer>();
 
 	Direction = ParentActor->Transform.Forward().ToXMVector();
 
@@ -205,4 +206,5 @@ void Player::RespawnPlayer() const
 	MyRigidBody->ClearTorque();
 	MyRigidBody->ClearVelocity();
 	MyRigidBody->ClearAngularVelocity();
+	MyMeshRenderer->ShaderParams.EnableDirLight = true;
 }

@@ -54,8 +54,12 @@ void ContactHandler::NotifyPairColliderTrigger(physx::PxTriggerPair& ContactPair
     const auto FirstTrans = FirstCollider->ParentActor->Transform;
     const auto SecondTrans = SecondCollider->ParentActor->Transform;
 
-    FirstCollider->OnContact(Contact(FirstCollider->ParentActor, SecondCollider->ParentActor));
-    SecondCollider->OnContact(Contact(SecondCollider->ParentActor, FirstCollider->ParentActor));
+    Contact::ContactStatus Status = (ContactPair.status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST) == physx::PxPairFlag::eNOTIFY_TOUCH_LOST ?
+        Contact::ContactStatus::Lost
+        : Contact::ContactStatus::Started;
+
+    FirstCollider->OnContact(Contact(FirstCollider->ParentActor, SecondCollider->ParentActor, Status));
+    SecondCollider->OnContact(Contact(SecondCollider->ParentActor, FirstCollider->ParentActor, Status));
 
     if (FirstTrans != FirstCollider->ParentActor->Transform) {
         ContactPair.triggerActor->setGlobalPose(FirstCollider->ParentActor->Transform);

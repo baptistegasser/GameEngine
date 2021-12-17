@@ -481,6 +481,8 @@ ATerrain* GameFactory::CreateTunnel()
 
 	// Trigger for entry/exit
 	const static auto EnableLight = [](const Contact& Contact) -> void {
+		if (Contact.Status == Contact::ContactStatus::Lost) return;
+
 		Pitbull::Actor* Target = Contact.FirstActor->Name == "TunnelEntryTrigger" ? Contact.SecondActor : Contact.FirstActor;
 		auto* Renderer = Target->GetComponent<MeshRenderer>();
 		if (Renderer) {
@@ -489,6 +491,8 @@ ATerrain* GameFactory::CreateTunnel()
 		}
 	};
 	const static auto DisableLight = [](const Contact& Contact) -> void {
+		if (Contact.Status == Contact::ContactStatus::Lost) return;
+
 		Pitbull::Actor* Target = Contact.FirstActor->Name == "TunnelTrigger" ? Contact.SecondActor: Contact.FirstActor;
 		auto* Renderer = Target->GetComponent<MeshRenderer>();
 		if (Renderer) {

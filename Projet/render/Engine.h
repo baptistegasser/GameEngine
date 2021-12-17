@@ -17,6 +17,8 @@
 
 #include <iostream>
 #include <chrono>
+#include <windows.h>
+#include <mmsystem.h>
 
 constexpr int FramesPerSecond = 60;
 constexpr double MSPerFrame = 1.0 / static_cast<double>(FramesPerSecond);
@@ -323,12 +325,20 @@ int Engine<T, TDevice>::LoadLevel(bool MainMenu)
 
 	InitAnimation();
 
+	if (!MainMenu) {
+		// Start sound
+		PlaySound(L".\\resources\\sound\\MainLoop.wav", nullptr, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	}
+
 	return 0;
 }
 
 template <class T, class TDevice>
 void Engine<T, TDevice>::UnloadLevel()
 {
+	// Stop sound
+	PlaySound(nullptr, nullptr, 0);
+
 	ResourcesManager.Cleanup();
 
 	delete CurrentScene;

@@ -98,7 +98,7 @@ void GameFactory::LoadLevel()
 	auto GrassTerrain = CreateTerrain(L".\\modeles\\heigtmap\\Arene.bmp",
 		Math::Transform{ TerrainPos, Math::Vec3f{ 0.15f, 0.15f, 0.15f }, Math::Quaternion{ 0, Math::Vec3f(0, 1, 0)} },
 		PhysicMaterial{ 0.35f, 0.35f, 0.2f },
-		L".\\modeles\\grass.dds", L".\\modeles\\soil3.dds", L".\\modeles\\Arene_Texture_2_1.dds", true);
+		L".\\modeles\\grass.dds", L".\\modeles\\soil3.dds", L".\\modeles\\arene_alpha.dds", true);
 	CreateEnemy(
 		Math::Transform{ Math::Vec3f{ TerrainPos.x + 5.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} },
 		Math::Transform{ Math::Vec3f{ TerrainPos.x + 71.f, PosYEnemy, TerrainPos.z + 10.f }, Math::Quaternion{physx::PxHalfPi, Math::Vec3f{0,1,0}} },

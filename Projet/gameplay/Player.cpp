@@ -67,7 +67,7 @@ void Player::FixedTick(const float& DeltaTime)
 		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (InputManager.IsKeyPressed(DIK_SPACE)) {
+	if (InputManager.IsKeyDown(DIK_SPACE)) {
 		if (isGrounded())
 			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}

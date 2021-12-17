@@ -29,6 +29,7 @@
 
 #include <math.h>
 #include "math/Math.h"
+#include "util/Util.h"
 
 void GameFactory::LoadMainMenu()
 {
@@ -54,8 +55,16 @@ void GameFactory::LoadLevel()
 	 ***/
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
-	CreateLights(DirectX::XMFLOAT3{ 0.f, 20.f, 0.f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, DirectX::XMFLOAT3{ 0.5f, 0.5f, 0.5f }, 4.f);
 	CreateTimer();
+
+	// Setup lighting
+	auto& CurrentScene = EngineD3D11::GetInstance().GetScene();
+	CurrentScene.LightManager.AmbientColor = { 0.6f };
+	
+	auto DirLight = new ADirectionalLight;
+	DirLight->GetLight()->Direction = { -0.5f, -1.f, 0.f };
+	DirLight->GetLight()->Color = { 1.0f, 0.f, 0.f };
+	CurrentScene.AddActor(DirLight);
 
 	/***
 	 * First state with platform ( z C 0,135)
@@ -171,27 +180,16 @@ void GameFactory::LoadLevel()
 
 	CreateTree(Math::Transform{ Math::Vec3f{ BasePos.x - 15.f, BasePos.y+15.0f, BasePos.z + 35.f }, Math::Quaternion{-physx::PxHalfPi, Math::Vec3f{0,1,0}} });
 	CreateTree(Math::Transform{ Math::Vec3f{ BasePos.x - 100.f, BasePos.y + 1.0f, BasePos.z + 20.f }, Math::Quaternion{physx::PxPi, Math::Vec3f{0,1,0}} });
-	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 105.f, BasePos.y, BasePos.z + 140.f), Math::Vec3f{ 0.15f, 1.f, 2.5f } },
+	CreatePlatform(Math::Transform{ Math::Vec3f(BasePos.x - 105.f, BasePos.y-0.001f, BasePos.z + 140.f), Math::Vec3f{ 0.15f, 1.f, 2.5f } },
 		L".\\modeles\\plateform\\plateformOrange.OMB");
 
 
 	/***
 	 * Second State with arena
 	 ***/
-	Math::Vec3f TerrainPos2 = { -115.f, -6.f, 400.f };
+	auto CaveTerrain = CreateTunnel();
+	auto TerrainPos2 = CaveTerrain->Transform.Position;
 	float PosYEnemy2 = -5.5f;
-
-	// Dim : 128 / 128
-	auto CaveTerrain = CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
-		Math::Transform{ TerrainPos2, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
-		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
-		L".\\modeles\\mur_pierre.dds",  L".\\modeles\\terre.dds", L".\\modeles\\waytunnel.dds", true);
-	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TerrainPos2.x + 128.f, TerrainPos2.y + 22.0f, TerrainPos2.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
-	CaveTrans.RotateZ(180);
-	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
-		CaveTrans,
-		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
-		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\blanc.dds", true);
 
 	float Speed = 0.15f;
 
@@ -303,7 +301,7 @@ void GameFactory::LoadLevel()
 	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 230.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
-ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
+ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull, bool IsTunnel)
 {
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
@@ -319,6 +317,8 @@ ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Tr
 	Terrain->Texture2 = RessourceManager.GetTexture(TextureName2);
 	Terrain->Texture3 = RessourceManager.GetTexture(TextureName3);
 	Terrain->Transform = Transform;
+	Terrain->IsTunnel = IsTunnel;
+
 	Engine.GetScene().AddActor(Terrain, true);
 	return Terrain;
 }
@@ -424,7 +424,7 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 		}
 	};
 
-	auto Collider = Ennemy->AddComponent<CapsuleCollider>(8.f, 40.f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
+	auto Collider = Ennemy->AddComponent<CapsuleCollider>(8.f, 18.f, PhysicMaterial{ 0.5f, 0.5f, 1.0f });
 	Collider->OnContactCallBack = EnemyCollider;
 
 	Ennemy->Transform = Transform;
@@ -433,6 +433,84 @@ void GameFactory::CreateIntelligentEnemy(Math::Transform Transform, Math::Transf
 		RelativeTerrain, RelativeTerrainPosition, Distance, IsKiller, FixedY);
 	InteligentEnemy->SetSpeed(Speed);
 	Engine.GetScene().AddActor(std::move(Ennemy));
+}
+
+ATerrain* GameFactory::CreateTunnel()
+{
+	Math::Vec3f TunnelPos { -115.f, -6.f, 400.f };
+
+	auto CaveGround = CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
+		Math::Transform{ TunnelPos, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
+		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
+	L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true, true);
+	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TunnelPos.x + 128.f, TunnelPos.y + 22.0f, TunnelPos.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
+	CaveTrans.RotateZ(180);
+	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
+		CaveTrans,
+		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
+		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true, true);
+
+	// Tunnel lights
+	auto& CurrentScene = EngineD3D11::GetInstance().GetScene();
+	const int TunnelLightCount = 6;
+	Math::Vec3f SceneLightsPos[TunnelLightCount] = {
+		{ -90.f, 3.f, 421.f },
+		{ -16.f, 5.8f, 460.f },
+		{ -51.7f, 5.4f, 478.f },
+		{ -43.f, 8.f, 419.f },
+		{ -96.f, 3.f, 492.f },
+		{ -30.f, 1.f, 518.5f },
+	};
+
+	for (int i = 0; i < TunnelLightCount; ++i) {
+		auto ASceneLight = new APointLight;
+		auto Light = ASceneLight->GetLight();
+		Light->Position = SceneLightsPos[i];
+		Light->Color = { frand(), frand(), frand() };
+		Light->Range = 20.f;
+		Light->Intensity = 2.f;
+		CurrentScene.AddActor(ASceneLight);
+	}
+
+	// Trigger for entry/exit
+	const static auto EnableLight = [](const Contact& Contact) -> void {
+		Pitbull::Actor* Target = Contact.FirstActor->Name == "TunnelEntryTrigger" ? Contact.SecondActor : Contact.FirstActor;
+		auto* Renderer = Target->GetComponent<MeshRenderer>();
+		if (Renderer) {
+			Renderer->ShaderParams.EnableDirLight = true;
+		}
+	};
+	const static auto DisableLight = [](const Contact& Contact) -> void {
+		Pitbull::Actor* Target = Contact.FirstActor->Name == "TunnelTrigger" ? Contact.SecondActor: Contact.FirstActor;
+		auto* Renderer = Target->GetComponent<MeshRenderer>();
+		if (Renderer) {
+			Renderer->ShaderParams.EnableDirLight = false;
+		}
+	};
+
+	auto StartTrigger = new Pitbull::Actor{ "TunnelEntryTrigger" };
+	StartTrigger->Transform.Position = TunnelPos + Math::Vec3f{ 15.f, 11.5f, -1.5f };;
+	auto Collider = StartTrigger->AddComponent<BoxCollider>(Math::Vec3f{ 15.f, 11.5f, 0.5f });
+	StartTrigger->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
+	Collider->OnContactCallBack = EnableLight;
+
+	auto EndTrigger = new Pitbull::Actor{ "TunnelEntryTrigger" };
+	EndTrigger->Transform.Position = TunnelPos + Math::Vec3f{ 128.f - 20.f, 11.5f, 128.5f };;
+	Collider = EndTrigger->AddComponent<BoxCollider>(Math::Vec3f{ 20.f, 11.5f, 0.5f });
+	EndTrigger->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
+	Collider->OnContactCallBack = EnableLight;
+
+	auto TunnelTrigger = new Pitbull::Actor{ "TunnelTrigger" };
+	TunnelTrigger->Transform.Position = TunnelPos + Math::Vec3f{ 64.f, 11.5f, 64.f };
+	Collider = TunnelTrigger->AddComponent<BoxCollider>(Math::Vec3f{60.f, 11.5f, 60.f});
+	TunnelTrigger->AddComponent<RigidBody>(RigidBody::RigidActorType::Static, true);
+	Collider->OnContactCallBack = DisableLight;
+
+	CurrentScene.AddActor(StartTrigger);
+	CurrentScene.AddActor(TunnelTrigger);
+	CurrentScene.AddActor(EndTrigger);
+	
+	return CaveGround;
 }
 
 void GameFactory::CreatePlatform(Math::Transform Transform, const wchar_t* Filename, PhysicMaterial Material)
@@ -466,47 +544,6 @@ void GameFactory::CreateMobilePlatform(Math::Transform Transform, Math::Vec3f En
 	Movement->SetSpeed(Speed);
 
 	Engine.GetScene().AddActor(std::move(MyPlateform));
-}
-
-void GameFactory::CreateLights(DirectX::XMFLOAT3 Pos, DirectX::XMFLOAT3 Specular, DirectX::XMFLOAT3 Roughness, float Intensity, float InnerRadius, float OuterRadius)
-{
-	auto& CurrentScene = EngineD3D11::GetInstance().GetScene();
-
-	CurrentScene.LightManager.AmbientColor = { 0.7f };
-
-	auto DirLight = new ADirectionalLight;
-	DirLight->GetLight()->Direction = { -0.5f, -1.f, 0.f };
-	DirLight->GetLight()->Color = { 0.5f, 0.5f, 0.5f };
-	CurrentScene.AddActor(DirLight);
-
-	auto ALightRed = new APointLight;
-	auto LightRed = ALightRed->GetLight();
-	LightRed->Position = { 0.f, 5.f, 0.f };
-	LightRed->Color = { 1.0f, 1.0f, 1.0f };
-	LightRed->Range = 20.f;
-	CurrentScene.AddActor(ALightRed);
-
-	auto ALightBlue = new APointLight;
-	auto LightBlue = ALightBlue->GetLight();
-	LightBlue->Position = { -40.f, 5.f, 0.f };
-	LightBlue->Color = { 1.0f, 1.0f, 1.0f };
-	LightBlue->Range = 20.f;
-	CurrentScene.AddActor(ALightBlue);
-
-	auto ALightGreen = new APointLight;
-	auto LightGreen = ALightGreen->GetLight();
-	LightGreen->Position = { 40.f, 5.f, 0.f };
-	LightGreen->Color = { 1.0f, 1.0f, 1.0f };
-	LightGreen->Range = 20.f;
-	CurrentScene.AddActor(ALightGreen);
-
-	auto ASpotRed = new ASpotLight;
-	auto SpotRed = ASpotRed->GetLight();
-	SpotRed->Position = { 0.f, 5.f, -40.f };
-	SpotRed->Direction = { -30.f, 0.f, -40.f };
-	SpotRed->Color = { 1.0f, 1.0f, 1.0f };
-	SpotRed->Range = 20.f;
-	CurrentScene.AddActor(ASpotRed);
 }
 
 void GameFactory::CreateSkyBox(Math::Transform* ToFollow)

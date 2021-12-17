@@ -92,7 +92,8 @@ void RigidBody::UpdateActorShapes() noexcept
 	// Create new shapes from colliders
 	const auto Colliders = ParentActor->GetComponents<Collider>();
 	for (const auto Collider : Colliders) {
-		PxShape* Shape = Physics->createShape(*Collider->GetPxGeometry(ParentActor->Transform.Scale), *Collider->GetPxMaterial(), true);
+		auto GeometryImpl = Collider->GetPxGeometry(ParentActor->Transform.Scale);
+		PxShape* Shape = Physics->createShape(*GeometryImpl, *Collider->GetPxMaterial(), true);
 
 		if (IsTrigger)
 		{
@@ -105,6 +106,12 @@ void RigidBody::UpdateActorShapes() noexcept
 		// Default rotation to not duplicate parent's rot
 		LocalTransform.Rotation = Math::Quaternion();
 		LocalTransform.Position = Collider->Offset;
+
+		// Fix orient capsule upside
+		if (GeometryImpl->getType() == PxGeometryType::eCAPSULE) {
+			LocalTransform.Rotate(0.f, 0.f, 90.f);
+		}
+
 		Shape->setLocalPose(LocalTransform);
 
 		RigidActor->attachShape(*Shape);

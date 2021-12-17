@@ -22,10 +22,11 @@ struct ShadersParams {
 	DirectX::XMVECTOR CameraPos;
 	DirectX::XMVECTOR AmbientColor;
 	ShaderMaterial Mat;
-	bool HasTexture;
+	int HasTexture;
+	int EnableDirLight = true;
 
 private:
-	DX_HLSL_FILL(3);
+	DX_HLSL_FILL(2);
 };
 
 DX_HLSL_ASSERT_ALLIGN(ShadersParams);

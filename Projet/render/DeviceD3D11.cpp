@@ -133,13 +133,21 @@ DeviceD3D11::~DeviceD3D11()
 	DX_RELEASE(DepthStencilView);
 	DX_RELEASE(RenderTargetView);
 	DX_RELEASE(SwapChain);
-	DX_RELEASE(D3DDevice);
 
 	if (ImmediateContext)
 	{
 		ImmediateContext->ClearState();
 		ImmediateContext->Flush();
 	}
+
+
+
+	ID3D11Debug* debugDev;
+	D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&debugDev));
+	debugDev->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+
+	DX_RELEASE(D3DDevice);
+
 	DX_RELEASE(ImmediateContext);
 }
 

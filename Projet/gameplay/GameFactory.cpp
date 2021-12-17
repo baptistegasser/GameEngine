@@ -55,6 +55,7 @@ void GameFactory::LoadLevel()
 	 ***/
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
+	return;
 	CreateTimer();
 
 	// Setup lighting

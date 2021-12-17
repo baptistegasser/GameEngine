@@ -63,7 +63,7 @@ void GameFactory::LoadLevel()
 	
 	auto DirLight = new ADirectionalLight;
 	DirLight->GetLight()->Direction = { -0.5f, -1.f, 0.f };
-	DirLight->GetLight()->Color = { 1.0f, 0.f, 0.f };
+	DirLight->GetLight()->Color = { 1.0f, 1.f, 1.f };
 	CurrentScene.AddActor(DirLight);
 
 	/***

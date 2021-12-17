@@ -89,7 +89,7 @@ private:
 
 	float Speed = 110.0f;
 	float JumpSpeed = 30.f;
-	float MaxSpeed = 15.0f;
+	float MaxSpeed = 20.0f;
 
 	/// <summary>
 	/// Swap the camera's type

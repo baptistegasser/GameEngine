@@ -280,7 +280,7 @@
       <Filter>Source Files\render</Filter>
     </ClCompile>
     <ClCompile Include="render\Menu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -501,6 +501,9 @@
       <Filter>Header Files\render</Filter>
     </ClInclude>
     <ClInclude Include="render\Menu.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Light.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>

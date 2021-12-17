@@ -102,11 +102,11 @@ bool Menu::ProcessInputs()
 {
 	const InputManager& InputManager = InputManager::GetInstance();
 
-	if (InputManager.IsKeyPressed(DIK_W)) {
+	if (InputManager.IsKeyPressed(DIK_W) || InputManager.IsKeyPressed(DIK_UP)) {
 		SelectPrevious();
 		return true;
 	}
-	if (InputManager.IsKeyPressed(DIK_S)) {
+	if (InputManager.IsKeyPressed(DIK_S) || InputManager.IsKeyPressed(DIK_DOWN)) {
 		SelectNext();
 		return true;
 	}

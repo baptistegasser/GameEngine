@@ -39,6 +39,15 @@ public:
 	const DIMOUSESTATE& GetMouseState() const noexcept;
 
 	/// <summary>
+	/// Show the mouse cursor.
+	/// </summary>
+	void ShowCursor() const noexcept;
+	/// <summary>
+	/// Hide the mouse cursor.
+	/// </summary>
+	void HideCursor() const noexcept;
+
+	/// <summary>
 	/// Return true during the first frame where the key is pressed.
 	/// </summary>
 	bool IsKeyDown(const KeyCode& Key) const noexcept;

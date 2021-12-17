@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
-Enemy::Enemy(Pitbull::Actor* Parent, bool IsKiller)
+Enemy::Enemy(Pitbull::Actor* Parent, bool IsKiller, bool BlurEffect)
 	: Component{ Parent }
 	, IsKiller{ IsKiller }
+	, BlurEffect{ BlurEffect }
 {
 }
 

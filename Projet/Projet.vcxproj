@@ -349,6 +349,10 @@
     <None Include="shaders\Effect_Nul.fx">
       <FileType>Document</FileType>
     </None>
+    <FxCompile Include="shaders\Effect_Blur.fx" />
+    <FxCompile Include="shaders\Effect_RadialBlur.fx" />
+    <FxCompile Include="shaders\Effect_Sharpen.fx" />
+    <FxCompile Include="shaders\Effect_Waves.fx" />
     <FxCompile Include="shaders\MiniPhong.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

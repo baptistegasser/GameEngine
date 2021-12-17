@@ -42,6 +42,11 @@ public :
 	}
 
 	/// <summary>
+	/// Take off a player's live or kill him
+	/// </summary>
+	void HitPlayer();
+
+	/// <summary>
 	/// Reset player value
 	/// </summary>
 	void RespawnPlayer() const;
@@ -100,5 +105,8 @@ private:
 	/// Check if player is dead
 	/// </summary>
 	[[nodiscard]] bool IsDead() const;
+
+	bool Live = true;
+	int InvulnarabilityTime = 0;
 };
 

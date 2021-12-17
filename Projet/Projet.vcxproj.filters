@@ -542,6 +542,18 @@
     <FxCompile Include="shaders\MiniPhongSkyBox.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\Effect_RadialBlur.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_Blur.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_Waves.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Effect_Sharpen.fx">
+      <Filter>Shaders\effects</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />

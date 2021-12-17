@@ -18,7 +18,7 @@ Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
 {
-	EngineD3D11::GetInstance().GetScene().AddActor(MyPauseMenu);
+	EngineD3D11::GetInstance().GetScene().AddActor(MyPauseMenu, true);
 	MyPauseMenu->Active = false;
 }
 

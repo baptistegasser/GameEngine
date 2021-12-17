@@ -442,13 +442,13 @@ ATerrain* GameFactory::CreateTunnel()
 	auto CaveGround = CreateTerrain(L".\\modeles\\heigtmap\\ground.bmp",
 		Math::Transform{ TunnelPos, Math::Vec3f{ 0.25f, 0.15f, 0.25f } },
 		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
-	L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true, true);
+	L".\\modeles\\roche.dds", L".\\modeles\\terre.dds", L".\\modeles\\ground_alpha.dds", true, true);
 	Math::Transform CaveTrans = Math::Transform{ Math::Vec3f{ TunnelPos.x + 128.f, TunnelPos.y + 22.0f, TunnelPos.z }, Math::Vec3f{ 0.25f, 0.15f, 0.25f } };
 	CaveTrans.RotateZ(180);
 	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
 		CaveTrans,
 		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
-		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\Arene_Texture_2.dds", true, true);
+		L".\\modeles\\roche.dds", L".\\modeles\\terre.dds", L".\\modeles\\Blanc.dds", true, true);
 
 	// Tunnel lights
 	auto& CurrentScene = EngineD3D11::GetInstance().GetScene();
@@ -477,6 +477,7 @@ ATerrain* GameFactory::CreateTunnel()
 		Pitbull::Actor* Target = Contact.FirstActor->Name == "TunnelEntryTrigger" ? Contact.SecondActor : Contact.FirstActor;
 		auto* Renderer = Target->GetComponent<MeshRenderer>();
 		if (Renderer) {
+
 			Renderer->ShaderParams.EnableDirLight = true;
 		}
 	};

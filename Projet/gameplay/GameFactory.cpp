@@ -191,7 +191,7 @@ void GameFactory::LoadLevel()
 	CreateTerrain(L".\\modeles\\heigtmap\\ground_reverse.bmp",
 		CaveTrans,
 		PhysicMaterial{ 0.5f, 0.5f, 0.7f },
-		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\waytunnel_reverse.dds", true);
+		L".\\modeles\\mur_pierre.dds", L".\\modeles\\terre.dds", L".\\modeles\\blanc.dds", true);
 
 	float Speed = 0.15f;
 
@@ -291,16 +291,16 @@ void GameFactory::LoadLevel()
 	/***
 	* Finish
 	***/
-	Math::Transform TunnelTrans = Math::Transform{ Math::Vec3f(TerrainPos3.x + 20.f, TerrainPos3.y + 9.f, TerrainPos3.z + 130.f), Math::Vec3f(0.5f, 0.05f, 0.07f) };
+	Math::Transform TunnelTrans = Math::Transform{ Math::Vec3f(TerrainPos3.x + 20.f, TerrainPos3.y + 9.f, TerrainPos3.z + 135.f), Math::Vec3f(0.5f, 0.05f, 0.07f) };
 
 	TunnelTrans.RotateY(270);
 	TunnelTrans.RotateZ(335);
 
 	CreateSlide(TunnelTrans);
 	
-	CreatePlatform(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 16.f, TerrainPos3.y - 20.f, TerrainPos3.z + 220.f }, Math::Vec3f{ 2.f, 1.f, 5.f } }, L".\\modeles\\plateform\\plateformDarkBlue.OMB");
+	CreatePlatform(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 16.f, TerrainPos3.y - 20.f, TerrainPos3.z + 215.f }, Math::Vec3f{ 2.f, 1.f, 3.f } }, L".\\modeles\\plateform\\plateformDarkBlue.OMB");
 
-	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 250.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
+	CreateGoal(Math::Transform{ Math::Vec3f(TerrainPos3.x + 16.f, TerrainPos3.y - 19.f, TerrainPos3.z + 230.f), Math::Vec3f(5.f, 5.f, 5.f) }, L".\\modeles\\tree_cloud\\tree_cloud.OMB");
 }
 
 ATerrain* GameFactory::CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull)
@@ -551,14 +551,20 @@ void GameFactory::CreateGoal(Math::Transform Transform, const wchar_t* Filename)
 
 	MyGoal->AddComponent<SpriteRenderer>(RessourceManager.GetTexture(L".\\modeles\\Goal.dds"),RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), true);
 
-	auto GoalCollider = [](const Contact& Contact) -> void {
+	auto GoalCollider = [this](const Contact& Contact) -> void {
 		if (Contact.FirstActor->Name == "Goal" && Contact.SecondActor->Name == "Player")
 		{
-			std::cout << "Fini la course";
+			EndGameMenu* MyEndGameMenu = new EndGameMenu(MyTime);
+			EngineD3D11::GetInstance().GetScene().AddActor(MyEndGameMenu, true);
+			EngineD3D11::GetInstance().Pause();
+			MyEndGameMenu->Active = true;
 		}
 		else if (Contact.FirstActor->Name == "Player" && Contact.SecondActor->Name == "Goal")
 		{
-			std::cout << "Fini la course";
+			EndGameMenu* MyEndGameMenu = new EndGameMenu(MyTime);
+			EngineD3D11::GetInstance().GetScene().AddActor(MyEndGameMenu, true);
+			EngineD3D11::GetInstance().Pause();
+			MyEndGameMenu->Active = true;
 		}
 	};
 
@@ -611,7 +617,7 @@ void GameFactory::CreateTimer()
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
 
-	auto MyTimer = new Pitbull::Actor{};
+	auto MyTimer = new Pitbull::Actor{"Timer"};
 
 	const auto Sprite = MyTimer->AddComponent<SpriteRenderer>(
 		RessourceManager.GetTexture(L".\\modeles\\ui\\container.dds"), RessourceManager.GetShaderSprite(L".\\shaders\\sprite1.fx"), false);
@@ -624,7 +630,7 @@ void GameFactory::CreateTimer()
 		100, 400);
 	Text->Offset.Position.y = 0.745f;
 	Text->Offset.Position.x = 0.78f;
-	MyTimer->AddComponent<Timer>();
+	MyTime = MyTimer->AddComponent<Timer>();
 
 	Engine.GetScene().AddActor(MyTimer, true);
 }
@@ -652,7 +658,6 @@ void GameFactory::CreateTree(Math::Transform Transform)
 	myTree->AddComponent<MeshRenderer>(
 		RessourceManager.GetMesh(L".\\modeles\\tree_cloud\\tree_cloud.OMB"),
 		RessourceManager.GetShader(L".\\shaders\\MiniPhong.fx"));
-	//myTree->AddComponent<BoxCollider>(Math::Vec3f(0.2f, 5.f, 0.2f), PhysicMaterial{ 0.5f, 0.5f, 0.4f }, Math::Vec3f(0, 2.5f, 0));
 	myTree->Transform = Transform;
 	Engine.GetScene().AddActor(std::move(myTree));
 }

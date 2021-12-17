@@ -50,7 +50,7 @@ private:
 	RigidBody* MyRigidBody;
 	Camera* MyCamera;
 	SphereCollider* MyCollider;
-	Menu* MyMenu;
+	PauseMenu* MyPauseMenu;
 
 	Math::Vec3f SpawnPos = Math::Vec3f{ 0.0f, 0.0f, 0.0f };
 

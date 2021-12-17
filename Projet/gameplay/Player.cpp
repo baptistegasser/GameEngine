@@ -13,13 +13,13 @@ using namespace Math;
 Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
 	, IsOnTerrain{false}
-	, MyMenu(new PauseMenu)
+	, MyPauseMenu(new PauseMenu)
 	, SpawnPos { std::move(Pos) }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
 {
-	EngineD3D11::GetInstance().GetScene().AddActor(MyMenu, true);
-	MyMenu->Active = false;
+	EngineD3D11::GetInstance().GetScene().AddActor(MyPauseMenu, true);
+	MyPauseMenu->Active = false;
 }
 
 void Player::Init()
@@ -28,6 +28,7 @@ void Player::Init()
 	MyRigidBody = ParentActor->GetComponent<RigidBody>();
 	MyCamera = ParentActor->GetComponent<Camera>();
 	MyCollider = ParentActor->GetComponent<SphereCollider>();
+	MyMeshRenderer = ParentActor->GetComponent<MeshRenderer>();
 
 	Direction = ParentActor->Transform.Forward().ToXMVector();
 
@@ -94,7 +95,7 @@ void Player::FixedTick(const float& DeltaTime)
 
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
 		Engine.Pause();
-		MyMenu->Active = true;
+		MyPauseMenu->Active = true;
 	}
 
 	if (InputManager.IsKeyUp(DIK_M)) {
@@ -205,4 +206,5 @@ void Player::RespawnPlayer() const
 	MyRigidBody->ClearTorque();
 	MyRigidBody->ClearVelocity();
 	MyRigidBody->ClearAngularVelocity();
+	MyMeshRenderer->ShaderParams.EnableDirLight = true;
 }

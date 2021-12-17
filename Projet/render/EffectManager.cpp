@@ -3,6 +3,16 @@
 
 #include "EngineD3D11.h"
 
+EffectManager::~EffectManager() noexcept
+{
+	Cleanup();
+}
+
+void EffectManager::Cleanup() noexcept
+{
+	Effects.clear();
+}
+
 bool EffectManager::HasEffectActivated() const noexcept
 {
 	for (auto& pair : Effects) {

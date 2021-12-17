@@ -13,7 +13,9 @@ public:
 	EffectManager() = default;
 	/// Default destructor as we are not the one truly managing the effects live,
 	/// this role is still done by the \ref ResourcesManager
-	~EffectManager() noexcept = default;
+	~EffectManager() noexcept;
+
+	void Cleanup() noexcept;
 
 	/// <summary>
 	/// Return true if one of the managed effect is activated.

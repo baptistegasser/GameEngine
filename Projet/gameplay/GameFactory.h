@@ -2,6 +2,8 @@
 #include "math/Transform.h"
 #include "physic/Collider.h"
 #include "util/Singleton.h"
+#include "render/Menu.h"
+#include "render/Timer.h"
 
 #include "gameplay/IntelligentEnemy.h"
 
@@ -115,4 +117,6 @@ private:
 	/// </summary>
 	/// <param name="Transform"> transform of the tree </param>
 	void CreateTree(Math::Transform Transform);
+
+	Timer* MyTime;
 };

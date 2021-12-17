@@ -340,6 +340,7 @@ void Engine<T, TDevice>::UnloadLevel()
 	PlaySound(nullptr, nullptr, 0);
 
 	ResourcesManager.Cleanup();
+	EffectManager.Cleanup();
 
 	delete CurrentScene;
 

@@ -12,11 +12,14 @@ using namespace Math;
 
 Player::Player(Pitbull::Actor* Parent, Vec3f Pos)
 	: Component{ Parent }
+	, IsOnTerrain{false}
+	, MyMenu(new PauseMenu)
+	, SpawnPos { std::move(Pos) }
 	, ViewType{ CameraViewType::Third }
 	, Direction{}
-	, SpawnPos { Pos }
-	, IsOnTerrain{false}
 {
+	EngineD3D11::GetInstance().GetScene().AddActor(MyMenu, true);
+	MyMenu->Active = false;
 }
 
 void Player::Init()
@@ -64,7 +67,7 @@ void Player::FixedTick(const float& DeltaTime)
 		MyRigidBody->AddForce(-Math::XMVector2PX(Direction) * Speed * DeltaTime, ForceMode::Impulse);
 	}
 
-	if (InputManager.IsKeyPressed(DIK_SPACE)) {
+	if (InputManager.IsKeyDown(DIK_SPACE)) {
 		if (isGrounded())
 			MyRigidBody->AddForce(Vec3f(0.0f, 1.0f, 0.0f) * JumpSpeed, ForceMode::Impulse);
 	}
@@ -73,8 +76,13 @@ void Player::FixedTick(const float& DeltaTime)
 		Engine.IsPaused() ? Engine.UnPause() : Engine.Pause();
 	}
 
+	if (InputManager.IsKeyDown(DIK_G)) {
+		Engine.GodMod ? Engine.GodMod = false : Engine.GodMod = true;
+	}
+
 	if (InputManager.IsKeyUp(DIK_ESCAPE)) {
-		Engine.Stop();
+		Engine.Pause();
+		MyMenu->Active = true;
 	}
 
 	if (InputManager.IsKeyUp(DIK_M)) {
@@ -141,7 +149,7 @@ bool Player::isGrounded()
 		IsOnTerrain = false;
 		return true;
 	}
-	return false;
+	return EngineD3D11::GetInstance().GodMod;
 }
 
 void Player::SwapCameraMode()
@@ -156,8 +164,8 @@ bool Player::IsDead() const
 {
 	if (ParentActor->Transform.Position.z < 135 && ParentActor->Transform.Position.y < 0) return true;
 	else if (ParentActor->Transform.Position.z >= 135 && ParentActor->Transform.Position.z < 545 && ParentActor->Transform.Position.y < -10) return true;
-	else if (ParentActor->Transform.Position.z >= 545 && ParentActor->Transform.Position.z < 700 && ParentActor->Transform.Position.y < 4) return true;
-	else if (ParentActor->Transform.Position.z >= 700 && ParentActor->Transform.Position.y < -25) return true;
+	else if (ParentActor->Transform.Position.z >= 570 && ParentActor->Transform.Position.z < 725 && ParentActor->Transform.Position.y < 4) return true;
+	else if (ParentActor->Transform.Position.z >= 725 && ParentActor->Transform.Position.y < -25) return true;
 	else if (ParentActor->Transform.Position.y < -30) return true;
 	return false;
 }

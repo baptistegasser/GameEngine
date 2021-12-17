@@ -15,9 +15,13 @@ public :
 	/// Update the time of the textrenderer
 	/// </summary>
 	void FixedTick(const float& DeltaTime) override;
+
+	std::wstring GetValue();
 private :
 	TextRenderer* MySprite;
 	std::chrono::steady_clock::time_point Start;
-	std::chrono::steady_clock::time_point End;
-	__int64 Duration;
+	std::chrono::steady_clock::time_point Last;
+	std::chrono::steady_clock::time_point Now;
+	std::chrono::nanoseconds IgnoreDuration;
+	std::chrono::seconds Duration;
 };

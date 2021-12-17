@@ -9,6 +9,7 @@ class GameFactory : public Singleton<GameFactory>
 {
 	friend struct Singleton<GameFactory>;
 public:
+	void LoadMainMenu();
 	void LoadLevel();
 
 private:
@@ -20,7 +21,7 @@ private:
 	/// </summary>
 	/// <param name="Filename"> : file name for map  </param>
 	///	<param name="Transform"> : transform of the map  </param>
-	void CreateTerrain(const wchar_t* Filename, Math::Transform Transform, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false, bool IsTunnel = false);
+	ATerrain* CreateTerrain(const wchar_t* Filename, Math::Transform Transform, PhysicMaterial Material, const std::wstring& TextureName1, const std::wstring& TextureName2, const std::wstring& TextureName3, bool FaceCull = false, bool IsTunnel = false);
 
 	/// <summary>
 	/// Create the player
@@ -33,7 +34,7 @@ private:
 	/// </summary>
 	///	<param name="Transform"> : transform of the enemy  </param>
 	///	<param name="End"> : deplacement of the enemy  </param>
-	void CreateEnemy(Math::Transform Transform, Math::Vec3f End, bool IsKiller = false, float Speed = 0.1f);
+	void CreateEnemy(Math::Transform Departure, Math::Transform End, bool IsKiller = false, float Speed = 0.1f);
 
 	/// <summary>
 	/// Create an intelligent enemy
@@ -42,12 +43,13 @@ private:
 	///	<param name="Transform"> : transform of the enemy  </param>
 	/// <param name="ToFollow"> transform of the actor we want to follow </param>
 	/// /// <param name="Distance"> distance max the enemy follow the actor's tranform </param>
-	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f);
+	void CreateIntelligentEnemy(Math::Transform Transform, Math::Transform* ToFollow, IntelligentEnemy::ActionZone Zone, ATerrain* RelativeTerrain,
+		Math::Vec3f RelativeTerrainPosition, float Distance = std::numeric_limits<float>::infinity(), bool IsKiller = false, float Speed = 0.1f, bool FixedY = false);
 
 	/// <summary>
 	/// Create our tunnel.
 	/// </summary>
-	void CreateTunnel();
+	ATerrain* CreateTunnel();
 
 	/// <summary>
 	/// Create a fixed platform
@@ -96,4 +98,16 @@ private:
 	/// Create the sprite timer on the screen
 	/// </summary>
 	void CreateTimer();
+
+	/// <summary>
+	/// Create a directional sign
+	/// </summary>
+	/// <param name="Transform"> transform of the sign </param>
+	void CreateDirectionalSign(Math::Transform Transform);
+
+	/// <summary>
+	/// Create a tree
+	/// </summary>
+	/// <param name="Transform"> transform of the tree </param>
+	void CreateTree(Math::Transform Transform);
 };

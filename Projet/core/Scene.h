@@ -47,6 +47,11 @@ public:
 	void LateTick(const float ElapsedTime);
 
 	/// <summary>
+	/// Call all actors UITick() method.
+	/// </summary>
+	void UITick(const float ElapsedTime);
+
+	/// <summary>
 	/// Update the scene state.
 	/// </summary>
 	void Update();

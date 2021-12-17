@@ -40,13 +40,11 @@ public:
 		Running = 1 << 1,
 		Paused = 1 << 2,
 		Stopping = 1 << 3,
+		LoadRequested = 1 << 4
 	};
 
 protected:
-	virtual ~Engine()
-	{
-		Cleanup();
-	}
+	virtual ~Engine();
 
 protected:
 	virtual void TickSpecific() = 0;
@@ -62,9 +60,11 @@ protected:
 private:
 	int InitAnimation();
 	bool RenderScene(const float DeltaTime);
+	void UnloadLevel();
 	void Cleanup();
-	int InitScene();
-	static bool InitObjects();
+	int LoadLevel(bool MainMenu);
+	bool InitMainMenu();
+	bool InitLevel();
 
 	void Tick();
 	bool TickScene(float DeltaTime) const;
@@ -91,6 +91,7 @@ private:
 	bool IsStateSet(const States& State) const noexcept { return (CurrentState & State) == State; }
 
 public:
+	bool GodMod = false;
 
 	[[nodiscard]] bool IsStopping() const noexcept { return IsStateSet(States::Stopping); }
 	[[nodiscard]] bool IsPaused() const noexcept { return IsStateSet(States::Paused); }
@@ -98,6 +99,7 @@ public:
 	void Stop() noexcept { CurrentState |= States::Stopping; }
 	void Pause() noexcept { CurrentState |= States::Paused; }
 	void UnPause() noexcept { CurrentState &= ~States::Paused; }
+	void RequestLoadLevel() noexcept { CurrentState |= States::LoadRequested; }
 
 public:
 	DirectX::XMMATRIX MatView{};
@@ -158,15 +160,15 @@ int Engine<T, TDevice>::Init()
 
 	Device = CreateDeviceSpecific(CDS_MODE::CDS_FENETRE);
 
-	CurrentScene = new Scene{};
-
-	PhysicManager::GetInstance().Init();
-	PhysicManager::GetInstance().InitScene(CurrentScene->PhysxScene);
-
-	InitScene();
-	InitAnimation();
+	LoadLevel(true);
 
 	return 0;
+}
+
+template <class T, class TDevice>
+Engine<T, TDevice>::~Engine()
+{
+	Cleanup();
 }
 
 template <class T, class TDevice>
@@ -186,17 +188,22 @@ void Engine<T, TDevice>::Tick()
 		PhysicAccumulator -= PhysicDeltaStep;
 	}
 
+	if (IsStateSet(States::LoadRequested))
+	{
+		UnloadLevel();
+		LoadLevel(false);
+		UnsetState(States::LoadRequested);
+	}
+
 	if (DeltaTime > MSPerFrame)
 	{
 		InputManager::GetInstance().Tick();
 
 		TickScene(static_cast<float>(DeltaTime));
 
-		if (!IsPaused()) {
-			// Optimized rendering
-			Device->Present();
-			RenderScene(static_cast<float>(DeltaTime));
-		}
+		// Optimized rendering
+		Device->Present();
+		RenderScene(static_cast<float>(DeltaTime));
 		
 		PreviousTimeStep = CurrentTimeStep;
 	}
@@ -205,8 +212,13 @@ void Engine<T, TDevice>::Tick()
 template <class T, class TDevice>
 bool Engine<T, TDevice>::TickScene(float DeltaTime) const
 {
-	// Make all component Tick
-	CurrentScene->Tick(DeltaTime);
+	if (!IsPaused())
+	{
+		// Make all component Tick
+		CurrentScene->Tick(DeltaTime);
+	}
+
+	CurrentScene->UITick(DeltaTime);
 
 	// Update the scene to reflect components changes
 	CurrentScene->Update();
@@ -243,6 +255,7 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 
 	// Get actors in vision range
 	const auto Actors = CurrentScene->GetVisibleActors();
+
 	for (const auto& Actor : Actors) {
 		Actor->LateTick(DeltaTime);
 	}
@@ -263,12 +276,26 @@ bool Engine<T, TDevice>::RenderScene(const float DeltaTime)
 }
 
 template <class T, class TDevice>
-int Engine<T, TDevice>::InitScene()
+int Engine<T, TDevice>::LoadLevel(bool MainMenu)
 {
 	using namespace DirectX;
 
-	if (!InitObjects()) {
-		return 1;
+	CurrentScene = new Scene{};
+
+	PhysicManager::GetInstance().Init();
+	PhysicManager::GetInstance().InitScene(CurrentScene->PhysxScene);
+
+	if (MainMenu)
+	{
+		if (!InitMainMenu()) {
+			return 1;
+		}
+	}
+	else
+	{
+		if (!InitLevel()) {
+			return 1;
+		}
 	}
 
 	MatView = XMMatrixLookAtLH(
@@ -291,11 +318,30 @@ int Engine<T, TDevice>::InitScene()
 
 	CurrentScene->Init();
 
+	InitAnimation();
+
 	return 0;
 }
 
 template <class T, class TDevice>
-bool Engine<T, TDevice>::InitObjects()
+void Engine<T, TDevice>::UnloadLevel()
+{
+	delete CurrentScene;
+
+	ResourcesManager.Cleanup();
+	PhysicManager::GetInstance().Cleanup();
+}
+
+template <class T, class TDevice>
+bool Engine<T, TDevice>::InitMainMenu()
+{
+	GameFactory::GetInstance().LoadMainMenu();
+
+	return true;
+}
+
+template <class T, class TDevice>
+bool Engine<T, TDevice>::InitLevel()
 {
 	GameFactory::GetInstance().LoadLevel();
 
@@ -305,10 +351,7 @@ bool Engine<T, TDevice>::InitObjects()
 template <class T, class TDevice>
 void Engine<T, TDevice>::Cleanup()
 {
-	delete CurrentScene;
-
-	ResourcesManager.Cleanup();
-	PhysicManager::GetInstance().Cleanup();
+	UnloadLevel();
 
 	Gdiplus::GdiplusShutdown(GDIToken);
 }

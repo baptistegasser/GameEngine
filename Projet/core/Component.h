@@ -43,6 +43,8 @@ namespace Pitbull
 		/// <param name="ElapsedTime">The elapsed time since last call, same as the one passed to \ref Tick.</param>
 		virtual void LateTick(const float& ElapsedTime);
 
+		virtual void UITick(const float& ElapsedTime);
+
 		virtual void SpriteTick(const float& ElapsedTime);
 
 		/// <summary>

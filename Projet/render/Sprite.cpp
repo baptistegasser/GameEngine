@@ -114,7 +114,7 @@ ShaderSprite::~ShaderSprite()
 	DX_RELEASE(Passe);
 	DX_RELEASE(ConstantBuffer);
 	DX_RELEASE(SampleState);
-	DX_RELEASE(Effet);
 	DX_RELEASE(VertexLayout);
 	DX_RELEASE(VertexBuffer);
+	DX_RELEASE(Effet);
 }

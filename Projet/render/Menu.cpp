@@ -11,7 +11,7 @@
 Button::Button(Pitbull::Actor* Parent, TextRenderer* Text, SpriteRenderer* RaisedSprite, SpriteRenderer* PressedSprite, SpriteRenderer* BallSprite, std::function<void()> Cb)
 	: Component{ Parent }
 	, Current{ PressedSprite }
-	, Text{ Text }
+	, Text{ std::unique_ptr<TextRenderer>(Text) }
 	, RaisedSprite{ RaisedSprite }
 	, PressedSprite{ PressedSprite }
 	, BallSprite{ BallSprite }

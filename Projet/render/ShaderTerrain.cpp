@@ -13,6 +13,9 @@ ShaderTerrain::ShaderTerrain(const wchar_t* FileName)
 {
 	ID3D11Device* PD3DDevice = EngineD3D11::GetInstance().Device->D3DDevice;
 
+	// Remove initiali constant buffer to replace it
+	DX_RELEASE(PConstantBuffer);
+
 	D3D11_BUFFER_DESC BuffDesc;
 	ZeroMemory(&BuffDesc, sizeof(BuffDesc));
 

@@ -329,9 +329,10 @@ int Engine<T, TDevice>::LoadLevel(bool MainMenu)
 template <class T, class TDevice>
 void Engine<T, TDevice>::UnloadLevel()
 {
+	ResourcesManager.Cleanup();
+
 	delete CurrentScene;
 
-	ResourcesManager.Cleanup();
 	PhysicManager::GetInstance().Cleanup();
 }
 

@@ -13,6 +13,8 @@ void ResourcesManager::Cleanup() noexcept
 {
 	// Remove all ressources -> call respective destructor
 	Shaders.clear();
+	ShadersTerrain.clear();
+	Effects.clear();
 	Textures.clear();
 	Sprites.clear();
 	Meshes.clear();

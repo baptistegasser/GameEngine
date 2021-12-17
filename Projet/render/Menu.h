@@ -18,7 +18,7 @@ public:
 private:
 	void SpriteTick(const float& ElapsedTime) override;
 	SpriteRenderer* Current;
-	TextRenderer* Text;
+	std::unique_ptr<TextRenderer> Text;
 	SpriteRenderer* RaisedSprite;
 	SpriteRenderer* PressedSprite;
 	SpriteRenderer* BallSprite;

@@ -54,7 +54,6 @@ void GameFactory::LoadLevel()
 	 ***/
 	CreatePlayer(Math::Vec3f(0, 10.5f, 0));
 	CreateSkyBox(PlayerTransform);
-	return;
 	CreateTimer();
 
 	// Setup lighting
@@ -551,7 +550,7 @@ void GameFactory::CreateSkyBox(Math::Transform* ToFollow)
 	auto& Engine = EngineD3D11::GetInstance();
 	auto& RessourceManager = Engine.ResourcesManager;
 
-	Engine.GetScene().AddSkyBox(new Skybox{
+	Engine.GetScene().SetSkyBox(new Skybox{
 			ToFollow
 			, RessourceManager.GetMesh(L".\\modeles\\sky\\sky.OMB")
 			, RessourceManager.GetShader(L".\\shaders\\MiniPhongSkyBox.fx")

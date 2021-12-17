@@ -10,7 +10,7 @@ class Player : public Pitbull::Component
 {
 public :
 	Player(Pitbull::Actor* Parent, Math::Vec3f Pos);
-	~Player() override = default;
+	~Player() = default;
 
 	void Init() override;
 

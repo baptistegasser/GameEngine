@@ -255,7 +255,7 @@ void GameFactory::LoadLevel()
 
 	CreateIntelligentEnemy(Math::Transform{ Math::Vec3f{ TerrainPos3.x + 60.f, 20.f, TerrainPos3.z + 66.f }, Math::Vec3f(0.7f, 0.7f, 0.7f) }, PlayerTransform,
 		IntelligentEnemy::ActionZone{ TerrainPos3, Math::Vec3f{ TerrainPos3.x + 128.f, PosYEnemy2 + 50.f, TerrainPos3.z + 128.f } }, IceTerrain,
-		Math::Vec3f{ 15.f, 20.f, 35.f }, 128.0f, false, 0.175f, true);
+		Math::Vec3f{ 15.f, 20.f, 35.f }, 128.0f, false, 0.25f, true);
 	CreateDirectionalSign(
 		Math::Transform{ Math::Vec3f{TerrainPos3.x+100.f, TerrainPos3.y + 11.5f, TerrainPos3.z + 5.f  },
 		Math::Vec3f{ 0.3f, 0.3f, 0.3f },

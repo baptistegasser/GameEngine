@@ -524,15 +524,6 @@
     <FxCompile Include="shaders\sprite1.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\MiniPhong.vhl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\ps1.phl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\vs1.vhl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\MiniPhong.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
